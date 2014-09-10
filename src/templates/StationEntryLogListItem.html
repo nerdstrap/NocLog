@@ -1,0 +1,33 @@
+<div class="station-entry-log-list-item-view">
+    <div class="row collapse">
+        <div class="small-2 columns">
+            <a class="station-name-link" data-stationid="{{stationId}}">{{withDefault stationName "&nbsp;"}}</a>
+        </div>
+        <div class="small-2 columns">
+            <a class="personnel-name-link" data-outsideid="{{outsideId}}">{{withDefault userName "&nbsp;"}}</a>
+        </div>
+        <div class="small-2 columns">
+            <span>{{formatPhoneWithDefault contact "%D %r" "&nbsp;"}}</span>
+        </div>
+        <div class="small-1 columns">
+            <span>{{formatDateWithDefault inTime "%D %r" "&nbsp;"}}</span>
+        </div>
+        <div class="small-1 columns">
+            <span>{{withDefault duration "&nbsp;"}}</span>
+        </div>
+        <div class="small-1 columns">
+            <span>{{formatDateWithDefault outTime "%D %r" "&nbsp;"}}</span>
+        </div>
+        <div class="small-1 columns">
+            <span>{{withDefault purpose "&nbsp;"}}</span>
+        </div>
+        <div class="small-2 columns">
+            <span>{{withDefault additionalInfo "&nbsp;"}}</span>
+        </div>
+        <!--
+        <div class="small-1 columns">
+            <a class="station-entry-log-link" data-stationentrylogid="{{stationEntryLogId}}">{{{checkOutButtonText}}}</a>
+        </div>
+        -->
+    </div>
+</div>

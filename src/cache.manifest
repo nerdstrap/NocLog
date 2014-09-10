@@ -1,0 +1,9 @@
+CACHE MANIFEST
+# Build Time: @buildTime@
+CACHE:
+# Don't cache anything
+FALLBACK:
+# Nothing
+NETWORK:
+# Request everything from server
+*

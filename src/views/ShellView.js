@@ -1,0 +1,51 @@
+define(function (require) {
+    'use strict';
+
+    var $ = require('jquery'),
+        _ = require('underscore'),
+        Backbone = require('backbone'),
+        CompositeView = require('views/CompositeView'),
+        HeaderView = require('views/HeaderView'),
+        FooterView = require('views/FooterView'),
+        AppEventNamesEnum = require('enums/AppEventNamesEnum'),
+        appEvents = require('events'),
+        appResources = require('resources'),
+        template = require('hbs!templates/Shell');
+
+    var ShellView = CompositeView.extend({
+        resources: function (culture) {
+            return {};
+        },
+        initialize: function (options) {
+            console.trace('ShellView.initialize');
+            options || (options = {});
+            this.dispatcher = options.dispatcher || this;
+        },
+        render: function () {
+            console.trace('ShellView.render()');
+            var currentContext = this;
+
+            var renderModel = _.extend({}, currentContext.resources(), currentContext.model);
+            currentContext.$el.html(template(renderModel));
+
+            var headerViewInstance = new HeaderView({
+                el: $('#header-view', currentContext.$el),
+                model: currentContext.model
+            });
+            this.renderChild(headerViewInstance);
+
+            var footerViewInstance = new FooterView({
+                el: $('#footer-view', currentContext.$el),
+                model: currentContext.model
+            });
+            this.renderChild(footerViewInstance);
+
+            return this;
+        },
+        contentViewEl: function () {
+            return $('#content-view', this.el);
+        }
+    });
+
+    return ShellView;
+});

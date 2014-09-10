@@ -1,0 +1,76 @@
+root { 
+    display: block;
+    font-size:1em;
+}
+ol, ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* stickey footer http://www.cssstickyfooter.com/using-sticky-footer-code.html*/
+html, body {
+    height: 100%;
+}
+body {
+    line-height: 1.5em;
+}
+
+.shell-view {
+    min-height: 100%;
+    background-color: #F2F2F2;
+}
+
+.shell-view {
+    overflow: auto;
+    padding-bottom: 270px;
+}
+/* must be same height as the footer */
+#footer {
+    position: relative;
+    margin-top: -270px; /* negative value of footer height */
+    height: 270px;
+    line-height: 270px;
+    overflow: hidden;
+    clear: both;
+    background-color: #DEDEDE;
+}
+/*Opera Fix*/
+body:before {
+    content: "";
+    height: 100%;
+    float: left;
+    width: 0;
+    margin-top:-32767px;
+}
+
+.hidden {
+    display: none;
+}
+
+.invisible {
+    visibility: hidden;
+}
+
+.checked-in-icon,
+.hazard-icon {
+    width:25px;
+}
+
+.footer-logo {
+    width: 40;
+}
+
+/* app */
+
+.station-list-view,
+.station-entry-log-list-view {
+    background-color: #FFFFFF;
+    margin: 5px;    
+}
+
+.station-list-item-view,
+.station-entry-log-list-item-view {
+    background-color: #F2F2F2;
+    margin: 5px;    
+}
