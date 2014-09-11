@@ -19,6 +19,7 @@ define(function (require) {
                 errorMessage: appResources.getResource('StationListView.errorMessage').value,
                 infoMessage: appResources.getResource('StationListView.infoMessage').value,
                 listViewTitleText: appResources.getResource('StationListView.listViewTitleText').value,
+                listFilterHeaderText: appResources.getResource('StationListView.listFilterHeaderText').value,
                 stationNameHeaderText: appResources.getResource('StationListView.stationNameHeaderText').value,
                 regionHeaderText: appResources.getResource('StationListView.regionHeaderText').value,
                 areaHeaderText: appResources.getResource('StationListView.areaHeaderText').value,
@@ -31,8 +32,7 @@ define(function (require) {
             this.dispatcher = options.dispatcher || this;
 
             this.listenTo(this.collection, 'reset', this.addAll);
-        },
-        
+        },        
         render: function () {
             console.trace('StationListView.render()');
             var currentContext = this;
@@ -43,6 +43,9 @@ define(function (require) {
             _.each(this.collection.models, this.addOne, this);
             
             return this;
+        },
+        events: {
+            'change #station-list-filter': 'changeStationListFilter'
         },
         addAll: function () {
             this._leaveChildren();
@@ -55,6 +58,23 @@ define(function (require) {
                 dispatcher: currentContext.dispatcher
             });
             this.appendChildTo(stationListItemView, '.view-list');
+        },
+        changeStationListFilter: function(event) {
+            if (event) {
+                event.preventDefault();
+            }
+            if (event.target) {
+                var filter = event.target.value;
+                if (filter === "open") {
+                    this.dispatcher.trigger(AppEventNamesEnum.showOpenStationEntryLogs);
+                }
+                if (filter === "expired") {
+                    this.dispatcher.trigger(AppEventNamesEnum.showExpiredStationEntryLogs);
+                }
+                if (filter === "all") {
+                    this.dispatcher.trigger(AppEventNamesEnum.showStationEntryLogs);
+                }
+            }
         }
     });
 

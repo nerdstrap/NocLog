@@ -29,14 +29,16 @@ define(function (require) {
             currentContext.$el.html(template(renderModel));
 
             var headerViewInstance = new HeaderView({
+                model: currentContext.model,
                 el: $('#header-view', currentContext.$el),
-                model: currentContext.model
+                dispatcher: currentContext.dispatcher
             });
             this.renderChild(headerViewInstance);
 
             var footerViewInstance = new FooterView({
+                model: currentContext.model,
                 el: $('#footer-view', currentContext.$el),
-                model: currentContext.model
+                dispatcher: currentContext.dispatcher
             });
             this.renderChild(footerViewInstance);
 

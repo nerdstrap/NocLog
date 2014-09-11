@@ -1,21 +1,27 @@
 <div class="station-entry-log-list-view">
     <div class="row collapse">
         <div class="small-12 columns">
-            <h3>{{listViewTitleText}}</h3>
+            <h2>{{listViewTitleText}}</h2>
         </div>
     </div>
     <div class="row collapse">
         <div class="small-2 columns">
-            <label for="station-entry-log-list-filter">{{{listFilterHeaderText}}}&#58;&#160;
-                <select id="station-entry-log-list-filter">
+            <label for="station-entry-log-list-status-filter">{{{listFilterHeaderText}}}&#58;&#160;
+                <select id="station-entry-log-list-status-filter">
                     <option value="open">open</option>
                     <option value="expired">expired</option>
                     <option value="all">all</option>
                 </select>
             </label>
         </div>
-        <div class="small-10 columns">
-            <span>&#160;</span>
+        <div class="small-2 columns">
+            <label for="station-entry-log-list-region-filter">{{{listFilterHeaderText}}}&#58;&#160;
+                <select id="station-entry-log-list-region-filter">
+                </select>
+            </label>
+        </div>
+        <div class="small-2 columns">
+            &#160;
         </div>
     </div>
     <div class="row collapse hidden">

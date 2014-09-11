@@ -1,26 +1,26 @@
-define(function (require) {
+define(function(require) {
     'use strict';
 
     var $ = require('jquery'),
-        _ = require('underscore'),
-        Backbone = require('backbone'),
-        SwappingRouter = require('routers/SwappingRouter'),
-        ShellView = require('views/ShellView'),
-        DashboardController = require('controllers/DashboardController');
+            _ = require('underscore'),
+            Backbone = require('backbone'),
+            SwappingRouter = require('routers/SwappingRouter'),
+            ShellView = require('views/ShellView'),
+            DashboardController = require('controllers/DashboardController'),
+            AppEventNamesEnum = require('enums/AppEventNamesEnum'),
+            appEvents = require('events'),
+            appResources = require('resources');
 
     var AppRouter = SwappingRouter.extend({
-        /** @class AppRouter
-         * @contructs AppRouter object
-         * @param {object} options
-         */
-        initialize: function (options) {
+        initialize: function(options) {
             console.trace('appRouter.initialize');
             options || (options = {});
             var currentContext = this;
-
+            
             var shellViewInstance = new ShellView({
+                model: new Backbone.Model({id: 1}),
                 el: $('body'),
-                model: new Backbone.Model({id: 1})
+                dispatcher: appEvents
             });
             shellViewInstance.render();
             this.contentViewEl = shellViewInstance.contentViewEl();
@@ -29,39 +29,40 @@ define(function (require) {
                 router: currentContext
             });
         },
-        /** Route fragment handler mappings
-         */
         routes: {
-            '': 'goToDashboard',
-            'dashboard': 'goToDashboard',
+            '': 'goToStationEntryLogList',
+            'stationEntryLog': 'goToStationEntryLogList',
+            'station': 'goToStationList',
+            'personnel': 'goToPersonnelList',
+            'stationEntryLog/:id': 'goToStationEntryLogWithId',
             'station/:id': 'goToStationWithId',
-            'stationEntryLog/:id': 'goToStationEntryLogWithId'
+            'personnel/:id': 'goToPersonnelWithId'
         },
-        /** Navigates to the station search
-         */
-        goToDashboard: function () {
-            console.trace('appRouter.goToDashboard');
-            this.dashboardControllerInstance.goToDashboard();
+        goToStationEntryLogList: function() {
+            console.trace('appRouter.goToStationEntryLogList');
+            this.dashboardControllerInstance.goToStationEntryLogList();
         },
-        /** Navigates to the station view
-         * @param {string} stationId
-         */
-        goToStationWithId: function (stationId) {
-            console.trace('appRouter.goToStationWithId');
-            this.dashboardControllerInstance.goToStationWithId(stationId);
+        goToStationList: function() {
+            console.trace('appRouter.goToStationList');
+            this.dashboardControllerInstance.goToStationList();
         },
-        /** Navigates to the station entry log view
-         * @param {string} stationEntryLogId
-         */
-        goToStationEntryLogWithId: function (stationEntryLogId) {
+        goToPersonnelList: function() {
+            console.trace('appRouter.goToPersonnelList');
+            this.dashboardControllerInstance.goToPersonnelList();
+        },
+        goToStationEntryLogWithId: function(stationEntryLogId) {
             console.trace('appRouter.goToStationEntryLogWithId');
             this.dashboardControllerInstance.goToStationWithId(stationEntryLogId);
         },
-        /** Simple proxy to Backbone.history to save a fragment into the history
-         * @param {object} fragment
-         * @param {object} options
-         */
-        navigate: function (fragment, options) {
+        goToStationWithId: function(stationId) {
+            console.trace('appRouter.goToStationWithId');
+            this.dashboardControllerInstance.goToStationWithId(stationId);
+        },
+        goToPersonnelWithId: function(personnelId) {
+            console.trace('appRouter.goToPersonnelWithId');
+            this.dashboardControllerInstance.goToPersonnelWithId(personnelId);
+        },
+        navigate: function(fragment, options) {
             SwappingRouter.prototype.navigate.call(this, fragment, options);
             this.trigger('after-navigate', fragment, options);
         }

@@ -1,30 +1,38 @@
-define(function (require) {
+define(function(require) {
     'use strict';
 
     var $ = require('jquery'),
-        _ = require('underscore'),
-        Backbone = require('backbone'),
-        CompositeView = require('views/CompositeView'),
-        AppEventNamesEnum = require('enums/AppEventNamesEnum'),
-        appEvents = require('events'),
-        appResources = require('resources'),
-        template = require('hbs!templates/Header');
+            _ = require('underscore'),
+            Backbone = require('backbone'),
+            CompositeView = require('views/CompositeView'),
+            AppEventNamesEnum = require('enums/AppEventNamesEnum'),
+            appEvents = require('events'),
+            appResources = require('resources'),
+            template = require('hbs!templates/Header');
 
     var HeaderView = CompositeView.extend({
-        resources: function (culture) {
+        resources: function(culture) {
             return {
-                'appTitleButtonText': appResources.getResource('appTitleButtonText').value
+                'appTitleText': appResources.getResource('appTitleText').value,
+                'goToStationEntryLogListButtonText': appResources.getResource('goToStationEntryLogListButtonText').value,
+                'goToStationListButtonText': appResources.getResource('goToStationListButtonText').value,
+                'goToPersonnelListButtonText': appResources.getResource('goToPersonnelListButtonText').value,
+                'goToReportListButtonText': appResources.getResource('goToReportListButtonText').value
             };
         },
-        initialize: function (options) {
+        initialize: function(options) {
             console.trace('HeaderView.initialize');
             options || (options = {});
             this.dispatcher = options.dispatcher || this;
         },
         events: {
-            'click #app-title-button': 'titleButtonClick'
+            'click #app-title-button': 'titleButtonClick',
+            'click #go-to-station-entry-log-list-button': 'goToStationEntryLogList',
+            'click #go-to-station-list-button': 'goToStationList',
+            'click #go-to-personnel-list-button': 'goToPersonnelList',
+            'click #go-to-report-list-button': 'goToReportList'
         },
-        render: function () {
+        render: function() {
             console.trace('HeaderView.render');
             var currentContext = this;
 
@@ -33,10 +41,34 @@ define(function (require) {
 
             return this;
         },
-        titleButtonClick: function (event) {
+        titleButtonClick: function(event) {
             if (event) {
                 event.preventDefault();
             }
+        },
+        goToStationEntryLogList: function(event) {
+            if (event) {
+                event.preventDefault();
+            }
+            this.dispatcher.trigger(AppEventNamesEnum.goToStationEntryLogList);
+        },
+        goToStationList: function(event) {
+            if (event) {
+                event.preventDefault();
+            }
+            this.dispatcher.trigger(AppEventNamesEnum.goToStationList);
+        },
+        goToPersonnelList: function(event) {
+            if (event) {
+                event.preventDefault();
+            }
+            this.dispatcher.trigger(AppEventNamesEnum.goToPersonnelList);
+        },
+        goToReportList: function(event) {
+            if (event) {
+                event.preventDefault();
+            }
+            this.dispatcher.trigger(AppEventNamesEnum.goToReportList);
         }
     });
 

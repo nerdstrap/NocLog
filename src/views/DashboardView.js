@@ -15,8 +15,6 @@ define(function(require) {
     var DashboardView = CompositeView.extend({
         resources: function(culture) {
             return {
-                'showStationListButtonText': appResources.getResource('showStationListButtonText').value,
-                'showStationEntryLogListButtonText': appResources.getResource('showStationEntryLogListButtonText').value
             };
         },
         initialize: function(options) {
@@ -48,10 +46,6 @@ define(function(require) {
             this.renderChild(stationEntryLogListViewInstance);
 
             return this;
-        },
-        events: {
-            'click #refresh-station-list-button': 'refreshStationList',
-            'click #refresh-station-entry-log-list-button': 'refreshStationEntryLogList'
         }
     });
 

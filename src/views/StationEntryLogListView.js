@@ -9,7 +9,8 @@ define(function(require) {
             AppEventNamesEnum = require('enums/AppEventNamesEnum'),
             appEvents = require('events'),
             appResources = require('resources'),
-            template = require('hbs!templates/StationEntryLogList');
+            template = require('hbs!templates/StationEntryLogList'),
+            regionListTemplate = require('hbs!templates/RegionList');
 
     var StationEntryLogListView = CompositeView.extend({
         resources: function(culture) {
@@ -34,8 +35,12 @@ define(function(require) {
             console.trace('StationEntryLogListView.initialize');
             options || (options = {});
             this.dispatcher = options.dispatcher || this;
+            this.regionCollection = options.regionCollection || new Backbone.Collection();
+            this.areaCollection = options.areaCollection || new Backbone.Collection();
 
             this.listenTo(this.collection, 'reset', this.addAll);
+            this.listenTo(this.regionCollection, 'reset', this.addAllRegions);
+            this.listenTo(this.areaCollection, 'reset', this.addAllAreas);
         },
         render: function() {
             console.trace('StationEntryLogListView.render()');
@@ -49,7 +54,9 @@ define(function(require) {
             return this;
         },
         events: {
-            'change #station-entry-log-list-filter': 'changeStationEntryLogListFilter'
+            'change #station-entry-log-list-status-filter': 'changeStationEntryLogListFilter',
+            'change #station-entry-log-list-region-filter': 'changeStationEntryLogListFilter',
+            'change #station-entry-log-list-area-filter': 'changeStationEntryLogListFilter'
         },
         addAll: function() {
             this._leaveChildren();
@@ -62,6 +69,16 @@ define(function(require) {
                 dispatcher: currentContext.dispatcher
             });
             this.appendChildTo(stationEntryLogListItemView, '.view-list');
+        },
+        addAllRegions: function() {
+            var currentContext = this;
+            var regionListRenderModel = {
+                id: '#station-entry-log-list-region-filter',
+                regions: currentContext.regionCollection.models
+            };
+            this.$('#station-entry-log-list-region-filter').html(regionListTemplate(regionListRenderModel));
+        },
+        addAllAreas: function() {
         },
         changeStationEntryLogListFilter: function(event) {
             if (event) {

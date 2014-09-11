@@ -8,7 +8,7 @@ define(function (require) {
     var resources = [
         /* app */
         {
-            'key': 'appTitleButtonText',
+            'key': 'appTitleText',
             'value': 'Network Operations Center | Telecom Station Entry Log'
         },    
         {
@@ -52,14 +52,22 @@ define(function (require) {
             'value': 'open check-in'
         },
         
-        /* dashboard */
+        /* header */
         {
-            'key': 'showStationListButtonText',
+            'key': 'goToStationEntryLogListButtonText',
+            'value': 'Entry Log'
+        },
+        {
+            'key': 'goToStationListButtonText',
             'value': 'Stations'
         },
         {
-            'key': 'showStationEntryLogListButtonText',
-            'value': 'Entry Log'
+            'key': 'goToPersonnelListButtonText',
+            'value': 'Personnel'
+        },
+        {
+            'key': 'goToReportListButtonText',
+            'value': 'Reports'
         },
         {
             'key': 'checkInButtonText',
@@ -69,35 +77,9 @@ define(function (require) {
             'key': 'checkOutButtonText',
             'value': 'Check-out'
         },
-        
-        /* station list */    
         {
-            'key': 'StationListView.loadingMessage',
-            'value': 'loading'
-        },
-        {
-            'key': 'StationListView.errorMessage',
-            'value': 'error'
-        },
-        {
-            'key': 'StationListView.infoMessage',
-            'value': 'info'
-        },
-        {
-            'key': 'StationListView.listViewTitleText',
-            'value': 'Stations'
-        },
-        {
-            'key': 'StationListView.stationNameHeaderText',
-            'value': 'Station'
-        },
-        {
-            'key': 'StationListView.regionHeaderText',
-            'value': 'Region'
-        },
-        {
-            'key': 'StationListView.areaHeaderText',
-            'value': 'Area'
+            'key': 'extendDurationButtonText',
+            'value': 'Extend duration'
         },
         
         /* station entry log list */
@@ -152,8 +134,75 @@ define(function (require) {
         {
             'key': 'StationEntryLogListView.additionalInfoHeaderText',
             'value': 'Additional Info'
-        }
+        },
         
+        /* station list */    
+        {
+            'key': 'StationListView.loadingMessage',
+            'value': 'loading'
+        },
+        {
+            'key': 'StationListView.errorMessage',
+            'value': 'error'
+        },
+        {
+            'key': 'StationListView.infoMessage',
+            'value': 'info'
+        },
+        {
+            'key': 'StationListView.listViewTitleText',
+            'value': 'Stations'
+        },
+        {
+            'key': 'StationListView.listFilterHeaderText',
+            'value': 'Show Me'
+        },
+        {
+            'key': 'StationListView.stationNameHeaderText',
+            'value': 'Station'
+        },
+        {
+            'key': 'StationListView.regionHeaderText',
+            'value': 'Region'
+        },
+        {
+            'key': 'StationListView.areaHeaderText',
+            'value': 'Area'
+        },
+        
+        /* personnel list */    
+        {
+            'key': 'PersonnelListView.loadingMessage',
+            'value': 'loading'
+        },
+        {
+            'key': 'PersonnelListView.errorMessage',
+            'value': 'error'
+        },
+        {
+            'key': 'PersonnelListView.infoMessage',
+            'value': 'info'
+        },
+        {
+            'key': 'PersonnelListView.listViewTitleText',
+            'value': 'Personnel'
+        },
+        {
+            'key': 'PersonnelListView.listFilterHeaderText',
+            'value': 'Show Me'
+        },
+        {
+            'key': 'PersonnelListView.personnelNameHeaderText',
+            'value': 'Personnel'
+        },
+        {
+            'key': 'PersonnelListView.regionHeaderText',
+            'value': 'Region'
+        },
+        {
+            'key': 'PersonnelListView.areaHeaderText',
+            'value': 'Area'
+        }
     ];
 
     var defaultResource = { 'key': '', 'value': '' };
