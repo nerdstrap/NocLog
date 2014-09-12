@@ -1,6 +1,3 @@
-<select id="{{id}}">
-    <option disabled="disabled" selected="selected" class="disstyleableMe">region</option>
-    {{~#each regions}}
-    <option value="{{attributes.region}}">{{attributes.region}}</option>
-    {{~/each}}
-</select>
+{{~#each regions}}
+<option value="{{attributes.region}}">{{attributes.region}}</option>
+{{~/each}}

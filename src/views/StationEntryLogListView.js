@@ -10,7 +10,8 @@ define(function(require) {
             appEvents = require('events'),
             appResources = require('resources'),
             template = require('hbs!templates/StationEntryLogList'),
-            regionListTemplate = require('hbs!templates/RegionList');
+            regionListTemplate = require('hbs!templates/RegionList'),
+            areaListTemplate = require('hbs!templates/AreaList');
 
     var StationEntryLogListView = CompositeView.extend({
         resources: function(culture) {
@@ -73,12 +74,16 @@ define(function(require) {
         addAllRegions: function() {
             var currentContext = this;
             var regionListRenderModel = {
-                id: '#station-entry-log-list-region-filter',
                 regions: currentContext.regionCollection.models
             };
-            this.$('#station-entry-log-list-region-filter').html(regionListTemplate(regionListRenderModel));
+            this.$('#station-entry-log-list-region-filter').append(regionListTemplate(regionListRenderModel));
         },
         addAllAreas: function() {
+            var currentContext = this;
+            var areaListRenderModel = {
+                areas: currentContext.areaCollection.models
+            };
+            this.$('#station-entry-log-list-area-filter').append(areaListTemplate(areaListRenderModel));
         },
         changeStationEntryLogListFilter: function(event) {
             if (event) {

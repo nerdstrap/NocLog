@@ -43,8 +43,8 @@ define(function(require) {
             this.stationEntryLogSearchResults = options.stationEntryLogSearchResults || new StationEntryLogCollection();
             this.stationSearchResults = options.stationSearchResults || new StationCollection();
             this.personnelSearchResults = options.personnelSearchResults || new PersonnelCollection();
-            this.regionCollection = options.regionCollection || new Backbone.Collection();
-            this.areaCollection = options.areaCollection || new Backbone.Collection();
+            this.regionResults = options.regionCollection || new Backbone.Collection();
+            this.areaResults = options.areaCollection || new Backbone.Collection();
 
             this.listenTo(appEvents, AppEventNamesEnum.goToStationEntryLogList, this.goToStationEntryLogList);
             this.listenTo(appEvents, AppEventNamesEnum.goToStationList, this.goToStationList);
@@ -67,17 +67,18 @@ define(function(require) {
                 controller: currentContext,
                 dispatcher: currentContext.dispatcher,
                 collection: currentContext.stationEntryLogSearchResults,
-                regionCollection: currentContext.regionCollection,
-                areaCollection: currentContext.areaCollection
+                regionCollection: currentContext.regionResults,
+                areaCollection: currentContext.areaResults
             });
 
             currentContext.router.swapContent(stationEntryLogListViewInstance);
             var fragmentAlreadyMatches = (Backbone.history.fragment === 'stationEntryLog' || Backbone.history.fragment === '');
             currentContext.router.navigate('stationEntryLog', {replace: fragmentAlreadyMatches});
 
-            $.when(currentContext.stationEntryLogSearchResults.getStationEntryLogsByOpen(), currentContext.stationSearchResults.getStations()).done(function(getStationEntryLogSearchResults, getStationSearchResults) {
-                currentContext.stationEntryLogSearchResults.reset(getStationEntryLogSearchResults[0]);
-                currentContext.setRegionAreaOptions(getStationSearchResults[0]);
+            $.when(currentContext.stationEntryLogSearchResults.getStationEntryLogsByOpen()).done(function(getStationEntryLogSearchResults) {
+                currentContext.stationEntryLogSearchResults.reset(getStationEntryLogSearchResults.stationEntryLogs);
+                currentContext.regionResults.reset(getStationEntryLogSearchResults.regions);
+                currentContext.areaResults.reset(getStationEntryLogSearchResults.areas);
                 deferred.resolve(stationEntryLogListViewInstance);
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 currentContext.stationEntryLogSearchResults.reset();
@@ -215,7 +216,9 @@ define(function(require) {
                     deferred = $.Deferred();
 
             $.when(currentContext.stationEntryLogSearchResults.getStationEntryLogs()).done(function(getStationEntryLogSearchResults) {
-                currentContext.stationEntryLogSearchResults.reset(getStationEntryLogSearchResults);
+                currentContext.stationEntryLogSearchResults.reset(getStationEntryLogSearchResults.stationEntryLogs);
+                currentContext.regionResults.reset(getStationEntryLogSearchResults.regions);
+                currentContext.areaResults.reset(getStationEntryLogSearchResults.areas);
                 deferred.resolve(getStationEntryLogSearchResults);
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 deferred.reject(textStatus);
@@ -229,7 +232,9 @@ define(function(require) {
                     deferred = $.Deferred();
 
             $.when(currentContext.stationEntryLogSearchResults.getStationEntryLogsByOpen()).done(function(getStationEntryLogSearchResults) {
-                currentContext.stationEntryLogSearchResults.reset(getStationEntryLogSearchResults);
+                currentContext.stationEntryLogSearchResults.reset(getStationEntryLogSearchResults.stationEntryLogs);
+                currentContext.regionResults.reset(getStationEntryLogSearchResults.regions);
+                currentContext.areaResults.reset(getStationEntryLogSearchResults.areas);
                 deferred.resolve(getStationEntryLogSearchResults);
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 deferred.reject(textStatus);
@@ -243,27 +248,15 @@ define(function(require) {
                     deferred = $.Deferred();
 
             $.when(currentContext.stationEntryLogSearchResults.getStationEntryLogsByExpired()).done(function(getStationEntryLogSearchResults) {
-                currentContext.stationEntryLogSearchResults.reset(getStationEntryLogSearchResults);
+                currentContext.stationEntryLogSearchResults.reset(getStationEntryLogSearchResults.stationEntryLogs);
+                currentContext.regionResults.reset(getStationEntryLogSearchResults.regions);
+                currentContext.areaResults.reset(getStationEntryLogSearchResults.areas);
                 deferred.resolve(getStationEntryLogSearchResults);
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 deferred.reject(textStatus);
             });
 
             return deferred.promise();
-        },
-        setRegionAreaOptions: function(results) {
-            var currentContext = this;
-
-            var regions = _.map(results, function(result) {
-                return { 'region': result.region };
-            });
-            var areas = _.map(results, function(result) {
-                return { 'area': result.area };
-            });
-
-            currentContext.regionCollection.reset(regions);
-            currentContext.areaCollection.reset(areas);
-
         }
     });
 
