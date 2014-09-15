@@ -1,4 +1,4 @@
-define(function(require) {
+define(function (require) {
     'use strict';
 
     var $ = require('jquery'),
@@ -143,7 +143,177 @@ define(function(require) {
         }
     ];
 
-    var _getById = function(stationEntryLogId) {
+    var inMemoryRegions = [
+        {
+            'regionId': 1,
+            'regionName': 'AP/KP'
+        },
+        {
+            'regionId': 2,
+            'regionName': 'Central'
+        },
+        {
+            'regionId': 3,
+            'regionName': 'Eastern'
+        },
+        {
+            'regionId': 4,
+            'regionName': 'IM'
+        },
+        {
+            'regionId': 5,
+            'regionName': 'Midwest'
+        },
+        {
+            'regionId': 6,
+            'regionName': 'Northern'
+        },
+        {
+            'regionId': 7,
+            'regionName': 'Ohio'
+        },
+        {
+            'regionId': 8,
+            'regionName': 'PSO'
+        },
+        {
+            'regionId': 9,
+            'regionName': 'Region Support'
+        },
+        {
+            'regionId': 10,
+            'regionName': 'SWEPCO'
+        },
+        {
+            'regionId': 11,
+            'regionName': 'Southern'
+        },
+        {
+            'regionId': 12,
+            'regionName': 'Southwest'
+        },
+        {
+            'regionId': 13,
+            'regionName': 'Texas'
+        },
+        {
+            'regionId': 14,
+            'regionName': 'Western'
+        }
+    ];
+
+    var inMemoryAreas = [
+        {
+        'areaId': 1,
+        'areaName': 'AEPHQ'
+        },
+        {
+            'areaId': 2,
+            'areaName': 'Abilene'
+        },
+        {
+            'areaId': 3,
+            'areaName': 'Ashland'
+        },
+        {
+            'areaId': 4,
+            'areaName': 'Bluefield'
+        },
+        {
+            'areaId': 5,
+            'areaName': 'C3 Central'
+        },
+        {
+            'areaId': 6,
+            'areaName': 'C3 North'
+        },
+        {
+            'areaId': 7,
+            'areaName': 'C3 South'
+        },
+        {
+            'areaId': 8,
+            'areaName': 'Canton'
+        },
+        {
+            'areaId': 9,
+            'areaName': 'Charleston'
+        },
+        {
+            'areaId': 10,
+            'areaName': 'Coastal Texas'
+        },
+        {
+            'areaId': 11,
+            'areaName': 'Columbus'
+        },
+        {
+            'areaId': 12,
+            'areaName': 'Corpus Christi'
+        },
+        {
+            'areaId': 13,
+            'areaName': 'Dallas'
+        },
+        {
+            'areaId': 14,
+            'areaName': 'East Texas'
+        },
+        {
+            'areaId': 15,
+            'areaName': 'Fort Wayne'
+        },
+        {
+            'areaId': 16,
+            'areaName': 'Groveport'
+        },
+        {
+            'areaId': 17,
+            'areaName': 'Laredo'
+        },
+        {
+            'areaId': 18,
+            'areaName': 'Lawton'
+        },
+        {
+            'areaId': 19,
+            'areaName': 'Muncie'
+        },
+        {
+            'areaId': 20,
+            'areaName': 'Oklahoma'
+        },
+        {
+            'areaId': 21,
+            'areaName': 'Pharr'
+        },
+        {
+            'areaId': 22,
+            'areaName': 'Roanoke'
+        },
+        {
+            'areaId': 23,
+            'areaName': 'Shreveport'
+        },
+        {
+            'areaId': 24,
+            'areaName': 'South Bend'
+        },
+        {
+            'areaId': 25,
+            'areaName': 'Southern Ohio'
+        },
+        {
+            'areaId': 26,
+            'areaName': 'Texarkana'
+        },
+        {
+            'areaId': 27,
+            'areaName': 'Tulsa'
+        }
+    ];
+
+    var _getById = function (stationEntryLogId) {
         var deferred = $.Deferred(),
                 result = null,
                 l = inMemoryStationEntryLogs.length,
@@ -158,41 +328,41 @@ define(function(require) {
         deferred.resolve(result);
         return deferred.promise();
     };
-    
-    var _getAll = function() {
+
+    var _getAll = function () {
         var deferred = $.Deferred(),
                 results = inMemoryStationEntryLogs;
         deferred.resolve(results, 'success', null);
         return deferred.promise();
     };
-    
-    var _getOpen = function() {
+
+    var _getOpen = function () {
         var deferred = $.Deferred(),
-                results = inMemoryStationEntryLogs.filter(function(stationEntryLog) {
+                results = inMemoryStationEntryLogs.filter(function (stationEntryLog) {
                     return stationEntryLog.outTime !== undefined;
                 });
         deferred.resolve(results);
         return deferred.promise();
     };
-    
-    var _getExpired = function() {
+
+    var _getExpired = function () {
         var deferred = $.Deferred(),
                 results = inMemoryStationEntryLogs;
         deferred.resolve(results, 'success', null);
         return deferred.promise();
     };
-    
+
     var stationEntryLogService = {
-        getById: function(stationEntryLogId) {
+        getById: function (stationEntryLogId) {
             return _getById(stationEntryLogId);
         },
-        getAll: function() {
+        getAll: function () {
             return _getAll();
         },
-        getOpen: function() {
+        getOpen: function () {
             return _getOpen();
         },
-        getExpired: function() {
+        getExpired: function () {
             return _getExpired();
         }
     };
