@@ -104,6 +104,18 @@ define(function (require) {
             'value': 'Show Me'
         },
         {
+            'key': 'StationEntryLogListView.regionFilterDefaultOption',
+            'value': '&#45;&#160;region&#160;&#45;'
+        },
+        {
+            'key': 'StationEntryLogListView.areaFilterDefaultOption',
+            'value': '&#45;&#160;area&#160;&#45;'
+        },
+        {
+            'key': 'StationEntryLogListView.updateListFilterButtonText',
+            'value': 'Update List'
+        },
+        {
             'key': 'StationEntryLogListView.stationNameHeaderText',
             'value': 'Station'
         },
@@ -135,6 +147,14 @@ define(function (require) {
             'key': 'StationEntryLogListView.additionalInfoHeaderText',
             'value': 'Additional Info'
         },
+        {
+            'key': 'StationEntryLogListView.regionHeaderText',
+            'value': 'Region'
+        },
+        {
+            'key': 'StationEntryLogListView.areaHeaderText',
+            'value': 'Area'
+        },
         
         /* station list */    
         {
@@ -156,6 +176,18 @@ define(function (require) {
         {
             'key': 'StationListView.listFilterHeaderText',
             'value': 'Show Me'
+        },
+        {
+            'key': 'StationListView.regionFilterDefaultOption',
+            'value': '&#45;&#160;region&#160;&#45;'
+        },
+        {
+            'key': 'StationListView.areaFilterDefaultOption',
+            'value': '&#45;&#160;area&#160;&#45;'
+        },
+        {
+            'key': 'StationListView.updateListFilterButtonText',
+            'value': 'Update List'
         },
         {
             'key': 'StationListView.stationNameHeaderText',
@@ -202,6 +234,72 @@ define(function (require) {
         {
             'key': 'PersonnelListView.areaHeaderText',
             'value': 'Area'
+        },
+        
+        /* station entry log */
+        {
+            'key': 'StationEntryLogView.stationNameHeaderText',
+            'value': 'Station'
+        },
+        {
+            'key': 'StationEntryLogView.personnelNameHeaderText',
+            'value': 'Personnel'
+        },
+        {
+            'key': 'StationEntryLogView.contactHeaderText',
+            'value': 'Contact'
+        },
+        {
+            'key': 'StationEntryLogView.inTimeHeaderText',
+            'value': 'Checked-In'
+        },
+        {
+            'key': 'StationEntryLogView.outTimeHeaderText',
+            'value': 'Checked-out'
+        },
+        {
+            'key': 'StationEntryLogView.durationHeaderText',
+            'value': 'Duration'
+        },
+        {
+            'key': 'StationEntryLogView.purposeHeaderText',
+            'value': 'Purpose'
+        },
+        {
+            'key': 'StationEntryLogView.additionalInfoHeaderText',
+            'value': 'Additional Info'
+        },
+        {
+            'key': 'StationEntryLogView.regionHeaderText',
+            'value': 'Region'
+        },
+        {
+            'key': 'StationEntryLogView.areaHeaderText',
+            'value': 'Area'
+        },
+        
+        
+        
+        /* station */
+        {
+            'key': 'StationView.stationNameHeaderText',
+            'value': 'Station'
+        },
+        {
+            'key': 'StationView.contactHeaderText',
+            'value': 'Contact'
+        },
+        {
+            'key': 'StationView.regionHeaderText',
+            'value': 'Region'
+        },
+        {
+            'key': 'StationView.areaHeaderText',
+            'value': 'Area'
+        },
+        {
+            'key': 'StationView.directionsHeaderText',
+            'value': 'Directions'
         }
     ];
 

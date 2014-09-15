@@ -13,6 +13,7 @@ define(function(require) {
         showStationEntryLogs: 'showStationEntryLogs',
         showOpenStationEntryLogs: 'showOpenStationEntryLogs',
         showExpiredStationEntryLogs: 'showExpiredStationEntryLogs',
+        showStations: 'showStations',
         goToDirectionsWithLatLng: 'goToDirectionsWithLatLng'
     };
     

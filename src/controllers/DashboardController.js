@@ -18,7 +18,9 @@ define(function(require) {
             PersonnelCollection = require('collections/PersonnelCollection'),
             AppEventNamesEnum = require('enums/AppEventNamesEnum'),
             appEvents = require('events'),
-            appResources = require('resources');
+            appResources = require('resources'),
+            globals = require('globals'),
+            env = require('env');
 
     /**
      * Creates a new DashboardController with the specified attributes.
@@ -57,6 +59,10 @@ define(function(require) {
             this.listenTo(appEvents, AppEventNamesEnum.showOpenStationEntryLogs, this.showOpenStationEntryLogs);
             this.listenTo(appEvents, AppEventNamesEnum.showExpiredStationEntryLogs, this.showExpiredStationEntryLogs);
             this.listenTo(appEvents, AppEventNamesEnum.showStationEntryLogs, this.showStationEntryLogs);
+            
+            this.listenTo(appEvents, AppEventNamesEnum.showStations, this.showStations);
+            
+            this.listenTo(appEvents, AppEventNamesEnum.goToDirectionsWithLatLng, this.goToDirectionsWithLatLng);
         },
         goToStationEntryLogList: function() {
             console.trace('DashboardController.goToStationEntryLogList');
@@ -95,14 +101,18 @@ define(function(require) {
             var stationListViewInstance = new StationListView({
                 controller: currentContext,
                 dispatcher: currentContext.dispatcher,
-                collection: currentContext.stationSearchResults
+                collection: currentContext.stationSearchResults,
+                regionCollection: currentContext.regionResults,
+                areaCollection: currentContext.areaResults
             });
 
             currentContext.router.swapContent(stationListViewInstance);
             currentContext.router.navigate('station');
 
             $.when(currentContext.stationSearchResults.getStations()).done(function(getStationSearchResults) {
-                currentContext.stationSearchResults.reset(getStationSearchResults);
+                currentContext.stationSearchResults.reset(getStationSearchResults.stations);
+                currentContext.regionResults.reset(getStationSearchResults.regions);
+                currentContext.areaResults.reset(getStationSearchResults.areas);
                 deferred.resolve(stationListViewInstance);
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 currentContext.stationSearchResults.reset();
@@ -151,8 +161,8 @@ define(function(require) {
             currentContext.router.swapContent(stationEntryLogViewInstance);
             currentContext.router.navigate('stationEntryLog/' + stationEntryLogId);
 
-            $.when(stationEntryLogModelInstance.getStationEntryLogById(stationEntryLogId)).done(function(getStationResults) {
-                stationEntryLogModelInstance.set(getStationResults);
+            $.when(stationEntryLogModelInstance.getStationEntryLogById(stationEntryLogId)).done(function(getStationEntryLogResults) {
+                stationEntryLogModelInstance.set(getStationEntryLogResults);
                 deferred.resolve(stationEntryLogViewInstance);
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 deferred.reject(textStatus);
@@ -210,15 +220,15 @@ define(function(require) {
 
             return deferred.promise();
         },
-        showStationEntryLogs: function() {
+        showStationEntryLogs: function(options) {
             console.trace('DashboardController.showStationEntryLogs');
             var currentContext = this,
                     deferred = $.Deferred();
 
-            $.when(currentContext.stationEntryLogSearchResults.getStationEntryLogs()).done(function(getStationEntryLogSearchResults) {
+            $.when(currentContext.stationEntryLogSearchResults.getStationEntryLogs(options)).done(function(getStationEntryLogSearchResults) {
                 currentContext.stationEntryLogSearchResults.reset(getStationEntryLogSearchResults.stationEntryLogs);
-                currentContext.regionResults.reset(getStationEntryLogSearchResults.regions);
-                currentContext.areaResults.reset(getStationEntryLogSearchResults.areas);
+                //currentContext.regionResults.reset(getStationEntryLogSearchResults.regions);
+                //currentContext.areaResults.reset(getStationEntryLogSearchResults.areas);
                 deferred.resolve(getStationEntryLogSearchResults);
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 deferred.reject(textStatus);
@@ -226,15 +236,15 @@ define(function(require) {
 
             return deferred.promise();
         },
-        showOpenStationEntryLogs: function() {
+        showOpenStationEntryLogs: function(options) {
             console.trace('DashboardController.showOpenStationEntryLogs');
             var currentContext = this,
                     deferred = $.Deferred();
 
-            $.when(currentContext.stationEntryLogSearchResults.getStationEntryLogsByOpen()).done(function(getStationEntryLogSearchResults) {
+            $.when(currentContext.stationEntryLogSearchResults.getStationEntryLogsByOpen(options)).done(function(getStationEntryLogSearchResults) {
                 currentContext.stationEntryLogSearchResults.reset(getStationEntryLogSearchResults.stationEntryLogs);
-                currentContext.regionResults.reset(getStationEntryLogSearchResults.regions);
-                currentContext.areaResults.reset(getStationEntryLogSearchResults.areas);
+                //currentContext.regionResults.reset(getStationEntryLogSearchResults.regions);
+                //currentContext.areaResults.reset(getStationEntryLogSearchResults.areas);
                 deferred.resolve(getStationEntryLogSearchResults);
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 deferred.reject(textStatus);
@@ -242,21 +252,42 @@ define(function(require) {
 
             return deferred.promise();
         },
-        showExpiredStationEntryLogs: function() {
+        showExpiredStationEntryLogs: function(options) {
             console.trace('DashboardController.showExpiredStationEntryLogs');
             var currentContext = this,
                     deferred = $.Deferred();
 
-            $.when(currentContext.stationEntryLogSearchResults.getStationEntryLogsByExpired()).done(function(getStationEntryLogSearchResults) {
+            $.when(currentContext.stationEntryLogSearchResults.getStationEntryLogsByExpired(options)).done(function(getStationEntryLogSearchResults) {
                 currentContext.stationEntryLogSearchResults.reset(getStationEntryLogSearchResults.stationEntryLogs);
-                currentContext.regionResults.reset(getStationEntryLogSearchResults.regions);
-                currentContext.areaResults.reset(getStationEntryLogSearchResults.areas);
+                //currentContext.regionResults.reset(getStationEntryLogSearchResults.regions);
+                //currentContext.areaResults.reset(getStationEntryLogSearchResults.areas);
                 deferred.resolve(getStationEntryLogSearchResults);
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 deferred.reject(textStatus);
             });
 
             return deferred.promise();
+        },
+        showStations: function(options) {
+            console.trace('DashboardController.showStations');
+            var currentContext = this,
+                    deferred = $.Deferred();
+
+            $.when(currentContext.stationSearchResults.getStations(options)).done(function(getStationSearchResults) {
+                currentContext.stationSearchResults.reset(getStationSearchResults.stations);
+                //currentContext.regionResults.reset(getStationSearchResults.regions);
+                //currentContext.areaResults.reset(getStationSearchResults.areas);
+                deferred.resolve(getStationSearchResults);
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                deferred.reject(textStatus);
+            });
+
+            return deferred.promise();
+        },
+        goToDirectionsWithLatLng: function(latitude, longitude) {
+            console.trace('DashboardController.goToDirectionsWithLatLng');
+            var directionsUri = 'http://maps.google.com?daddr=' + latitude + "," + longitude;
+            globals.window.open(directionsUri);
         }
     });
 

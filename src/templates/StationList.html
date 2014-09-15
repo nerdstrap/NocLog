@@ -6,16 +6,17 @@
     </div>
     <div class="row collapse">
         <div class="small-2 columns">
-            <label for="station-list-filter">{{{listFilterHeaderText}}}&#58;&#160;
-                <select id="station-list-filter">
-                    <option value="open">open</option>
-                    <option value="expired">expired</option>
-                    <option value="all">all</option>
-                </select>
-            </label>
+            <select id="station-list-region-filter">
+                <option disabled="disabled" selected="selected">{{{regionFilterDefaultOption}}}</option>
+            </select>
         </div>
-        <div class="small-10 columns">
-            <span>&#160;</span>
+        <div class="small-2 columns">
+            <select id="station-list-area-filter">
+                <option disabled="disabled" selected="selected">{{{areaFilterDefaultOption}}}</option>
+            </select>
+        </div>
+        <div class="small-8 columns">
+            <a id="station-list-update-filter-button" class="button tiny default">{{{updateListFilterButtonText}}}</a>
         </div>
     </div>
     <div class="row collapse hidden">

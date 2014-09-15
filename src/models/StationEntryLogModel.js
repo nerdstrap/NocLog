@@ -65,13 +65,10 @@ define(function (require) {
             }
             return Backbone.Model.prototype.set.call(this, attributes, options);
         },
-        getStationEntryLogById: function(stationEntryLogId) {
+        getStationEntryLogById: function() {
             var currentContext = this;
             return $.ajax({
                 contentType: 'application/json',
-                data: $.param({
-                    id: stationEntryLogId
-                }),
                 dataType: 'json',
                 type: "GET",
                 url: currentContext.url()

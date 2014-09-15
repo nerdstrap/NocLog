@@ -1,30 +1,82 @@
 <div class="station-entry-log-view">
     <div class="row collapse">
-        <div class="small-12 columns">
+        <div class="small-2 columns">
+            <span>{{{stationNameHeaderText}}}</span>
+        </div>
+        <div class="small-10 columns">
             <h1 data-stationid="{{stationId}}">{{stationName}}</h1>
         </div>
     </div>
     <div class="row collapse">
-        <div class="small-12 columns">
-            <h1 data-personnelid="{{personnelId}}">{{personnelName}}</h1>
+        <div class="small-2 columns">
+            <span>{{{personnelNameHeaderText}}}</span>
+        </div>
+        <div class="small-10 columns">
+            <h1 data-personnelid="{{outsideId}}">{{userName}}</h1>
         </div>
     </div>
     <div class="row collapse">
-        <div class="small-12 columns">
-            <span>{{phone}}</span>
+        <div class="small-2 columns">
+            <span>{{{contactHeaderText}}}</span>
+        </div>
+        <div class="small-10 columns">
+            <span>{{formatPhoneWithDefault contact "%D %r" "&nbsp;"}}</span>
         </div>
     </div>
     <div class="row collapse">
-        <div class="small-6 columns">
-            <span>{{area}}</span>
+        <div class="small-2 columns">
+            <span>{{{inTimeHeaderText}}}</span>
         </div>
-        <div class="small-6 columns">
-            <span>{{region}}</span>
+        <div class="small-10 columns">
+            <span>{{formatDateWithDefault inTime "%D %r" "&nbsp;"}}</span>
         </div>
     </div>
     <div class="row collapse">
-        <div class="small-12 columns">
-            <a class="directions-link" data-latitude="{{latitude}}" data-longitude="{{longitude}}">directions</a>
+        <div class="small-2 columns">
+            <span>{{{durationHeaderText}}}</span>
+        </div>
+        <div class="small-10 columns">
+            <span>{{withDefault duration "&nbsp;"}}</span>
+        </div>
+    </div>
+    <div class="row collapse">
+        <div class="small-2 columns">
+            <span>{{{outTimeHeaderText}}}</span>
+        </div>
+        <div class="small-10 columns">
+            <span>{{formatDateWithDefault outTime "%D %r" "&nbsp;"}}</span>
+        </div>
+    </div>
+    <div class="row collapse">
+        <div class="small-2 columns">
+            <span>{{{purposeHeaderText}}}</span>
+        </div>
+        <div class="small-10 columns">
+            <span>{{withDefault purpose "&nbsp;"}}</span>
+        </div>
+    </div>
+    <div class="row collapse">
+        <div class="small-2 columns">
+            <span>{{{additionalInfoHeaderText}}}</span>
+        </div>
+        <div class="small-10 columns">
+            <span>{{withDefault additionalInfo "&nbsp;"}}</span>
+        </div>
+    </div>
+    <div class="row collapse">
+        <div class="small-2 columns">
+            <span>{{{regionHeaderText}}}</span>
+        </div>
+        <div class="small-10 columns">
+            <span>{{withDefault region "&nbsp;"}}</span>
+        </div>
+    </div>
+    <div class="row collapse">
+        <div class="small-2 columns">
+            <span>{{{areaHeaderText}}}</span>
+        </div>
+        <div class="small-10 columns">
+            <span>{{withDefault area "&nbsp;"}}</span>
         </div>
     </div>
 </div>

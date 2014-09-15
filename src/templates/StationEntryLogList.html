@@ -6,30 +6,24 @@
     </div>
     <div class="row collapse">
         <div class="small-2 columns">
-            <label for="station-entry-log-list-status-filter">{{{listFilterHeaderText}}}&#58;&#160;
-                <select id="station-entry-log-list-status-filter">
-                    <option value="open">open</option>
-                    <option value="expired">expired</option>
-                    <option value="all">all</option>
-                </select>
-            </label>
+            <select id="station-entry-log-list-status-filter">
+                <option value="open">open</option>
+                <option value="expired">expired</option>
+                <option value="all">all</option>
+            </select>
         </div>
         <div class="small-2 columns">
-            <label for="station-entry-log-list-region-filter">&#160;
-                <select id="station-entry-log-list-region-filter">
-                    <option disabled="disabled" selected="selected" class="disstyleableMe">region</option>
-                </select>
-            </label>
+            <select id="station-entry-log-list-region-filter">
+                <option disabled="disabled" selected="selected">{{{regionFilterDefaultOption}}}</option>
+            </select>
         </div>
         <div class="small-2 columns">
-            <label for="station-entry-log-list-area-filter">&#160;
-                <select id="station-entry-log-list-area-filter">
-                    <option disabled="disabled" selected="selected" class="disstyleableMe">area</option>
-                </select>
-            </label>
+            <select id="station-entry-log-list-area-filter">
+                <option disabled="disabled" selected="selected">{{{areaFilterDefaultOption}}}</option>
+            </select>
         </div>
         <div class="small-6 columns">
-            &#160;
+            <a id="station-entry-log-list-update-filter-button" class="button tiny default">{{{updateListFilterButtonText}}}</a>
         </div>
     </div>
     <div class="row collapse hidden">
@@ -48,7 +42,7 @@
                     <div class="small-2 columns">
                         <span>{{{personnelNameHeaderText}}}</span>
                     </div>
-                    <div class="small-2 columns">
+                    <div class="small-1 columns">
                         <span>{{{contactHeaderText}}}</span>
                     </div>
                     <div class="small-1 columns">
@@ -63,8 +57,14 @@
                     <div class="small-1 columns">
                         <span>{{{purposeHeaderText}}}</span>
                     </div>
-                    <div class="small-2 columns">
+                    <div class="small-1 columns">
                         <span>{{{additionalInfoHeaderText}}}</span>
+                    </div>
+                    <div class="small-1 columns">
+                        <span>{{{regionHeaderText}}}</span>
+                    </div>
+                    <div class="small-1 columns">
+                        <span>{{{areaHeaderText}}}</span>
                     </div>
                 </div>
             </ol>

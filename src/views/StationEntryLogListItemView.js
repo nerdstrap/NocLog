@@ -39,8 +39,8 @@ define(function(require) {
         },
         events: {
             'click .station-name-link': 'goToStationWithId',
-            'click .personnel-name-link': 'goToPersonnelWithId',
-            'click .station-entry-log-link': 'goToStationEntryLogWithId'
+            'click .personnel-name-link': 'goToStationEntryLogWithId'
+            /*'click .station-entry-log-link': 'goToStationEntryLogWithId'*/
         },
         goToStationWithId: function(event) {
             if (event) {
@@ -60,7 +60,7 @@ define(function(require) {
             if (event) {
                 event.preventDefault();
             }
-            var stationEntryLogId = this.model.get('id');
+            var stationEntryLogId = this.model.get('stationEntryLogId');
             this.dispatcher.trigger(AppEventNamesEnum.goToStationEntryLogWithId, stationEntryLogId);
         }
     });

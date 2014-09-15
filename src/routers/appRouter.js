@@ -52,7 +52,7 @@ define(function(require) {
         },
         goToStationEntryLogWithId: function(stationEntryLogId) {
             console.trace('appRouter.goToStationEntryLogWithId');
-            this.dashboardControllerInstance.goToStationWithId(stationEntryLogId);
+            this.dashboardControllerInstance.goToStationEntryLogWithId(stationEntryLogId);
         },
         goToStationWithId: function(stationId) {
             console.trace('appRouter.goToStationWithId');

@@ -22,6 +22,9 @@ define(function(require) {
                 infoMessage: appResources.getResource('StationEntryLogListView.infoMessage').value,
                 listViewTitleText: appResources.getResource('StationEntryLogListView.listViewTitleText').value,
                 listFilterHeaderText: appResources.getResource('StationEntryLogListView.listFilterHeaderText').value,
+                regionFilterDefaultOption: appResources.getResource('StationEntryLogListView.regionFilterDefaultOption').value,
+                areaFilterDefaultOption: appResources.getResource('StationEntryLogListView.areaFilterDefaultOption').value,
+                updateListFilterButtonText: appResources.getResource('StationEntryLogListView.updateListFilterButtonText').value,
                 stationNameHeaderText: appResources.getResource('StationEntryLogListView.stationNameHeaderText').value,
                 personnelNameHeaderText: appResources.getResource('StationEntryLogListView.personnelNameHeaderText').value,
                 contactHeaderText: appResources.getResource('StationEntryLogListView.contactHeaderText').value,
@@ -29,7 +32,9 @@ define(function(require) {
                 outTimeHeaderText: appResources.getResource('StationEntryLogListView.outTimeHeaderText').value,
                 durationHeaderText: appResources.getResource('StationEntryLogListView.durationHeaderText').value,
                 purposeHeaderText: appResources.getResource('StationEntryLogListView.purposeHeaderText').value,
-                additionalInfoHeaderText: appResources.getResource('StationEntryLogListView.additionalInfoHeaderText').value
+                additionalInfoHeaderText: appResources.getResource('StationEntryLogListView.additionalInfoHeaderText').value,
+                regionHeaderText: appResources.getResource('StationEntryLogListView.regionHeaderText').value,
+                areaHeaderText: appResources.getResource('StationEntryLogListView.areaHeaderText').value
             };
         },
         initialize: function(options) {
@@ -55,9 +60,12 @@ define(function(require) {
             return this;
         },
         events: {
-            'change #station-entry-log-list-status-filter': 'changeStationEntryLogListFilter',
-            'change #station-entry-log-list-region-filter': 'changeStationEntryLogListFilter',
-            'change #station-entry-log-list-area-filter': 'changeStationEntryLogListFilter'
+            /*
+             'change #station-entry-log-list-status-filter': 'changeStationEntryLogListFilter',
+             'change #station-entry-log-list-region-filter': 'changeStationEntryLogListFilter',
+             'change #station-entry-log-list-area-filter': 'changeStationEntryLogListFilter'
+             */
+            'click #station-entry-log-list-update-filter-button': 'updateStationEntryLogList'
         },
         addAll: function() {
             this._leaveChildren();
@@ -74,32 +82,40 @@ define(function(require) {
         addAllRegions: function() {
             var currentContext = this;
             var regionListRenderModel = {
+                regionFilterDefaultOption: currentContext.resources().regionFilterDefaultOption,
                 regions: currentContext.regionCollection.models
             };
-            this.$('#station-entry-log-list-region-filter').append(regionListTemplate(regionListRenderModel));
+            this.$('#station-entry-log-list-region-filter').html(regionListTemplate(regionListRenderModel));
         },
         addAllAreas: function() {
             var currentContext = this;
             var areaListRenderModel = {
+                areaFilterDefaultOption: currentContext.resources().areaFilterDefaultOption,
                 areas: currentContext.areaCollection.models
             };
-            this.$('#station-entry-log-list-area-filter').append(areaListTemplate(areaListRenderModel));
+            this.$('#station-entry-log-list-area-filter').html(areaListTemplate(areaListRenderModel));
         },
-        changeStationEntryLogListFilter: function(event) {
+        updateStationEntryLogList: function(event) {
             if (event) {
                 event.preventDefault();
             }
-            if (event.target) {
-                var filter = event.target.value;
-                if (filter === "open") {
-                    this.dispatcher.trigger(AppEventNamesEnum.showOpenStationEntryLogs);
-                }
-                if (filter === "expired") {
-                    this.dispatcher.trigger(AppEventNamesEnum.showExpiredStationEntryLogs);
-                }
-                if (filter === "all") {
-                    this.dispatcher.trigger(AppEventNamesEnum.showStationEntryLogs);
-                }
+            var status = this.$('#station-entry-log-list-status-filter').val();
+            var region = this.$('#station-entry-log-list-region-filter').val();
+            var area = this.$('#station-entry-log-list-area-filter').val();
+            
+            var options = {
+              region: region,
+              area: area
+            };
+            
+            if (status === 'open') {
+                this.dispatcher.trigger(AppEventNamesEnum.showOpenStationEntryLogs, options);
+            }
+            if (status === 'expired') {
+                this.dispatcher.trigger(AppEventNamesEnum.showExpiredStationEntryLogs, options);
+            }
+            if (status === 'all') {
+                this.dispatcher.trigger(AppEventNamesEnum.showStationEntryLogs, options);
             }
         }
     });

@@ -19,7 +19,12 @@ define(function(require) {
                 hazardIconAlt: appResources.getResource('hazardIconAlt').value,
                 checkedInIconSvgSrc: appResources.getResource('checkedInIconSvgSrc').value,
                 checkedInIconAlt: appResources.getResource('checkedInIconAlt').value,
-                checkOutButtonText: appResources.getResource('Station.checkOutButtonText').value
+                checkOutButtonText: appResources.getResource('checkOutButtonText').value,
+                stationNameHeaderText: appResources.getResource('StationView.stationNameHeaderText').value,
+                contactHeaderText: appResources.getResource('StationView.contactHeaderText').value,
+                regionHeaderText: appResources.getResource('StationView.regionHeaderText').value,
+                areaHeaderText: appResources.getResource('StationView.areaHeaderText').value,
+                directionsHeaderText: appResources.getResource('StationView.directionsHeaderText').value
             };
         },
         initialize: function(options) {
@@ -47,8 +52,9 @@ define(function(require) {
             if (event) {
                 event.preventDefault();
             }
-            var stationId = this.model.get('stationId');
-            this.dispatcher.trigger(AppEventNamesEnum.goToDirectionsWithLatLng, stationId);
+            var latitude = this.model.get('latitude');
+            var longitude = this.model.get('longitude');
+            this.dispatcher.trigger(AppEventNamesEnum.goToDirectionsWithLatLng, latitude, longitude);
         }
     });
 

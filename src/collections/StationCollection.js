@@ -12,36 +12,23 @@ define(function(require) {
         url: function() {
             return env.getApiUrl() + '/station';
         },
-        getStations: function() {
+        getStations: function(options) {
             var currentContext = this;
+            
+            var data;
+            if (options) {
+                data = $.param({
+                   regionname: options.region,
+                   areaname: options.area
+                });
+            }
+            
             return $.ajax({
                 contentType: 'application/json',
+                data: data,
                 dataType: 'json',
                 type: "GET",
                 url: currentContext.url()
-            });
-        },
-        getStationsBySearchQuery: function(searchQuery) {
-            var currentContext = this;
-            
-            return $.ajax({
-                contentType: 'application/json',
-                data: $.param({
-                    stationname: searchQuery.substr(0, 2)
-                }),
-                dataType: 'json',
-                type: "GET",
-                url: currentContext.url() + '/find'
-            });
-        },
-        getStationsByRecentCheckIn: function() {
-            var currentContext = this;
-            
-            return $.ajax({
-                contentType: 'application/json',
-                dataType: 'json',
-                type: "GET",
-                url: currentContext.url() + '/find/recent'
             });
         }
     });

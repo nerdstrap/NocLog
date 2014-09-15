@@ -1,3 +1,6 @@
+@import "normalize";
+@import "foundation";
+
 root { 
     display: block;
     font-size:1em;
@@ -74,3 +77,4 @@ body:before {
     background-color: #F2F2F2;
     margin: 5px;    
 }
+ 

@@ -19,7 +19,17 @@ define(function(require) {
                 hazardIconAlt: appResources.getResource('hazardIconAlt').value,
                 checkedInIconSvgSrc: appResources.getResource('checkedInIconSvgSrc').value,
                 checkedInIconAlt: appResources.getResource('checkedInIconAlt').value,
-                checkOutButtonText: appResources.getResource('checkOutButtonText').value
+                checkOutButtonText: appResources.getResource('checkOutButtonText').value,
+                stationNameHeaderText: appResources.getResource('StationEntryLogView.stationNameHeaderText').value,
+                personnelNameHeaderText: appResources.getResource('StationEntryLogView.personnelNameHeaderText').value,
+                contactHeaderText: appResources.getResource('StationEntryLogView.contactHeaderText').value,
+                inTimeHeaderText: appResources.getResource('StationEntryLogView.inTimeHeaderText').value,
+                outTimeHeaderText: appResources.getResource('StationEntryLogView.outTimeHeaderText').value,
+                durationHeaderText: appResources.getResource('StationEntryLogView.durationHeaderText').value,
+                purposeHeaderText: appResources.getResource('StationEntryLogView.purposeHeaderText').value,
+                additionalInfoHeaderText: appResources.getResource('StationEntryLogView.additionalInfoHeaderText').value,
+                regionHeaderText: appResources.getResource('StationEntryLogView.regionHeaderText').value,
+                areaHeaderText: appResources.getResource('StationEntryLogView.areaHeaderText').value
             };
         },
         initialize: function(options) {
@@ -38,17 +48,6 @@ define(function(require) {
             currentContext.$el.html(template(renderModel));
 
             return this;
-        },
-        events: {
-            'click .directions-link': 'goToDirectionsWithLatLng'
-        },
-        
-        goToDirectionsWithLatLng: function(event) {
-            if (event) {
-                event.preventDefault();
-            }
-            var stationId = this.model.get('stationId');
-            this.dispatcher.trigger(AppEventNamesEnum.goToDirectionsWithLatLng, stationId);
         }
     });
 
