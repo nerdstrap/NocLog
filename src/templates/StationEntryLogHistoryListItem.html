@@ -1,4 +1,4 @@
-<div class="station-entry-log-list-item-view">
+<div class="station-entry-log-history-list-item-view">
     <div class="row collapse">
         <div class="small-2 columns">
             <a class="station-name-link" data-stationid="{{stationId}}">{{withDefault stationName "&nbsp;"}}</a>
@@ -13,7 +13,7 @@
             <span>{{formatDateWithDefault inTime "%D %r" "&nbsp;"}}</span>
         </div>
         <div class="small-2 columns">
-            <span>{{formatDateWithDefault expectedOutTime "%D %r" "&nbsp;"}}</span>
+            <span>{{formatDateWithDefault outTime "%D %r" "&nbsp;"}}</span>
         </div>
         <div class="small-1 columns">
             <span>{{withDefault purpose "&nbsp;"}}</span>

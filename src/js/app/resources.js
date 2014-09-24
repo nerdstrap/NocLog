@@ -58,16 +58,16 @@ define(function (require) {
             'value': 'Entry Log'
         },
         {
+            'key': 'goToStationEntryLogHistoryListButtonText',
+            'value': 'History'
+        },
+        {
             'key': 'goToStationListButtonText',
             'value': 'Stations'
         },
         {
             'key': 'goToPersonnelListButtonText',
             'value': 'Personnel'
-        },
-        {
-            'key': 'goToReportListButtonText',
-            'value': 'Reports'
         },
         {
             'key': 'checkInButtonText',
@@ -97,7 +97,7 @@ define(function (require) {
         },
         {
             'key': 'StationEntryLogListView.listViewTitleText',
-            'value': 'Station Entry Logs'
+            'value': 'Open Station Entries'
         },
         {
             'key': 'StationEntryLogListView.listFilterHeaderText',
@@ -140,6 +140,10 @@ define(function (require) {
             'value': 'Duration'
         },
         {
+            'key': 'StationEntryLogListView.expectedOutTimeHeaderText',
+            'value': 'Est. Check-out'
+        },
+        {
             'key': 'StationEntryLogListView.purposeHeaderText',
             'value': 'Purpose'
         },
@@ -153,6 +157,84 @@ define(function (require) {
         },
         {
             'key': 'StationEntryLogListView.areaHeaderText',
+            'value': 'Area'
+        },
+        
+        /* station entry log history list */
+        {
+            'key': 'StationEntryLogHistoryListView.loadingMessage',
+            'value': 'loading'
+        },
+        {
+            'key': 'StationEntryLogHistoryListView.errorMessage',
+            'value': 'error'
+        },
+        {
+            'key': 'StationEntryLogHistoryListView.infoMessage',
+            'value': 'info'
+        },
+        {
+            'key': 'StationEntryLogHistoryListView.listViewTitleText',
+            'value': 'Historical Station Entry Log'
+        },
+        {
+            'key': 'StationEntryLogHistoryListView.stationIdentifierFilterDefaultOption',
+            'value': '&#45;&#160;station&#160;&#45;'
+        },
+        {
+            'key': 'StationEntryLogHistoryListView.regionFilterDefaultOption',
+            'value': '&#45;&#160;region&#160;&#45;'
+        },
+        {
+            'key': 'StationEntryLogHistoryListView.areaFilterDefaultOption',
+            'value': '&#45;&#160;area&#160;&#45;'
+        },
+        {
+            'key': 'StationEntryLogHistoryListView.updateListFilterButtonText',
+            'value': 'Update List'
+        },
+        {
+            'key': 'StationEntryLogHistoryListView.stationNameHeaderText',
+            'value': 'Station'
+        },
+        {
+            'key': 'StationEntryLogHistoryListView.personnelNameHeaderText',
+            'value': 'Personnel'
+        },
+        {
+            'key': 'StationEntryLogHistoryListView.contactHeaderText',
+            'value': 'Contact'
+        },
+        {
+            'key': 'StationEntryLogHistoryListView.inTimeHeaderText',
+            'value': 'Checked-In'
+        },
+        {
+            'key': 'StationEntryLogHistoryListView.outTimeHeaderText',
+            'value': 'Checked-out'
+        },
+        {
+            'key': 'StationEntryLogHistoryListView.durationHeaderText',
+            'value': 'Duration'
+        },
+        {
+            'key': 'StationEntryLogHistoryListView.expectedOutTimeHeaderText',
+            'value': 'Est. Check-out'
+        },
+        {
+            'key': 'StationEntryLogHistoryListView.purposeHeaderText',
+            'value': 'Purpose'
+        },
+        {
+            'key': 'StationEntryLogHistoryListView.additionalInfoHeaderText',
+            'value': 'Additional Info'
+        },
+        {
+            'key': 'StationEntryLogHistoryListView.regionHeaderText',
+            'value': 'Region'
+        },
+        {
+            'key': 'StationEntryLogHistoryListView.areaHeaderText',
             'value': 'Area'
         },
         

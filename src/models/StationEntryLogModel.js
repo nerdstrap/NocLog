@@ -21,27 +21,36 @@ define(function (require) {
                 (attributes = {})[key] = val;
             }
             if (attributes) {
+                var inTimeParsed = false;
+                var durationParsed = false;
                 if (attributes.hasOwnProperty('inTime')) {
                     var inTime = attributes.inTime;
                     if (inTime && !isNaN(inTime)) {
                         attributes.inTime = new Date(inTime);
+                        inTimeParsed = true;
                     }
                 }
                 
                 if (attributes.hasOwnProperty('duration')) {
                     var duration = attributes.duration;
-                    if (duration && duration.length > 0 && !isNaN(duration)) {
+                    if (duration && !isNaN(duration)) {
                         attributes.duration = Number(duration);
+                        durationParsed = true;
                     }
+                }
+                
+                if (inTimeParsed && durationParsed) {
+                    attributes.expectedOutTime = utils.addMinutes(attributes.inTime, attributes.duration);
                 }
                     
                 if (attributes.hasOwnProperty('outTime')) {
                     var outTime = attributes.outTime;
                     if (outTime && !isNaN(outTime)) {
                         attributes.outTime = new Date(outTime);
+                        attributes.checkedOut = true;
                     }
                 }
-
+                
                 if (attributes.hasOwnProperty('latitude')) {
                     var latitude = attributes.latitude;
                     if (latitude && !isNaN(latitude)) {

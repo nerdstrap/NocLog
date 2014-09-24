@@ -5,6 +5,7 @@ define(function(require) {
         login: 'login',
         logout: 'logout',
         goToStationEntryLogList: 'goToStationEntryLogList',
+        goToStationEntryLogHistoryList: 'goToStationEntryLogHistoryList',
         goToStationList: 'goToStationList',
         goToPersonnelList: 'goToPersonnelList',
         goToStationEntryLogWithId: 'goToStationEntryLogWithId',

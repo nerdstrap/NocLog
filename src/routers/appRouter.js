@@ -34,6 +34,7 @@ define(function(require) {
             'stationEntryLog': 'goToStationEntryLogList',
             'station': 'goToStationList',
             'personnel': 'goToPersonnelList',
+            'stationEntryLogHistory': 'goToStationEntryLogHistoryList',
             'stationEntryLog/:id': 'goToStationEntryLogWithId',
             'station/:id': 'goToStationWithId',
             'personnel/:id': 'goToPersonnelWithId'
@@ -49,6 +50,10 @@ define(function(require) {
         goToPersonnelList: function() {
             console.trace('appRouter.goToPersonnelList');
             this.dashboardControllerInstance.goToPersonnelList();
+        },
+        goToStationEntryLogHistoryList: function() {
+            console.trace('appRouter.goToStationEntryLogHistoryList');
+            this.dashboardControllerInstance.goToStationEntryLogHistoryList();
         },
         goToStationEntryLogWithId: function(stationEntryLogId) {
             console.trace('appRouter.goToStationEntryLogWithId');

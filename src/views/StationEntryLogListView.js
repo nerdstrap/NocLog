@@ -31,6 +31,7 @@ define(function(require) {
                 inTimeHeaderText: appResources.getResource('StationEntryLogListView.inTimeHeaderText').value,
                 outTimeHeaderText: appResources.getResource('StationEntryLogListView.outTimeHeaderText').value,
                 durationHeaderText: appResources.getResource('StationEntryLogListView.durationHeaderText').value,
+                expectedOutTimeHeaderText: appResources.getResource('StationEntryLogListView.expectedOutTimeHeaderText').value,
                 purposeHeaderText: appResources.getResource('StationEntryLogListView.purposeHeaderText').value,
                 additionalInfoHeaderText: appResources.getResource('StationEntryLogListView.additionalInfoHeaderText').value,
                 regionHeaderText: appResources.getResource('StationEntryLogListView.regionHeaderText').value,
@@ -45,6 +46,7 @@ define(function(require) {
             this.areaCollection = options.areaCollection || new Backbone.Collection();
 
             this.listenTo(this.collection, 'reset', this.addAll);
+            this.listenTo(this.collection, 'sort', this.addAll);
             this.listenTo(this.regionCollection, 'reset', this.addAllRegions);
             this.listenTo(this.areaCollection, 'reset', this.addAllAreas);
         },
@@ -60,12 +62,9 @@ define(function(require) {
             return this;
         },
         events: {
-            /*
-             'change #station-entry-log-list-status-filter': 'changeStationEntryLogListFilter',
-             'change #station-entry-log-list-region-filter': 'changeStationEntryLogListFilter',
-             'change #station-entry-log-list-area-filter': 'changeStationEntryLogListFilter'
-             */
-            'click #station-entry-log-list-update-filter-button': 'updateStationEntryLogList'
+            'click #station-entry-log-list-update-filter-button': 'updateStationEntryLogListFilter',
+            'click #station-entry-log-list-region-sort-button': 'updateStationEntryLogListRegionSort',
+            'click #station-entry-log-list-area-sort-button': 'updateStationEntryLogListAreaSort'
         },
         addAll: function() {
             this._leaveChildren();
@@ -95,7 +94,7 @@ define(function(require) {
             };
             this.$('#station-entry-log-list-area-filter').html(areaListTemplate(areaListRenderModel));
         },
-        updateStationEntryLogList: function(event) {
+        updateStationEntryLogListFilter: function(event) {
             if (event) {
                 event.preventDefault();
             }
@@ -114,9 +113,74 @@ define(function(require) {
             if (status === 'expired') {
                 this.dispatcher.trigger(AppEventNamesEnum.showExpiredStationEntryLogs, options);
             }
-            if (status === 'all') {
-                this.dispatcher.trigger(AppEventNamesEnum.showStationEntryLogs, options);
+        },
+        updateStationEntryLogListRegionSort: function(event) {
+            if (event) {
+                event.preventDefault();
             }
+            
+            if (event.target) {
+                var sortDirection = $(event.target).data('sortDirection');
+                if (sortDirection) {
+                    sortDirection = parseInt(sortDirection);
+                    sortDirection *= -1;
+                } else {
+                    sortDirection = 1;
+                }
+                if (sortDirection === 1) {
+                    this.$('#station-entry-log-list-region-sort-ascending-indicator').removeClass('hidden');
+                    this.$('#station-entry-log-list-region-sort-descending-indicator').addClass('hidden');
+                    this.$('#station-entry-log-list-area-sort-ascending-indicator').addClass('hidden');
+                    this.$('#station-entry-log-list-area-sort-descending-indicator').addClass('hidden');
+                } else {
+                    this.$('#station-entry-log-list-region-sort-ascending-indicator').addClass('hidden');
+                    this.$('#station-entry-log-list-region-sort-descending-indicator').removeClass('hidden');
+                    this.$('#station-entry-log-list-area-sort-ascending-indicator').addClass('hidden');
+                    this.$('#station-entry-log-list-area-sort-descending-indicator').addClass('hidden');
+                }
+                $(event.target).data('sortDirection', sortDirection.toString());
+                this.collection.sortDirection = sortDirection;
+            }
+
+            this.collection.sortAttributes = ['region', 'expectedOutTime'];
+            this.collection.sort();
+        },
+        updateStationEntryLogListAreaSort: function(event) {
+            if (event) {
+                event.preventDefault();
+            }
+            
+            if (event.target) {
+                var sortDirection = $(event.target).data('sortDirection');
+                if (sortDirection) {
+                    sortDirection = parseInt(sortDirection);
+                    sortDirection *= -1;
+                } else {
+                    sortDirection = 1;
+                }
+                if (sortDirection === 1) {
+                    this.$('#station-entry-log-list-region-sort-ascending-indicator').addClass('hidden');
+                    this.$('#station-entry-log-list-region-sort-descending-indicator').addClass('hidden');
+                    this.$('#station-entry-log-list-area-sort-ascending-indicator').removeClass('hidden');
+                    this.$('#station-entry-log-list-area-sort-descending-indicator').addClass('hidden');
+                } else {
+                    this.$('#station-entry-log-list-region-sort-ascending-indicator').addClass('hidden');
+                    this.$('#station-entry-log-list-region-sort-descending-indicator').addClass('hidden');
+                    this.$('#station-entry-log-list-area-sort-ascending-indicator').addClass('hidden');
+                    this.$('#station-entry-log-list-area-sort-descending-indicator').removeClass('hidden');
+                }
+                $(event.target).data('sortDirection', sortDirection.toString());
+                this.collection.sortDirection = sortDirection;
+            }
+
+            this.collection.sortAttributes = ['area', 'expectedOutTime'];
+            this.collection.sort();
+        },
+        showLoading: function() {
+            this.$('.view-status').removeClass('hidden');
+        },
+        hideLoading: function() {
+            this.$('.view-status').addClass('hidden');
         }
     });
 

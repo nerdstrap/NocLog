@@ -39,6 +39,7 @@ define(function(require) {
             this.areaCollection = options.areaCollection || new Backbone.Collection();
 
             this.listenTo(this.collection, 'reset', this.addAll);
+            this.listenTo(this.collection, 'sort', this.addAll);
             this.listenTo(this.regionCollection, 'reset', this.addAllRegions);
             this.listenTo(this.areaCollection, 'reset', this.addAllAreas);
         },
@@ -54,10 +55,8 @@ define(function(require) {
             return this;
         },
         events: {
-            /*
-             'change #station-list-filter': 'changeStationListFilter'
-             */
-            'click #station-list-update-filter-button': 'updateStationList'
+            'click #station-list-update-filter-button': 'updateStationListFilter',
+            'click #station-list-region-sort-button': 'updateStationListSort'
         },
         addAll: function() {
             this._leaveChildren();
@@ -87,7 +86,7 @@ define(function(require) {
             };
             this.$('#station-list-area-filter').html(areaListTemplate(areaListRenderModel));
         },
-        updateStationList: function(event) {
+        updateStationListFilter: function(event) {
             if (event) {
                 event.preventDefault();
             }
@@ -104,6 +103,14 @@ define(function(require) {
             if (status === 'all') {
                 this.dispatcher.trigger(AppEventNamesEnum.showStations, options);
             }
+        },
+        updateStationListSort: function(event) {
+            if (event) {
+                event.preventDefault();
+            }
+
+            this.collection.sortAttribute = 'stationName|region';
+            this.collection.sort();
         }
     });
 

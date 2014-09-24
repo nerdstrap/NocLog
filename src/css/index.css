@@ -6075,12 +6075,11 @@ body:before {
 .invisible {
   visibility: hidden; }
 
-.checked-in-icon,
-.hazard-icon {
-  width: 25px; }
-
-.footer-logo {
-  width: 40; }
+/* grid */
+.row {
+  margin-left: 0;
+  margin-right: 0;
+  max-width: none; }
 
 /* app */
 .station-list-view,

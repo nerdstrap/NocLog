@@ -1,4 +1,4 @@
-<div class="station-entry-log-list-view">
+<div class="station-entry-log-history-list-view">
     <div class="row collapse">
         <div class="small-12 columns">
             <h2>{{listViewTitleText}}</h2>
@@ -6,23 +6,22 @@
     </div>
     <div class="row collapse">
         <div class="small-2 columns">
-            <select id="station-entry-log-list-status-filter">
-                <option value="open">open</option>
-                <option value="expired">expired</option>
+            <select id="station-entry-log-history-list-station-identifier-filter">
+                <option disabled="disabled" selected="selected">{{{stationIdentifierFilterDefaultOption}}}</option>
             </select>
         </div>
         <div class="small-2 columns">
-            <select id="station-entry-log-list-region-filter">
+            <select id="station-entry-log-history-list-region-filter">
                 <option disabled="disabled" selected="selected">{{{regionFilterDefaultOption}}}</option>
             </select>
         </div>
         <div class="small-2 columns">
-            <select id="station-entry-log-list-area-filter">
+            <select id="station-entry-log-history-list-area-filter">
                 <option disabled="disabled" selected="selected">{{{areaFilterDefaultOption}}}</option>
             </select>
         </div>
         <div class="small-6 columns">
-            <a id="station-entry-log-list-update-filter-button" class="button tiny default">{{{updateListFilterButtonText}}}</a>
+            <a id="station-entry-log-history-list-update-filter-button" class="button tiny default">{{{updateListFilterButtonText}}}</a>
         </div>
     </div>
     <div class="row collapse view-status hidden">
@@ -48,8 +47,8 @@
                         <span>{{{inTimeHeaderText}}}</span>
                     </div>
                     <div class="small-2 columns">
-                        <span>{{{expectedOutTimeHeaderText}}}</span>
-                        <span id="station-entry-log-list-expected-out-time-sort-ascending-indicator">+</span>
+                        <span>{{{outTimeHeaderText}}}</span>
+                        <span id="station-entry-log-history-list-out-time-sort-ascending-indicator">+</span>
                     </div>
                     <div class="small-1 columns">
                         <span>{{{purposeHeaderText}}}</span>
@@ -58,14 +57,14 @@
                         <span>{{{additionalInfoHeaderText}}}</span>
                     </div>
                     <div class="small-1 columns">
-                        <a id="station-entry-log-list-region-sort-button" href="#">{{{regionHeaderText}}}</a>
-                        <span id="station-entry-log-list-region-sort-ascending-indicator" class="hidden">+</span>
-                        <span id="station-entry-log-list-region-sort-descending-indicator" class="hidden">-</span>
+                        <a id="station-entry-log-history-list-region-sort-button" href="#">{{{regionHeaderText}}}</a>
+                        <span id="station-entry-log-history-list-region-sort-ascending-indicator" class="hidden">+</span>
+                        <span id="station-entry-log-history-list-region-sort-descending-indicator" class="hidden">-</span>
                     </div>
                     <div class="small-1 columns">
-                        <a id="station-entry-log-list-area-sort-button" href="#">{{{areaHeaderText}}}</a>
-                        <span id="station-entry-log-list-area-sort-ascending-indicator" class="hidden">+</span>
-                        <span id="station-entry-log-list-area-sort-descending-indicator" class="hidden">-</span>
+                        <a id="station-entry-log-history-list-area-sort-button" href="#">{{{areaHeaderText}}}</a>
+                        <span id="station-entry-log-history-list-area-sort-ascending-indicator" class="hidden">+</span>
+                        <span id="station-entry-log-history-list-area-sort-descending-indicator" class="hidden">-</span>
                     </div>
                 </div>
             </ol>

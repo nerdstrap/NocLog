@@ -3,8 +3,9 @@
 
 root { 
     display: block;
-    font-size:1em;
+    font-size: 1em;
 }
+
 ol, ul {
     list-style: none;
     margin: 0;
@@ -55,13 +56,12 @@ body:before {
     visibility: hidden;
 }
 
-.checked-in-icon,
-.hazard-icon {
-    width:25px;
-}
+/* grid */
 
-.footer-logo {
-    width: 40;
+.row {
+    margin-left: 0;
+    margin-right: 0;
+    max-width: none;
 }
 
 /* app */

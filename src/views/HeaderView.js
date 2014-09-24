@@ -15,6 +15,7 @@ define(function(require) {
             return {
                 'appTitleText': appResources.getResource('appTitleText').value,
                 'goToStationEntryLogListButtonText': appResources.getResource('goToStationEntryLogListButtonText').value,
+                'goToStationEntryLogHistoryListButtonText': appResources.getResource('goToStationEntryLogHistoryListButtonText').value,
                 'goToStationListButtonText': appResources.getResource('goToStationListButtonText').value,
                 'goToPersonnelListButtonText': appResources.getResource('goToPersonnelListButtonText').value,
                 'goToReportListButtonText': appResources.getResource('goToReportListButtonText').value
@@ -28,9 +29,9 @@ define(function(require) {
         events: {
             'click #app-title-button': 'titleButtonClick',
             'click #go-to-station-entry-log-list-button': 'goToStationEntryLogList',
+            'click #go-to-station-entry-log-history-list-button': 'goToStationEntryLogHistoryList',
             'click #go-to-station-list-button': 'goToStationList',
-            'click #go-to-personnel-list-button': 'goToPersonnelList',
-            'click #go-to-report-list-button': 'goToReportList'
+            'click #go-to-personnel-list-button': 'goToPersonnelList'
         },
         render: function() {
             console.trace('HeaderView.render');
@@ -64,11 +65,11 @@ define(function(require) {
             }
             this.dispatcher.trigger(AppEventNamesEnum.goToPersonnelList);
         },
-        goToReportList: function(event) {
+        goToStationEntryLogHistoryList: function(event) {
             if (event) {
                 event.preventDefault();
             }
-            this.dispatcher.trigger(AppEventNamesEnum.goToReportList);
+            this.dispatcher.trigger(AppEventNamesEnum.goToStationEntryLogHistoryList);
         }
     });
 

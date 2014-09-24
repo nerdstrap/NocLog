@@ -16,7 +16,7 @@
             </select>
         </div>
         <div class="small-8 columns">
-            <a id="station-list-update-filter-button" class="button tiny default">{{{updateListFilterButtonText}}}</a>
+            <a id="station-list-update-filter-button" class="button tiny default" href="#">{{{updateListFilterButtonText}}}</a>
         </div>
     </div>
     <div class="row collapse hidden">
@@ -29,17 +29,14 @@
         <div class="small-12 columns">
             <ol class="view-list">
                 <div class="row collapse">
-                    <div class="small-3 columns">
+                    <div class="small-4 columns">
                         <span>{{{stationNameHeaderText}}}</span>
                     </div>
-                    <div class="small-3 columns">
-                        <span>{{{regionHeaderText}}}</span>
+                    <div class="small-4 columns">
+                        <a id="station-list-region-sort-button" href="#">{{{regionHeaderText}}}</a>
                     </div>
-                    <div class="small-3 columns">
-                        <span>{{{areaHeaderText}}}</span>
-                    </div>
-                    <div class="small-3 columns">
-                        <span>{{{placeholderHeaderText}}}</span>
+                    <div class="small-4 columns">
+                        <a id="station-list-area-sort-button" href="#">{{{areaHeaderText}}}</a>
                     </div>
                 </div>
             </ol>
