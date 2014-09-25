@@ -6091,3 +6091,7 @@ body:before {
 .station-entry-log-list-item-view {
   background-color: #F2F2F2;
   margin: 5px; }
+
+.no-padding {
+  padding-left: 0;
+  padding-right: 0; }

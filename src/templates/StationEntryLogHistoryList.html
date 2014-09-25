@@ -5,24 +5,44 @@
         </div>
     </div>
     <div class="row collapse">
-        <div class="small-2 columns">
-            <select id="station-entry-log-history-list-station-identifier-filter">
-                <option disabled="disabled" selected="selected">{{{stationIdentifierFilterDefaultOption}}}</option>
-            </select>
-        </div>
-        <div class="small-2 columns">
-            <select id="station-entry-log-history-list-region-filter">
-                <option disabled="disabled" selected="selected">{{{regionFilterDefaultOption}}}</option>
-            </select>
-        </div>
-        <div class="small-2 columns">
-            <select id="station-entry-log-history-list-area-filter">
-                <option disabled="disabled" selected="selected">{{{areaFilterDefaultOption}}}</option>
-            </select>
-        </div>
-        <div class="small-6 columns">
-            <a id="station-entry-log-history-list-update-filter-button" class="button tiny default">{{{updateListFilterButtonText}}}</a>
-        </div>
+        <form method="get" data-abide>
+            <div class="small-2 columns">
+                <select id="station-entry-log-history-list-station-identifier-filter">
+                    <option disabled="disabled" selected="selected">{{{stationIdentifierFilterDefaultOption}}}</option>
+                </select>
+            </div>
+            <div class="small-1 columns">
+                <select id="station-entry-log-history-list-region-filter">
+                    <option disabled="disabled" selected="selected">{{{regionFilterDefaultOption}}}</option>
+                </select>
+            </div>
+            <div class="small-1 columns">
+                <select id="station-entry-log-history-list-area-filter">
+                    <option disabled="disabled" selected="selected">{{{areaFilterDefaultOption}}}</option>
+                </select>
+            </div>
+            <div class="small-1 columns">
+                <span>start:</span>
+            </div>
+            <div class="small-1 columns no-padding">
+                <input id="station-entry-log-history-list-start-date-filter" type="date">
+            </div>
+            <div class="small-1 columns no-padding">
+                <input id="station-entry-log-history-list-start-time-filter" type="time">
+            </div>
+            <div class="small-1 columns">
+                <span>end:</span>
+            </div>
+            <div class="small-1 columns no-padding">
+                <input id="station-entry-log-history-list-end-date-filter" type="date">
+            </div>
+            <div class="small-1 columns no-padding">
+                <input id="station-entry-log-history-list-end-time-filter" type="time">
+            </div>
+            <div class="small-2 columns">
+                <a id="station-entry-log-history-list-update-filter-button" class="button tiny default">{{{updateListFilterButtonText}}}</a>
+            </div>
+        </form>
     </div>
     <div class="row collapse view-status hidden">
         <div class="small-12 columns">

@@ -85,7 +85,7 @@ define(function(require) {
                 data: data,
                 dataType: 'json',
                 type: "GET",
-                url: currentContext.url()
+                url: currentContext.url() + '/history'
             });
         },
         getStationEntryLogsByOpen: function(options) {
