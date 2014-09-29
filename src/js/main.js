@@ -2,7 +2,7 @@ require.config({
     config: {
         'env': {
             apiUrl: '/NocLog-services/webresources',
-            siteRoot: '/~michaelbaltic/noclog/src/'
+            siteRoot: '/NocLog-web'
         },
         'models/AppLocationModel': {
             'timeout': 5000,

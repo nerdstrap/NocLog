@@ -36,7 +36,9 @@ define(function(require) {
                 purposeHeaderText: appResources.getResource('StationEntryLogHistoryListView.purposeHeaderText').value,
                 additionalInfoHeaderText: appResources.getResource('StationEntryLogHistoryListView.additionalInfoHeaderText').value,
                 regionHeaderText: appResources.getResource('StationEntryLogHistoryListView.regionHeaderText').value,
-                areaHeaderText: appResources.getResource('StationEntryLogHistoryListView.areaHeaderText').value
+                areaHeaderText: appResources.getResource('StationEntryLogHistoryListView.areaHeaderText').value,
+                startDateTimeHeaderText: appResources.getResource('StationEntryLogHistoryListView.startDateTimeHeaderText').value,
+                endDateTimeHeaderText: appResources.getResource('StationEntryLogHistoryListView.endDateTimeHeaderText').value
             };
         },
         initialize: function(options) {
@@ -75,6 +77,7 @@ define(function(require) {
         addAll: function() {
             this._leaveChildren();
             _.each(this.collection.models, this.addOne, this);
+            this.hideLoading();
         },
         addOne: function(stationEntryLog) {
             var currentContext = this;
@@ -112,6 +115,8 @@ define(function(require) {
             if (event) {
                 event.preventDefault();
             }
+            
+            this.showLoading();
 
             var stationId = this.$('#station-entry-log-history-list-station-identifier-filter').val();
             var region = this.$('#station-entry-log-history-list-region-filter').val();
@@ -120,15 +125,15 @@ define(function(require) {
             var startTime = this.$('#station-entry-log-history-list-start-time-filter').val();
             var endDate = this.$('#station-entry-log-history-list-end-date-filter').val();
             var endTime = this.$('#station-entry-log-history-list-end-time-filter').val();
-            var startDateTime = new Date(startDate + ' ' + startTime);
-            var endDateTime = new Date(endDate + ' ' + endTime);
 
             var options = {
                 stationId: stationId,
                 region: region,
                 area: area,
-                startDateTime: startDateTime,
-                endDateTime: endDateTime
+                startDate: startDate,
+                startTime: startTime,
+                endDate: endDate,
+                endTime: endTime
             };
 
             this.dispatcher.trigger(AppEventNamesEnum.showStationEntryLogs, options);
@@ -145,6 +150,16 @@ define(function(require) {
             if (event) {
                 event.preventDefault();
             }
+            
+            this.showLoading();
+            
+            this.$('#station-entry-log-history-list-station-identifier-filter').val("");
+            this.$('#station-entry-log-history-list-region-filter').val("");
+            this.$('#station-entry-log-history-list-area-filter').val("");
+            this.$('#station-entry-log-history-list-start-date-filter').val("");
+            this.$('#station-entry-log-history-list-start-time-filter').val("");
+            this.$('#station-entry-log-history-list-end-date-filter').val("");
+            this.$('#station-entry-log-history-list-end-time-filter').val("");
 
             this.$('#station-entry-log-history-list-reset-list-options-button').addClass('hidden');
             this.$('#station-entry-log-history-list-options-view').addClass('hidden');
@@ -155,11 +170,8 @@ define(function(require) {
             if (event) {
                 event.preventDefault();
             }
-
-            this.$('#station-entry-log-history-list-region-sort-ascending-indicator').addClass('hidden');
-            this.$('#station-entry-log-history-list-region-sort-descending-indicator').addClass('hidden');
-            this.$('#station-entry-log-history-list-area-sort-ascending-indicator').addClass('hidden');
-            this.$('#station-entry-log-history-list-area-sort-descending-indicator').addClass('hidden');
+            
+            this.showSortIndicators();
 
             this.$('#station-entry-log-history-list-region-sort-button').removeData('sort-direction');
             this.$('#station-entry-log-history-list-area-sort-button').removeData('sort-direction');
@@ -172,6 +184,8 @@ define(function(require) {
             if (event) {
                 event.preventDefault();
             }
+            
+            var sortAttributes = ['region', 'outTime'];
 
             var sortDirection = this.$('#station-entry-log-history-list-region-sort-button').data('sort-direction');
             if (sortDirection) {
@@ -180,28 +194,20 @@ define(function(require) {
             } else {
                 sortDirection = 1;
             }
-            if (sortDirection === 1) {
-                this.$('#station-entry-log-history-list-region-sort-ascending-indicator').removeClass('hidden');
-                this.$('#station-entry-log-history-list-region-sort-descending-indicator').addClass('hidden');
-                this.$('#station-entry-log-history-list-area-sort-ascending-indicator').addClass('hidden');
-                this.$('#station-entry-log-history-list-area-sort-descending-indicator').addClass('hidden');
-            } else {
-                this.$('#station-entry-log-history-list-region-sort-ascending-indicator').addClass('hidden');
-                this.$('#station-entry-log-history-list-region-sort-descending-indicator').removeClass('hidden');
-                this.$('#station-entry-log-history-list-area-sort-ascending-indicator').addClass('hidden');
-                this.$('#station-entry-log-history-list-area-sort-descending-indicator').addClass('hidden');
-            }
+            this.showSortIndicators(sortAttributes, sortDirection);
             this.$('#station-entry-log-history-list-region-sort-button').data('sort-direction', sortDirection.toString());
             this.$('#station-entry-log-history-list-area-sort-button').removeData('sort-direction');
-            this.collection.sortDirection = sortDirection;
 
-            this.collection.sortAttributes = ['region', 'outTime'];
+            this.collection.sortDirection = sortDirection;
+            this.collection.sortAttributes = sortAttributes;
             this.collection.sort();
         },
         updateStationEntryLogHistoryListAreaSort: function(event) {
             if (event) {
                 event.preventDefault();
             }
+            
+            var sortAttributes = ['area', 'outTime'];
 
             var sortDirection = this.$('#station-entry-log-history-list-area-sort-button').data('sortDirection');
             if (sortDirection) {
@@ -210,23 +216,36 @@ define(function(require) {
             } else {
                 sortDirection = 1;
             }
-            if (sortDirection === 1) {
-                this.$('#station-entry-log-history-list-region-sort-ascending-indicator').addClass('hidden');
-                this.$('#station-entry-log-history-list-region-sort-descending-indicator').addClass('hidden');
-                this.$('#station-entry-log-history-list-area-sort-ascending-indicator').removeClass('hidden');
-                this.$('#station-entry-log-history-list-area-sort-descending-indicator').addClass('hidden');
-            } else {
-                this.$('#station-entry-log-history-list-region-sort-ascending-indicator').addClass('hidden');
-                this.$('#station-entry-log-history-list-region-sort-descending-indicator').addClass('hidden');
-                this.$('#station-entry-log-history-list-area-sort-ascending-indicator').addClass('hidden');
-                this.$('#station-entry-log-history-list-area-sort-descending-indicator').removeClass('hidden');
-            }
+            this.showSortIndicators(sortAttributes, sortDirection);
             this.$('#station-entry-log-history-list-area-sort-button').data('sort-direction', sortDirection.toString());
             this.$('#station-entry-log-history-list-region-sort-button').removeData('sort-direction');
+            
             this.collection.sortDirection = sortDirection;
-
-            this.collection.sortAttributes = ['area', 'outTime'];
+            this.collection.sortAttributes = sortAttributes;
             this.collection.sort();
+        },
+        showSortIndicators: function(sortAttributes, sortDirection) {
+            this.$('#station-entry-log-history-list-region-sort-ascending-indicator').addClass('hidden');
+            this.$('#station-entry-log-history-list-region-sort-descending-indicator').addClass('hidden');
+            this.$('#station-entry-log-history-list-area-sort-ascending-indicator').addClass('hidden');
+            this.$('#station-entry-log-history-list-area-sort-descending-indicator').addClass('hidden');
+            
+            if (sortAttributes && sortAttributes.length > 0) {
+                var sortAttribute = sortAttributes[0];
+                if (sortAttribute === 'region') {
+                    if (sortDirection === 1) {
+                        this.$('#station-entry-log-history-list-region-sort-ascending-indicator').removeClass('hidden');
+                    } else {
+                        this.$('#station-entry-log-history-list-region-sort-descending-indicator').removeClass('hidden');
+                    }
+                } else if (sortAttribute === 'area') {
+                    if (sortDirection === 1) {
+                        this.$('#station-entry-log-history-list-area-sort-ascending-indicator').removeClass('hidden');
+                    } else {
+                        this.$('#station-entry-log-history-list-area-sort-descending-indicator').removeClass('hidden');
+                    }
+                }
+            }
         },
         showLoading: function() {
             this.$('.view-status').removeClass('hidden');

@@ -1,85 +1,141 @@
 @import "normalize";
 @import "foundation";
 
-root { 
-    display: block;
-    font-size: 1em;
+/* -------- NocLog -------- */
+
+root {
+  display: block;
+  font-size: 1em;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 ol, ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
+  list-style: none;
+  margin: 0;
+  padding: 0; }
 
 /* stickey footer http://www.cssstickyfooter.com/using-sticky-footer-code.html*/
 html, body {
-    height: 100%;
-}
+  height: 100%; }
+
 body {
-    line-height: 1.5em;
-}
+  font-size: 1em;
+  line-height: 1.5em; }
 
 .shell-view {
-    min-height: 100%;
-    background-color: #F2F2F2;
-}
+  min-height: 100%;
+  background-color: #DEDEDE; }
 
 .shell-view {
-    overflow: auto;
-    padding-bottom: 270px;
-}
+  overflow: auto;
+  padding-bottom: 40px; }
+
 /* must be same height as the footer */
 #footer {
-    position: relative;
-    margin-top: -270px; /* negative value of footer height */
-    height: 270px;
-    line-height: 270px;
-    overflow: hidden;
-    clear: both;
-    background-color: #DEDEDE;
-}
+  position: relative;
+  margin-top: -40px;
+  /* negative value of footer height */
+  height: 40px;
+  line-height: 40px;
+  overflow: hidden;
+  clear: both;
+  background-color: #DEDEDE; }
+
+  .footer-logo {
+    width: 40px;
+  }
+
 /*Opera Fix*/
 body:before {
-    content: "";
-    height: 100%;
-    float: left;
-    width: 0;
-    margin-top:-32767px;
+  content: "";
+  height: 100%;
+  float: left;
+  width: 0;
+  margin-top: -32767px; }
+
+/* app */
+.row {
+margin-left: 0;
+margin-right: 0;
+max-width: none;
 }
 
 .hidden {
-    display: none;
+  display: none;
 }
-
-.invisible {
-    visibility: hidden;
-}
-
-/* grid */
-
-.row {
-    margin-left: 0;
-    margin-right: 0;
-    max-width: none;
-}
-
-/* app */
 
 .station-list-view,
-.station-entry-log-list-view {
-    background-color: #FFFFFF;
-    margin: 5px;    
+.station-entry-log-list-view,
+.station-entry-log-history-list-view {
+  background-color: #FFFFFF;
+  margin: 5px;
+  padding: 5px;
+}
+
+.list-header-item-view {
+  background-color: #DEDEDE;
+  font-size: 1.2em;
+  line-height: 1.2em;
+  padding: 3px;
+  border: solid 1px #C2C2C2;
+  margin: 5px 0;
+}
+
+.list-header-item-view .columns {
+  position: relative;
+  height: 50px;
+}
+
+.list-header-item-view .columns span {
+  position: absolute;
+        bottom: 0;
+        left: 0;
 }
 
 .station-list-item-view,
-.station-entry-log-list-item-view {
-    background-color: #F2F2F2;
-    margin: 5px;    
+.station-entry-log-list-item-view,
+.station-entry-log-history-list-item-view {
+  background-color: #DEDEDE;
+  border: solid 1px #C2C2C2;
+  padding: 3px;
+  margin: 5px 0;
 }
 
-.no-padding {
-    padding-left: 0;
-    padding-right: 0;
+.h2 { 
+    font-size: 2.3em;
 }
- 
+.h3 {
+    font-size: 1.5em;
+}
+
+/* overriding font size for the various input types */
+select, 
+input[type="text"], 
+input[type="password"], 
+input[type="date"], 
+input[type="datetime"], 
+input[type="datetime-local"], 
+input[type="month"], 
+input[type="week"], 
+input[type="email"], 
+input[type="number"], 
+input[type="search"], 
+input[type="tel"], 
+input[type="time"], 
+input[type="url"], 
+textarea {
+  display: inline;
+  min-width: 170px;
+  max-width: 170px;
+    font-size: 1em;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: normal;
+    color: #000000;
+}
+.detail {
+    font-size: 1em;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: normal;
+    font-style: italic;
+    color: #000000;
+}

@@ -85,7 +85,7 @@ define(function (require) {
         /* station entry log list */
         {
             'key': 'StationEntryLogListView.loadingMessage',
-            'value': 'loading'
+            'value': 'loading station entries'
         },
         {
             'key': 'StationEntryLogListView.errorMessage',
@@ -171,7 +171,7 @@ define(function (require) {
         /* station entry log history list */
         {
             'key': 'StationEntryLogHistoryListView.loadingMessage',
-            'value': 'loading'
+            'value': 'loading station entries'
         },
         {
             'key': 'StationEntryLogHistoryListView.errorMessage',
@@ -187,15 +187,15 @@ define(function (require) {
         },
         {
             'key': 'StationEntryLogHistoryListView.stationIdentifierFilterDefaultOption',
-            'value': '&#45;&#160;station&#160;&#45;'
+            'value': '&#45;&#160;select&#160;&#45;'
         },
         {
             'key': 'StationEntryLogHistoryListView.regionFilterDefaultOption',
-            'value': '&#45;&#160;region&#160;&#45;'
+            'value': '&#45;&#160;select&#160;&#45;'
         },
         {
             'key': 'StationEntryLogHistoryListView.areaFilterDefaultOption',
-            'value': '&#45;&#160;area&#160;&#45;'
+            'value': '&#45;&#160;select&#160;&#45;'
         },
         {
             'key': 'StationEntryLogHistoryListView.refreshListButtonText',
@@ -245,11 +245,19 @@ define(function (require) {
             'key': 'StationEntryLogHistoryListView.areaHeaderText',
             'value': 'Area'
         },
+        {
+            'key': 'StationEntryLogHistoryListView.startDateTimeHeaderText',
+            'value': 'Start Date/Time'
+        },
+        {
+            'key': 'StationEntryLogHistoryListView.endDateTimeHeaderText',
+            'value': 'End Date/Time'
+        },
         
         /* station list */    
         {
             'key': 'StationListView.loadingMessage',
-            'value': 'loading'
+            'value': 'loading stations'
         },
         {
             'key': 'StationListView.errorMessage',

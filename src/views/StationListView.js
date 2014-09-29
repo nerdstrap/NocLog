@@ -65,6 +65,7 @@ define(function(require) {
         addAll: function() {
             this._leaveChildren();
             _.each(this.collection.models, this.addOne, this);
+            this.hideLoading();
         },
         addOne: function(station) {
             var currentContext = this;
@@ -95,6 +96,8 @@ define(function(require) {
                 event.preventDefault();
             }
 
+            this.showLoading();
+            
             var status = 'all';
             var region = this.$('#station-list-region-filter').val();
             var area = this.$('#station-list-area-filter').val();
@@ -120,6 +123,8 @@ define(function(require) {
             if (event) {
                 event.preventDefault();
             }
+            
+            this.showLoading();
 
             this.$('#station-list-reset-list-options-button').addClass('hidden');
             this.$('#station-list-options-view').addClass('hidden');
@@ -130,33 +135,21 @@ define(function(require) {
             if (event) {
                 event.preventDefault();
             }
-            
-            var sortDirection = this.$('#station-list-station-name-sort-button').data('sortDirection');
+            var sortAttributes = ['stationName'];
+            var sortDirection = this.$('#station-list-station-name-sort-button').data('sort-direction');
             if (sortDirection) {
                 sortDirection = parseInt(sortDirection);
                 sortDirection *= -1;
             } else {
                 sortDirection = 1;
             }
-            if (sortDirection === 1) {
-                this.$('#station-list-station-name-sort-ascending-indicator').removeClass('hidden');
-                this.$('#station-list-station-name-sort-descending-indicator').addClass('hidden');
-                this.$('#station-list-region-sort-ascending-indicator').addClass('hidden');
-                this.$('#station-list-region-sort-descending-indicator').addClass('hidden');
-                this.$('#station-list-area-sort-ascending-indicator').addClass('hidden');
-                this.$('#station-list-area-sort-descending-indicator').addClass('hidden');
-            } else {
-                this.$('#station-list-station-name-sort-ascending-indicator').addClass('hidden');
-                this.$('#station-list-station-name-sort-descending-indicator').removeClass('hidden');
-                this.$('#station-list-region-sort-ascending-indicator').addClass('hidden');
-                this.$('#station-list-region-sort-descending-indicator').addClass('hidden');
-                this.$('#station-list-area-sort-ascending-indicator').addClass('hidden');
-                this.$('#station-list-area-sort-descending-indicator').addClass('hidden');
-            }
-            this.$('#station-list-station-name-sort-button').data('sortDirection', sortDirection.toString());
+            this.showSortIndicators(sortAttributes, sortDirection);
+            this.$('#station-list-station-name-sort-button').data('sort-direction', sortDirection.toString());
+            this.$('#station-list-region-sort-button').removeData('sort-direction');
+            this.$('#station-list-area-sort-button').removeData('sort-direction');
+            
             this.collection.sortDirection = sortDirection;
-
-            this.collection.sortAttributes = ['stationName'];
+            this.collection.sortAttributes = sortAttributes;
             this.collection.sort();
         },
         updateStationListRegionSort: function(event) {
@@ -164,32 +157,22 @@ define(function(require) {
                 event.preventDefault();
             }
             
-            var sortDirection = this.$('#station-list-region-sort-button').data('sortDirection');
+            var sortAttributes = ['region'];
+            
+            var sortDirection = this.$('#station-list-region-sort-button').data('sort-direction');
             if (sortDirection) {
                 sortDirection = parseInt(sortDirection);
                 sortDirection *= -1;
             } else {
                 sortDirection = 1;
             }
-            if (sortDirection === 1) {
-                this.$('#station-list-station-name-sort-ascending-indicator').addClass('hidden');
-                this.$('#station-list-station-name-sort-descending-indicator').addClass('hidden');
-                this.$('#station-list-region-sort-ascending-indicator').removeClass('hidden');
-                this.$('#station-list-region-sort-descending-indicator').addClass('hidden');
-                this.$('#station-list-area-sort-ascending-indicator').addClass('hidden');
-                this.$('#station-list-area-sort-descending-indicator').addClass('hidden');
-            } else {
-                this.$('#station-list-station-name-sort-ascending-indicator').addClass('hidden');
-                this.$('#station-list-station-name-sort-descending-indicator').addClass('hidden');
-                this.$('#station-list-region-sort-ascending-indicator').addClass('hidden');
-                this.$('#station-list-region-sort-descending-indicator').removeClass('hidden');
-                this.$('#station-list-area-sort-ascending-indicator').addClass('hidden');
-                this.$('#station-list-area-sort-descending-indicator').addClass('hidden');
-            }
-            this.$('#station-list-region-sort-button').data('sortDirection', sortDirection.toString());
+            this.showSortIndicators(sortAttributes, sortDirection);
+            this.$('#station-list-station-name-sort-button').removeData('sort-direction').removeAttr('data-sort-direction');
+            this.$('#station-list-region-sort-button').data('sort-direction', sortDirection.toString());
+            this.$('#station-list-area-sort-button').removeData('sort-direction');
+            
             this.collection.sortDirection = sortDirection;
-
-            this.collection.sortAttributes = ['region'];
+            this.collection.sortAttributes = sortAttributes;
             this.collection.sort();
         },
         updateStationListAreaSort: function(event) {
@@ -197,32 +180,54 @@ define(function(require) {
                 event.preventDefault();
             }
             
-            var sortDirection = this.$('#station-list-area-sort-button').data('sortDirection');
+            var sortAttributes = ['area'];
+            
+            var sortDirection = this.$('#station-list-area-sort-button').data('sort-direction');
             if (sortDirection) {
                 sortDirection = parseInt(sortDirection);
                 sortDirection *= -1;
             } else {
                 sortDirection = 1;
             }
-            if (sortDirection === 1) {
-                this.$('#station-list-station-name-sort-ascending-indicator').addClass('hidden');
-                this.$('#station-list-station-name-sort-descending-indicator').addClass('hidden');
-                this.$('#station-list-region-sort-ascending-indicator').addClass('hidden');
-                this.$('#station-list-region-sort-descending-indicator').addClass('hidden');
-                this.$('#station-list-area-sort-ascending-indicator').removeClass('hidden');
-                this.$('#station-list-area-sort-descending-indicator').addClass('hidden');
-            } else {
-                this.$('#station-list-station-name-sort-ascending-indicator').addClass('hidden');
-                this.$('#station-list-station-name-sort-descending-indicator').addClass('hidden');
-                this.$('#station-list-region-sort-ascending-indicator').addClass('hidden');
-                this.$('#station-list-region-sort-descending-indicator').addClass('hidden');
-                this.$('#station-list-area-sort-ascending-indicator').addClass('hidden');
-                this.$('#station-list-area-sort-descending-indicator').removeClass('hidden');
-            }
-            this.$('#station-list-area-sort-button').data('sortDirection', sortDirection.toString());
+            this.showSortIndicators(sortAttributes, sortDirection);
+            this.$('#station-list-station-name-sort-button').removeData('sort-direction').removeAttr('data-sort-direction');
+            this.$('#station-list-region-sort-button').removeData('sort-direction');
+            this.$('#station-list-area-sort-button').data('sort-direction', sortDirection.toString());
+            
             this.collection.sortDirection = sortDirection;
-            this.collection.sortAttributes = ['area'];
+            this.collection.sortAttributes = sortAttributes;
             this.collection.sort();
+        },
+        showSortIndicators: function(sortAttributes, sortDirection) {
+            this.$('#station-list-station-name-sort-ascending-indicator').addClass('hidden');
+            this.$('#station-list-station-name-sort-descending-indicator').addClass('hidden');
+            this.$('#station-list-region-sort-ascending-indicator').addClass('hidden');
+            this.$('#station-list-region-sort-descending-indicator').addClass('hidden');
+            this.$('#station-list-area-sort-ascending-indicator').addClass('hidden');
+            this.$('#station-list-area-sort-descending-indicator').addClass('hidden');
+            
+            if (sortAttributes && sortAttributes.length > 0) {
+                var sortAttribute = sortAttributes[0];
+                 if (sortAttribute === 'stationName') {
+                    if (sortDirection === 1) {
+                        this.$('#station-list-station-name-sort-ascending-indicator').removeClass('hidden');
+                    } else {
+                        this.$('#station-list-station-name-sort-descending-indicator').removeClass('hidden');
+                    }
+                } else if (sortAttribute === 'region') {
+                    if (sortDirection === 1) {
+                        this.$('#station-list-region-sort-ascending-indicator').removeClass('hidden');
+                    } else {
+                        this.$('#station-list-region-sort-descending-indicator').removeClass('hidden');
+                    }
+                } else if (sortAttribute === 'area') {
+                    if (sortDirection === 1) {
+                        this.$('#station-list-area-sort-ascending-indicator').removeClass('hidden');
+                    } else {
+                        this.$('#station-list-area-sort-descending-indicator').removeClass('hidden');
+                    }
+                }
+            }
         },
         showLoading: function() {
             this.$('.view-status').removeClass('hidden');

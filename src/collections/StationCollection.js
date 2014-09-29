@@ -16,8 +16,12 @@ define(function(require) {
         sortableFields: [
             {
                 sortAttribute: 'stationName',
-                comparator: function(a, b) {
-                    return (a === b) ? 0 : (a > b) ? 1 : -1;
+                comparator: function(a, b, sortDirection) {
+                    if (sortDirection === 1) {
+                        return (a === b) ? 0 : (a > b) ? 1 : -1;
+                    } else {
+                        return (a === b) ? 0 : (a < b) ? 1 : -1;
+                    }
                 }
             },
             {

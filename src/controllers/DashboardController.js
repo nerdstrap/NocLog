@@ -124,7 +124,7 @@ define(function(require) {
             currentContext.router.navigate('stationEntryLogHistory');
 
             stationEntryLogHistoryListViewInstance.showLoading();
-            $.when(currentContext.stationEntryLogSearchResults.getStationEntryLogs()).done(function(getStationEntryLogSearchResults) {
+            $.when(currentContext.stationEntryLogSearchResults.getStationEntryLogsByHistory()).done(function(getStationEntryLogSearchResults) {
                 currentContext.stationEntryLogSearchResults.reset(getStationEntryLogSearchResults.stationEntryLogs);
                 currentContext.stationIdentifierResults.reset(getStationEntryLogSearchResults.stationIdentifiers);
                 currentContext.regionResults.reset(getStationEntryLogSearchResults.regions);
@@ -276,7 +276,7 @@ define(function(require) {
             var currentContext = this,
                     deferred = $.Deferred();
 
-            $.when(currentContext.stationEntryLogSearchResults.getStationEntryLogs(options)).done(function(getStationEntryLogSearchResults) {
+            $.when(currentContext.stationEntryLogSearchResults.getStationEntryLogsByHistory(options)).done(function(getStationEntryLogSearchResults) {
                 currentContext.stationEntryLogSearchResults.reset(getStationEntryLogSearchResults.stationEntryLogs);
                 deferred.resolve(getStationEntryLogSearchResults);
             }).fail(function(jqXHR, textStatus, errorThrown) {

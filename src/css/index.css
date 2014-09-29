@@ -6026,16 +6026,11 @@ th.hide-for-touch {
 
   th.show-for-print {
     display: table-cell !important; } }
-
-
-
 /* -------- NocLog -------- */
-
 root {
   display: block;
   font-size: 1em;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-}
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
 
 ol, ul {
   list-style: none;
@@ -6069,9 +6064,8 @@ body {
   clear: both;
   background-color: #DEDEDE; }
 
-  .footer-logo {
-    width: 40px;
-  }
+.footer-logo {
+  width: 40px; }
 
 /*Opera Fix*/
 body:before {
@@ -6083,22 +6077,19 @@ body:before {
 
 /* app */
 .row {
-margin-left: 0;
-margin-right: 0;
-max-width: none;
-}
+  margin-left: 0;
+  margin-right: 0;
+  max-width: none; }
 
 .hidden {
-  display: none;
-}
+  display: none; }
 
 .station-list-view,
 .station-entry-log-list-view,
 .station-entry-log-history-list-view {
   background-color: #FFFFFF;
   margin: 5px;
-  padding: 5px;
-}
+  padding: 5px; }
 
 .list-header-item-view {
   background-color: #DEDEDE;
@@ -6106,19 +6097,16 @@ max-width: none;
   line-height: 1.2em;
   padding: 3px;
   border: solid 1px #C2C2C2;
-  margin: 5px 0;
-}
+  margin: 5px 0; }
 
 .list-header-item-view .columns {
   position: relative;
-  height: 50px;
-}
+  height: 50px; }
 
 .list-header-item-view .columns span {
   position: absolute;
-        bottom: 0;
-        left: 0;
-}
+  bottom: 0;
+  left: 0; }
 
 .station-list-item-view,
 .station-entry-log-list-item-view,
@@ -6126,44 +6114,41 @@ max-width: none;
   background-color: #DEDEDE;
   border: solid 1px #C2C2C2;
   padding: 3px;
-  margin: 5px 0;
-}
+  margin: 5px 0; }
 
-.h2 { 
-    font-size: 2.3em;
-}
+.h2 {
+  font-size: 2.3em; }
+
 .h3 {
-    font-size: 1.5em;
-}
+  font-size: 1.5em; }
 
 /* overriding font size for the various input types */
-select, 
-input[type="text"], 
-input[type="password"], 
-input[type="date"], 
-input[type="datetime"], 
-input[type="datetime-local"], 
-input[type="month"], 
-input[type="week"], 
-input[type="email"], 
-input[type="number"], 
-input[type="search"], 
-input[type="tel"], 
-input[type="time"], 
-input[type="url"], 
+select,
+input[type="text"],
+input[type="password"],
+input[type="date"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="month"],
+input[type="week"],
+input[type="email"],
+input[type="number"],
+input[type="search"],
+input[type="tel"],
+input[type="time"],
+input[type="url"],
 textarea {
   display: inline;
   min-width: 170px;
   max-width: 170px;
-    font-size: 1em;
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    font-weight: normal;
-    color: #000000;
-}
+  font-size: 1em;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: normal;
+  color: #000000; }
+
 .detail {
-    font-size: 1em;
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    font-weight: normal;
-    font-style: italic;
-    color: #000000;
-}
+  font-size: 1em;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: normal;
+  font-style: italic;
+  color: #000000; }

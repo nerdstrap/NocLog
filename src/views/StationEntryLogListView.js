@@ -73,6 +73,7 @@ define(function(require) {
         addAll: function() {
             this._leaveChildren();
             _.each(this.collection.models, this.addOne, this);
+            this.hideLoading();
         },
         addOne: function(stationEntryLog) {
             var currentContext = this;
@@ -102,6 +103,9 @@ define(function(require) {
             if (event) {
                 event.preventDefault();
             }
+            
+            this.showLoading();
+            
             var status = this.$('#station-entry-log-list-status-filter').val();
             var region = this.$('#station-entry-log-list-region-filter').val();
             var area = this.$('#station-entry-log-list-area-filter').val();
@@ -130,21 +134,20 @@ define(function(require) {
             if (event) {
                 event.preventDefault();
             }
+            
+            this.showLoading();
 
             this.$('#station-entry-log-list-reset-list-options-button').addClass('hidden');
             this.$('#station-entry-log-list-options-view').addClass('hidden');
 
             this.dispatcher.trigger(AppEventNamesEnum.showOpenStationEntryLogs);
         },
-        updateStationEntryLogListOutTimeSort: function(event) {
+        updateStationEntryLogListExpectedOutTimeSort: function(event) {
             if (event) {
                 event.preventDefault();
             }
 
-            this.$('#station-entry-log-list-region-sort-ascending-indicator').addClass('hidden');
-            this.$('#station-entry-log-list-region-sort-descending-indicator').addClass('hidden');
-            this.$('#station-entry-log-list-area-sort-ascending-indicator').addClass('hidden');
-            this.$('#station-entry-log-list-area-sort-descending-indicator').addClass('hidden');
+            this.showSortIndicators();
 
             this.$('#station-entry-log-list-region-sort-button').removeData('sort-direction');
             this.$('#station-entry-log-list-area-sort-button').removeData('sort-direction');
@@ -157,29 +160,22 @@ define(function(require) {
             if (event) {
                 event.preventDefault();
             }
+            var sortAttributes = ['region', 'expectedOutTime'];
             
-            var sortDirection = this.$('#station-entry-log-list-region-sort-button').data('sortDirection');
+            var sortDirection = this.$('#station-entry-log-list-region-sort-button').data('sort-direction');
             if (sortDirection) {
                 sortDirection = parseInt(sortDirection);
                 sortDirection *= -1;
             } else {
                 sortDirection = 1;
             }
-            if (sortDirection === 1) {
-                this.$('#station-entry-log-list-region-sort-ascending-indicator').removeClass('hidden');
-                this.$('#station-entry-log-list-region-sort-descending-indicator').addClass('hidden');
-                this.$('#station-entry-log-list-area-sort-ascending-indicator').addClass('hidden');
-                this.$('#station-entry-log-list-area-sort-descending-indicator').addClass('hidden');
-            } else {
-                this.$('#station-entry-log-list-region-sort-ascending-indicator').addClass('hidden');
-                this.$('#station-entry-log-list-region-sort-descending-indicator').removeClass('hidden');
-                this.$('#station-entry-log-list-area-sort-ascending-indicator').addClass('hidden');
-                this.$('#station-entry-log-list-area-sort-descending-indicator').addClass('hidden');
-            }
-            this.$('#station-entry-log-list-region-sort-button').data('sortDirection', sortDirection.toString());
+            
+            this.showSortIndicators(sortAttributes, sortDirection);
+            this.$('#station-entry-log-list-region-sort-button').data('sort-direction', sortDirection.toString());
+            this.$('#station-entry-log-list-area-sort-button').removeData('sort-direction');
+            
             this.collection.sortDirection = sortDirection;
-
-            this.collection.sortAttributes = ['region', 'expectedOutTime'];
+            this.collection.sortAttributes = sortAttributes;
             this.collection.sort();
         },
         updateStationEntryLogListAreaSort: function(event) {
@@ -187,28 +183,45 @@ define(function(require) {
                 event.preventDefault();
             }
             
-            var sortDirection = this.$('#station-entry-log-list-area-sort-button').data('sortDirection');
+            var sortAttributes = ['area', 'expectedOutTime'];
+            
+            var sortDirection = this.$('#station-entry-log-list-area-sort-button').data('sort-direction');
             if (sortDirection) {
                 sortDirection = parseInt(sortDirection);
                 sortDirection *= -1;
             } else {
                 sortDirection = 1;
             }
-            if (sortDirection === 1) {
-                this.$('#station-entry-log-list-region-sort-ascending-indicator').addClass('hidden');
-                this.$('#station-entry-log-list-region-sort-descending-indicator').addClass('hidden');
-                this.$('#station-entry-log-list-area-sort-ascending-indicator').removeClass('hidden');
-                this.$('#station-entry-log-list-area-sort-descending-indicator').addClass('hidden');
-            } else {
-                this.$('#station-entry-log-list-region-sort-ascending-indicator').addClass('hidden');
-                this.$('#station-entry-log-list-region-sort-descending-indicator').addClass('hidden');
-                this.$('#station-entry-log-list-area-sort-ascending-indicator').addClass('hidden');
-                this.$('#station-entry-log-list-area-sort-descending-indicator').removeClass('hidden');
-            }
-            this.$('#station-entry-log-list-area-sort-button').data('sortDirection', sortDirection.toString());
+            this.showSortIndicators(sortAttributes, sortDirection);
+            this.$('#station-entry-log-list-region-sort-button').removeData('sort-direction');
+            this.$('#station-entry-log-list-area-sort-button').data('sort-direction', sortDirection.toString());
+            
             this.collection.sortDirection = sortDirection;
-            this.collection.sortAttributes = ['area', 'expectedOutTime'];
+            this.collection.sortAttributes = sortAttributes;
             this.collection.sort();
+        },
+        showSortIndicators: function(sortAttributes, sortDirection) {
+            this.$('#station-entry-log-list-region-sort-ascending-indicator').addClass('hidden');
+            this.$('#station-entry-log-list-region-sort-descending-indicator').addClass('hidden');
+            this.$('#station-entry-log-list-area-sort-ascending-indicator').addClass('hidden');
+            this.$('#station-entry-log-list-area-sort-descending-indicator').addClass('hidden');
+            
+            if (sortAttributes && sortAttributes.length > 0) {
+                var sortAttribute = sortAttributes[0];
+                if (sortAttribute === 'region') {
+                    if (sortDirection === 1) {
+                        this.$('#station-entry-log-list-region-sort-ascending-indicator').removeClass('hidden');
+                    } else {
+                        this.$('#station-entry-log-list-region-sort-descending-indicator').removeClass('hidden');
+                    }
+                } else if (sortAttribute === 'area') {
+                    if (sortDirection === 1) {
+                        this.$('#station-entry-log-list-area-sort-ascending-indicator').removeClass('hidden');
+                    } else {
+                        this.$('#station-entry-log-list-area-sort-descending-indicator').removeClass('hidden');
+                    }
+                }
+            }
         },
         showLoading: function() {
             this.$('.view-status').removeClass('hidden');

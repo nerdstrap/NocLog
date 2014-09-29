@@ -5,7 +5,8 @@ define(function(require) {
             _ = require('underscore'),
             Backbone = require('backbone'),
             StationEntryLogModel = require('models/StationEntryLogModel'),
-            env = require('env');
+            env = require('env'),
+            dates = require('dates');
 
     var StationEntryLogCollection = Backbone.Collection.extend({
         model: StationEntryLogModel,
@@ -68,7 +69,17 @@ define(function(require) {
             // When the loop is done, or if fields was defined empty, we return the last equality
             return result;
         },
-        getStationEntryLogs: function(options) {
+//        getAllStationEntryLogs: function() {
+//            var currentContext = this;
+//
+//            return $.ajax({
+//                contentType: 'application/json',
+//                dataType: 'json',
+//                type: "GET",
+//                url: currentContext.url()
+//            });
+//        },
+        getStationEntryLogsByHistory: function(options) {
             var currentContext = this;
 
             var data;
@@ -76,7 +87,11 @@ define(function(require) {
                 data = $.param({
                     stationid: options.stationId,
                     regionname: options.region,
-                    areaname: options.area
+                    areaname: options.area,
+                    startdate: options.startDate,
+                    starttime: options.startTime,
+                    enddate: options.endDate,
+                    endtime: options.endTime
                 });
             }
 

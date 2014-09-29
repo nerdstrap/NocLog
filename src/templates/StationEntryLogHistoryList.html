@@ -13,34 +13,32 @@
     </div>
     <div id="station-entry-log-history-list-options-view" class="row collapse hidden">
         <div class="small-2 columns">
+            <label>{{{stationNameHeaderText}}}</label>
             <select id="station-entry-log-history-list-station-identifier-filter">
                 <option disabled="disabled" selected="selected">{{{stationIdentifierFilterDefaultOption}}}</option>
             </select>
         </div>
         <div class="small-2 columns">
+            <label>{{{regionHeaderText}}}</label>
             <select id="station-entry-log-history-list-region-filter">
                 <option disabled="disabled" selected="selected">{{{regionFilterDefaultOption}}}</option>
             </select>
         </div>
         <div class="small-2 columns">
+            <label>{{{areaHeaderText}}}</label>
             <select id="station-entry-log-history-list-area-filter">
                 <option disabled="disabled" selected="selected">{{{areaFilterDefaultOption}}}</option>
             </select>
         </div>
         <div class="small-3 columns">
+            <label>{{{startDateTimeHeaderText}}}</label>
             <input id="station-entry-log-history-list-start-date-filter" type="date">
             <input id="station-entry-log-history-list-start-time-filter" type="time">
         </div>
         <div class="small-3 columns">
+            <label>{{{endDateTimeHeaderText}}}</label>
             <input id="station-entry-log-history-list-end-date-filter" type="date">
             <input id="station-entry-log-history-list-end-time-filter" type="time">
-        </div>
-    </div>
-    
-    <div class="row collapse view-status hidden">
-        <div class="small-12 columns">
-            <span class="view-message"></span>
-            <img src="{{loadingIconSrc}}" class="view-loading" />
         </div>
     </div>
     <div class="row collapse">
@@ -84,6 +82,12 @@
                             <i id="station-entry-log-history-list-area-sort-ascending-indicator" class="fa fa-sort-amount-asc hidden"></i>
                             <i id="station-entry-log-history-list-area-sort-descending-indicator" class="fa fa-sort-amount-desc hidden"></i>
                         </span>
+                    </div>
+                </div>
+                <div class="row collapse view-status hidden">
+                    <div class="small-12 columns">
+                        <span class="view-message">{{{loadingMessage}}}</span>
+                        <img src="{{loadingIconSrc}}" class="view-loading" />
                     </div>
                 </div>
             </ol>
