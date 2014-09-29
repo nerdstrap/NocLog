@@ -1,49 +1,42 @@
 <div class="station-entry-log-history-list-view">
     <div class="row collapse">
         <div class="small-12 columns">
-            <h2>{{listViewTitleText}}</h2>
+            <h3>{{listViewTitleText}}</h3>
         </div>
     </div>
     <div class="row collapse">
-        <form method="get" data-abide>
-            <div class="small-2 columns">
-                <select id="station-entry-log-history-list-station-identifier-filter">
-                    <option disabled="disabled" selected="selected">{{{stationIdentifierFilterDefaultOption}}}</option>
-                </select>
-            </div>
-            <div class="small-1 columns">
-                <select id="station-entry-log-history-list-region-filter">
-                    <option disabled="disabled" selected="selected">{{{regionFilterDefaultOption}}}</option>
-                </select>
-            </div>
-            <div class="small-1 columns">
-                <select id="station-entry-log-history-list-area-filter">
-                    <option disabled="disabled" selected="selected">{{{areaFilterDefaultOption}}}</option>
-                </select>
-            </div>
-            <div class="small-1 columns">
-                <span>start:</span>
-            </div>
-            <div class="small-1 columns no-padding">
-                <input id="station-entry-log-history-list-start-date-filter" type="date">
-            </div>
-            <div class="small-1 columns no-padding">
-                <input id="station-entry-log-history-list-start-time-filter" type="time">
-            </div>
-            <div class="small-1 columns">
-                <span>end:</span>
-            </div>
-            <div class="small-1 columns no-padding">
-                <input id="station-entry-log-history-list-end-date-filter" type="date">
-            </div>
-            <div class="small-1 columns no-padding">
-                <input id="station-entry-log-history-list-end-time-filter" type="time">
-            </div>
-            <div class="small-2 columns">
-                <a id="station-entry-log-history-list-update-filter-button" class="button tiny default">{{{updateListFilterButtonText}}}</a>
-            </div>
-        </form>
+        <div class="small-12 columns">
+            <a id="station-entry-log-history-list-refresh-list-button" class="button">{{{refreshListButtonText}}}</a>
+            <a id="station-entry-log-history-list-show-list-options-button" class="button alert">{{{showListOptionsButtonText}}}</a>
+            <a id="station-entry-log-history-list-reset-list-options-button" class="button secondary hidden">{{{resetListOptionsButtonText}}}</a>
+        </div>
     </div>
+    <div id="station-entry-log-history-list-options-view" class="row collapse hidden">
+        <div class="small-2 columns">
+            <select id="station-entry-log-history-list-station-identifier-filter">
+                <option disabled="disabled" selected="selected">{{{stationIdentifierFilterDefaultOption}}}</option>
+            </select>
+        </div>
+        <div class="small-2 columns">
+            <select id="station-entry-log-history-list-region-filter">
+                <option disabled="disabled" selected="selected">{{{regionFilterDefaultOption}}}</option>
+            </select>
+        </div>
+        <div class="small-2 columns">
+            <select id="station-entry-log-history-list-area-filter">
+                <option disabled="disabled" selected="selected">{{{areaFilterDefaultOption}}}</option>
+            </select>
+        </div>
+        <div class="small-3 columns">
+            <input id="station-entry-log-history-list-start-date-filter" type="date">
+            <input id="station-entry-log-history-list-start-time-filter" type="time">
+        </div>
+        <div class="small-3 columns">
+            <input id="station-entry-log-history-list-end-date-filter" type="date">
+            <input id="station-entry-log-history-list-end-time-filter" type="time">
+        </div>
+    </div>
+    
     <div class="row collapse view-status hidden">
         <div class="small-12 columns">
             <span class="view-message"></span>
@@ -52,8 +45,8 @@
     </div>
     <div class="row collapse">
         <div class="small-12 columns">
-            <ol class="view-list">
-                <div class="row collapse">
+            <ol id="station-entry-log-history-list">
+                <div class="row collapse list-header-item-view">
                     <div class="small-2 columns">
                         <span>{{{stationNameHeaderText}}}</span>
                     </div>
@@ -67,8 +60,10 @@
                         <span>{{{inTimeHeaderText}}}</span>
                     </div>
                     <div class="small-2 columns">
-                        <span>{{{outTimeHeaderText}}}</span>
-                        <span id="station-entry-log-history-list-out-time-sort-ascending-indicator">+</span>
+                        <span>
+                            <a id="station-entry-log-history-list-out-time-sort-button" href="#" data-sort-direction="1">{{{outTimeHeaderText}}}</a>
+                            <i id="station-entry-log-history-list-out-time-sort-ascending-indicator" class="fa fa-sort-amount-asc"></i>
+                        </span>
                     </div>
                     <div class="small-1 columns">
                         <span>{{{purposeHeaderText}}}</span>
@@ -77,14 +72,18 @@
                         <span>{{{additionalInfoHeaderText}}}</span>
                     </div>
                     <div class="small-1 columns">
-                        <a id="station-entry-log-history-list-region-sort-button" href="#">{{{regionHeaderText}}}</a>
-                        <span id="station-entry-log-history-list-region-sort-ascending-indicator" class="hidden">+</span>
-                        <span id="station-entry-log-history-list-region-sort-descending-indicator" class="hidden">-</span>
+                        <span>
+                            <a id="station-entry-log-history-list-region-sort-button" href="#" data-sort-direction>{{{regionHeaderText}}}</a>
+                            <i id="station-entry-log-history-list-region-sort-ascending-indicator" class="fa fa-sort-amount-asc hidden"></i>
+                            <i id="station-entry-log-history-list-region-sort-descending-indicator" class="fa fa-sort-amount-desc hidden"></i>
+                        </span>
                     </div>
                     <div class="small-1 columns">
-                        <a id="station-entry-log-history-list-area-sort-button" href="#">{{{areaHeaderText}}}</a>
-                        <span id="station-entry-log-history-list-area-sort-ascending-indicator" class="hidden">+</span>
-                        <span id="station-entry-log-history-list-area-sort-descending-indicator" class="hidden">-</span>
+                        <span>
+                            <a id="station-entry-log-history-list-area-sort-button" href="#" data-sort-direction>{{{areaHeaderText}}}</a>
+                            <i id="station-entry-log-history-list-area-sort-ascending-indicator" class="fa fa-sort-amount-asc hidden"></i>
+                            <i id="station-entry-log-history-list-area-sort-descending-indicator" class="fa fa-sort-amount-desc hidden"></i>
+                        </span>
                     </div>
                 </div>
             </ol>

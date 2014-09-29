@@ -25,14 +25,14 @@ define(function(require) {
                 stationIdentifierFilterDefaultOption: appResources.getResource('StationEntryLogHistoryListView.stationIdentifierFilterDefaultOption').value,
                 regionFilterDefaultOption: appResources.getResource('StationEntryLogHistoryListView.regionFilterDefaultOption').value,
                 areaFilterDefaultOption: appResources.getResource('StationEntryLogHistoryListView.areaFilterDefaultOption').value,
-                updateListFilterButtonText: appResources.getResource('StationEntryLogHistoryListView.updateListFilterButtonText').value,
+                refreshListButtonText: appResources.getResource('StationEntryLogHistoryListView.refreshListButtonText').value,
+                showListOptionsButtonText: appResources.getResource('StationEntryLogHistoryListView.showListOptionsButtonText').value,
+                resetListOptionsButtonText: appResources.getResource('StationEntryLogHistoryListView.resetListOptionsButtonText').value,
                 stationNameHeaderText: appResources.getResource('StationEntryLogHistoryListView.stationNameHeaderText').value,
                 personnelNameHeaderText: appResources.getResource('StationEntryLogHistoryListView.personnelNameHeaderText').value,
                 contactHeaderText: appResources.getResource('StationEntryLogHistoryListView.contactHeaderText').value,
                 inTimeHeaderText: appResources.getResource('StationEntryLogHistoryListView.inTimeHeaderText').value,
                 outTimeHeaderText: appResources.getResource('StationEntryLogHistoryListView.outTimeHeaderText').value,
-                durationHeaderText: appResources.getResource('StationEntryLogHistoryListView.durationHeaderText').value,
-                expectedOutTimeHeaderText: appResources.getResource('StationEntryLogHistoryListView.expectedOutTimeHeaderText').value,
                 purposeHeaderText: appResources.getResource('StationEntryLogHistoryListView.purposeHeaderText').value,
                 additionalInfoHeaderText: appResources.getResource('StationEntryLogHistoryListView.additionalInfoHeaderText').value,
                 regionHeaderText: appResources.getResource('StationEntryLogHistoryListView.regionHeaderText').value,
@@ -65,7 +65,10 @@ define(function(require) {
             return this;
         },
         events: {
-            'click #station-entry-log-history-list-update-filter-button': 'updateStationEntryLogHistoryListFilter',
+            'click #station-entry-log-history-list-refresh-list-button': 'refreshStationEntryLogHistoryList',
+            'click #station-entry-log-history-list-show-list-options-button': 'showStationEntryLogHistoryListFilter',
+            'click #station-entry-log-history-list-reset-list-options-button': 'resetStationEntryLogHistoryListFilter',
+            'click #station-entry-log-history-list-out-time-sort-button': 'updateStationEntryLogHistoryListOutTimeSort',
             'click #station-entry-log-history-list-region-sort-button': 'updateStationEntryLogHistoryListRegionSort',
             'click #station-entry-log-history-list-area-sort-button': 'updateStationEntryLogHistoryListAreaSort'
         },
@@ -79,7 +82,7 @@ define(function(require) {
                 model: stationEntryLog,
                 dispatcher: currentContext.dispatcher
             });
-            this.appendChildTo(stationEntryLogListItemView, '.view-list');
+            this.appendChildTo(stationEntryLogListItemView, '#station-entry-log-history-list');
         },
         addAllStationIdentifiers: function() {
             var currentContext = this;
@@ -105,49 +108,92 @@ define(function(require) {
             };
             this.$('#station-entry-log-history-list-area-filter').html(areaListTemplate(areaListRenderModel));
         },
-        updateStationEntryLogHistoryListFilter: function(event) {
+        refreshStationEntryLogHistoryList: function(event) {
             if (event) {
                 event.preventDefault();
             }
+
             var stationId = this.$('#station-entry-log-history-list-station-identifier-filter').val();
             var region = this.$('#station-entry-log-history-list-region-filter').val();
             var area = this.$('#station-entry-log-history-list-area-filter').val();
+            var startDate = this.$('#station-entry-log-history-list-start-date-filter').val();
+            var startTime = this.$('#station-entry-log-history-list-start-time-filter').val();
+            var endDate = this.$('#station-entry-log-history-list-end-date-filter').val();
+            var endTime = this.$('#station-entry-log-history-list-end-time-filter').val();
+            var startDateTime = new Date(startDate + ' ' + startTime);
+            var endDateTime = new Date(endDate + ' ' + endTime);
 
             var options = {
                 stationId: stationId,
                 region: region,
-                area: area
+                area: area,
+                startDateTime: startDateTime,
+                endDateTime: endDateTime
             };
 
             this.dispatcher.trigger(AppEventNamesEnum.showStationEntryLogs, options);
+        },
+        showStationEntryLogHistoryListFilter: function(event) {
+            if (event) {
+                event.preventDefault();
+            }
+
+            this.$('#station-entry-log-history-list-options-view').removeClass('hidden');
+            this.$('#station-entry-log-history-list-reset-list-options-button').removeClass('hidden');
+        },
+        resetStationEntryLogHistoryListFilter: function(event) {
+            if (event) {
+                event.preventDefault();
+            }
+
+            this.$('#station-entry-log-history-list-reset-list-options-button').addClass('hidden');
+            this.$('#station-entry-log-history-list-options-view').addClass('hidden');
+
+            this.dispatcher.trigger(AppEventNamesEnum.showStationEntryLogs);
+        },
+        updateStationEntryLogHistoryListOutTimeSort: function(event) {
+            if (event) {
+                event.preventDefault();
+            }
+
+            this.$('#station-entry-log-history-list-region-sort-ascending-indicator').addClass('hidden');
+            this.$('#station-entry-log-history-list-region-sort-descending-indicator').addClass('hidden');
+            this.$('#station-entry-log-history-list-area-sort-ascending-indicator').addClass('hidden');
+            this.$('#station-entry-log-history-list-area-sort-descending-indicator').addClass('hidden');
+
+            this.$('#station-entry-log-history-list-region-sort-button').removeData('sort-direction');
+            this.$('#station-entry-log-history-list-area-sort-button').removeData('sort-direction');
+
+            this.collection.sortDirection = 1;
+            this.collection.sortAttributes = ['outTime'];
+            this.collection.sort();
         },
         updateStationEntryLogHistoryListRegionSort: function(event) {
             if (event) {
                 event.preventDefault();
             }
 
-            if (event.target) {
-                var sortDirection = $(event.target).data('sortDirection');
-                if (sortDirection) {
-                    sortDirection = parseInt(sortDirection);
-                    sortDirection *= -1;
-                } else {
-                    sortDirection = 1;
-                }
-                if (sortDirection === 1) {
-                    this.$('#station-entry-log-history-list-region-sort-ascending-indicator').removeClass('hidden');
-                    this.$('#station-entry-log-history-list-region-sort-descending-indicator').addClass('hidden');
-                    this.$('#station-entry-log-history-list-area-sort-ascending-indicator').addClass('hidden');
-                    this.$('#station-entry-log-history-list-area-sort-descending-indicator').addClass('hidden');
-                } else {
-                    this.$('#station-entry-log-history-list-region-sort-ascending-indicator').addClass('hidden');
-                    this.$('#station-entry-log-history-list-region-sort-descending-indicator').removeClass('hidden');
-                    this.$('#station-entry-log-history-list-area-sort-ascending-indicator').addClass('hidden');
-                    this.$('#station-entry-log-history-list-area-sort-descending-indicator').addClass('hidden');
-                }
-                $(event.target).data('sortDirection', sortDirection.toString());
-                this.collection.sortDirection = sortDirection;
+            var sortDirection = this.$('#station-entry-log-history-list-region-sort-button').data('sort-direction');
+            if (sortDirection) {
+                sortDirection = parseInt(sortDirection);
+                sortDirection *= -1;
+            } else {
+                sortDirection = 1;
             }
+            if (sortDirection === 1) {
+                this.$('#station-entry-log-history-list-region-sort-ascending-indicator').removeClass('hidden');
+                this.$('#station-entry-log-history-list-region-sort-descending-indicator').addClass('hidden');
+                this.$('#station-entry-log-history-list-area-sort-ascending-indicator').addClass('hidden');
+                this.$('#station-entry-log-history-list-area-sort-descending-indicator').addClass('hidden');
+            } else {
+                this.$('#station-entry-log-history-list-region-sort-ascending-indicator').addClass('hidden');
+                this.$('#station-entry-log-history-list-region-sort-descending-indicator').removeClass('hidden');
+                this.$('#station-entry-log-history-list-area-sort-ascending-indicator').addClass('hidden');
+                this.$('#station-entry-log-history-list-area-sort-descending-indicator').addClass('hidden');
+            }
+            this.$('#station-entry-log-history-list-region-sort-button').data('sort-direction', sortDirection.toString());
+            this.$('#station-entry-log-history-list-area-sort-button').removeData('sort-direction');
+            this.collection.sortDirection = sortDirection;
 
             this.collection.sortAttributes = ['region', 'outTime'];
             this.collection.sort();
@@ -157,28 +203,27 @@ define(function(require) {
                 event.preventDefault();
             }
 
-            if (event.target) {
-                var sortDirection = $(event.target).data('sortDirection');
-                if (sortDirection) {
-                    sortDirection = parseInt(sortDirection);
-                    sortDirection *= -1;
-                } else {
-                    sortDirection = 1;
-                }
-                if (sortDirection === 1) {
-                    this.$('#station-entry-log-history-list-region-sort-ascending-indicator').addClass('hidden');
-                    this.$('#station-entry-log-history-list-region-sort-descending-indicator').addClass('hidden');
-                    this.$('#station-entry-log-history-list-area-sort-ascending-indicator').removeClass('hidden');
-                    this.$('#station-entry-log-history-list-area-sort-descending-indicator').addClass('hidden');
-                } else {
-                    this.$('#station-entry-log-history-list-region-sort-ascending-indicator').addClass('hidden');
-                    this.$('#station-entry-log-history-list-region-sort-descending-indicator').addClass('hidden');
-                    this.$('#station-entry-log-history-list-area-sort-ascending-indicator').addClass('hidden');
-                    this.$('#station-entry-log-history-list-area-sort-descending-indicator').removeClass('hidden');
-                }
-                $(event.target).data('sortDirection', sortDirection.toString());
-                this.collection.sortDirection = sortDirection;
+            var sortDirection = this.$('#station-entry-log-history-list-area-sort-button').data('sortDirection');
+            if (sortDirection) {
+                sortDirection = parseInt(sortDirection);
+                sortDirection *= -1;
+            } else {
+                sortDirection = 1;
             }
+            if (sortDirection === 1) {
+                this.$('#station-entry-log-history-list-region-sort-ascending-indicator').addClass('hidden');
+                this.$('#station-entry-log-history-list-region-sort-descending-indicator').addClass('hidden');
+                this.$('#station-entry-log-history-list-area-sort-ascending-indicator').removeClass('hidden');
+                this.$('#station-entry-log-history-list-area-sort-descending-indicator').addClass('hidden');
+            } else {
+                this.$('#station-entry-log-history-list-region-sort-ascending-indicator').addClass('hidden');
+                this.$('#station-entry-log-history-list-region-sort-descending-indicator').addClass('hidden');
+                this.$('#station-entry-log-history-list-area-sort-ascending-indicator').addClass('hidden');
+                this.$('#station-entry-log-history-list-area-sort-descending-indicator').removeClass('hidden');
+            }
+            this.$('#station-entry-log-history-list-area-sort-button').data('sort-direction', sortDirection.toString());
+            this.$('#station-entry-log-history-list-region-sort-button').removeData('sort-direction');
+            this.collection.sortDirection = sortDirection;
 
             this.collection.sortAttributes = ['area', 'outTime'];
             this.collection.sort();

@@ -1,10 +1,17 @@
 <div class="station-list-view">
     <div class="row collapse">
         <div class="small-12 columns">
-            <h2>{{listViewTitleText}}</h2>
+            <h3>{{listViewTitleText}}</h3>
         </div>
     </div>
     <div class="row collapse">
+        <div class="small-12 columns">
+            <a id="station-list-refresh-list-button" class="button">{{{refreshListButtonText}}}</a>
+            <a id="station-list-show-list-options-button" class="button alert">{{{showListOptionsButtonText}}}</a>
+            <a id="station-list-reset-list-options-button" class="button secondary hidden">{{{resetListOptionsButtonText}}}</a>
+        </div>
+    </div>
+    <div id="station-list-options-view" class="row collapse hidden">
         <div class="small-2 columns">
             <select id="station-list-region-filter">
                 <option disabled="disabled" selected="selected">{{{regionFilterDefaultOption}}}</option>
@@ -16,27 +23,39 @@
             </select>
         </div>
         <div class="small-8 columns">
-            <a id="station-list-update-filter-button" class="button tiny default" href="#">{{{updateListFilterButtonText}}}</a>
+            <span>&nbsp;</span>
         </div>
     </div>
-    <div class="row collapse hidden">
-        <div class="small-12 columns view-status">
+    <div class="row collapse view-status hidden">
+        <div class="small-12 columns">
             <span class="view-message"></span>
             <img src="{{loadingIconSrc}}" class="view-loading" />
         </div>
     </div>
     <div class="row collapse">
         <div class="small-12 columns">
-            <ol class="view-list">
-                <div class="row collapse">
+            <ol id="station-list">
+                <div class="row collapse list-header-item-view">
                     <div class="small-4 columns">
-                        <span>{{{stationNameHeaderText}}}</span>
+                        <span>
+                        <a id="station-list-station-name-sort-button" data-sort-direction="1">{{{stationNameHeaderText}}}</a>
+                       <i id="station-list-station-name-sort-ascending-indicator" class="fa fa-sort-amount-asc"></i>
+                       <i id="station-list-station-name-sort-descending-indicator" class="fa fa-sort-amount-desc hidden"></i>
+                       </span>
                     </div>
                     <div class="small-4 columns">
+                        <span>
                         <a id="station-list-region-sort-button" href="#">{{{regionHeaderText}}}</a>
+                        <i id="station-list-region-sort-ascending-indicator" class="fa fa-sort-amount-asc hidden"></i>
+                            <i id="station-list-region-sort-descending-indicator" class="fa fa-sort-amount-desc hidden"></i>
+                            </span>
                     </div>
                     <div class="small-4 columns">
+                        <span>
                         <a id="station-list-area-sort-button" href="#">{{{areaHeaderText}}}</a>
+                            <i id="station-list-area-sort-ascending-indicator" class="fa fa-sort-amount-asc hidden"></i>
+                            <i id="station-list-area-sort-descending-indicator" class="fa fa-sort-amount-desc hidden"></i>
+                        </span>
                     </div>
                 </div>
             </ol>

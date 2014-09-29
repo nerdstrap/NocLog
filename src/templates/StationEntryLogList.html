@@ -1,14 +1,21 @@
 <div class="station-entry-log-list-view">
     <div class="row collapse">
         <div class="small-12 columns">
-            <h2>{{listViewTitleText}}</h2>
+            <h3>{{listViewTitleText}}</h3>
         </div>
     </div>
     <div class="row collapse">
+        <div class="small-12 columns">
+            <a id="station-entry-log-list-refresh-list-button" class="button">{{{refreshListButtonText}}}</a>
+            <a id="station-entry-log-list-show-list-options-button" class="button alert">{{{showListOptionsButtonText}}}</a>
+            <a id="station-entry-log-list-reset-list-options-button" class="button secondary hidden">{{{resetListOptionsButtonText}}}</a>
+        </div>
+    </div>
+    <div id="station-entry-log-list-options-view" class="row collapse hidden">
         <div class="small-2 columns">
             <select id="station-entry-log-list-status-filter">
-                <option value="open">open</option>
-                <option value="expired">expired</option>
+                <option value="{{{statusFilterOpenOption}}}">{{{statusFilterOpenOption}}}</option>
+                <option value="{{{statusFilterExpiredOption}}}">{{{statusFilterExpiredOption}}}</option>
             </select>
         </div>
         <div class="small-2 columns">
@@ -22,7 +29,7 @@
             </select>
         </div>
         <div class="small-6 columns">
-            <a id="station-entry-log-list-update-filter-button" class="button tiny default">{{{updateListFilterButtonText}}}</a>
+            <span>&nbsp;</span>
         </div>
     </div>
     <div class="row collapse view-status hidden">
@@ -33,8 +40,8 @@
     </div>
     <div class="row collapse">
         <div class="small-12 columns">
-            <ol class="view-list">
-                <div class="row collapse">
+            <ol id="station-entry-log-list">
+                <div class="row collapse list-header-item-view">
                     <div class="small-2 columns">
                         <span>{{{stationNameHeaderText}}}</span>
                     </div>
@@ -48,8 +55,10 @@
                         <span>{{{inTimeHeaderText}}}</span>
                     </div>
                     <div class="small-2 columns">
-                        <span>{{{expectedOutTimeHeaderText}}}</span>
-                        <span id="station-entry-log-list-expected-out-time-sort-ascending-indicator">+</span>
+                        <span>
+                        <a id="station-entry-log-list-expected-out-time-sort-button" href="#" data-sort-direction="1">{{{expectedOutTimeHeaderText}}}</a>
+                       <i id="station-entry-log-list-out-time-sort-ascending-indicator" class="fa fa-sort-amount-asc"></i>
+                       </span>
                     </div>
                     <div class="small-1 columns">
                         <span>{{{purposeHeaderText}}}</span>
@@ -58,14 +67,18 @@
                         <span>{{{additionalInfoHeaderText}}}</span>
                     </div>
                     <div class="small-1 columns">
+                        <span>
                         <a id="station-entry-log-list-region-sort-button" href="#">{{{regionHeaderText}}}</a>
-                        <span id="station-entry-log-list-region-sort-ascending-indicator" class="hidden">+</span>
-                        <span id="station-entry-log-list-region-sort-descending-indicator" class="hidden">-</span>
+                        <i id="station-entry-log-list-region-sort-ascending-indicator" class="fa fa-sort-amount-asc hidden"></i>
+                            <i id="station-entry-log-list-region-sort-descending-indicator" class="fa fa-sort-amount-desc hidden"></i>
+                            </span>
                     </div>
                     <div class="small-1 columns">
+                        <span>
                         <a id="station-entry-log-list-area-sort-button" href="#">{{{areaHeaderText}}}</a>
-                        <span id="station-entry-log-list-area-sort-ascending-indicator" class="hidden">+</span>
-                        <span id="station-entry-log-list-area-sort-descending-indicator" class="hidden">-</span>
+                            <i id="station-entry-log-list-area-sort-ascending-indicator" class="fa fa-sort-amount-asc hidden"></i>
+                            <i id="station-entry-log-list-area-sort-descending-indicator" class="fa fa-sort-amount-desc hidden"></i>
+                        </span>
                     </div>
                 </div>
             </ol>

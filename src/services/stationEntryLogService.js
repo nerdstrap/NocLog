@@ -26,25 +26,44 @@ define(function(require) {
         return deferred.promise();
     };
     
-    var _getAll = function() {
-        var deferred = $.Deferred(),
-                results = inMemoryStationEntryLogs;
+    var _getHistory = function() {
+        var deferred = $.Deferred();
+        var results = {
+        	stationEntryLogs: inMemoryStationEntryLogs.filter(function(stationEntryLog) {
+        		return stationEntryLog.outTime !== undefined;
+        	}),
+            stationIdentifiers: inMemoryStationIdentifiers,
+            regions: inMemoryRegions,
+            areas: inMemoryAreas
+        };
         deferred.resolve(results, 'success', null);
         return deferred.promise();
     };
     
     var _getOpen = function() {
-        var deferred = $.Deferred(),
-                results = inMemoryStationEntryLogs.filter(function(stationEntryLog) {
-                    return stationEntryLog.outTime !== undefined;
-                });
+        var deferred = $.Deferred();
+        var results = {
+        	stationEntryLogs: inMemoryStationEntryLogs.filter(function(stationEntryLog) {
+        		return stationEntryLog.outTime !== undefined;
+        	}),
+            stationIdentifiers: inMemoryStationIdentifiers,
+            regions: inMemoryRegions,
+            areas: inMemoryAreas
+        };
         deferred.resolve(results);
         return deferred.promise();
     };
     
     var _getExpired = function() {
-        var deferred = $.Deferred(),
-                results = inMemoryStationEntryLogs;
+        var deferred = $.Deferred();
+        var results = {
+        	stationEntryLogs: inMemoryStationEntryLogs.filter(function(stationEntryLog) {
+        		return stationEntryLog.outTime !== undefined;
+        	}),
+            stationIdentifiers: inMemoryStationIdentifiers,
+            regions: inMemoryRegions,
+            areas: inMemoryAreas
+        };
         deferred.resolve(results, 'success', null);
         return deferred.promise();
     };
@@ -53,8 +72,8 @@ define(function(require) {
         getById: function(stationEntryLogId) {
             return _getById(stationEntryLogId);
         },
-        getAll: function() {
-            return _getAll();
+        getHistory: function() {
+            return _getHistory();
         },
         getOpen: function() {
             return _getOpen();

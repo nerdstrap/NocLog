@@ -143,6 +143,10 @@ define(function(require) {
             var currentContext = this,
                     deferred = $.Deferred();
 
+            currentContext.stationSearchResults.reset();
+            currentContext.stationSearchResults.sortAttributes = ['stationName'];
+            currentContext.stationSearchResults.sortDirection = 1;
+
             var stationListViewInstance = new StationListView({
                 controller: currentContext,
                 dispatcher: currentContext.dispatcher,
@@ -154,11 +158,13 @@ define(function(require) {
             currentContext.router.swapContent(stationListViewInstance);
             currentContext.router.navigate('station');
 
+            stationListViewInstance.showLoading();
             $.when(currentContext.stationSearchResults.getStations()).done(function(getStationSearchResults) {
                 currentContext.stationSearchResults.reset(getStationSearchResults.stations);
                 currentContext.regionResults.reset(getStationSearchResults.regions);
                 currentContext.areaResults.reset(getStationSearchResults.areas);
                 deferred.resolve(stationListViewInstance);
+                stationListViewInstance.hideLoading();
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 currentContext.stationSearchResults.reset();
                 deferred.reject(textStatus);

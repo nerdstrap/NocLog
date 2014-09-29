@@ -21,16 +21,17 @@ define(function(require) {
                 errorMessage: appResources.getResource('StationEntryLogListView.errorMessage').value,
                 infoMessage: appResources.getResource('StationEntryLogListView.infoMessage').value,
                 listViewTitleText: appResources.getResource('StationEntryLogListView.listViewTitleText').value,
-                listFilterHeaderText: appResources.getResource('StationEntryLogListView.listFilterHeaderText').value,
+                statusFilterOpenOption: appResources.getResource('StationEntryLogListView.statusFilterOpenOption').value,
+                statusFilterExpiredOption: appResources.getResource('StationEntryLogListView.statusFilterExpiredOption').value,
                 regionFilterDefaultOption: appResources.getResource('StationEntryLogListView.regionFilterDefaultOption').value,
                 areaFilterDefaultOption: appResources.getResource('StationEntryLogListView.areaFilterDefaultOption').value,
-                updateListFilterButtonText: appResources.getResource('StationEntryLogListView.updateListFilterButtonText').value,
+                refreshListButtonText: appResources.getResource('StationEntryLogHistoryListView.refreshListButtonText').value,
+                showListOptionsButtonText: appResources.getResource('StationEntryLogHistoryListView.showListOptionsButtonText').value,
+                resetListOptionsButtonText: appResources.getResource('StationEntryLogHistoryListView.resetListOptionsButtonText').value,
                 stationNameHeaderText: appResources.getResource('StationEntryLogListView.stationNameHeaderText').value,
                 personnelNameHeaderText: appResources.getResource('StationEntryLogListView.personnelNameHeaderText').value,
                 contactHeaderText: appResources.getResource('StationEntryLogListView.contactHeaderText').value,
                 inTimeHeaderText: appResources.getResource('StationEntryLogListView.inTimeHeaderText').value,
-                outTimeHeaderText: appResources.getResource('StationEntryLogListView.outTimeHeaderText').value,
-                durationHeaderText: appResources.getResource('StationEntryLogListView.durationHeaderText').value,
                 expectedOutTimeHeaderText: appResources.getResource('StationEntryLogListView.expectedOutTimeHeaderText').value,
                 purposeHeaderText: appResources.getResource('StationEntryLogListView.purposeHeaderText').value,
                 additionalInfoHeaderText: appResources.getResource('StationEntryLogListView.additionalInfoHeaderText').value,
@@ -62,7 +63,10 @@ define(function(require) {
             return this;
         },
         events: {
-            'click #station-entry-log-list-update-filter-button': 'updateStationEntryLogListFilter',
+            'click #station-entry-log-list-refresh-list-button': 'refreshStationEntryLogList',
+            'click #station-entry-log-list-show-list-options-button': 'showStationEntryLogListFilter',
+            'click #station-entry-log-list-reset-list-options-button': 'resetStationEntryLogListFilter',
+            'click #station-entry-log-list-expected-out-time-sort-button': 'updateStationEntryLogListExpectedOutTimeSort',
             'click #station-entry-log-list-region-sort-button': 'updateStationEntryLogListRegionSort',
             'click #station-entry-log-list-area-sort-button': 'updateStationEntryLogListAreaSort'
         },
@@ -76,7 +80,7 @@ define(function(require) {
                 model: stationEntryLog,
                 dispatcher: currentContext.dispatcher
             });
-            this.appendChildTo(stationEntryLogListItemView, '.view-list');
+            this.appendChildTo(stationEntryLogListItemView, '#station-entry-log-list');
         },
         addAllRegions: function() {
             var currentContext = this;
@@ -114,33 +118,66 @@ define(function(require) {
                 this.dispatcher.trigger(AppEventNamesEnum.showExpiredStationEntryLogs, options);
             }
         },
+        showStationEntryLogListFilter: function(event) {
+            if (event) {
+                event.preventDefault();
+            }
+
+            this.$('#station-entry-log-list-options-view').removeClass('hidden');
+            this.$('#station-entry-log-list-reset-list-options-button').removeClass('hidden');
+        },
+        resetStationEntryLogListFilter: function(event) {
+            if (event) {
+                event.preventDefault();
+            }
+
+            this.$('#station-entry-log-list-reset-list-options-button').addClass('hidden');
+            this.$('#station-entry-log-list-options-view').addClass('hidden');
+
+            this.dispatcher.trigger(AppEventNamesEnum.showOpenStationEntryLogs);
+        },
+        updateStationEntryLogListOutTimeSort: function(event) {
+            if (event) {
+                event.preventDefault();
+            }
+
+            this.$('#station-entry-log-list-region-sort-ascending-indicator').addClass('hidden');
+            this.$('#station-entry-log-list-region-sort-descending-indicator').addClass('hidden');
+            this.$('#station-entry-log-list-area-sort-ascending-indicator').addClass('hidden');
+            this.$('#station-entry-log-list-area-sort-descending-indicator').addClass('hidden');
+
+            this.$('#station-entry-log-list-region-sort-button').removeData('sort-direction');
+            this.$('#station-entry-log-list-area-sort-button').removeData('sort-direction');
+
+            this.collection.sortDirection = 1;
+            this.collection.sortAttributes = ['expectedOutTime'];
+            this.collection.sort();
+        },
         updateStationEntryLogListRegionSort: function(event) {
             if (event) {
                 event.preventDefault();
             }
             
-            if (event.target) {
-                var sortDirection = $(event.target).data('sortDirection');
-                if (sortDirection) {
-                    sortDirection = parseInt(sortDirection);
-                    sortDirection *= -1;
-                } else {
-                    sortDirection = 1;
-                }
-                if (sortDirection === 1) {
-                    this.$('#station-entry-log-list-region-sort-ascending-indicator').removeClass('hidden');
-                    this.$('#station-entry-log-list-region-sort-descending-indicator').addClass('hidden');
-                    this.$('#station-entry-log-list-area-sort-ascending-indicator').addClass('hidden');
-                    this.$('#station-entry-log-list-area-sort-descending-indicator').addClass('hidden');
-                } else {
-                    this.$('#station-entry-log-list-region-sort-ascending-indicator').addClass('hidden');
-                    this.$('#station-entry-log-list-region-sort-descending-indicator').removeClass('hidden');
-                    this.$('#station-entry-log-list-area-sort-ascending-indicator').addClass('hidden');
-                    this.$('#station-entry-log-list-area-sort-descending-indicator').addClass('hidden');
-                }
-                $(event.target).data('sortDirection', sortDirection.toString());
-                this.collection.sortDirection = sortDirection;
+            var sortDirection = this.$('#station-entry-log-list-region-sort-button').data('sortDirection');
+            if (sortDirection) {
+                sortDirection = parseInt(sortDirection);
+                sortDirection *= -1;
+            } else {
+                sortDirection = 1;
             }
+            if (sortDirection === 1) {
+                this.$('#station-entry-log-list-region-sort-ascending-indicator').removeClass('hidden');
+                this.$('#station-entry-log-list-region-sort-descending-indicator').addClass('hidden');
+                this.$('#station-entry-log-list-area-sort-ascending-indicator').addClass('hidden');
+                this.$('#station-entry-log-list-area-sort-descending-indicator').addClass('hidden');
+            } else {
+                this.$('#station-entry-log-list-region-sort-ascending-indicator').addClass('hidden');
+                this.$('#station-entry-log-list-region-sort-descending-indicator').removeClass('hidden');
+                this.$('#station-entry-log-list-area-sort-ascending-indicator').addClass('hidden');
+                this.$('#station-entry-log-list-area-sort-descending-indicator').addClass('hidden');
+            }
+            this.$('#station-entry-log-list-region-sort-button').data('sortDirection', sortDirection.toString());
+            this.collection.sortDirection = sortDirection;
 
             this.collection.sortAttributes = ['region', 'expectedOutTime'];
             this.collection.sort();
@@ -150,29 +187,26 @@ define(function(require) {
                 event.preventDefault();
             }
             
-            if (event.target) {
-                var sortDirection = $(event.target).data('sortDirection');
-                if (sortDirection) {
-                    sortDirection = parseInt(sortDirection);
-                    sortDirection *= -1;
-                } else {
-                    sortDirection = 1;
-                }
-                if (sortDirection === 1) {
-                    this.$('#station-entry-log-list-region-sort-ascending-indicator').addClass('hidden');
-                    this.$('#station-entry-log-list-region-sort-descending-indicator').addClass('hidden');
-                    this.$('#station-entry-log-list-area-sort-ascending-indicator').removeClass('hidden');
-                    this.$('#station-entry-log-list-area-sort-descending-indicator').addClass('hidden');
-                } else {
-                    this.$('#station-entry-log-list-region-sort-ascending-indicator').addClass('hidden');
-                    this.$('#station-entry-log-list-region-sort-descending-indicator').addClass('hidden');
-                    this.$('#station-entry-log-list-area-sort-ascending-indicator').addClass('hidden');
-                    this.$('#station-entry-log-list-area-sort-descending-indicator').removeClass('hidden');
-                }
-                $(event.target).data('sortDirection', sortDirection.toString());
-                this.collection.sortDirection = sortDirection;
+            var sortDirection = this.$('#station-entry-log-list-area-sort-button').data('sortDirection');
+            if (sortDirection) {
+                sortDirection = parseInt(sortDirection);
+                sortDirection *= -1;
+            } else {
+                sortDirection = 1;
             }
-
+            if (sortDirection === 1) {
+                this.$('#station-entry-log-list-region-sort-ascending-indicator').addClass('hidden');
+                this.$('#station-entry-log-list-region-sort-descending-indicator').addClass('hidden');
+                this.$('#station-entry-log-list-area-sort-ascending-indicator').removeClass('hidden');
+                this.$('#station-entry-log-list-area-sort-descending-indicator').addClass('hidden');
+            } else {
+                this.$('#station-entry-log-list-region-sort-ascending-indicator').addClass('hidden');
+                this.$('#station-entry-log-list-region-sort-descending-indicator').addClass('hidden');
+                this.$('#station-entry-log-list-area-sort-ascending-indicator').addClass('hidden');
+                this.$('#station-entry-log-list-area-sort-descending-indicator').removeClass('hidden');
+            }
+            this.$('#station-entry-log-list-area-sort-button').data('sortDirection', sortDirection.toString());
+            this.collection.sortDirection = sortDirection;
             this.collection.sortAttributes = ['area', 'expectedOutTime'];
             this.collection.sort();
         },

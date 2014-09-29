@@ -21,14 +21,14 @@ define(function(require) {
                 errorMessage: appResources.getResource('StationListView.errorMessage').value,
                 infoMessage: appResources.getResource('StationListView.infoMessage').value,
                 listViewTitleText: appResources.getResource('StationListView.listViewTitleText').value,
-                listFilterHeaderText: appResources.getResource('StationListView.listFilterHeaderText').value,
+                refreshListButtonText: appResources.getResource('StationListView.refreshListButtonText').value,
+                showListOptionsButtonText: appResources.getResource('StationListView.showListOptionsButtonText').value,
+                resetListOptionsButtonText: appResources.getResource('StationListView.resetListOptionsButtonText').value,
                 regionFilterDefaultOption: appResources.getResource('StationListView.regionFilterDefaultOption').value,
                 areaFilterDefaultOption: appResources.getResource('StationListView.areaFilterDefaultOption').value,
-                updateListFilterButtonText: appResources.getResource('StationListView.updateListFilterButtonText').value,
                 stationNameHeaderText: appResources.getResource('StationListView.stationNameHeaderText').value,
                 regionHeaderText: appResources.getResource('StationListView.regionHeaderText').value,
-                areaHeaderText: appResources.getResource('StationListView.areaHeaderText').value,
-                placeholderHeaderText: appResources.getResource('StationListView.placeholderHeaderText').value
+                areaHeaderText: appResources.getResource('StationListView.areaHeaderText').value
             };
         },
         initialize: function(options) {
@@ -55,8 +55,12 @@ define(function(require) {
             return this;
         },
         events: {
-            'click #station-list-update-filter-button': 'updateStationListFilter',
-            'click #station-list-region-sort-button': 'updateStationListSort'
+            'click #station-list-refresh-list-button': 'refreshStationList',
+            'click #station-list-show-list-options-button': 'showStationListFilter',
+            'click #station-list-reset-list-options-button': 'resetStationListFilter',
+            'click #station-list-station-name-sort-button': 'updateStationListStationNameSort',
+            'click #station-list-region-sort-button': 'updateStationListRegionSort',
+            'click #station-list-area-sort-button': 'updateStationListAreaSort'
         },
         addAll: function() {
             this._leaveChildren();
@@ -68,7 +72,7 @@ define(function(require) {
                 model: station,
                 dispatcher: currentContext.dispatcher
             });
-            this.appendChildTo(stationListItemView, '.view-list');
+            this.appendChildTo(stationListItemView, '#station-list');
         },
         addAllRegions: function() {
             var currentContext = this;
@@ -104,13 +108,127 @@ define(function(require) {
                 this.dispatcher.trigger(AppEventNamesEnum.showStations, options);
             }
         },
-        updateStationListSort: function(event) {
+        showStationListFilter: function(event) {
             if (event) {
                 event.preventDefault();
             }
 
-            this.collection.sortAttribute = 'stationName|region';
+            this.$('#station-list-options-view').removeClass('hidden');
+            this.$('#station-list-reset-list-options-button').removeClass('hidden');
+        },
+        resetStationListFilter: function(event) {
+            if (event) {
+                event.preventDefault();
+            }
+
+            this.$('#station-list-reset-list-options-button').addClass('hidden');
+            this.$('#station-list-options-view').addClass('hidden');
+
+            this.dispatcher.trigger(AppEventNamesEnum.showOpenStations);
+        },
+        updateStationListStationNameSort: function(event) {
+            if (event) {
+                event.preventDefault();
+            }
+            
+            var sortDirection = this.$('#station-list-station-name-sort-button').data('sortDirection');
+            if (sortDirection) {
+                sortDirection = parseInt(sortDirection);
+                sortDirection *= -1;
+            } else {
+                sortDirection = 1;
+            }
+            if (sortDirection === 1) {
+                this.$('#station-list-station-name-sort-ascending-indicator').removeClass('hidden');
+                this.$('#station-list-station-name-sort-descending-indicator').addClass('hidden');
+                this.$('#station-list-region-sort-ascending-indicator').addClass('hidden');
+                this.$('#station-list-region-sort-descending-indicator').addClass('hidden');
+                this.$('#station-list-area-sort-ascending-indicator').addClass('hidden');
+                this.$('#station-list-area-sort-descending-indicator').addClass('hidden');
+            } else {
+                this.$('#station-list-station-name-sort-ascending-indicator').addClass('hidden');
+                this.$('#station-list-station-name-sort-descending-indicator').removeClass('hidden');
+                this.$('#station-list-region-sort-ascending-indicator').addClass('hidden');
+                this.$('#station-list-region-sort-descending-indicator').addClass('hidden');
+                this.$('#station-list-area-sort-ascending-indicator').addClass('hidden');
+                this.$('#station-list-area-sort-descending-indicator').addClass('hidden');
+            }
+            this.$('#station-list-station-name-sort-button').data('sortDirection', sortDirection.toString());
+            this.collection.sortDirection = sortDirection;
+
+            this.collection.sortAttributes = ['stationName'];
             this.collection.sort();
+        },
+        updateStationListRegionSort: function(event) {
+            if (event) {
+                event.preventDefault();
+            }
+            
+            var sortDirection = this.$('#station-list-region-sort-button').data('sortDirection');
+            if (sortDirection) {
+                sortDirection = parseInt(sortDirection);
+                sortDirection *= -1;
+            } else {
+                sortDirection = 1;
+            }
+            if (sortDirection === 1) {
+                this.$('#station-list-station-name-sort-ascending-indicator').addClass('hidden');
+                this.$('#station-list-station-name-sort-descending-indicator').addClass('hidden');
+                this.$('#station-list-region-sort-ascending-indicator').removeClass('hidden');
+                this.$('#station-list-region-sort-descending-indicator').addClass('hidden');
+                this.$('#station-list-area-sort-ascending-indicator').addClass('hidden');
+                this.$('#station-list-area-sort-descending-indicator').addClass('hidden');
+            } else {
+                this.$('#station-list-station-name-sort-ascending-indicator').addClass('hidden');
+                this.$('#station-list-station-name-sort-descending-indicator').addClass('hidden');
+                this.$('#station-list-region-sort-ascending-indicator').addClass('hidden');
+                this.$('#station-list-region-sort-descending-indicator').removeClass('hidden');
+                this.$('#station-list-area-sort-ascending-indicator').addClass('hidden');
+                this.$('#station-list-area-sort-descending-indicator').addClass('hidden');
+            }
+            this.$('#station-list-region-sort-button').data('sortDirection', sortDirection.toString());
+            this.collection.sortDirection = sortDirection;
+
+            this.collection.sortAttributes = ['region'];
+            this.collection.sort();
+        },
+        updateStationListAreaSort: function(event) {
+            if (event) {
+                event.preventDefault();
+            }
+            
+            var sortDirection = this.$('#station-list-area-sort-button').data('sortDirection');
+            if (sortDirection) {
+                sortDirection = parseInt(sortDirection);
+                sortDirection *= -1;
+            } else {
+                sortDirection = 1;
+            }
+            if (sortDirection === 1) {
+                this.$('#station-list-station-name-sort-ascending-indicator').addClass('hidden');
+                this.$('#station-list-station-name-sort-descending-indicator').addClass('hidden');
+                this.$('#station-list-region-sort-ascending-indicator').addClass('hidden');
+                this.$('#station-list-region-sort-descending-indicator').addClass('hidden');
+                this.$('#station-list-area-sort-ascending-indicator').removeClass('hidden');
+                this.$('#station-list-area-sort-descending-indicator').addClass('hidden');
+            } else {
+                this.$('#station-list-station-name-sort-ascending-indicator').addClass('hidden');
+                this.$('#station-list-station-name-sort-descending-indicator').addClass('hidden');
+                this.$('#station-list-region-sort-ascending-indicator').addClass('hidden');
+                this.$('#station-list-region-sort-descending-indicator').addClass('hidden');
+                this.$('#station-list-area-sort-ascending-indicator').addClass('hidden');
+                this.$('#station-list-area-sort-descending-indicator').removeClass('hidden');
+            }
+            this.$('#station-list-area-sort-button').data('sortDirection', sortDirection.toString());
+            this.collection.sortDirection = sortDirection;
+            this.collection.sortAttributes = ['area'];
+            this.collection.sort();
+        },
+        showLoading: function() {
+            this.$('.view-status').removeClass('hidden');
+        },
+        hideLoading: function() {
+            this.$('.view-status').addClass('hidden');
         }
     });
 

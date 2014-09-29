@@ -100,8 +100,24 @@ define(function (require) {
             'value': 'Open Station Entries'
         },
         {
-            'key': 'StationEntryLogListView.listFilterHeaderText',
-            'value': 'Show Me'
+            'key': 'StationEntryLogListView.refreshListButtonText',
+            'value': 'Refresh'
+        },
+        {
+            'key': 'StationEntryLogListView.showListOptionsButtonText',
+            'value': 'Show Options'
+        },
+        {
+            'key': 'StationEntryLogListView.resetListOptionsButtonText',
+            'value': 'Reset'
+        },
+        {
+            'key': 'StationEntryLogListView.statusFilterOpenOption',
+            'value': 'open'
+        },
+        {
+            'key': 'StationEntryLogListView.statusFilterExpiredOption',
+            'value': 'expired'
         },
         {
             'key': 'StationEntryLogListView.regionFilterDefaultOption',
@@ -130,14 +146,6 @@ define(function (require) {
         {
             'key': 'StationEntryLogListView.inTimeHeaderText',
             'value': 'Checked-In'
-        },
-        {
-            'key': 'StationEntryLogListView.outTimeHeaderText',
-            'value': 'Checked-out'
-        },
-        {
-            'key': 'StationEntryLogListView.durationHeaderText',
-            'value': 'Duration'
         },
         {
             'key': 'StationEntryLogListView.expectedOutTimeHeaderText',
@@ -190,8 +198,16 @@ define(function (require) {
             'value': '&#45;&#160;area&#160;&#45;'
         },
         {
-            'key': 'StationEntryLogHistoryListView.updateListFilterButtonText',
-            'value': 'Update List'
+            'key': 'StationEntryLogHistoryListView.refreshListButtonText',
+            'value': 'Refresh'
+        },
+        {
+            'key': 'StationEntryLogHistoryListView.showListOptionsButtonText',
+            'value': 'Show Options'
+        },
+        {
+            'key': 'StationEntryLogHistoryListView.resetListOptionsButtonText',
+            'value': 'Reset'
         },
         {
             'key': 'StationEntryLogHistoryListView.stationNameHeaderText',
@@ -212,14 +228,6 @@ define(function (require) {
         {
             'key': 'StationEntryLogHistoryListView.outTimeHeaderText',
             'value': 'Checked-out'
-        },
-        {
-            'key': 'StationEntryLogHistoryListView.durationHeaderText',
-            'value': 'Duration'
-        },
-        {
-            'key': 'StationEntryLogHistoryListView.expectedOutTimeHeaderText',
-            'value': 'Est. Check-out'
         },
         {
             'key': 'StationEntryLogHistoryListView.purposeHeaderText',
@@ -256,8 +264,16 @@ define(function (require) {
             'value': 'Stations'
         },
         {
-            'key': 'StationListView.listFilterHeaderText',
-            'value': 'Show Me'
+            'key': 'StationListView.refreshListButtonText',
+            'value': 'Refresh'
+        },
+        {
+            'key': 'StationListView.showListOptionsButtonText',
+            'value': 'Show Options'
+        },
+        {
+            'key': 'StationListView.resetListOptionsButtonText',
+            'value': 'Reset'
         },
         {
             'key': 'StationListView.regionFilterDefaultOption',
@@ -266,10 +282,6 @@ define(function (require) {
         {
             'key': 'StationListView.areaFilterDefaultOption',
             'value': '&#45;&#160;area&#160;&#45;'
-        },
-        {
-            'key': 'StationListView.updateListFilterButtonText',
-            'value': 'Update List'
         },
         {
             'key': 'StationListView.stationNameHeaderText',
