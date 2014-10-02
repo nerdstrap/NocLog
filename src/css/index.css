@@ -6084,9 +6084,11 @@ body:before {
 .hidden {
   display: none; }
 
-.station-list-view,
 .station-entry-log-list-view,
-.station-entry-log-history-list-view {
+.station-entry-log-history-list-view,
+.station-list-view,
+.station-entry-log-view,
+.station-view {
   background-color: #FFFFFF;
   margin: 5px;
   padding: 5px; }
@@ -6108,9 +6110,9 @@ body:before {
   bottom: 0;
   left: 0; }
 
-.station-list-item-view,
 .station-entry-log-list-item-view,
-.station-entry-log-history-list-item-view {
+.station-entry-log-history-list-item-view,
+.station-list-item-view {
   background-color: #DEDEDE;
   border: solid 1px #C2C2C2;
   padding: 3px;
@@ -6146,9 +6148,26 @@ textarea {
   font-weight: normal;
   color: #000000; }
 
-.detail {
+span.detail {
   font-size: 1em;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-weight: normal;
   font-style: italic;
   color: #000000; }
+
+#station-show-contact-details-button,
+#station-show-location-details-button,
+#station-show-emergency-details-button,
+#station-show-other-details-button,
+.section-header {
+  color: #008cba;
+  font-size: 1.2em;
+  line-height: 1.2em;
+  border-bottom: solid 1px #b6edff; }
+
+#station-show-contact-details-button i,
+#station-show-location-details-button i,
+#station-show-emergency-details-button i,
+#station-show-other-details-button i,
+.section-header i {
+  float: right; }

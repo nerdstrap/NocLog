@@ -384,24 +384,222 @@ define(function (require) {
         
         /* station */
         {
-            'key': 'StationView.stationNameHeaderText',
-            'value': 'Station'
+            'key': 'StationView.goToMapButtonText',
+            'value': 'View Station in Google Maps'
         },
         {
-            'key': 'StationView.contactHeaderText',
-            'value': 'Contact'
+            'key': 'StationView.contactSectionTitleText',
+            'value': 'Contact Information'
         },
         {
-            'key': 'StationView.regionHeaderText',
-            'value': 'Region'
+            'key': 'StationView.locationSectionTitleText',
+            'value': 'Location Details'
         },
         {
-            'key': 'StationView.areaHeaderText',
-            'value': 'Area'
+            'key': 'StationView.emergencySectionTitleText',
+            'value': 'Medical Emergency Information'
+        },
+        {
+            'key': 'StationView.otherSectionTitleText',
+            'value': 'Other Information'
+        },
+        {
+            'key': 'StationView.faaSectionTitleText',
+            'value': 'FAA Information'
+        },
+        {
+            'key': 'StationView.itfoSectionTitleText',
+            'value': 'IT FO Information'
+        },
+        /* location */
+        {
+            'key': 'StationView.audinetHeaderText',
+            'value': 'Audinet'
+        },
+        {
+            'key': 'StationView.telephoneHeaderText',
+            'value': 'Telephone'
+        },
+        {
+            'key': 'StationView.address1HeaderText',
+            'value': 'Street'
+        },
+        {
+            'key': 'StationView.cityHeaderText',
+            'value': 'City'
+        },
+        {
+            'key': 'StationView.stateHeaderText',
+            'value': 'State'
+        },
+        {
+            'key': 'StationView.postalCodeHeaderText',
+            'value': 'Postal Code'
+        },
+        {
+            'key': 'StationView.latitudeHeaderText',
+            'value': 'Latitude'
+        },
+        {
+            'key': 'StationView.longitudeHeaderText',
+            'value': 'Longitude'
         },
         {
             'key': 'StationView.directionsHeaderText',
             'value': 'Directions'
+        },
+        /* contact */
+        {
+            'key': 'StationView.contactIdHeaderText',
+            'value': 'IT FO Contact'
+        },
+        {
+            'key': 'StationView.contactPhoneHeaderText',
+            'value': 'Contact Phone'
+        },
+        {
+            'key': 'StationView.contactSecurityPhoneHeaderText',
+            'value': 'Security Phone'
+        },
+        {
+            'key': 'StationView.contactAddress1HeaderText',
+            'value': 'Mailing Address'
+        },
+        {
+            'key': 'StationView.contactCityHeaderText',
+            'value': 'City'
+        },
+        {
+            'key': 'StationView.contactStateHeaderText',
+            'value': 'State'
+        },
+        {
+            'key': 'StationView.contactPostalCodeHeaderText',
+            'value': 'Postal Code'
+        },
+        /* emergency */
+        {
+            'key': 'StationView.medicalEmergencyDepartmentHeaderText',
+            'value': 'Medical Emergency'
+        },
+        {
+            'key': 'StationView.medicalEmergencyDepartmentPhoneHeaderText',
+            'value': 'Medical Emergency Phone'
+        },
+        {
+            'key': 'StationView.fireDepartmentHeaderText',
+            'value': 'Fire Department'
+        },
+        {
+            'key': 'StationView.fireDepartmentPhoneHeaderText',
+            'value': 'Fire Department Phone'
+        },
+        {
+            'key': 'StationView.policeDepartmentHeaderText',
+            'value': 'Police Department'
+        },
+        {
+            'key': 'StationView.policeDepartmentPhoneHeaderText',
+            'value': 'Police Department Phone'
+        },
+        /* other */
+        {
+            'key': 'StationView.complexNameHeaderText',
+            'value': 'Complex'
+        },
+        {
+            'key': 'StationView.owningOrganizationHeaderText',
+            'value': 'Owning Org.'
+        },
+        {
+            'key': 'StationView.leasedCircuitsHeaderText',
+            'value': 'Leased Circuits'
+        },
+        /* faa */
+        {
+            'key': 'StationView.faaReportableHeaderText',
+            'value': 'FAA Reportable'
+        },
+        {
+            'key': 'StationView.faaRegionHeaderText',
+            'value': 'FAA Region'
+        },
+        {
+            'key': 'StationView.towerNumberHeaderText',
+            'value': 'Tower Number'
+        },
+        {
+            'key': 'StationView.nearestAirportHeaderText',
+            'value': 'Nearest Airport'
+        },
+        /* it fo */
+        {
+            'key': 'StationView.benefittingOrganizationHeaderText',
+            'value': 'Benefitting Org.'
+        },
+        {
+            'key': 'StationView.landOwnerHeaderText',
+            'value': 'Land Owner'
+        },
+        {
+            'key': 'StationView.servingUtilityTelephoneHeaderText',
+            'value': 'Serving Utility Phone'
+        },
+        {
+            'key': 'StationView.acCircuitFeederHeaderText',
+            'value': 'AC Circuit Feeder'
+        },
+        {
+            'key': 'StationView.fuelProviderHeaderText',
+            'value': 'Fuel Provider'
+        },
+        {
+            'key': 'StationView.areaHeaderText',
+            'value': 'IT FO Area'
+        },
+        {
+            'key': 'StationView.regionHeaderText',
+            'value': 'IT FO Region'
+        },
+        {
+            'key': 'StationView.equipmentHeaderText',
+            'value': 'Equipment'
+        },
+        {
+            'key': 'StationView.telecomNpaHeaderText',
+            'value': 'Telecom NPA'
+        },
+        {
+            'key': 'StationView.telecomNxxHeaderText',
+            'value': 'Telecom NXX'
+        },
+        {
+            'key': 'StationView.servingElectricUtilityHeaderText',
+            'value': 'Serving Electric Utility'
+        },
+        {
+            'key': 'StationView.servingTelephoneCompanyHeaderText',
+            'value': 'Serving Telephone Co.'
+        },
+        {
+            'key': 'StationView.siteAccessMethodHeaderText',
+            'value': 'Site Access Method'
+        },
+        {
+            'key': 'StationView.siteTypeHeaderText',
+            'value': 'Site Type'
+        },
+        {
+            'key': 'StationView.notesHeaderText',
+            'value': 'Site Notes'
+        },
+        {
+            'key': 'StationView.demarcationLocationHeaderText',
+            'value': 'Telco Demarc.'
+        },
+        {
+            'key': 'StationView.transformerPoleHeaderText',
+            'value': 'Transformer Pole'
         }
     ];
 

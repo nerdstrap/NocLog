@@ -26,7 +26,14 @@ define(function(require) {
             if (cleanedPhone.length > 10) {
                 cleanedPhone = cleanedPhone.substring(cleanedPhone.length - 10);
             }
-            return cleanedPhone;
+            var formattedPhone = cleanedPhone;
+            if (cleanedPhone.length === 10) {
+                formattedPhone = '(' + cleanedPhone.substr(0, 3) + ') ' + cleanedPhone.substr(3, 3) + '-' + cleanedPhone.substr(7, 4);
+            }
+            if (cleanedPhone.length === 7) {
+                formattedPhone = cleanedPhone.substr(0, 3) + '-' + cleanedPhone.substr(3, 4);
+            }
+            return formattedPhone;
         }
         return phone;
     };

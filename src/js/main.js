@@ -63,10 +63,10 @@ require.config({
         'utils': 'app/utils',
         
         /* Convenience */
-        'collections': '../collections/memory',
+        'collections': '../collections',
         'controllers': '../controllers',
         'enums': '../enums',
-        'models': '../models/memory',
+        'models': '../models',
         'routers': '../routers',
         'services': '../services',
         'templates': '../templates',

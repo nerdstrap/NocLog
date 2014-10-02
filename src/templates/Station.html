@@ -1,42 +1,467 @@
 <div class="station-view">
     <div class="row collapse">
-        <div class="small-2 columns">
-            <span>{{{stationNameHeaderText}}}</span>
-        </div>
-        <div class="small-10 columns">
-            <span data-stationid="{{stationId}}">{{stationName}}</span>
+        <div class="small-12 columns">
+            <h3 data-stationid="{{stationId}}">{{{stationName}}}</h3>
         </div>
     </div>
     <div class="row collapse">
-        <div class="small-2 columns">
-            <span>{{{contactHeaderText}}}</span>
-        </div>
-        <div class="small-10 columns">
-            <span>{{formatPhoneWithDefault contact "%D %r" "&nbsp;"}}</span>
+        <div class="small-12 columns">
+            <a class="directions-link" data-latitude="{{latitude}}" data-longitude="{{longitude}}">{{{goToMapButtonText}}}</a>
         </div>
     </div>
-    <div class="row collapse">
-        <div class="small-2 columns">
-            <span>{{{regionHeaderText}}}</span>
+    <div id="station-view-section-container" class="row">
+        <div class="small-6 columns">
+            <div class="panel callout">
+                <div id="station-show-location-details-button" class="row collapse section-header">
+                    <div class="small-12 columns">
+                        <span>{{{locationSectionTitleText}}}</span>
+                        <i id="station-hide-location-details-icon" class="fa fa-angle-double-up hidden"></i>
+                        <i id="station-show-location-details-icon" class="fa fa-angle-double-down"></i>
+                    </div>
+                </div>
+                <div id="station-location-details-view" class="row collapse">
+                    <div class="small-12 columns">
+                        <div class="row collapse">
+                            <div class="small-4 columns">
+                                <span>{{{audinetHeaderText}}}</span>
+                            </div>
+                            <div class="small-8 columns">
+                                <span class="detail">{{formatPhoneWithDefault contactAudinet "(d3) %r)" "&nbsp;"}}</span>
+                            </div>
+                        </div>
+                        <div class="row collapse">
+                            <div class="small-4 columns">
+                                <span>{{{telephoneHeaderText}}}</span>
+                            </div>
+                            <div class="small-8 columns">
+                                <span class="detail">{{formatPhoneWithDefault telephone "%D %r" "&nbsp;"}}</span>
+                            </div>
+                        </div>
+                        <div class="row collapse">
+                            <div class="small-4 columns">
+                                <span>{{{address1HeaderText}}}</span>
+                            </div>
+                            <div class="small-8 columns">
+                                <span class="detail">{{withDefault address1 "&nbsp;"}}</span>
+                            </div>
+                        </div>
+                        <div class="row collapse">
+                            <div class="small-4 columns">
+                                <span>{{{cityHeaderText}}}</span>
+                            </div>
+                            <div class="small-8 columns">
+                                <span class="detail">{{withDefault city "&nbsp;"}}</span>
+                            </div>
+                        </div>
+                        <div class="row collapse">
+                            <div class="small-4 columns">
+                                <span>{{{stateHeaderText}}}</span>
+                            </div>
+                            <div class="small-8 columns">
+                                <span class="detail">{{withDefault state "&nbsp;"}}</span>
+                            </div>
+                        </div>
+                        <div class="row collapse">
+                            <div class="small-4 columns">
+                                <span>{{{postalCodeHeaderText}}}</span>
+                            </div>
+                            <div class="small-8 columns">
+                                <span class="detail">{{withDefault postalCode "&nbsp;"}}</span>
+                            </div>
+                        </div>
+                        <div class="row collapse">
+                            <div class="small-4 columns">
+                                <span>{{{latitudeHeaderText}}}</span>
+                            </div>
+                            <div class="small-8 columns">
+                                <span class="detail">{{withDefault latitude "&nbsp;"}}</span>
+                            </div>
+                        </div>
+                        <div class="row collapse">
+                            <div class="small-4 columns">
+                                <span>{{{longitudeHeaderText}}}</span>
+                            </div>
+                            <div class="small-8 columns">
+                                <span class="detail">{{withDefault longitude "&nbsp;"}}</span>
+                            </div>
+                        </div>
+                        <div class="row collapse">
+                            <div class="small-4 columns">
+                                <span>{{{directionsHeaderText}}}</span>
+                            </div>
+                            <div class="small-8 columns">
+                                <span class="detail">{{withDefault directions "&nbsp;"}}</span>
+                            </div>
+                        </div>
+                        <div class="row collapse">
+                            &nbsp;
+                        </div>
+                    </div>
+                </div>
+                <div id="station-show-contact-details-button" class="row collapse section-header">
+                    <div class="small-12 columns">
+                        <span>{{{contactSectionTitleText}}}</span>
+                        <i id="station-hide-contact-details-icon" class="fa fa-angle-double-up hidden"></i>
+                        <i id="station-show-contact-details-icon" class="fa fa-angle-double-down"></i>
+                    </div>
+                </div>
+                <div id="station-contact-details-view" class="row collapse">
+                    <div class="small-12 columns">
+                        <div class="row collapse">
+                            <div class="small-4 columns">
+                                <span>{{{contactIdHeaderText}}}</span>
+                            </div>
+                            <div class="small-8 columns">
+                                <span class="detail">{{withDefault contactId "&nbsp;"}}</span>
+                            </div>
+                        </div>
+                        <div class="row collapse">
+                            <div class="small-4 columns">
+                                <span>{{{contactPhoneHeaderText}}}</span>
+                            </div>
+                            <div class="small-8 columns">
+                                <span class="detail">{{formatPhoneWithDefault contactPhone "%D %r" "&nbsp;"}}</span>
+                            </div>
+                        </div>
+                        <div class="row collapse">
+                            <div class="small-4 columns">
+                                <span>{{{contactSecurityPhoneHeaderText}}}</span>
+                            </div>
+                            <div class="small-8 columns">
+                                <span class="detail">{{formatPhoneWithDefault contactSecurityPhone "%D %r" "&nbsp;"}}</span>
+                            </div>
+                        </div>
+                        <div class="row collapse">
+                            <div class="small-4 columns">
+                                <span>{{{contactAddress1HeaderText}}}</span>
+                            </div>
+                            <div class="small-8 columns">
+                                <span class="detail">{{withDefault contactAddress1 "&nbsp;"}}</span>
+                            </div>
+                        </div>
+                        <div class="row collapse">
+                            <div class="small-4 columns">
+                                <span>{{{contactCityHeaderText}}}</span>
+                            </div>
+                            <div class="small-8 columns">
+                                <span class="detail">{{withDefault contactCity "&nbsp;"}}</span>
+                            </div>
+                        </div>
+                        <div class="row collapse">
+                            <div class="small-4 columns">
+                                <span>{{{contactStateHeaderText}}}</span>
+                            </div>
+                            <div class="small-8 columns">
+                                <span class="detail">{{withDefault contactState "&nbsp;"}}</span>
+                            </div>
+                        </div>
+                        <div class="row collapse">
+                            <div class="small-4 columns">
+                                <span>{{{contactPostalCodeHeaderText}}}</span>
+                            </div>
+                            <div class="small-8 columns">
+                                <span class="detail">{{withDefault contactPostalCode "&nbsp;"}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel">
+                <div id="station-show-emergency-details-button" class="row collapse section-header">
+                    <div class="small-12 columns">
+                        <span>{{{emergencySectionTitleText}}}</span>
+                        <i id="station-hide-emergency-details-icon" class="fa fa-angle-double-up hidden"></i>
+                        <i id="station-show-emergency-details-icon" class="fa fa-angle-double-down"></i>
+                    </div>
+                </div>
+                <div id="station-emergency-details-view" class="row collapse">
+                    <div class="small-12 columns">
+                        <div class="row collapse">
+                            <div class="small-4 columns">
+                                <span>{{{medicalEmergencyDepartmentHeaderText}}}</span>
+                            </div>
+                            <div class="small-8 columns">
+                                <span class="detail">{{withDefault medicalEmergencyDepartment "&nbsp;"}}</span>
+                            </div>
+                        </div>
+                        <div class="row collapse">
+                            <div class="small-4 columns">
+                                <span>{{{medicalEmergencyDepartmentPhoneHeaderText}}}</span>
+                            </div>
+                            <div class="small-8 columns">
+                                <span class="detail">{{formatPhoneWithDefault medicalEmergencyDepartmentPhone "%D %r" "&nbsp;"}}</span>
+                            </div>
+                        </div>
+                        <div class="row collapse">
+                            <div class="small-4 columns">
+                                <span>{{{fireDepartmentHeaderText}}}</span>
+                            </div>
+                            <div class="small-8 columns">
+                                <span class="detail">{{withDefault fireDepartment "&nbsp;"}}</span>
+                            </div>
+                        </div>
+                        <div class="row collapse">
+                            <div class="small-4 columns">
+                                <span>{{{fireDepartmentPhoneHeaderText}}}</span>
+                            </div>
+                            <div class="small-8 columns">
+                                <span class="detail">{{formatPhoneWithDefault fireDepartmentPhone "%D %r" "&nbsp;"}}</span>
+                            </div>
+                        </div>
+                        <div class="row collapse">
+                            <div class="small-4 columns">
+                                <span>{{{policeDepartmentHeaderText}}}</span>
+                            </div>
+                            <div class="small-8 columns">
+                                <span class="detail">{{withDefault policeDepartment "&nbsp;"}}</span>
+                            </div>
+                        </div>
+                        <div class="row collapse">
+                            <div class="small-4 columns">
+                                <span>{{{policeDepartmentPhoneHeaderText}}}</span>
+                            </div>
+                            <div class="small-8 columns">
+                                <span class="detail">{{formatPhoneWithDefault policeDepartmentPhone "%D %r" "&nbsp;"}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="small-10 columns">
-            <span>{{withDefault region "&nbsp;"}}</span>
-        </div>
-    </div>
-    <div class="row collapse">
-        <div class="small-2 columns">
-            <span>{{{areaHeaderText}}}</span>
-        </div>
-        <div class="small-10 columns">
-            <span>{{withDefault area "&nbsp;"}}</span>
-        </div>
-    </div>
-    <div class="row collapse">
-        <div class="small-2 columns">
-            <span>{{{directionsHeaderText}}}</span>
-        </div>
-        <div class="small-10 columns">
-            <a class="directions-link" data-latitude="{{latitude}}" data-longitude="{{longitude}}">View in Google Maps</a>
+        <div class="small-6 columns">
+            <div class="panel">
+                <div id="station-show-other-details-button" class="row collapse section-header">
+                    <div class="small-12 columns">
+                        <span>{{{otherSectionTitleText}}}</span>
+                        <i id="station-hide-other-details-icon" class="fa fa-angle-double-up hidden"></i>
+                        <i id="station-show-other-details-icon" class="fa fa-angle-double-down"></i>
+                    </div>
+                </div>
+                <div id="station-other-details-view" class="row collapse">
+                    <div class="small-12 columns">
+                        <div class="row collapse">
+                            <div class="small-4 columns">
+                                <span>{{{complexNameHeaderText}}}</span>
+                            </div>
+                            <div class="small-8 columns">
+                                <span class="detail">{{withDefault complexName "&nbsp;"}}</span>
+                            </div>
+                        </div>
+                        <div class="row collapse">
+                            <div class="small-4 columns">
+                                <span>{{{owningOrganizationHeaderText}}}</span>
+                            </div>
+                            <div class="small-8 columns">
+                                <span class="detail">{{withDefault owningOrganization "&nbsp;"}}</span>
+                            </div>
+                        </div>
+                        <div class="row collapse">
+                            <div class="small-4 columns">
+                                <span>{{{leasedCircuitsHeaderText}}}</span>
+                            </div>
+                            <div class="small-8 columns">
+                                <span class="detail">{{withDefault leasedCircuits "&nbsp;"}}</span>
+                            </div>
+                        </div>
+                        <div class="row collapse">
+                            &nbsp;
+                        </div>
+                    </div>
+                </div>
+                <div id="station-show-faa-details-button" class="row collapse section-header">
+                    <div class="small-12 columns">
+                        <span>{{{faaSectionTitleText}}}</span>
+                        <i id="station-hide-faa-details-icon" class="fa fa-angle-double-up hidden"></i>
+                        <i id="station-show-faa-details-icon" class="fa fa-angle-double-down"></i>
+                    </div>
+                </div>
+                <div id="station-faa-details-view" class="row collapse">
+                    <div class="small-12 columns">
+                        <div class="row collapse">
+                            <div class="small-4 columns">
+                                <span>{{{faaReportableHeaderText}}}</span>
+                            </div>
+                            <div class="small-8 columns">
+                                <span class="detail">{{withDefault faaReportable "&nbsp;"}}</span>
+                            </div>
+                        </div>
+                        <div class="row collapse">
+                            <div class="small-4 columns">
+                                <span>{{{faaRegionHeaderText}}}</span>
+                            </div>
+                            <div class="small-8 columns">
+                                <span class="detail">{{withDefault faaRegion "&nbsp;"}}</span>
+                            </div>
+                        </div>
+                        <div class="row collapse">
+                            <div class="small-4 columns">
+                                <span>{{{towerNumberHeaderText}}}</span>
+                            </div>
+                            <div class="small-8 columns">
+                                <span class="detail">{{withDefault towerNumber "&nbsp;"}}</span>
+                            </div>
+                        </div>
+                        <div class="row collapse">
+                            <div class="small-4 columns">
+                                <span>{{{nearestAirportHeaderText}}}</span>
+                            </div>
+                            <div class="small-8 columns">
+                                <span class="detail">{{withDefault nearestAirport "&nbsp;"}}</span>
+                            </div>
+                        </div>
+                        <div class="row collapse">
+                            &nbsp;
+                        </div>
+                    </div>
+                </div>
+                <div id="station-show-it-fo-details-button" class="row collapse section-header">
+                    <div class="small-12 columns">
+                        <span>{{{itfoSectionTitleText}}}</span>
+                        <i id="station-hide-it-fo-details-icon" class="fa fa-angle-double-up hidden"></i>
+                        <i id="station-show-it-fo-details-icon" class="fa fa-angle-double-down"></i>
+                    </div>
+                </div>
+                <div id="station-it-fo-details-view" class="row collapse">
+                    <div class="small-12 columns">
+                        <div class="row collapse">
+                            <div class="small-4 columns">
+                                <span>{{{benefittingOrganizationHeaderText}}}</span>
+                            </div>
+                            <div class="small-8 columns">
+                                <span class="detail">{{withDefault benefittingOrganization "&nbsp;"}}</span>
+                            </div>
+                        </div>
+                        <div class="row collapse">
+                            <div class="small-4 columns">
+                                <span>{{{landOwnerHeaderText}}}</span>
+                            </div>
+                            <div class="small-8 columns">
+                                <span class="detail">{{withDefault landOwner "&nbsp;"}}</span>
+                            </div>
+                        </div>
+                        <div class="row collapse">
+                            <div class="small-4 columns">
+                                <span>{{{servingUtilityTelephoneHeaderText}}}</span>
+                            </div>
+                            <div class="small-8 columns">
+                                <span class="detail">{{formatPhoneWithDefault servingUtilityTelephone "%D %r" "&nbsp;"}}</span>
+                            </div>
+                        </div>
+                        <div class="row collapse">
+                            <div class="small-4 columns">
+                                <span>{{{acCircuitFeederHeaderText}}}</span>
+                            </div>
+                            <div class="small-8 columns">
+                                <span class="detail">{{withDefault acCircuitFeeder "&nbsp;"}}</span>
+                            </div>
+                        </div>
+                        <div class="row collapse">
+                            <div class="small-4 columns">
+                                <span>{{{fuelProviderHeaderText}}}</span>
+                            </div>
+                            <div class="small-8 columns">
+                                <span class="detail">{{withDefault fuelProvider "&nbsp;"}}</span>
+                            </div>
+                        </div>
+                        <div class="row collapse">
+                            <div class="small-4 columns">
+                                <span>{{{areaHeaderText}}}</span>
+                            </div>
+                            <div class="small-8 columns">
+                                <span class="detail">{{withDefault area "&nbsp;"}}</span>
+                            </div>
+                        </div>
+                        <div class="row collapse">
+                            <div class="small-4 columns">
+                                <span>{{{regionHeaderText}}}</span>
+                            </div>
+                            <div class="small-8 columns">
+                                <span class="detail">{{withDefault region "&nbsp;"}}</span>
+                            </div>
+                        </div>
+                        <div class="row collapse">
+                            <div class="small-4 columns">
+                                <span>{{{equipmentHeaderText}}}</span>
+                            </div>
+                            <div class="small-8 columns">
+                                <span class="detail">{{withDefault equipment "&nbsp;"}}</span>
+                            </div>
+                        </div>
+                        <div class="row collapse">
+                            <div class="small-4 columns">
+                                <span>{{{telecomNpaHeaderText}}}</span>
+                            </div>
+                            <div class="small-8 columns">
+                                <span class="detail">{{withDefault telecomNpa "&nbsp;"}}</span>
+                            </div>
+                        </div>
+                        <div class="row collapse">
+                            <div class="small-4 columns">
+                                <span>{{{telecomNxxHeaderText}}}</span>
+                            </div>
+                            <div class="small-8 columns">
+                                <span class="detail">{{withDefault telecomNxx "&nbsp;"}}</span>
+                            </div>
+                        </div>
+                        <div class="row collapse">
+                            <div class="small-4 columns">
+                                <span>{{{servingElectricUtilityHeaderText}}}</span>
+                            </div>
+                            <div class="small-8 columns">
+                                <span class="detail">{{withDefault servingElectricUtility "&nbsp;"}}</span>
+                            </div>
+                        </div>
+                        <div class="row collapse">
+                            <div class="small-4 columns">
+                                <span>{{{servingTelephoneCompanyHeaderText}}}</span>
+                            </div>
+                            <div class="small-8 columns">
+                                <span class="detail">{{withDefault servingTelephoneCompany "&nbsp;"}}</span>
+                            </div>
+                        </div>
+                        <div class="row collapse">
+                            <div class="small-4 columns">
+                                <span>{{{siteAccessMethodHeaderText}}}</span>
+                            </div>
+                            <div class="small-8 columns">
+                                <span class="detail">{{withDefault siteAccessMethod "&nbsp;"}}</span>
+                            </div>
+                        </div>
+                        <div class="row collapse">
+                            <div class="small-4 columns">
+                                <span>{{{siteTypeHeaderText}}}</span>
+                            </div>
+                            <div class="small-8 columns">
+                                <span class="detail">{{withDefault siteType "&nbsp;"}}</span>
+                            </div>
+                        </div>
+                        <div class="row collapse">
+                            <div class="small-4 columns">
+                                <span>{{{notesHeaderText}}}</span>
+                            </div>
+                            <div class="small-8 columns">
+                                <span class="detail">{{withDefault notes "&nbsp;"}}</span>
+                            </div>
+                        </div>
+                        <div class="row collapse">
+                            <div class="small-4 columns">
+                                <span>{{{demarcationLocationHeaderText}}}</span>
+                            </div>
+                            <div class="small-8 columns">
+                                <span class="detail">{{withDefault demarcationLocation "&nbsp;"}}</span>
+                            </div>
+                        </div>
+                        <div class="row collapse">
+                            <div class="small-4 columns">
+                                <span>{{{transformerPoleHeaderText}}}</span>
+                            </div>
+                            <div class="small-8 columns">
+                                <span class="detail">{{withDefault transformerPole "&nbsp;"}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

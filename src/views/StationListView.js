@@ -91,7 +91,7 @@ define(function(require) {
             };
             this.$('#station-list-area-filter').html(areaListTemplate(areaListRenderModel));
         },
-        updateStationListFilter: function(event) {
+        refreshStationList: function(event) {
             if (event) {
                 event.preventDefault();
             }
@@ -129,7 +129,7 @@ define(function(require) {
             this.$('#station-list-reset-list-options-button').addClass('hidden');
             this.$('#station-list-options-view').addClass('hidden');
 
-            this.dispatcher.trigger(AppEventNamesEnum.showOpenStations);
+            this.dispatcher.trigger(AppEventNamesEnum.showStations);
         },
         updateStationListStationNameSort: function(event) {
             if (event) {

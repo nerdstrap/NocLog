@@ -4,101 +4,103 @@
 /* -------- NocLog -------- */
 
 root {
-  display: block;
-  font-size: 1em;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    display: block;
+    font-size: 1em;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 ol, ul {
-  list-style: none;
-  margin: 0;
-  padding: 0; }
+    list-style: none;
+    margin: 0;
+    padding: 0; }
 
 /* stickey footer http://www.cssstickyfooter.com/using-sticky-footer-code.html*/
 html, body {
-  height: 100%; }
+    height: 100%; }
 
 body {
-  font-size: 1em;
-  line-height: 1.5em; }
+    font-size: 1em;
+    line-height: 1.5em; }
 
 .shell-view {
-  min-height: 100%;
-  background-color: #DEDEDE; }
+    min-height: 100%;
+    background-color: #DEDEDE; }
 
 .shell-view {
-  overflow: auto;
-  padding-bottom: 40px; }
+    overflow: auto;
+    padding-bottom: 40px; }
 
 /* must be same height as the footer */
 #footer {
-  position: relative;
-  margin-top: -40px;
-  /* negative value of footer height */
-  height: 40px;
-  line-height: 40px;
-  overflow: hidden;
-  clear: both;
-  background-color: #DEDEDE; }
+    position: relative;
+    margin-top: -40px;
+    /* negative value of footer height */
+    height: 40px;
+    line-height: 40px;
+    overflow: hidden;
+    clear: both;
+    background-color: #DEDEDE; }
 
-  .footer-logo {
+.footer-logo {
     width: 40px;
-  }
+}
 
 /*Opera Fix*/
 body:before {
-  content: "";
-  height: 100%;
-  float: left;
-  width: 0;
-  margin-top: -32767px; }
+    content: "";
+    height: 100%;
+    float: left;
+    width: 0;
+    margin-top: -32767px; }
 
 /* app */
 .row {
-margin-left: 0;
-margin-right: 0;
-max-width: none;
+    margin-left: 0;
+    margin-right: 0;
+    max-width: none;
 }
 
 .hidden {
-  display: none;
+    display: none;
 }
 
-.station-list-view,
 .station-entry-log-list-view,
-.station-entry-log-history-list-view {
-  background-color: #FFFFFF;
-  margin: 5px;
-  padding: 5px;
+.station-entry-log-history-list-view,
+.station-list-view,
+.station-entry-log-view,
+.station-view {
+    background-color: #FFFFFF;
+    margin: 5px;
+    padding: 5px;
 }
 
 .list-header-item-view {
-  background-color: #DEDEDE;
-  font-size: 1.2em;
-  line-height: 1.2em;
-  padding: 3px;
-  border: solid 1px #C2C2C2;
-  margin: 5px 0;
+    background-color: #DEDEDE;
+    font-size: 1.2em;
+    line-height: 1.2em;
+    padding: 3px;
+    border: solid 1px #C2C2C2;
+    margin: 5px 0;
 }
 
 .list-header-item-view .columns {
-  position: relative;
-  height: 50px;
+    position: relative;
+    height: 50px;
 }
 
 .list-header-item-view .columns span {
-  position: absolute;
-        bottom: 0;
-        left: 0;
+    position: absolute;
+    bottom: 0;
+    left: 0;
 }
 
-.station-list-item-view,
 .station-entry-log-list-item-view,
-.station-entry-log-history-list-item-view {
-  background-color: #DEDEDE;
-  border: solid 1px #C2C2C2;
-  padding: 3px;
-  margin: 5px 0;
+.station-entry-log-history-list-item-view,
+.station-list-item-view {
+    background-color: #DEDEDE;
+    border: solid 1px #C2C2C2;
+    padding: 3px;
+    margin: 5px 0;
 }
 
 .h2 { 
@@ -124,18 +126,38 @@ input[type="tel"],
 input[type="time"], 
 input[type="url"], 
 textarea {
-  display: inline;
-  min-width: 170px;
-  max-width: 170px;
+    display: inline;
+    min-width: 170px;
+    max-width: 170px;
     font-size: 1em;
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-weight: normal;
     color: #000000;
 }
-.detail {
+
+span.detail {
     font-size: 1em;
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-weight: normal;
     font-style: italic;
-    color: #000000;
+    color: #000000; 
+}
+
+#station-show-contact-details-button,
+#station-show-location-details-button,
+#station-show-emergency-details-button,
+#station-show-other-details-button,
+.section-header {
+    color: #008cba;
+    font-size: 1.2em;
+    line-height: 1.2em;
+    border-bottom: solid 1px #b6edff;
+}
+
+#station-show-contact-details-button i,
+#station-show-location-details-button i,
+#station-show-emergency-details-button i,
+#station-show-other-details-button i,
+.section-header i {
+    float:right;
 }
