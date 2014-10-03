@@ -8,10 +8,10 @@
         <div class="small-12 columns">
             <a id="station-entry-log-list-refresh-list-button" class="button">{{{refreshListButtonText}}}</a>
             <a id="station-entry-log-list-show-list-options-button" class="button alert">{{{showListOptionsButtonText}}}</a>
-            <a id="station-entry-log-list-reset-list-options-button" class="button secondary hidden">{{{resetListOptionsButtonText}}}</a>
+            <a id="station-entry-log-list-reset-list-options-button" class="button secondary">{{{resetListOptionsButtonText}}}</a>
         </div>
     </div>
-    <div id="station-entry-log-list-options-view" class="row collapse hidden">
+    <div id="station-entry-log-list-options-view" class="row collapse">
         <div class="small-2 columns">
             <select id="station-entry-log-list-status-filter">
                 <option value="{{{statusFilterOpenOption}}}">{{{statusFilterOpenOption}}}</option>
@@ -34,7 +34,7 @@
     </div>
     <div class="row collapse">
         <div class="small-12 columns">
-            <ol id="station-entry-log-list">
+            <ol id="station-entry-log-list-header">
                 <div class="row collapse list-header-item-view">
                     <div class="small-2 columns">
                         <span>{{{stationNameHeaderText}}}</span>
@@ -81,6 +81,10 @@
                         <img src="{{loadingIconSrc}}" class="view-loading" />
                     </div>
                 </div>
+            </ol>
+        </div>
+        <div class="small-12 columns divWithScroll">
+            <ol id="station-entry-log-list">
             </ol>
         </div>
     </div>

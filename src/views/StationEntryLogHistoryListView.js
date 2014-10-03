@@ -9,6 +9,7 @@ define(function(require) {
             AppEventNamesEnum = require('enums/AppEventNamesEnum'),
             appEvents = require('events'),
             appResources = require('resources'),
+            utils = require('utils'),
             template = require('hbs!templates/StationEntryLogHistoryList'),
             stationIdentifierListTemplate = require('hbs!templates/StationIdentifierList'),
             regionListTemplate = require('hbs!templates/RegionList'),
@@ -64,6 +65,13 @@ define(function(require) {
 
             _.each(this.collection.models, this.addOne, this);
 
+            var today = new Date();
+            var yesterday = utils.addDays(Date.now(), -1);
+            var xxx = utils.getFormattedDate(yesterday);
+            
+            this.$('#station-entry-log-history-list-start-date-filter').val(utils.getFormattedDate(yesterday));
+            this.$('#station-entry-log-history-list-end-date-filter').val(utils.getFormattedDate(today));
+
             return this;
         },
         events: {
@@ -115,7 +123,7 @@ define(function(require) {
             if (event) {
                 event.preventDefault();
             }
-            
+
             this.showLoading();
 
             var stationId = this.$('#station-entry-log-history-list-station-identifier-filter').val();
@@ -150,9 +158,9 @@ define(function(require) {
             if (event) {
                 event.preventDefault();
             }
-            
+
             this.showLoading();
-            
+
             this.$('#station-entry-log-history-list-station-identifier-filter').val("");
             this.$('#station-entry-log-history-list-region-filter').val("");
             this.$('#station-entry-log-history-list-area-filter').val("");
@@ -170,7 +178,7 @@ define(function(require) {
             if (event) {
                 event.preventDefault();
             }
-            
+
             this.showSortIndicators();
 
             this.$('#station-entry-log-history-list-region-sort-button').removeData('sort-direction');
@@ -184,7 +192,7 @@ define(function(require) {
             if (event) {
                 event.preventDefault();
             }
-            
+
             var sortAttributes = ['region', 'outTime'];
 
             var sortDirection = this.$('#station-entry-log-history-list-region-sort-button').data('sort-direction');
@@ -206,7 +214,7 @@ define(function(require) {
             if (event) {
                 event.preventDefault();
             }
-            
+
             var sortAttributes = ['area', 'outTime'];
 
             var sortDirection = this.$('#station-entry-log-history-list-area-sort-button').data('sortDirection');
@@ -219,7 +227,7 @@ define(function(require) {
             this.showSortIndicators(sortAttributes, sortDirection);
             this.$('#station-entry-log-history-list-area-sort-button').data('sort-direction', sortDirection.toString());
             this.$('#station-entry-log-history-list-region-sort-button').removeData('sort-direction');
-            
+
             this.collection.sortDirection = sortDirection;
             this.collection.sortAttributes = sortAttributes;
             this.collection.sort();
@@ -229,7 +237,7 @@ define(function(require) {
             this.$('#station-entry-log-history-list-region-sort-descending-indicator').addClass('hidden');
             this.$('#station-entry-log-history-list-area-sort-ascending-indicator').addClass('hidden');
             this.$('#station-entry-log-history-list-area-sort-descending-indicator').addClass('hidden');
-            
+
             if (sortAttributes && sortAttributes.length > 0) {
                 var sortAttribute = sortAttributes[0];
                 if (sortAttribute === 'region') {

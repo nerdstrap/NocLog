@@ -110,6 +110,12 @@ body:before {
     font-size: 1.5em;
 }
 
+.divWithScroll{
+    height:550px;
+    overflow:scroll;
+    overflow-x:hidden;
+}
+
 /* overriding font size for the various input types */
 select, 
 input[type="text"], 

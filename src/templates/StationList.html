@@ -8,10 +8,10 @@
         <div class="small-12 columns">
             <a id="station-list-refresh-list-button" class="button">{{{refreshListButtonText}}}</a>
             <a id="station-list-show-list-options-button" class="button alert">{{{showListOptionsButtonText}}}</a>
-            <a id="station-list-reset-list-options-button" class="button secondary hidden">{{{resetListOptionsButtonText}}}</a>
+            <a id="station-list-reset-list-options-button" class="button secondary">{{{resetListOptionsButtonText}}}</a>
         </div>
     </div>
-    <div id="station-list-options-view" class="row collapse hidden">
+    <div id="station-list-options-view" class="row collapse">
         <div class="small-2 columns">
             <select id="station-list-region-filter">
                 <option disabled="disabled" selected="selected">{{{regionFilterDefaultOption}}}</option>
@@ -28,7 +28,7 @@
     </div>
     <div class="row collapse">
         <div class="small-12 columns">
-            <ol id="station-list">
+            <ol id="station-list-header">
                 <div class="row collapse list-header-item-view">
                     <div class="small-4 columns">
                         <span>
@@ -58,6 +58,10 @@
                         <img src="{{loadingIconSrc}}" class="view-loading" />
                     </div>
                 </div>
+            </ol>
+        </div>
+        <div class="small-12 columns divWithScroll">
+            <ol id="station-list">
             </ol>
         </div>
     </div>
