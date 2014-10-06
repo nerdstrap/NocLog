@@ -437,6 +437,10 @@ define(function (require) {
             'value': 'Postal Code'
         },
         {
+            'key': 'StationView.countyHeaderText',
+            'value': 'County'
+        },
+        {
             'key': 'StationView.latitudeHeaderText',
             'value': 'Latitude'
         },

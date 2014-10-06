@@ -71,6 +71,14 @@
                         </div>
                         <div class="row collapse">
                             <div class="small-4 columns">
+                                <span>{{{countyHeaderText}}}</span>
+                            </div>
+                            <div class="small-8 columns">
+                                <span class="detail">{{withDefault county "&nbsp;"}}</span>
+                            </div>
+                        </div>
+                        <div class="row collapse">
+                            <div class="small-4 columns">
                                 <span>{{{latitudeHeaderText}}}</span>
                             </div>
                             <div class="small-8 columns">
@@ -325,6 +333,22 @@
                     <div class="small-12 columns">
                         <div class="row collapse">
                             <div class="small-4 columns">
+                                <span>{{{areaHeaderText}}}</span>
+                            </div>
+                            <div class="small-8 columns">
+                                <span class="detail">{{withDefault area "&nbsp;"}}</span>
+                            </div>
+                        </div>
+                        <div class="row collapse">
+                            <div class="small-4 columns">
+                                <span>{{{regionHeaderText}}}</span>
+                            </div>
+                            <div class="small-8 columns">
+                                <span class="detail">{{withDefault region "&nbsp;"}}</span>
+                            </div>
+                        </div>
+                        <div class="row collapse">
+                            <div class="small-4 columns">
                                 <span>{{{benefittingOrganizationHeaderText}}}</span>
                             </div>
                             <div class="small-8 columns">
@@ -332,11 +356,14 @@
                             </div>
                         </div>
                         <div class="row collapse">
+                            &nbsp;
+                        </div>
+                        <div class="row collapse">
                             <div class="small-4 columns">
-                                <span>{{{landOwnerHeaderText}}}</span>
+                                <span>{{{servingElectricUtilityHeaderText}}}</span>
                             </div>
                             <div class="small-8 columns">
-                                <span class="detail">{{withDefault landOwner "&nbsp;"}}</span>
+                                <span class="detail">{{withDefault servingElectricUtility "&nbsp;"}}</span>
                             </div>
                         </div>
                         <div class="row collapse">
@@ -357,34 +384,29 @@
                         </div>
                         <div class="row collapse">
                             <div class="small-4 columns">
-                                <span>{{{fuelProviderHeaderText}}}</span>
+                                <span>{{{transformerPoleHeaderText}}}</span>
                             </div>
                             <div class="small-8 columns">
-                                <span class="detail">{{withDefault fuelProvider "&nbsp;"}}</span>
+                                <span class="detail">{{withDefault transformerPole "&nbsp;"}}</span>
+                            </div>
+                        </div>
+                        <div class="row collapse">
+                            &nbsp;
+                        </div>
+                        <div class="row collapse">
+                            <div class="small-4 columns">
+                                <span>{{{servingTelephoneCompanyHeaderText}}}</span>
+                            </div>
+                            <div class="small-8 columns">
+                                <span class="detail">{{withDefault servingTelephoneCompany "&nbsp;"}}</span>
                             </div>
                         </div>
                         <div class="row collapse">
                             <div class="small-4 columns">
-                                <span>{{{areaHeaderText}}}</span>
+                                <span>{{{demarcationLocationHeaderText}}}</span>
                             </div>
                             <div class="small-8 columns">
-                                <span class="detail">{{withDefault area "&nbsp;"}}</span>
-                            </div>
-                        </div>
-                        <div class="row collapse">
-                            <div class="small-4 columns">
-                                <span>{{{regionHeaderText}}}</span>
-                            </div>
-                            <div class="small-8 columns">
-                                <span class="detail">{{withDefault region "&nbsp;"}}</span>
-                            </div>
-                        </div>
-                        <div class="row collapse">
-                            <div class="small-4 columns">
-                                <span>{{{equipmentHeaderText}}}</span>
-                            </div>
-                            <div class="small-8 columns">
-                                <span class="detail">{{withDefault equipment "&nbsp;"}}</span>
+                                <span class="detail">{{withDefault demarcationLocation "&nbsp;"}}</span>
                             </div>
                         </div>
                         <div class="row collapse">
@@ -404,19 +426,25 @@
                             </div>
                         </div>
                         <div class="row collapse">
-                            <div class="small-4 columns">
-                                <span>{{{servingElectricUtilityHeaderText}}}</span>
-                            </div>
-                            <div class="small-8 columns">
-                                <span class="detail">{{withDefault servingElectricUtility "&nbsp;"}}</span>
-                            </div>
+                            &nbsp;
                         </div>
                         <div class="row collapse">
                             <div class="small-4 columns">
-                                <span>{{{servingTelephoneCompanyHeaderText}}}</span>
+                                <span>{{{fuelProviderHeaderText}}}</span>
                             </div>
                             <div class="small-8 columns">
-                                <span class="detail">{{withDefault servingTelephoneCompany "&nbsp;"}}</span>
+                                <span class="detail">{{withDefault fuelProvider "&nbsp;"}}</span>
+                            </div>
+                        </div>
+                        <div class="row collapse">
+                            &nbsp;
+                        </div>
+                        <div class="row collapse">
+                            <div class="small-4 columns">
+                                <span>{{{siteTypeHeaderText}}}</span>
+                            </div>
+                            <div class="small-8 columns">
+                                <span class="detail">{{withDefault siteType "&nbsp;"}}</span>
                             </div>
                         </div>
                         <div class="row collapse">
@@ -429,10 +457,18 @@
                         </div>
                         <div class="row collapse">
                             <div class="small-4 columns">
-                                <span>{{{siteTypeHeaderText}}}</span>
+                                <span>{{{equipmentHeaderText}}}</span>
                             </div>
                             <div class="small-8 columns">
-                                <span class="detail">{{withDefault siteType "&nbsp;"}}</span>
+                                <span class="detail">{{withDefault equipment "&nbsp;"}}</span>
+                            </div>
+                        </div>
+                        <div class="row collapse">
+                            <div class="small-4 columns">
+                                <span>{{{landOwnerHeaderText}}}</span>
+                            </div>
+                            <div class="small-8 columns">
+                                <span class="detail">{{withDefault landOwner "&nbsp;"}}</span>
                             </div>
                         </div>
                         <div class="row collapse">
@@ -441,22 +477,6 @@
                             </div>
                             <div class="small-8 columns">
                                 <span class="detail">{{withDefault notes "&nbsp;"}}</span>
-                            </div>
-                        </div>
-                        <div class="row collapse">
-                            <div class="small-4 columns">
-                                <span>{{{demarcationLocationHeaderText}}}</span>
-                            </div>
-                            <div class="small-8 columns">
-                                <span class="detail">{{withDefault demarcationLocation "&nbsp;"}}</span>
-                            </div>
-                        </div>
-                        <div class="row collapse">
-                            <div class="small-4 columns">
-                                <span>{{{transformerPoleHeaderText}}}</span>
-                            </div>
-                            <div class="small-8 columns">
-                                <span class="detail">{{withDefault transformerPole "&nbsp;"}}</span>
                             </div>
                         </div>
                     </div>

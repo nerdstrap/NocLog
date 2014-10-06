@@ -28,6 +28,7 @@ define(function(require) {
                 cityHeaderText: appResources.getResource('StationView.cityHeaderText').value,
                 stateHeaderText: appResources.getResource('StationView.stateHeaderText').value,
                 postalCodeHeaderText: appResources.getResource('StationView.postalCodeHeaderText').value,
+                countyHeaderText: appResources.getResource('StationView.countyHeaderText').value,
                 latitudeHeaderText: appResources.getResource('StationView.latitudeHeaderText').value,
                 longitudeHeaderText: appResources.getResource('StationView.longitudeHeaderText').value,
                 directionsHeaderText: appResources.getResource('StationView.directionsHeaderText').value,
