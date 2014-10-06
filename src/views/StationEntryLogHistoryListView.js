@@ -67,7 +67,6 @@ define(function(require) {
 
             var today = new Date();
             var yesterday = utils.addDays(Date.now(), -1);
-            var xxx = utils.getFormattedDate(yesterday);
             
             this.$('#station-entry-log-history-list-start-date-filter').val(utils.getFormattedDate(yesterday));
             this.$('#station-entry-log-history-list-end-date-filter').val(utils.getFormattedDate(today));
@@ -161,12 +160,15 @@ define(function(require) {
 
             this.showLoading();
 
+            var today = new Date();
+            var yesterday = utils.addDays(Date.now(), -1);
+
             this.$('#station-entry-log-history-list-station-identifier-filter').val("");
             this.$('#station-entry-log-history-list-region-filter').val("");
             this.$('#station-entry-log-history-list-area-filter').val("");
-            this.$('#station-entry-log-history-list-start-date-filter').val("");
+            this.$('#station-entry-log-history-list-start-date-filter').val(utils.getFormattedDate(yesterday));
             this.$('#station-entry-log-history-list-start-time-filter').val("");
-            this.$('#station-entry-log-history-list-end-date-filter').val("");
+            this.$('#station-entry-log-history-list-end-date-filter').val(utils.getFormattedDate(today));
             this.$('#station-entry-log-history-list-end-time-filter').val("");
 
             this.$('#station-entry-log-history-list-reset-list-options-button').addClass('hidden');

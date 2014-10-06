@@ -7,6 +7,7 @@ define(function(require) {
 
     // these modules setup functions & configuration that are used elsewhere
     require('foundation.core');
+    require('foundation.tooltip');
     require('utils');
     require('routers/appRouter');
     require('handlebars.helpers');
