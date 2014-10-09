@@ -104,10 +104,6 @@ define(function (require) {
             'value': 'Refresh'
         },
         {
-            'key': 'StationEntryLogListView.showListOptionsButtonText',
-            'value': 'Show Options'
-        },
-        {
             'key': 'StationEntryLogListView.resetListOptionsButtonText',
             'value': 'Reset'
         },
@@ -202,10 +198,6 @@ define(function (require) {
             'value': 'Refresh'
         },
         {
-            'key': 'StationEntryLogHistoryListView.showListOptionsButtonText',
-            'value': 'Show Options'
-        },
-        {
             'key': 'StationEntryLogHistoryListView.resetListOptionsButtonText',
             'value': 'Reset'
         },
@@ -276,12 +268,12 @@ define(function (require) {
             'value': 'Refresh'
         },
         {
-            'key': 'StationListView.showListOptionsButtonText',
-            'value': 'Show Options'
-        },
-        {
             'key': 'StationListView.resetListOptionsButtonText',
             'value': 'Reset'
+        },
+        {
+            'key': 'StationListView.stationIdentifierSelectDefaultOption',
+            'value': '&#45;&#160;jump to station&#160;&#45;'
         },
         {
             'key': 'StationListView.regionFilterDefaultOption',

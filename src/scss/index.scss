@@ -60,6 +60,10 @@ body:before {
     max-width: none;
 }
 
+.row.highlighted {
+    background: red;
+}
+
 .hidden {
     display: none;
 }

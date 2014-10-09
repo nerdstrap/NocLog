@@ -27,7 +27,6 @@ define(function(require) {
                 regionFilterDefaultOption: appResources.getResource('StationEntryLogHistoryListView.regionFilterDefaultOption').value,
                 areaFilterDefaultOption: appResources.getResource('StationEntryLogHistoryListView.areaFilterDefaultOption').value,
                 refreshListButtonText: appResources.getResource('StationEntryLogHistoryListView.refreshListButtonText').value,
-                showListOptionsButtonText: appResources.getResource('StationEntryLogHistoryListView.showListOptionsButtonText').value,
                 resetListOptionsButtonText: appResources.getResource('StationEntryLogHistoryListView.resetListOptionsButtonText').value,
                 stationNameHeaderText: appResources.getResource('StationEntryLogHistoryListView.stationNameHeaderText').value,
                 personnelNameHeaderText: appResources.getResource('StationEntryLogHistoryListView.personnelNameHeaderText').value,
@@ -67,7 +66,7 @@ define(function(require) {
 
             var today = new Date();
             var yesterday = utils.addDays(Date.now(), -1);
-            
+
             this.$('#station-entry-log-history-list-start-date-filter').val(utils.getFormattedDate(yesterday));
             this.$('#station-entry-log-history-list-end-date-filter').val(utils.getFormattedDate(today));
 
@@ -75,7 +74,6 @@ define(function(require) {
         },
         events: {
             'click #station-entry-log-history-list-refresh-list-button': 'refreshStationEntryLogHistoryList',
-            'click #station-entry-log-history-list-show-list-options-button': 'showStationEntryLogHistoryListFilter',
             'click #station-entry-log-history-list-reset-list-options-button': 'resetStationEntryLogHistoryListFilter',
             'click #station-entry-log-history-list-out-time-sort-button': 'updateStationEntryLogHistoryListOutTimeSort',
             'click #station-entry-log-history-list-region-sort-button': 'updateStationEntryLogHistoryListRegionSort',
@@ -97,7 +95,7 @@ define(function(require) {
         addAllStationIdentifiers: function() {
             var currentContext = this;
             var stationIdentifierListRenderModel = {
-                stationIdentifierFilterDefaultOption: currentContext.resources().stationIdentifierFilterDefaultOption,
+                defaultOption: currentContext.resources().stationIdentifierFilterDefaultOption,
                 stationIdentifiers: currentContext.stationIdentifierCollection.models
             };
             this.$('#station-entry-log-history-list-station-identifier-filter').html(stationIdentifierListTemplate(stationIdentifierListRenderModel));
@@ -145,14 +143,6 @@ define(function(require) {
 
             this.dispatcher.trigger(AppEventNamesEnum.showStationEntryLogs, options);
         },
-        showStationEntryLogHistoryListFilter: function(event) {
-            if (event) {
-                event.preventDefault();
-            }
-
-            this.$('#station-entry-log-history-list-options-view').removeClass('hidden');
-            this.$('#station-entry-log-history-list-reset-list-options-button').removeClass('hidden');
-        },
         resetStationEntryLogHistoryListFilter: function(event) {
             if (event) {
                 event.preventDefault();
@@ -163,16 +153,24 @@ define(function(require) {
             var today = new Date();
             var yesterday = utils.addDays(Date.now(), -1);
 
-            this.$('#station-entry-log-history-list-station-identifier-filter').val("");
-            this.$('#station-entry-log-history-list-region-filter').val("");
-            this.$('#station-entry-log-history-list-area-filter').val("");
+            this.$('#station-entry-log-history-list-station-identifier-filter').val('');
+            this.$('#station-entry-log-history-list-region-filter').val('');
+            this.$('#station-entry-log-history-list-area-filter').val('');
             this.$('#station-entry-log-history-list-start-date-filter').val(utils.getFormattedDate(yesterday));
-            this.$('#station-entry-log-history-list-start-time-filter').val("");
+            this.$('#station-entry-log-history-list-start-time-filter').val('');
             this.$('#station-entry-log-history-list-end-date-filter').val(utils.getFormattedDate(today));
-            this.$('#station-entry-log-history-list-end-time-filter').val("");
+            this.$('#station-entry-log-history-list-end-time-filter').val('');
 
-            this.$('#station-entry-log-history-list-reset-list-options-button').addClass('hidden');
-            this.$('#station-entry-log-history-list-options-view').addClass('hidden');
+            this.$('#station-entry-log-history-list-region-sort-button').removeData('sort-direction');
+            this.$('#station-entry-log-history-list-area-sort-button').removeData('sort-direction');
+
+            var sortAttributes = [{
+                    sortAttribute: 'outTime',
+                    sortDirection: 1
+                }];
+
+            this.showSortIndicators(sortAttributes);
+            this.collection.sortAttributes = sortAttributes;
 
             this.dispatcher.trigger(AppEventNamesEnum.showStationEntryLogs);
         },
@@ -181,13 +179,19 @@ define(function(require) {
                 event.preventDefault();
             }
 
-            this.showSortIndicators();
-
             this.$('#station-entry-log-history-list-region-sort-button').removeData('sort-direction');
             this.$('#station-entry-log-history-list-area-sort-button').removeData('sort-direction');
 
-            this.collection.sortDirection = 1;
-            this.collection.sortAttributes = ['outTime'];
+            var sortAttributes = [
+                {
+                    sortAttribute: 'outTime',
+                    sortDirection: 1
+                }
+            ];
+
+            this.showSortIndicators(sortAttributes);
+            this.collection.sortAttributes = sortAttributes;
+
             this.collection.sort();
         },
         updateStationEntryLogHistoryListRegionSort: function(event) {
@@ -195,21 +199,25 @@ define(function(require) {
                 event.preventDefault();
             }
 
-            var sortAttributes = ['region', 'outTime'];
+            var regionSortDirection = this.getDataSortDirection(this.$('#station-entry-log-history-list-region-sort-button'));
 
-            var sortDirection = this.$('#station-entry-log-history-list-region-sort-button').data('sort-direction');
-            if (sortDirection) {
-                sortDirection = parseInt(sortDirection);
-                sortDirection *= -1;
-            } else {
-                sortDirection = 1;
-            }
-            this.showSortIndicators(sortAttributes, sortDirection);
-            this.$('#station-entry-log-history-list-region-sort-button').data('sort-direction', sortDirection.toString());
+            var sortAttributes = [
+                {
+                    sortAttribute: 'region',
+                    sortDirection: regionSortDirection
+                },
+                {
+                    sortAttribute: 'outTime',
+                    sortDirection: 1
+                }
+            ];
+            
+            this.$('#station-entry-log-history-list-region-sort-button').data('sort-direction', regionSortDirection.toString());
             this.$('#station-entry-log-history-list-area-sort-button').removeData('sort-direction');
 
-            this.collection.sortDirection = sortDirection;
+            this.showSortIndicators(sortAttributes);
             this.collection.sortAttributes = sortAttributes;
+            
             this.collection.sort();
         },
         updateStationEntryLogHistoryListAreaSort: function(event) {
@@ -217,45 +225,69 @@ define(function(require) {
                 event.preventDefault();
             }
 
-            var sortAttributes = ['area', 'outTime'];
+            var areaSortDirection = this.getDataSortDirection(this.$('#station-entry-log-history-list-area-sort-button'));
 
-            var sortDirection = this.$('#station-entry-log-history-list-area-sort-button').data('sortDirection');
-            if (sortDirection) {
-                sortDirection = parseInt(sortDirection);
-                sortDirection *= -1;
-            } else {
-                sortDirection = 1;
-            }
-            this.showSortIndicators(sortAttributes, sortDirection);
-            this.$('#station-entry-log-history-list-area-sort-button').data('sort-direction', sortDirection.toString());
+            var sortAttributes = [
+                {
+                    sortAttribute: 'area',
+                    sortDirection: areaSortDirection
+                },
+                {
+                    sortAttribute: 'outTime',
+                    sortDirection: 1
+                }
+            ];
+            
+            this.$('#station-entry-log-history-list-area-sort-button').data('sort-direction', areaSortDirection.toString());
             this.$('#station-entry-log-history-list-region-sort-button').removeData('sort-direction');
 
-            this.collection.sortDirection = sortDirection;
+            this.showSortIndicators(sortAttributes);
             this.collection.sortAttributes = sortAttributes;
+            
             this.collection.sort();
         },
-        showSortIndicators: function(sortAttributes, sortDirection) {
+        showSortIndicators: function(sortAttributes) {
             this.$('#station-entry-log-history-list-region-sort-ascending-indicator').addClass('hidden');
             this.$('#station-entry-log-history-list-region-sort-descending-indicator').addClass('hidden');
             this.$('#station-entry-log-history-list-area-sort-ascending-indicator').addClass('hidden');
             this.$('#station-entry-log-history-list-area-sort-descending-indicator').addClass('hidden');
 
             if (sortAttributes && sortAttributes.length > 0) {
-                var sortAttribute = sortAttributes[0];
-                if (sortAttribute === 'region') {
-                    if (sortDirection === 1) {
-                        this.$('#station-entry-log-history-list-region-sort-ascending-indicator').removeClass('hidden');
-                    } else {
-                        this.$('#station-entry-log-history-list-region-sort-descending-indicator').removeClass('hidden');
-                    }
-                } else if (sortAttribute === 'area') {
-                    if (sortDirection === 1) {
-                        this.$('#station-entry-log-history-list-area-sort-ascending-indicator').removeClass('hidden');
-                    } else {
-                        this.$('#station-entry-log-history-list-area-sort-descending-indicator').removeClass('hidden');
+                for (var i in sortAttributes) {
+                    var sortAttribute = sortAttributes[i].sortAttribute;
+                    var sortDirection = sortAttributes[i].sortDirection;
+                    if (sortAttribute === 'region') {
+                        if (sortDirection === 1) {
+                            this.$('#station-entry-log-history-list-region-sort-ascending-indicator').removeClass('hidden');
+                        } else {
+                            this.$('#station-entry-log-history-list-region-sort-descending-indicator').removeClass('hidden');
+                        }
+                    } else if (sortAttribute === 'area') {
+                        if (sortDirection === 1) {
+                            this.$('#station-entry-log-history-list-area-sort-ascending-indicator').removeClass('hidden');
+                        } else {
+                            this.$('#station-entry-log-history-list-area-sort-descending-indicator').removeClass('hidden');
+                        }
                     }
                 }
             }
+        },
+        getDataSortDirection: function(sortButton) {
+            var sortDirection = 1;
+            if (sortButton) {
+                var data = sortButton.data('sort-direction');
+                if (data) {
+                    try {
+                        sortDirection = parseInt(data);
+                        sortDirection *= -1;
+                    }
+                    catch (nfex) {
+                        console.error(nfex);
+                        sortDirection = 1;
+                    }
+                }
+            }
+            return sortDirection;
         },
         showLoading: function() {
             this.$('.view-status').removeClass('hidden');

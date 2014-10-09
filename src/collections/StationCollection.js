@@ -10,9 +10,11 @@ define(function(require) {
     var StationCollection = Backbone.Collection.extend({
         model: StationModel,
         sortAttributes: [
-            'stationName'
+            {
+                sortAttribute: 'stationName',
+                sortDirection: 1
+            }
         ],
-        sortDirection: 1,
         sortableFields: [
             {
                 sortAttribute: 'stationName',
@@ -52,10 +54,13 @@ define(function(require) {
             var currentContext = this;
             var i, result = 0;
             for (i in currentContext.sortAttributes) {
-                var sortAttribute = currentContext.sortAttributes[i];
-                var sortableField = _.find(currentContext.sortableFields, function(s){ return s.sortAttribute === sortAttribute; });
+                var sortAttribute = currentContext.sortAttributes[i].sortAttribute;
+                var sortDirection = currentContext.sortAttributes[i].sortDirection;
+                var sortableField = _.find(currentContext.sortableFields, function(s) {
+                    return s.sortAttribute === sortAttribute;
+                });
                 if (sortableField) {
-                    result = sortableField.comparator(a.get(sortAttribute), b.get(sortAttribute), currentContext.sortDirection);
+                    result = sortableField.comparator(a.get(sortAttribute), b.get(sortAttribute), sortDirection);
                 }
                 if (result !== 0) {
                     return result; // on inequality we return right away

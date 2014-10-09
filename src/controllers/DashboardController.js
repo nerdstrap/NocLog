@@ -73,12 +73,15 @@ define(function(require) {
                     deferred = $.Deferred();
             
             currentContext.stationEntryLogSearchResults.reset();
-            currentContext.stationEntryLogSearchResults.sortAttributes = ['expectedOutTime'];
-            currentContext.stationEntryLogSearchResults.sortDirection = 1;
+            currentContext.stationEntryLogSearchResults.sortAttributes = [{
+                    sortAttribute: 'expectedOutTime',
+                    sortDirection: 1
+                }];
 
             var stationEntryLogListViewInstance = new StationEntryLogListView({
                 controller: currentContext,
                 dispatcher: currentContext.dispatcher,
+                stationIdentifierCollection: currentContext.stationIdentifierResults,
                 collection: currentContext.stationEntryLogSearchResults,
                 regionCollection: currentContext.regionResults,
                 areaCollection: currentContext.areaResults
@@ -108,8 +111,10 @@ define(function(require) {
                     deferred = $.Deferred();
             
             currentContext.stationEntryLogSearchResults.reset();
-            currentContext.stationEntryLogSearchResults.sortAttributes = ['outTime'];
-            currentContext.stationEntryLogSearchResults.sortDirection = 1;
+            currentContext.stationEntryLogSearchResults.sortAttributes = [{
+                    sortAttribute: 'outTime',
+                    sortDirection: 1
+                }];
 
             var stationEntryLogHistoryListViewInstance = new StationEntryLogHistoryListView({
                 controller: currentContext,
@@ -144,13 +149,16 @@ define(function(require) {
                     deferred = $.Deferred();
 
             currentContext.stationSearchResults.reset();
-            currentContext.stationSearchResults.sortAttributes = ['stationName'];
-            currentContext.stationSearchResults.sortDirection = 1;
+            currentContext.stationSearchResults.sortAttributes = [{
+                sortAttribute: 'stationName',
+                sortDirection: 1
+            }];
 
             var stationListViewInstance = new StationListView({
                 controller: currentContext,
                 dispatcher: currentContext.dispatcher,
                 collection: currentContext.stationSearchResults,
+                stationIdentifierCollection: currentContext.stationIdentifierResults,
                 regionCollection: currentContext.regionResults,
                 areaCollection: currentContext.areaResults
             });
@@ -161,6 +169,7 @@ define(function(require) {
             stationListViewInstance.showLoading();
             $.when(currentContext.stationSearchResults.getStations()).done(function(getStationSearchResults) {
                 currentContext.stationSearchResults.reset(getStationSearchResults.stations);
+                currentContext.stationIdentifierResults.reset(getStationSearchResults.stationIdentifiers);
                 currentContext.regionResults.reset(getStationSearchResults.regions);
                 currentContext.areaResults.reset(getStationSearchResults.areas);
                 deferred.resolve(stationListViewInstance);

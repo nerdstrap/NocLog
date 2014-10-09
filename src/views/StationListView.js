@@ -4,12 +4,14 @@ define(function(require) {
     var $ = require('jquery'),
             _ = require('underscore'),
             Backbone = require('backbone'),
+            globals = require('globals'),
             CompositeView = require('views/CompositeView'),
             StationListItemView = require('views/StationListItemView'),
             AppEventNamesEnum = require('enums/AppEventNamesEnum'),
             appEvents = require('events'),
             appResources = require('resources'),
             template = require('hbs!templates/StationList'),
+            stationIdentifierListTemplate = require('hbs!templates/StationIdentifierList'),
             regionListTemplate = require('hbs!templates/RegionList'),
             areaListTemplate = require('hbs!templates/AreaList');
 
@@ -22,10 +24,10 @@ define(function(require) {
                 infoMessage: appResources.getResource('StationListView.infoMessage').value,
                 listViewTitleText: appResources.getResource('StationListView.listViewTitleText').value,
                 refreshListButtonText: appResources.getResource('StationListView.refreshListButtonText').value,
-                showListOptionsButtonText: appResources.getResource('StationListView.showListOptionsButtonText').value,
                 resetListOptionsButtonText: appResources.getResource('StationListView.resetListOptionsButtonText').value,
                 regionFilterDefaultOption: appResources.getResource('StationListView.regionFilterDefaultOption').value,
                 areaFilterDefaultOption: appResources.getResource('StationListView.areaFilterDefaultOption').value,
+                stationIdentifierSelectDefaultOption: appResources.getResource('StationListView.stationIdentifierSelectDefaultOption').value,
                 stationNameHeaderText: appResources.getResource('StationListView.stationNameHeaderText').value,
                 regionHeaderText: appResources.getResource('StationListView.regionHeaderText').value,
                 areaHeaderText: appResources.getResource('StationListView.areaHeaderText').value
@@ -35,11 +37,13 @@ define(function(require) {
             console.trace('StationListView.initialize');
             options || (options = {});
             this.dispatcher = options.dispatcher || this;
+            this.stationIdentifierCollection = options.stationIdentifierCollection || new Backbone.Collection();
             this.regionCollection = options.regionCollection || new Backbone.Collection();
             this.areaCollection = options.areaCollection || new Backbone.Collection();
 
             this.listenTo(this.collection, 'reset', this.addAll);
             this.listenTo(this.collection, 'sort', this.addAll);
+            this.listenTo(this.stationIdentifierCollection, 'reset', this.addAllStationIdentifiers);
             this.listenTo(this.regionCollection, 'reset', this.addAllRegions);
             this.listenTo(this.areaCollection, 'reset', this.addAllAreas);
         },
@@ -56,9 +60,9 @@ define(function(require) {
         },
         events: {
             'click #station-list-refresh-list-button': 'refreshStationList',
-            'click #station-list-show-list-options-button': 'showStationListFilter',
             'click #station-list-reset-list-options-button': 'resetStationListFilter',
             'click #station-list-station-name-sort-button': 'updateStationListStationNameSort',
+            'change #station-list-station-identifier-select': 'selectStation',
             'click #station-list-region-sort-button': 'updateStationListRegionSort',
             'click #station-list-area-sort-button': 'updateStationListAreaSort'
         },
@@ -74,6 +78,14 @@ define(function(require) {
                 dispatcher: currentContext.dispatcher
             });
             this.appendChildTo(stationListItemView, '#station-list');
+        },
+        addAllStationIdentifiers: function() {
+            var currentContext = this;
+            var stationIdentifierListRenderModel = {
+                defaultOption: currentContext.resources().stationIdentifierSelectDefaultOption,
+                stationIdentifiers: currentContext.stationIdentifierCollection.models
+            };
+            this.$('#station-list-station-identifier-select').html(stationIdentifierListTemplate(stationIdentifierListRenderModel));
         },
         addAllRegions: function() {
             var currentContext = this;
@@ -97,7 +109,7 @@ define(function(require) {
             }
 
             this.showLoading();
-            
+
             var status = 'all';
             var region = this.$('#station-list-region-filter').val();
             var area = this.$('#station-list-area-filter').val();
@@ -111,23 +123,27 @@ define(function(require) {
                 this.dispatcher.trigger(AppEventNamesEnum.showStations, options);
             }
         },
-        showStationListFilter: function(event) {
-            if (event) {
-                event.preventDefault();
-            }
-
-            this.$('#station-list-options-view').removeClass('hidden');
-            this.$('#station-list-reset-list-options-button').removeClass('hidden');
-        },
         resetStationListFilter: function(event) {
             if (event) {
                 event.preventDefault();
             }
-            
-            this.showLoading();
 
-            this.$('#station-list-reset-list-options-button').addClass('hidden');
-            this.$('#station-list-options-view').addClass('hidden');
+            this.showLoading();
+            
+            this.$('#station-list-region-filter').val('');
+            this.$('#station-list-area-filter').val('');
+            
+            this.$('#station-list-station-name-sort-button').data('sort-direction', '1');
+            this.$('#station-list-region-sort-button').removeData('sort-direction');
+            this.$('#station-list-area-sort-button').removeData('sort-direction');
+            
+            var sortAttributes = [{
+                    sortAttribute: 'stationName',
+                    sortDirection: 1
+                }];
+            
+            this.showSortIndicators(sortAttributes);
+            this.collection.sortAttributes = sortAttributes;
 
             this.dispatcher.trigger(AppEventNamesEnum.showStations);
         },
@@ -135,43 +151,62 @@ define(function(require) {
             if (event) {
                 event.preventDefault();
             }
-            var sortAttributes = ['stationName'];
-            var sortDirection = this.$('#station-list-station-name-sort-button').data('sort-direction');
-            if (sortDirection) {
-                sortDirection = parseInt(sortDirection);
-                sortDirection *= -1;
-            } else {
-                sortDirection = 1;
-            }
-            this.showSortIndicators(sortAttributes, sortDirection);
-            this.$('#station-list-station-name-sort-button').data('sort-direction', sortDirection.toString());
+
+            var stationNameSortDirection = this.getDataSortDirection(this.$('#station-list-station-name-sort-button'));
+
+            var sortAttributes = [{
+                    sortAttribute: 'stationName',
+                    sortDirection: stationNameSortDirection
+                }];
+
+            this.$('#station-list-station-name-sort-button').data('sort-direction', stationNameSortDirection.toString());
             this.$('#station-list-region-sort-button').removeData('sort-direction');
             this.$('#station-list-area-sort-button').removeData('sort-direction');
-            
-            this.collection.sortDirection = sortDirection;
+
+            this.showSortIndicators(sortAttributes);
             this.collection.sortAttributes = sortAttributes;
+            
             this.collection.sort();
+        },
+        selectStation: function(event) {
+            if (event) {
+                event.preventDefault();
+            }
+            var stationId = this.$('#station-list-station-identifier-select').val();
+            var list = this.$('#station-list').parent();
+            var row = list.find('.station-name-link[data-stationid=' + stationId + ']').parent().parent();
+            row.addClass('highlighted');
+            setTimeout(function(){
+                row.removeClass('highlighted');
+            }, 2000);
+            
+            var topPosition = row.position().top;
+            list.scrollTop(topPosition);
         },
         updateStationListRegionSort: function(event) {
             if (event) {
                 event.preventDefault();
             }
-            
-            var sortAttributes = ['region'];
-            
-            var sortDirection = this.$('#station-list-region-sort-button').data('sort-direction');
-            if (sortDirection) {
-                sortDirection = parseInt(sortDirection);
-                sortDirection *= -1;
-            } else {
-                sortDirection = 1;
-            }
-            this.showSortIndicators(sortAttributes, sortDirection);
-            this.$('#station-list-station-name-sort-button').removeData('sort-direction').removeAttr('data-sort-direction');
-            this.$('#station-list-region-sort-button').data('sort-direction', sortDirection.toString());
+
+            var regionSortDirection = this.getDataSortDirection(this.$('#station-list-region-sort-button'));
+
+            var stationNameSortDirection = this.getDataSortDirection(this.$('#station-list-station-name-sort-button'));
+
+            var sortAttributes = [
+                {
+                    sortAttribute: 'region',
+                    sortDirection: regionSortDirection
+                },
+                {
+                    sortAttribute: 'stationName',
+                    sortDirection: stationNameSortDirection
+                }
+            ];
+
+            this.$('#station-list-region-sort-button').data('sort-direction', regionSortDirection.toString());
             this.$('#station-list-area-sort-button').removeData('sort-direction');
-            
-            this.collection.sortDirection = sortDirection;
+
+            this.showSortIndicators(sortAttributes);
             this.collection.sortAttributes = sortAttributes;
             this.collection.sort();
         },
@@ -179,55 +214,79 @@ define(function(require) {
             if (event) {
                 event.preventDefault();
             }
-            
-            var sortAttributes = ['area'];
-            
-            var sortDirection = this.$('#station-list-area-sort-button').data('sort-direction');
-            if (sortDirection) {
-                sortDirection = parseInt(sortDirection);
-                sortDirection *= -1;
-            } else {
-                sortDirection = 1;
-            }
-            this.showSortIndicators(sortAttributes, sortDirection);
-            this.$('#station-list-station-name-sort-button').removeData('sort-direction').removeAttr('data-sort-direction');
+
+            var areaSortDirection = this.getDataSortDirection(this.$('#station-list-area-sort-button'));
+
+            var stationNameSortDirection = this.getDataSortDirection(this.$('#station-list-station-name-sort-button'));
+
+            var sortAttributes = [
+                {
+                    sortAttribute: 'area',
+                    sortDirection: areaSortDirection
+                },
+                {
+                    sortAttribute: 'stationName',
+                    sortDirection: stationNameSortDirection
+                }
+            ];
+
             this.$('#station-list-region-sort-button').removeData('sort-direction');
-            this.$('#station-list-area-sort-button').data('sort-direction', sortDirection.toString());
-            
-            this.collection.sortDirection = sortDirection;
+            this.$('#station-list-area-sort-button').data('sort-direction', areaSortDirection.toString());
+
+            this.showSortIndicators(sortAttributes);
             this.collection.sortAttributes = sortAttributes;
             this.collection.sort();
         },
-        showSortIndicators: function(sortAttributes, sortDirection) {
+        showSortIndicators: function(sortAttributes) {
             this.$('#station-list-station-name-sort-ascending-indicator').addClass('hidden');
             this.$('#station-list-station-name-sort-descending-indicator').addClass('hidden');
             this.$('#station-list-region-sort-ascending-indicator').addClass('hidden');
             this.$('#station-list-region-sort-descending-indicator').addClass('hidden');
             this.$('#station-list-area-sort-ascending-indicator').addClass('hidden');
             this.$('#station-list-area-sort-descending-indicator').addClass('hidden');
-            
+
             if (sortAttributes && sortAttributes.length > 0) {
-                var sortAttribute = sortAttributes[0];
-                 if (sortAttribute === 'stationName') {
-                    if (sortDirection === 1) {
-                        this.$('#station-list-station-name-sort-ascending-indicator').removeClass('hidden');
-                    } else {
-                        this.$('#station-list-station-name-sort-descending-indicator').removeClass('hidden');
-                    }
-                } else if (sortAttribute === 'region') {
-                    if (sortDirection === 1) {
-                        this.$('#station-list-region-sort-ascending-indicator').removeClass('hidden');
-                    } else {
-                        this.$('#station-list-region-sort-descending-indicator').removeClass('hidden');
-                    }
-                } else if (sortAttribute === 'area') {
-                    if (sortDirection === 1) {
-                        this.$('#station-list-area-sort-ascending-indicator').removeClass('hidden');
-                    } else {
-                        this.$('#station-list-area-sort-descending-indicator').removeClass('hidden');
+                for (var i in sortAttributes) {
+                    var sortAttribute = sortAttributes[i].sortAttribute;
+                    var sortDirection = sortAttributes[i].sortDirection;
+                    if (sortAttribute === 'stationName') {
+                        if (sortDirection === 1) {
+                            this.$('#station-list-station-name-sort-ascending-indicator').removeClass('hidden');
+                        } else {
+                            this.$('#station-list-station-name-sort-descending-indicator').removeClass('hidden');
+                        }
+                    } else if (sortAttribute === 'region') {
+                        if (sortDirection === 1) {
+                            this.$('#station-list-region-sort-ascending-indicator').removeClass('hidden');
+                        } else {
+                            this.$('#station-list-region-sort-descending-indicator').removeClass('hidden');
+                        }
+                    } else if (sortAttribute === 'area') {
+                        if (sortDirection === 1) {
+                            this.$('#station-list-area-sort-ascending-indicator').removeClass('hidden');
+                        } else {
+                            this.$('#station-list-area-sort-descending-indicator').removeClass('hidden');
+                        }
                     }
                 }
             }
+        },
+        getDataSortDirection: function(sortButton) {
+            var sortDirection = 1;
+            if (sortButton) {
+                var data = sortButton.data('sort-direction');
+                if (data) {
+                    try {
+                        sortDirection = parseInt(data);
+                        sortDirection *= -1;
+                    }
+                    catch (nfex) {
+                        console.error(nfex);
+                        sortDirection = 1;
+                    }
+                }
+            }
+            return sortDirection;
         },
         showLoading: function() {
             this.$('.view-status').removeClass('hidden');

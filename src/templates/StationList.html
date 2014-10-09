@@ -5,13 +5,6 @@
         </div>
     </div>
     <div class="row collapse">
-        <div class="small-12 columns">
-            <a id="station-list-refresh-list-button" class="button">{{{refreshListButtonText}}}</a>
-            <a id="station-list-show-list-options-button" class="button alert">{{{showListOptionsButtonText}}}</a>
-            <a id="station-list-reset-list-options-button" class="button secondary">{{{resetListOptionsButtonText}}}</a>
-        </div>
-    </div>
-    <div id="station-list-options-view" class="row collapse">
         <div class="small-2 columns">
             <select id="station-list-region-filter">
                 <option disabled="disabled" selected="selected">{{{regionFilterDefaultOption}}}</option>
@@ -22,7 +15,11 @@
                 <option disabled="disabled" selected="selected">{{{areaFilterDefaultOption}}}</option>
             </select>
         </div>
-        <div class="small-8 columns">
+        <div class="small-6 columns">
+            <a id="station-list-refresh-list-button" class="button">{{{refreshListButtonText}}}</a>
+            <a id="station-list-reset-list-options-button" class="button secondary">{{{resetListOptionsButtonText}}}</a>
+        </div>
+        <div class="small-2 columns">
             <span>&nbsp;</span>
         </div>
     </div>
@@ -35,18 +32,21 @@
                             <a id="station-list-station-name-sort-button" data-sort-direction="1">{{{stationNameHeaderText}}}</a>
                             <i id="station-list-station-name-sort-ascending-indicator" class="fa fa-sort-amount-asc"></i>
                             <i id="station-list-station-name-sort-descending-indicator" class="fa fa-sort-amount-desc hidden"></i>
+                            <select id="station-list-station-identifier-select" class="hidden">
+                                <option disabled="disabled" selected="selected">{{{stationIdentifierSelectDefaultOption}}}</option>
+                            </select>
                         </span>
                     </div>
                     <div class="small-4 columns">
                         <span>
-                            <a id="station-list-region-sort-button" href="#">{{{regionHeaderText}}}</a>
+                            <a id="station-list-region-sort-button" href="#" data-sort-direction>{{{regionHeaderText}}}</a>
                             <i id="station-list-region-sort-ascending-indicator" class="fa fa-sort-amount-asc hidden"></i>
                             <i id="station-list-region-sort-descending-indicator" class="fa fa-sort-amount-desc hidden"></i>
                         </span>
                     </div>
                     <div class="small-4 columns">
                         <span>
-                            <a id="station-list-area-sort-button" href="#">{{{areaHeaderText}}}</a>
+                            <a id="station-list-area-sort-button" href="#" data-sort-direction>{{{areaHeaderText}}}</a>
                             <i id="station-list-area-sort-ascending-indicator" class="fa fa-sort-amount-asc hidden"></i>
                             <i id="station-list-area-sort-descending-indicator" class="fa fa-sort-amount-desc hidden"></i>
                         </span>

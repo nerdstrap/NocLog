@@ -6,6 +6,8 @@ define(function(require) {
             Backbone = require('backbone'),
             CompositeView = require('views/CompositeView'),
             StationEntryLogListItemView = require('views/StationEntryLogListItemView'),
+            NewStationEntryLogModel = require('models/NewStationEntryLogModel'),
+            NewStationEntryLogView = require('views/NewStationEntryLogView'),
             AppEventNamesEnum = require('enums/AppEventNamesEnum'),
             appEvents = require('events'),
             appResources = require('resources'),
@@ -26,7 +28,6 @@ define(function(require) {
                 regionFilterDefaultOption: appResources.getResource('StationEntryLogListView.regionFilterDefaultOption').value,
                 areaFilterDefaultOption: appResources.getResource('StationEntryLogListView.areaFilterDefaultOption').value,
                 refreshListButtonText: appResources.getResource('StationEntryLogHistoryListView.refreshListButtonText').value,
-                showListOptionsButtonText: appResources.getResource('StationEntryLogHistoryListView.showListOptionsButtonText').value,
                 resetListOptionsButtonText: appResources.getResource('StationEntryLogHistoryListView.resetListOptionsButtonText').value,
                 stationNameHeaderText: appResources.getResource('StationEntryLogListView.stationNameHeaderText').value,
                 personnelNameHeaderText: appResources.getResource('StationEntryLogListView.personnelNameHeaderText').value,
@@ -64,11 +65,12 @@ define(function(require) {
         },
         events: {
             'click #station-entry-log-list-refresh-list-button': 'refreshStationEntryLogList',
-            'click #station-entry-log-list-show-list-options-button': 'showStationEntryLogListFilter',
             'click #station-entry-log-list-reset-list-options-button': 'resetStationEntryLogListFilter',
             'click #station-entry-log-list-expected-out-time-sort-button': 'updateStationEntryLogListExpectedOutTimeSort',
             'click #station-entry-log-list-region-sort-button': 'updateStationEntryLogListRegionSort',
-            'click #station-entry-log-list-area-sort-button': 'updateStationEntryLogListAreaSort'
+            'click #station-entry-log-list-area-sort-button': 'updateStationEntryLogListAreaSort',
+            'click #new-station-entry-log-button': 'goToNewStationEntryLog',
+            'click #cancel-new-station-entry-log-button': 'cancelNewStationEntryLog'
         },
         addAll: function() {
             this._leaveChildren();
@@ -99,22 +101,22 @@ define(function(require) {
             };
             this.$('#station-entry-log-list-area-filter').html(areaListTemplate(areaListRenderModel));
         },
-        updateStationEntryLogListFilter: function(event) {
+        refreshStationEntryLogList: function(event) {
             if (event) {
                 event.preventDefault();
             }
-            
+
             this.showLoading();
-            
+
             var status = this.$('#station-entry-log-list-status-filter').val();
             var region = this.$('#station-entry-log-list-region-filter').val();
             var area = this.$('#station-entry-log-list-area-filter').val();
-            
+
             var options = {
-              region: region,
-              area: area
+                region: region,
+                area: area
             };
-            
+
             if (status === 'open') {
                 this.dispatcher.trigger(AppEventNamesEnum.showOpenStationEntryLogs, options);
             }
@@ -122,23 +124,26 @@ define(function(require) {
                 this.dispatcher.trigger(AppEventNamesEnum.showExpiredStationEntryLogs, options);
             }
         },
-        showStationEntryLogListFilter: function(event) {
-            if (event) {
-                event.preventDefault();
-            }
-
-            this.$('#station-entry-log-list-options-view').removeClass('hidden');
-            this.$('#station-entry-log-list-reset-list-options-button').removeClass('hidden');
-        },
         resetStationEntryLogListFilter: function(event) {
             if (event) {
                 event.preventDefault();
             }
-            
+
             this.showLoading();
 
-            this.$('#station-entry-log-list-reset-list-options-button').addClass('hidden');
-            this.$('#station-entry-log-list-options-view').addClass('hidden');
+            this.$('#station-entry-log-list-status-filter').val('open');
+            this.$('#station-entry-log-list-region-filter').val('');
+            this.$('#station-entry-log-list-area-filter').val('');
+
+            this.$('#station-entry-log-list-region-sort-button').removeData('sort-direction');
+            this.$('#station-entry-log-list-area-sort-button').removeData('sort-direction');
+
+            var sortAttributes = [{
+                    sortAttribute: 'expectedOutTime',
+                    sortDirection: 1
+                }];
+            this.showSortIndicators(sortAttributes);
+            this.collection.sortAttributes = sortAttributes;
 
             this.dispatcher.trigger(AppEventNamesEnum.showOpenStationEntryLogs);
         },
@@ -147,87 +152,134 @@ define(function(require) {
                 event.preventDefault();
             }
 
-            this.showSortIndicators();
-
             this.$('#station-entry-log-list-region-sort-button').removeData('sort-direction');
             this.$('#station-entry-log-list-area-sort-button').removeData('sort-direction');
 
-            this.collection.sortDirection = 1;
-            this.collection.sortAttributes = ['expectedOutTime'];
+            var sortAttributes = [{
+                    sortAttribute: 'expectedOutTime',
+                    sortDirection: 1
+                }];
+            this.showSortIndicators(sortAttributes);
+            this.collection.sortAttributes = sortAttributes;
+            
             this.collection.sort();
         },
         updateStationEntryLogListRegionSort: function(event) {
             if (event) {
                 event.preventDefault();
             }
-            var sortAttributes = ['region', 'expectedOutTime'];
-            
-            var sortDirection = this.$('#station-entry-log-list-region-sort-button').data('sort-direction');
-            if (sortDirection) {
-                sortDirection = parseInt(sortDirection);
-                sortDirection *= -1;
-            } else {
-                sortDirection = 1;
-            }
-            
-            this.showSortIndicators(sortAttributes, sortDirection);
-            this.$('#station-entry-log-list-region-sort-button').data('sort-direction', sortDirection.toString());
+
+            var regionSortDirection = this.getDataSortDirection(this.$('#station-entry-log-list-region-sort-button'));
+
+            var sortAttributes = [
+                {
+                    sortAttribute: 'region',
+                    sortDirection: regionSortDirection
+                },
+                {
+                    sortAttribute: 'expectedOutTime',
+                    sortDirection: 1
+                }
+            ];
+
+            this.$('#station-entry-log-list-region-sort-button').data('sort-direction', regionSortDirection.toString());
             this.$('#station-entry-log-list-area-sort-button').removeData('sort-direction');
-            
-            this.collection.sortDirection = sortDirection;
+
+            this.showSortIndicators(sortAttributes);
             this.collection.sortAttributes = sortAttributes;
+
             this.collection.sort();
         },
         updateStationEntryLogListAreaSort: function(event) {
             if (event) {
                 event.preventDefault();
             }
-            
-            var sortAttributes = ['area', 'expectedOutTime'];
-            
-            var sortDirection = this.$('#station-entry-log-list-area-sort-button').data('sort-direction');
-            if (sortDirection) {
-                sortDirection = parseInt(sortDirection);
-                sortDirection *= -1;
-            } else {
-                sortDirection = 1;
-            }
-            this.showSortIndicators(sortAttributes, sortDirection);
+
+            var areaSortDirection = this.getDataSortDirection(this.$('#station-entry-log-list-area-sort-button'));
+
+            var sortAttributes = [
+                {
+                    sortAttribute: 'area',
+                    sortDirection: areaSortDirection
+                },
+                {
+                    sortAttribute: 'expectedOutTime',
+                    sortDirection: 1
+                }
+            ];
+
+            this.$('#station-entry-log-list-area-sort-button').data('sort-direction', areaSortDirection.toString());
             this.$('#station-entry-log-list-region-sort-button').removeData('sort-direction');
-            this.$('#station-entry-log-list-area-sort-button').data('sort-direction', sortDirection.toString());
-            
-            this.collection.sortDirection = sortDirection;
+
+            this.showSortIndicators(sortAttributes);
             this.collection.sortAttributes = sortAttributes;
+
             this.collection.sort();
         },
-        showSortIndicators: function(sortAttributes, sortDirection) {
+        showSortIndicators: function(sortAttributes) {
             this.$('#station-entry-log-list-region-sort-ascending-indicator').addClass('hidden');
             this.$('#station-entry-log-list-region-sort-descending-indicator').addClass('hidden');
             this.$('#station-entry-log-list-area-sort-ascending-indicator').addClass('hidden');
             this.$('#station-entry-log-list-area-sort-descending-indicator').addClass('hidden');
-            
+
             if (sortAttributes && sortAttributes.length > 0) {
-                var sortAttribute = sortAttributes[0];
-                if (sortAttribute === 'region') {
-                    if (sortDirection === 1) {
-                        this.$('#station-entry-log-list-region-sort-ascending-indicator').removeClass('hidden');
-                    } else {
-                        this.$('#station-entry-log-list-region-sort-descending-indicator').removeClass('hidden');
-                    }
-                } else if (sortAttribute === 'area') {
-                    if (sortDirection === 1) {
-                        this.$('#station-entry-log-list-area-sort-ascending-indicator').removeClass('hidden');
-                    } else {
-                        this.$('#station-entry-log-list-area-sort-descending-indicator').removeClass('hidden');
+                for (var i in sortAttributes) {
+                    var sortAttribute = sortAttributes[i].sortAttribute;
+                    var sortDirection = sortAttributes[i].sortDirection;
+                    if (sortAttribute === 'region') {
+                        if (sortDirection === 1) {
+                            this.$('#station-entry-log-list-region-sort-ascending-indicator').removeClass('hidden');
+                        } else {
+                            this.$('#station-entry-log-list-region-sort-descending-indicator').removeClass('hidden');
+                        }
+                    } else if (sortAttribute === 'area') {
+                        if (sortDirection === 1) {
+                            this.$('#station-entry-log-list-area-sort-ascending-indicator').removeClass('hidden');
+                        } else {
+                            this.$('#station-entry-log-list-area-sort-descending-indicator').removeClass('hidden');
+                        }
                     }
                 }
             }
+        },
+        getDataSortDirection: function(sortButton) {
+            var sortDirection = 1;
+            if (sortButton) {
+                var data = sortButton.data('sort-direction');
+                if (data) {
+                    try {
+                        sortDirection = parseInt(data);
+                        sortDirection *= -1;
+                    }
+                    catch (nfex) {
+                        console.error(nfex);
+                        sortDirection = 1;
+                    }
+                }
+            }
+            return sortDirection;
         },
         showLoading: function() {
             this.$('.view-status').removeClass('hidden');
         },
         hideLoading: function() {
             this.$('.view-status').addClass('hidden');
+        },
+        goToNewStationEntryLog: function() {
+            var currentContext = this;
+            currentContext.newStationEntryLogModelInstance = new NewStationEntryLogModel();
+            currentContext.newStationEntryLogViewInstance = new NewStationEntryLogView({
+                model: currentContext.newStationEntryLogModelInstance,
+                el: $('#new-station-entry-log-view', currentContext.$el),
+                dispatcher: currentContext.dispatcher
+            });
+            currentContext.renderChildInto(currentContext.newStationEntryLogViewInstance);
+        },
+        cancelNewStationEntryLog: function() {
+            var currentContext = this;
+            currentContext.newStationEntryLogViewInstance.leave();
+            delete currentContext.newStationEntryLogViewInstance;
+            delete currentContext.newStationEntryLogModelInstance;
         }
     });
 

@@ -6081,6 +6081,9 @@ body:before {
   margin-right: 0;
   max-width: none; }
 
+.row.highlighted {
+  background: red; }
+
 .hidden {
   display: none; }
 
