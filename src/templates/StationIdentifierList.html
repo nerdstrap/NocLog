@@ -1,4 +1,6 @@
 <option selected="selected" value="">{{{defaultOption}}}</option>
-{{~#each stationIdentifiers}}
-<option value="{{attributes.stationId}}">{{attributes.stationName}}</option>
-{{~/each}}
+{{#if stationIdentifiers}}
+    {{~#each stationIdentifiers}}
+    <option value="{{attributes.stationId}}">{{attributes.stationName}}</option>
+    {{~/each}}
+{{/if}}

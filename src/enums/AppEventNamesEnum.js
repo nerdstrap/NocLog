@@ -15,7 +15,12 @@ define(function(require) {
         showOpenStationEntryLogs: 'showOpenStationEntryLogs',
         showExpiredStationEntryLogs: 'showExpiredStationEntryLogs',
         showStations: 'showStations',
-        goToDirectionsWithLatLng: 'goToDirectionsWithLatLng'
+        goToDirectionsWithLatLng: 'goToDirectionsWithLatLng',
+        goToNewStationEntryLog: 'goToNewStationEntryLog',
+        goToCheckIn: 'goToCheckIn',
+        cancelCheckIn: 'cancelCheckIn',
+        checkInSuccess: 'checkInSuccess',
+        checkInError: 'checkInError'
     };
     
     if (Object.freeze) {

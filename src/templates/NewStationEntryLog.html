@@ -1,42 +1,101 @@
-<div class="new-station-entry-log-view">
+<fieldset class="new-station-entry-log-view">
+    <legend>{{{viewTitleText}}}</legend>
     <div class="row collapse">
-        <div class="small-12 columns">
-            <input id="new-station-entry-log-station-id" placeholder="station id" />
+        <div class="large-6 columns">
+            <label for="new-station-entry-log-personnel-id">{{{personnelNameHeaderText}}}
+                <input id="new-station-entry-log-personnel-id" placeholder="{{{personnelNameHeaderText}}}" />
+            </label>
+        </div>
+        <div class="large-3 columns">
+            <label for="new-station-entry-log-contact">{{{contactHeaderText}}}
+                <input id="new-station-entry-log-contact" placeholder="{{{contactHeaderText}}}" />
+            </label>
+        </div>
+        <div class="large-3 columns">
+            <label for="new-station-entry-log-email">{{{emailHeaderText}}}
+                <input id="new-station-entry-log-email" placeholder="email" />
+            </label>
         </div>
     </div>
     <div class="row collapse">
-        <div class="small-12 columns">
-            <input id="new-station-entry-log-personnel-id" placeholder="personnel id" />
+        <div class="large-2 columns">
+            <label for="new-station-entry-log-first-name">{{{firstNameHeaderText}}}
+                <input id="new-station-entry-log-first-name" placeholder="{{{firstNameHeaderText}}}" />
+            </label>
+        </div>
+        <div class="large-2 columns">
+            <label for="new-station-entry-log-middle-name">{{{middleNameHeaderText}}}
+                <input id="new-station-entry-log-middle-name" placeholder="{{{middleNameHeaderText}}}" />
+            </label>
+        </div>
+        <div class="large-2 columns">
+            <label for="new-station-entry-log-last-name">{{{lastNameHeaderText}}}
+                <input id="new-station-entry-log-last-name" placeholder="{{{lastNameHeaderText}}}" />
+            </label>
+        </div>
+        <div class="large-6 columns">
+            &nbsp;
         </div>
     </div>
     <div class="row collapse">
-        <div class="small-12 columns">
-            <input id="new-station-entry-log-phone" placeholder="phone" />
+        <div class="large-12 columns">
+            <label for="new-station-entry-log-station-identifier">{{{stationNameHeaderText}}}
+                <select id="new-station-entry-log-station-identifier">
+                    <option disabled="disabled" selected="selected">{{{stationIdentifierDefaultOption}}}</option>
+                </select>
+            </label>
         </div>
     </div>
     <div class="row collapse">
-        <div class="small-12 columns">
-            <input id="new-station-entry-log-email" placeholder="email" />
+        <div class="large-3 columns">
+            <label for="new-station-entry-log-purpose">{{{purposeHeaderText}}}
+                <select id="new-station-entry-log-purpose">
+                    <option disabled="disabled" selected="selected">{{{purposeDefaultOption}}}</option>
+                </select>
+            </label>
+        </div>
+        <div class="large-3 columns">
+            <label for="new-station-entry-log-duration">{{{durationHeaderText}}}
+                <select id="new-station-entry-log-duration">
+                    <option disabled="disabled" selected="selected">{{{durationDefaultOption}}}</option>
+                </select>
+            </label>
+        </div>
+        <div class="large-6 columns">
+            <label for="new-station-entry-log-expected-out-time">{{{expectedOutTimeHeaderText}}}
+                <span id="new-station-entry-log-expected-out-time">{{{expectedOutTimeHeaderText}}}</span>
+            </label>
         </div>
     </div>
     <div class="row collapse">
-        <div class="small-12 columns">
-            <input id="new-station-entry-log-purpose" placeholder="purpose" />
+        <div class="large-12 columns">
+            <label for="new-station-entry-log-purpose-other">{{{purposeOtherHeaderText}}}
+                <textarea id="new-station-entry-log-pupose-other" placeholder="{{{purposeOtherHeaderText}}}" rows="2"></textarea>
+            </label>
         </div>
     </div>
     <div class="row collapse">
-        <div class="small-12 columns">
-            <input id="new-station-entry-log-duration" placeholder="duration" />
+        <div class="large-6 columns">
+            <label for="new-station-entry-log-additional-info">{{{additionalInfoHeaderText}}}
+                <textarea id="new-station-entry-log-additional-info" placeholder="{{{additionalInfoHeaderText}}}" rows="2" ></textarea>
+            </label>
+        </div>
+        <div class="large-6 columns">
+            <label for="new-station-entry-log-station-with-crew">{{{withCrewHeaderText}}}
+                <select id="new-station-entry-log-with-crew">
+                    <option selected="selected">{{{withCrewNoOption}}}</option>
+                    <option>{{{withCrewYesOption}}}</option>
+                </select>
+            </label>
         </div>
     </div>
     <div class="row collapse">
-        <div class="small-12 columns">
-            <input id="new-station-entry-log-additional-info" placeholder="additional info" />
+        <div class="large-6 columns">
+            &nbsp;
+        </div>
+        <div class="large-6 columns">
+            <a id="new-station-entry-log-save-button" class="button">{{{saveButtonText}}}</a>
+            <a id="new-station-entry-log-cancel-button" class="button secondary">{{{cancelButtonText}}}</a>
         </div>
     </div>
-    <div class="row collapse">
-        <div class="small-12 columns">
-            <input id="new-station-entry-log-with-crew" placeholder="with crew" />
-        </div>
-    </div>
-</div>
+</fieldset>

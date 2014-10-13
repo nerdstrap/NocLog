@@ -1,0 +1,6 @@
+<option selected="selected" value="">{{{defaultOption}}}</option>
+{{#if durations}}
+{{~#each durations}}
+<option value="{{attributes.itemValue}}">{{attributes.itemText}}</option>
+{{~/each}}
+{{/if}}

@@ -108,6 +108,10 @@ define(function (require) {
             'value': 'Reset'
         },
         {
+            'key': 'StationEntryLogListView.newStationEntryLogButtonText',
+            'value': 'Create Manual Check-in'
+        },
+        {
             'key': 'StationEntryLogListView.statusFilterOpenOption',
             'value': 'open'
         },
@@ -596,6 +600,91 @@ define(function (require) {
         {
             'key': 'StationView.transformerPoleHeaderText',
             'value': 'Transformer Pole'
+        },
+        /* new station entry log */
+        {
+            'key': 'NewStationEntryLogView.viewTitleText',
+            'value': 'Manual Check-in'
+        },
+        {
+            'key': 'NewStationEntryLogView.stationIdentifierDefaultOption',
+            'value': '&#45;&#160;station&#160;&#45;'
+        },
+        {
+            'key': 'NewStationEntryLogView.purposeDefaultOption',
+            'value': '&#45;&#160;purpose&#160;&#45;'
+        },
+        {
+            'key': 'NewStationEntryLogView.durationDefaultOption',
+            'value': '&#45;&#160;duration&#160;&#45;'
+        },
+        {
+            'key': 'NewStationEntryLogView.withCrewYesOption',
+            'value': '&#45;&#160;with crew&#160;&#45;'
+        },
+        {
+            'key': 'NewStationEntryLogView.withCrewNoOption',
+            'value': '&#45;&#160;no crew&#160;&#45;'
+        },
+        {
+            'key': 'NewStationEntryLogView.stationNameHeaderText',
+            'value': 'Station'
+        },
+        {
+            'key': 'NewStationEntryLogView.personnelNameHeaderText',
+            'value': 'Personnel'
+        },
+        {
+            'key': 'NewStationEntryLogView.firstNameHeaderText',
+            'value': 'First'
+        },
+        {
+            'key': 'NewStationEntryLogView.middleNameHeaderText',
+            'value': 'Middle'
+        },
+        {
+            'key': 'NewStationEntryLogView.lastNameHeaderText',
+            'value': 'Last'
+        },
+        {
+            'key': 'NewStationEntryLogView.contactHeaderText',
+            'value': 'Contact'
+        },
+        {
+            'key': 'NewStationEntryLogView.emailHeaderText',
+            'value': 'Email'
+        },
+        {
+            'key': 'NewStationEntryLogView.purposeHeaderText',
+            'value': 'Purpose'
+        },
+        {
+            'key': 'NewStationEntryLogView.durationHeaderText',
+            'value': 'Duration'
+        },
+        {
+            'key': 'NewStationEntryLogView.expectedOutTimeHeaderText',
+            'value': 'Est. Check-out'
+        },
+        {
+            'key': 'NewStationEntryLogView.purposeOtherHeaderText',
+            'value': 'Other'
+        },
+        {
+            'key': 'NewStationEntryLogView.additionalInfoHeaderText',
+            'value': 'Additional Info'
+        },
+        {
+            'key': 'NewStationEntryLogView.withCrewHeaderText',
+            'value': 'With crew?'
+        },
+        {
+            'key': 'NewStationEntryLogView.saveButtonText',
+            'value': 'Save'
+        },
+        {
+            'key': 'NewStationEntryLogView.cancelButtonText',
+            'value': 'Cancel'
         }
     ];
 

@@ -27,8 +27,9 @@ define(function(require) {
                 statusFilterExpiredOption: appResources.getResource('StationEntryLogListView.statusFilterExpiredOption').value,
                 regionFilterDefaultOption: appResources.getResource('StationEntryLogListView.regionFilterDefaultOption').value,
                 areaFilterDefaultOption: appResources.getResource('StationEntryLogListView.areaFilterDefaultOption').value,
-                refreshListButtonText: appResources.getResource('StationEntryLogHistoryListView.refreshListButtonText').value,
-                resetListOptionsButtonText: appResources.getResource('StationEntryLogHistoryListView.resetListOptionsButtonText').value,
+                refreshListButtonText: appResources.getResource('StationEntryLogListView.refreshListButtonText').value,
+                resetListOptionsButtonText: appResources.getResource('StationEntryLogListView.resetListOptionsButtonText').value,
+                newStationEntryLogButtonText: appResources.getResource('StationEntryLogListView.newStationEntryLogButtonText').value,
                 stationNameHeaderText: appResources.getResource('StationEntryLogListView.stationNameHeaderText').value,
                 personnelNameHeaderText: appResources.getResource('StationEntryLogListView.personnelNameHeaderText').value,
                 contactHeaderText: appResources.getResource('StationEntryLogListView.contactHeaderText').value,
@@ -44,13 +45,18 @@ define(function(require) {
             console.trace('StationEntryLogListView.initialize');
             options || (options = {});
             this.dispatcher = options.dispatcher || this;
-            this.regionCollection = options.regionCollection || new Backbone.Collection();
-            this.areaCollection = options.areaCollection || new Backbone.Collection();
+            this.stationIdentifierCollection = options.stationIdentifierCollection;
+            this.regionCollection = options.regionCollection;
+            this.areaCollection = options.areaCollection;
+            this.purposeCollection = options.purposeCollection;
+            this.durationCollection = options.durationCollection;
 
             this.listenTo(this.collection, 'reset', this.addAll);
             this.listenTo(this.collection, 'sort', this.addAll);
             this.listenTo(this.regionCollection, 'reset', this.addAllRegions);
             this.listenTo(this.areaCollection, 'reset', this.addAllAreas);
+            
+            this.listenTo(appEvents, AppEventNamesEnum.cancelCheckIn, this.showNewStationEntryLogButton);
         },
         render: function() {
             console.trace('StationEntryLogListView.render()');
@@ -69,8 +75,7 @@ define(function(require) {
             'click #station-entry-log-list-expected-out-time-sort-button': 'updateStationEntryLogListExpectedOutTimeSort',
             'click #station-entry-log-list-region-sort-button': 'updateStationEntryLogListRegionSort',
             'click #station-entry-log-list-area-sort-button': 'updateStationEntryLogListAreaSort',
-            'click #new-station-entry-log-button': 'goToNewStationEntryLog',
-            'click #cancel-new-station-entry-log-button': 'cancelNewStationEntryLog'
+            'click #new-station-entry-log-button': 'goToNewStationEntryLog'
         },
         addAll: function() {
             this._leaveChildren();
@@ -270,16 +275,17 @@ define(function(require) {
             currentContext.newStationEntryLogModelInstance = new NewStationEntryLogModel();
             currentContext.newStationEntryLogViewInstance = new NewStationEntryLogView({
                 model: currentContext.newStationEntryLogModelInstance,
-                el: $('#new-station-entry-log-view', currentContext.$el),
-                dispatcher: currentContext.dispatcher
+                dispatcher: currentContext.dispatcher,
+                stationIdentifierCollection: currentContext.stationIdentifierCollection,
+                purposeCollection: currentContext.purposeCollection,
+                durationCollection: currentContext.durationCollection
             });
-            currentContext.renderChildInto(currentContext.newStationEntryLogViewInstance);
+            currentContext.renderChildInto(currentContext.newStationEntryLogViewInstance, currentContext.$('#new-station-entry-log-view-container'));
+            this.$('#new-station-entry-log-button').addClass('hidden');
+            this.dispatcher.trigger(AppEventNamesEnum.goToNewStationEntryLog);
         },
-        cancelNewStationEntryLog: function() {
-            var currentContext = this;
-            currentContext.newStationEntryLogViewInstance.leave();
-            delete currentContext.newStationEntryLogViewInstance;
-            delete currentContext.newStationEntryLogModelInstance;
+        showNewStationEntryLogButton: function() {
+            this.$('#new-station-entry-log-button').removeClass('hidden');
         }
     });
 

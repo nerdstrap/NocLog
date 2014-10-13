@@ -7,17 +7,17 @@ define(function (require) {
             env = require('env'),
             utils = require('utils');
 
-    var PersonnelModel = Backbone.Model.extend({
-        idAttribute: 'personnelId',
+    var LookupDataItemModel = Backbone.Model.extend({
+        idAttribute: 'lookupDataItemId',
         urlRoot: function () {
-            return env.getApiUrl() + '/personnel';
+            return env.getApiUrl() + '/lookupDataItem';
         },
-        getPersonnelById: function(personnelId) {
+        getById: function(lookupDataItemId) {
             var currentContext = this;
             return $.ajax({
                 contentType: 'application/json',
                 data: $.param({
-                    id: personnelId
+                    id: lookupDataItemId
                 }),
                 dataType: 'json',
                 type: "GET",
@@ -26,5 +26,5 @@ define(function (require) {
         }
     });
 
-    return PersonnelModel;
+    return LookupDataItemModel;
 });

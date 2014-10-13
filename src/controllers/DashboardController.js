@@ -17,6 +17,7 @@ define(function(require) {
             StationEntryLogCollection = require('collections/StationEntryLogCollection'),
             StationCollection = require('collections/StationCollection'),
             PersonnelCollection = require('collections/PersonnelCollection'),
+            LookupDataItemCollection = require('collections/LookupDataItemCollection'),
             AppEventNamesEnum = require('enums/AppEventNamesEnum'),
             appEvents = require('events'),
             appResources = require('resources'),
@@ -49,6 +50,8 @@ define(function(require) {
             this.stationIdentifierResults = options.stationIdentifierCollection || new Backbone.Collection();
             this.regionResults = options.regionCollection || new Backbone.Collection();
             this.areaResults = options.areaCollection || new Backbone.Collection();
+            this.purposeResults = options.purposeCollection || new LookupDataItemCollection();
+            this.durationResults = options.durationCollection || new LookupDataItemCollection();
 
             this.listenTo(appEvents, AppEventNamesEnum.goToStationEntryLogList, this.goToStationEntryLogList);
             this.listenTo(appEvents, AppEventNamesEnum.goToStationEntryLogHistoryList, this.goToStationEntryLogHistoryList);
@@ -66,6 +69,8 @@ define(function(require) {
             this.listenTo(appEvents, AppEventNamesEnum.showStations, this.showStations);
             
             this.listenTo(appEvents, AppEventNamesEnum.goToDirectionsWithLatLng, this.goToDirectionsWithLatLng);
+            
+            this.listenTo(appEvents, AppEventNamesEnum.goToNewStationEntryLog, this.goToNewStationEntryLog);
         },
         goToStationEntryLogList: function() {
             console.trace('DashboardController.goToStationEntryLogList');
@@ -84,7 +89,9 @@ define(function(require) {
                 stationIdentifierCollection: currentContext.stationIdentifierResults,
                 collection: currentContext.stationEntryLogSearchResults,
                 regionCollection: currentContext.regionResults,
-                areaCollection: currentContext.areaResults
+                areaCollection: currentContext.areaResults,
+                purposeCollection: currentContext.purposeResults,
+                durationCollection: currentContext.durationResults
             });
 
             currentContext.router.swapContent(stationEntryLogListViewInstance);
@@ -94,6 +101,7 @@ define(function(require) {
             stationEntryLogListViewInstance.showLoading();
             $.when(currentContext.stationEntryLogSearchResults.getStationEntryLogsByOpen()).done(function(getStationEntryLogSearchResults) {
                 currentContext.stationEntryLogSearchResults.reset(getStationEntryLogSearchResults.stationEntryLogs);
+                currentContext.stationIdentifierResults.reset(getStationEntryLogSearchResults.stationIdentifiers);
                 currentContext.regionResults.reset(getStationEntryLogSearchResults.regions);
                 currentContext.areaResults.reset(getStationEntryLogSearchResults.areas);
                 deferred.resolve(stationEntryLogListViewInstance);
@@ -340,6 +348,21 @@ define(function(require) {
             console.trace('DashboardController.goToDirectionsWithLatLng');
             var directionsUri = 'http://maps.google.com?daddr=' + latitude + "," + longitude;
             globals.window.open(directionsUri);
+        },
+        goToNewStationEntryLog: function() {
+            console.trace('DashboardController.goToNewStationEntryLog');
+            var currentContext = this,
+                    deferred = $.Deferred();
+
+            $.when(currentContext.purposeResults.getNewStationEntryLogOptions()).done(function(getNewStationEntryLogOptionsResults) {
+                currentContext.purposeResults.reset(getNewStationEntryLogOptionsResults.purposes);
+                currentContext.durationResults.reset(getNewStationEntryLogOptionsResults.durations);
+                deferred.resolve(getNewStationEntryLogOptionsResults);
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                deferred.reject(textStatus);
+            });
+
+            return deferred.promise();
         }
     });
 

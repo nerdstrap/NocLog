@@ -21,28 +21,19 @@
                 <option disabled="disabled" selected="selected">{{{areaFilterDefaultOption}}}</option>
             </select>
         </div>
-        <div class="small-4 columns">
+        <div class="small-3 columns">
             <a id="station-entry-log-list-refresh-list-button" class="button">{{{refreshListButtonText}}}</a>
             <a id="station-entry-log-list-reset-list-options-button" class="button secondary">{{{resetListOptionsButtonText}}}</a>
         </div>
-        <div class="small-2 columns">
-            <span>&nbsp;</span>
+        <div class="small-3 columns">
+            <a id="new-station-entry-log-button" class="button alert">{{{newStationEntryLogButtonText}}}</a>
         </div>
     </div>
-    <div class="row" id="noc-admin-new-station-entry-log-view">
+    <div class="row collapse">
         <div class="small-12 columns">
-            <div class="row">
-                <div class="small-2 columns">
-                    <a id="new-station-entry-log-button" class="button alert">new station entry log</a>
-                    <a id="cancel-new-station-entry-log-button" class="button secondary">cancel</a>
-                </div>
-                <div class="small-10 columns">
-                    <div id="new-station-entry-log-view"></div>
-                </div>
-            </div>
+            <div id="new-station-entry-log-view-container"></div>
         </div>
     </div>
-
     <div class="row collapse">
         <div class="small-12 columns">
             <ol id="station-entry-log-list-header">
