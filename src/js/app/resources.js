@@ -607,7 +607,7 @@ define(function (require) {
             'value': 'Manual Check-in'
         },
         {
-            'key': 'NewStationEntryLogView.stationIdentifierDefaultOption',
+            'key': 'NewStationEntryLogView.stationIdDefaultOption',
             'value': '&#45;&#160;station&#160;&#45;'
         },
         {
@@ -619,27 +619,27 @@ define(function (require) {
             'value': '&#45;&#160;duration&#160;&#45;'
         },
         {
-            'key': 'NewStationEntryLogView.withCrewYesOption',
-            'value': '&#45;&#160;with crew&#160;&#45;'
+            'key': 'NewStationEntryLogView.hasCrewYesOption',
+            'value': '&#45;&#160;yes&#160;&#45;'
         },
         {
-            'key': 'NewStationEntryLogView.withCrewNoOption',
-            'value': '&#45;&#160;no crew&#160;&#45;'
+            'key': 'NewStationEntryLogView.hasCrewNoOption',
+            'value': '&#45;&#160;no&#160;&#45;'
         },
         {
-            'key': 'NewStationEntryLogView.stationNameHeaderText',
-            'value': 'Station'
+            'key': 'NewStationEntryLogView.stationIdHeaderText',
+            'value': 'Station Id'
         },
         {
-            'key': 'NewStationEntryLogView.personnelNameHeaderText',
-            'value': 'Personnel'
+            'key': 'NewStationEntryLogView.userIdHeaderText',
+            'value': 'User Id'
         },
         {
             'key': 'NewStationEntryLogView.firstNameHeaderText',
             'value': 'First'
         },
         {
-            'key': 'NewStationEntryLogView.middleNameHeaderText',
+            'key': 'NewStationEntryLogView.middleInitialHeaderText',
             'value': 'Middle'
         },
         {
@@ -647,7 +647,7 @@ define(function (require) {
             'value': 'Last'
         },
         {
-            'key': 'NewStationEntryLogView.contactHeaderText',
+            'key': 'NewStationEntryLogView.contactNumberHeaderText',
             'value': 'Contact'
         },
         {
@@ -675,8 +675,8 @@ define(function (require) {
             'value': 'Additional Info'
         },
         {
-            'key': 'NewStationEntryLogView.withCrewHeaderText',
-            'value': 'With crew?'
+            'key': 'NewStationEntryLogView.hasCrewHeaderText',
+            'value': 'Check-in With Crew?'
         },
         {
             'key': 'NewStationEntryLogView.saveButtonText',

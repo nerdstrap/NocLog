@@ -83,34 +83,37 @@ define(function (require) {
                 url: currentContext.url()
             });
         },
-        checkIn: function () {
+        checkIn: function (options) {
             var currentContext = this;
             
             return $.ajax({
                 contentType: 'application/json',
+                data: JSON.stringify(options),
                 dataType: 'json',
                 type: "POST",
-                url: currentContext.url + '/find/recent'
+                url: currentContext.url() + '/checkIn'
             });
         },
-        checkOut: function () {
+        checkOut: function (options) {
             var currentContext = this;
             
             return $.ajax({
                 contentType: 'application/json',
+                data: JSON.stringify(options),
                 dataType: 'json',
                 type: "POST",
-                url: currentContext.url + '/find/recent'
+                url: currentContext.url() + '/checkOut'
             });
         },
-        extendDuration: function () {
+        updateCheckIn: function (options) {
             var currentContext = this;
             
             return $.ajax({
                 contentType: 'application/json',
+                data: JSON.stringify(options),
                 dataType: 'json',
-                type: "POST",
-                url: currentContext.url + '/find/recent'
+                type: "PATCH",
+                url: currentContext.url() + '/updateCheckIn'
             });
         }
     });

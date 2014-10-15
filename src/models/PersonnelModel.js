@@ -8,16 +8,17 @@ define(function (require) {
             utils = require('utils');
 
     var PersonnelModel = Backbone.Model.extend({
-        idAttribute: 'personnelId',
+        idAttribute: 'outsideId',
         urlRoot: function () {
             return env.getApiUrl() + '/personnel';
         },
-        getPersonnelById: function(personnelId) {
+        getPersonnelById: function(outsideId) {
             var currentContext = this;
+            
             return $.ajax({
                 contentType: 'application/json',
                 data: $.param({
-                    id: personnelId
+                    outsideid: outsideId
                 }),
                 dataType: 'json',
                 type: "GET",

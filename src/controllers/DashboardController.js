@@ -71,6 +71,7 @@ define(function(require) {
             this.listenTo(appEvents, AppEventNamesEnum.goToDirectionsWithLatLng, this.goToDirectionsWithLatLng);
             
             this.listenTo(appEvents, AppEventNamesEnum.goToNewStationEntryLog, this.goToNewStationEntryLog);
+            this.listenTo(appEvents, AppEventNamesEnum.goToCheckIn, this.goToCheckIn);
         },
         goToStationEntryLogList: function() {
             console.trace('DashboardController.goToStationEntryLogList');
@@ -360,6 +361,54 @@ define(function(require) {
                 deferred.resolve(getNewStationEntryLogOptionsResults);
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 deferred.reject(textStatus);
+            });
+
+            return deferred.promise();
+        },
+        goToCheckIn: function(stationEntryLogModel) {
+            console.trace('DashboardController.goToCheckIn');
+            var currentContext = this,
+                    deferred = $.Deferred();
+
+            $.when(stationEntryLogModel.checkIn(stationEntryLogModel.attributes)).done(function(checkInResults) {
+                currentContext.purposeResults.reset(checkInResults);
+                appEvents.trigger(AppEventNamesEnum.checkInSuccess, checkInResults);
+                deferred.resolve(checkInResults);
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                var msg = 'Error checking in. Please call the dispatch center.';
+                if (jqXHR.status === 409 && jqXHR.responseText) {
+                    msg = jqXHR.responseText;
+                }
+                //currentContext.showErrorView(msg);
+                if (jqXHR.status === 409 || jqXHR.status === 403) {
+                    msg = jqXHR.responseText;
+                }
+                
+                deferred.reject(msg);
+            });
+
+            return deferred.promise();
+        },
+        goToCheckOut: function(stationEntryLogModel) {
+            console.trace('DashboardController.goToCheckOut');
+            var currentContext = this,
+                    deferred = $.Deferred();
+
+            $.when(stationEntryLogModel.checkOut(stationEntryLogModel.attributes)).done(function(checkOutResults) {
+                currentContext.purposeResults.reset(checkOutResults);
+                appEvents.trigger(AppEventNamesEnum.checkInSuccess, checkOutResults);
+                deferred.resolve(checkOutResults);
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                var msg = 'Error checking out. Please call the dispatch center.';
+                if (jqXHR.status === 409 && jqXHR.responseText) {
+                    msg = jqXHR.responseText;
+                }
+                //currentContext.showErrorView(msg);
+                if (jqXHR.status === 409 || jqXHR.status === 403) {
+                    msg = jqXHR.responseText;
+                }
+                
+                deferred.reject(msg);
             });
 
             return deferred.promise();

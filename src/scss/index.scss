@@ -171,3 +171,18 @@ span.detail {
 .section-header i {
     float:right;
 }
+
+.new-station-entry-log-view .row {
+    padding: 5px 0px;
+}
+
+#new-station-entry-log-station-identifier,
+#new-station-entry-log-purpose,
+#new-station-entry-log-duration,
+#new-station-entry-log-purpose-other,
+#new-station-entry-log-additional-info {
+    width: 199px;
+    min-width: 199px;
+    max-width: 199px;
+   resize: none;
+}
