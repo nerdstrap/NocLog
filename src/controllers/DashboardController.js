@@ -65,19 +65,22 @@ define(function(require) {
             this.listenTo(appEvents, AppEventNamesEnum.showOpenStationEntryLogs, this.showOpenStationEntryLogs);
             this.listenTo(appEvents, AppEventNamesEnum.showExpiredStationEntryLogs, this.showExpiredStationEntryLogs);
             this.listenTo(appEvents, AppEventNamesEnum.showStationEntryLogs, this.showStationEntryLogs);
-            
+
             this.listenTo(appEvents, AppEventNamesEnum.showStations, this.showStations);
-            
+
             this.listenTo(appEvents, AppEventNamesEnum.goToDirectionsWithLatLng, this.goToDirectionsWithLatLng);
-            
+
             this.listenTo(appEvents, AppEventNamesEnum.goToNewStationEntryLog, this.goToNewStationEntryLog);
             this.listenTo(appEvents, AppEventNamesEnum.goToCheckIn, this.goToCheckIn);
+            this.listenTo(appEvents, AppEventNamesEnum.goToCheckOut, this.goToCheckOut);
+
+            this.listenTo(appEvents, AppEventNamesEnum.goToLookupUserId, this.goToLookupUserId);
         },
         goToStationEntryLogList: function() {
             console.trace('DashboardController.goToStationEntryLogList');
             var currentContext = this,
                     deferred = $.Deferred();
-            
+
             currentContext.stationEntryLogSearchResults.reset();
             currentContext.stationEntryLogSearchResults.sortAttributes = [{
                     sortAttribute: 'expectedOutTime',
@@ -101,6 +104,8 @@ define(function(require) {
 
             stationEntryLogListViewInstance.showLoading();
             $.when(currentContext.stationEntryLogSearchResults.getStationEntryLogsByOpen()).done(function(getStationEntryLogSearchResults) {
+                stationEntryLogListViewInstance.userRole = getStationEntryLogSearchResults.userRole;
+                stationEntryLogListViewInstance.checkUserRole();
                 currentContext.stationEntryLogSearchResults.reset(getStationEntryLogSearchResults.stationEntryLogs);
                 currentContext.stationIdentifierResults.reset(getStationEntryLogSearchResults.stationIdentifiers);
                 currentContext.regionResults.reset(getStationEntryLogSearchResults.regions);
@@ -118,7 +123,7 @@ define(function(require) {
             console.trace('DashboardController.goToStationEntryLogHistoryList');
             var currentContext = this,
                     deferred = $.Deferred();
-            
+
             currentContext.stationEntryLogSearchResults.reset();
             currentContext.stationEntryLogSearchResults.sortAttributes = [{
                     sortAttribute: 'outTime',
@@ -159,9 +164,9 @@ define(function(require) {
 
             currentContext.stationSearchResults.reset();
             currentContext.stationSearchResults.sortAttributes = [{
-                sortAttribute: 'stationName',
-                sortDirection: 1
-            }];
+                    sortAttribute: 'stationName',
+                    sortDirection: 1
+                }];
 
             var stationListViewInstance = new StationListView({
                 controller: currentContext,
@@ -372,10 +377,12 @@ define(function(require) {
 
             $.when(stationEntryLogModel.checkIn(stationEntryLogModel.attributes)).done(function(checkInResults) {
                 currentContext.purposeResults.reset(checkInResults);
+                currentContext.stationEntryLogSearchResults.add(checkInResults);
                 appEvents.trigger(AppEventNamesEnum.checkInSuccess, checkInResults);
                 deferred.resolve(checkInResults);
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 var msg = 'Error checking in. Please call the dispatch center.';
+                appEvents.trigger(AppEventNamesEnum.checkInError, msg);
                 if (jqXHR.status === 409 && jqXHR.responseText) {
                     msg = jqXHR.responseText;
                 }
@@ -383,7 +390,7 @@ define(function(require) {
                 if (jqXHR.status === 409 || jqXHR.status === 403) {
                     msg = jqXHR.responseText;
                 }
-                
+
                 deferred.reject(msg);
             });
 
@@ -395,11 +402,13 @@ define(function(require) {
                     deferred = $.Deferred();
 
             $.when(stationEntryLogModel.checkOut(stationEntryLogModel.attributes)).done(function(checkOutResults) {
-                currentContext.purposeResults.reset(checkOutResults);
-                appEvents.trigger(AppEventNamesEnum.checkInSuccess, checkOutResults);
+                var model = currentContext.stationEntryLogSearchResults.findWhere({stationEntryLogId: checkOutResults.stationEntryLogId});
+                model.destroy();
+                appEvents.trigger(AppEventNamesEnum.checkOutSuccess, checkOutResults);
                 deferred.resolve(checkOutResults);
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 var msg = 'Error checking out. Please call the dispatch center.';
+                appEvents.trigger(AppEventNamesEnum.checkOutError, msg);
                 if (jqXHR.status === 409 && jqXHR.responseText) {
                     msg = jqXHR.responseText;
                 }
@@ -407,7 +416,30 @@ define(function(require) {
                 if (jqXHR.status === 409 || jqXHR.status === 403) {
                     msg = jqXHR.responseText;
                 }
-                
+
+                deferred.reject(msg);
+            });
+
+            return deferred.promise();
+        },
+        goToLookupUserId: function(personnelModel) {
+            console.trace('DashboardController.goToLookupUserId');
+            var currentContext = this,
+                    deferred = $.Deferred();
+
+            $.when(personnelModel.getPersonnelByUserId(personnelModel.attributes)).done(function(getPersonnelByUserIdResults) {
+                currentContext.dispatcher.trigger(AppEventNamesEnum.userIdFound, getPersonnelByUserIdResults);
+                deferred.resolve(getPersonnelByUserIdResults);
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                var msg = 'Error looking up the personnel user id.';
+                appEvents.trigger(AppEventNamesEnum.userIdLookupError, msg);
+                if (jqXHR.status === 409 && jqXHR.responseText) {
+                    msg = jqXHR.responseText;
+                }
+                //currentContext.showErrorView(msg);
+                if (jqXHR.status === 409 || jqXHR.status === 403) {
+                    msg = jqXHR.responseText;
+                }
                 deferred.reject(msg);
             });
 

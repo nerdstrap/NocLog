@@ -12,6 +12,9 @@ define(function (require) {
         urlRoot: function () {
             return env.getApiUrl() + '/stationEntryLog';
         },
+        sync: function(method, model, options) {
+            console.trace('Backbone.sync methods have been disabled.');
+        },
         set: function (key, val, options) {
             var attributes;
             if (typeof key === 'object') {
@@ -99,9 +102,9 @@ define(function (require) {
             
             return $.ajax({
                 contentType: 'application/json',
-                data: JSON.stringify(options),
+                data: JSON.stringify({stationEntryLogId: options.stationEntryLogId}),
                 dataType: 'json',
-                type: "POST",
+                type: "PUT",
                 url: currentContext.url() + '/checkOut'
             });
         },
@@ -112,7 +115,7 @@ define(function (require) {
                 contentType: 'application/json',
                 data: JSON.stringify(options),
                 dataType: 'json',
-                type: "PATCH",
+                type: "PUT",
                 url: currentContext.url() + '/updateCheckIn'
             });
         }

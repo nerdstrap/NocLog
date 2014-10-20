@@ -12,6 +12,9 @@ define(function (require) {
         url: function () {
             return env.getApiUrl() + '/personnel';
         },
+        sync: function(method, model, options) {
+            console.trace('Backbone.sync methods have been disabled.');
+        },
         getPersonnel: function () {
             var currentContext = this;
 
@@ -19,7 +22,7 @@ define(function (require) {
                 contentType: 'application/json',
                 dataType: 'json',
                 type: "GET",
-                url: currentContext.url()
+                url: currentContext.url() + '/find'
             });
         }
     });

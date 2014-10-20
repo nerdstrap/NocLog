@@ -53,6 +53,9 @@ define(function(require) {
         url: function() {
             return env.getApiUrl() + '/stationEntryLog';
         },
+        sync: function(method, model, options) {
+            console.trace('Backbone.sync methods have been disabled.');
+        },
         comparator: function(a, b) {
             var currentContext = this;
             var i, result = 0;

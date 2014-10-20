@@ -1,4 +1,4 @@
-define(function (require) {
+define(function(require) {
     'use strict';
 
     var $ = require('jquery'),
@@ -8,21 +8,21 @@ define(function (require) {
             utils = require('utils');
 
     var PersonnelModel = Backbone.Model.extend({
-        idAttribute: 'outsideId',
-        urlRoot: function () {
+        idAttribute: 'userId',
+        urlRoot: function() {
             return env.getApiUrl() + '/personnel';
         },
-        getPersonnelById: function(outsideId) {
+        sync: function(method, model, options) {
+            console.trace('Backbone.sync methods have been disabled.');
+        },
+        getPersonnelByUserId: function(options) {
             var currentContext = this;
-            
+
             return $.ajax({
                 contentType: 'application/json',
-                data: $.param({
-                    outsideid: outsideId
-                }),
                 dataType: 'json',
                 type: "GET",
-                url: currentContext.url()
+                url: currentContext.url() + '/find'
             });
         }
     });

@@ -20,9 +20,14 @@ define(function(require) {
         goToCheckIn: 'goToCheckIn',
         cancelCheckIn: 'cancelCheckIn',
         checkInSuccess: 'checkInSuccess',
-        checkInError: 'checkInError'
+        checkInError: 'checkInError',
+        checkOutSuccess: 'checkOutSuccess',
+        checkOutError: 'checkOutError',
+        goToLookupUserId: 'goToLookupUserId',
+        userIdFound: 'userIdFound',
+        userIdLookupError: 'userIdLookupError'
     };
-    
+
     if (Object.freeze) {
         Object.freeze(AppEventNamesEnum);
     }

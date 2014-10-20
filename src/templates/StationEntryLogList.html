@@ -26,7 +26,7 @@
             <a id="station-entry-log-list-reset-list-options-button" class="button secondary">{{{resetListOptionsButtonText}}}</a>
         </div>
         <div class="small-3 columns">
-            <a id="new-station-entry-log-button" class="button alert">{{{newStationEntryLogButtonText}}}</a>
+            <a id="new-station-entry-log-button" class="button alert hidden">{{{newStationEntryLogButtonText}}}</a>
         </div>
     </div>
     <div class="row collapse">
@@ -82,6 +82,12 @@
                         <span class="view-message">{{{loadingMessage}}}</span>
                         <img src="{{loadingIconSrc}}" class="view-loading" />
                     </div>
+                </div>
+                <div class="row collapse error list-view-error hidden">
+                    <span class="text-detail">{{errorMessage}}</span>
+                </div>
+                <div class="row collapse info list-view-info hidden">
+                    <span class="text-detail">{{infoMessage}}</span>
                 </div>
             </ol>
         </div>

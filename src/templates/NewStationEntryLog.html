@@ -1,24 +1,28 @@
 <fieldset class="new-station-entry-log-view">
     <legend>{{{viewTitleText}}}</legend>
     <div class="row collapse">
+        <div class="error view-error hidden">
+            <span class="text-detail">{{errorMessage}}</span>
+        </div>
         <div class="small-1 large-1 columns">
             <label for="new-station-entry-log-user-id">{{{userIdHeaderText}}}
             </label>
         </div>
-        <div class="small-2 large-2 columns">
-            <input id="new-station-entry-log-user-id" placeholder="{{{userIdHeaderText}}}" />
+        <div class="small-2 large-4 columns">
+            <input id="new-station-entry-log-user-id" name="userId" placeholder="{{{userIdHeaderText}}}" />
+            <a id="new-station-entry-log-user-id-search-button">lookup</a>
         </div>
-        <div class="small-3 large-3 columns">
+        <div class="small-1 large-1 columns">
             &nbsp;
         </div>
         <div class="small-2 large-2 columns">
-            <input id="new-station-entry-log-first-name" placeholder="{{{firstNameHeaderText}}}" />
+            <input id="new-station-entry-log-first-name" name="firstName" placeholder="{{{firstNameHeaderText}}}" />
         </div>
         <div class="small-2 large-2 columns">
-            <input id="new-station-entry-log-middle-initial" placeholder="{{{middleInitialHeaderText}}}" />
+            <input id="new-station-entry-log-middle-initial" name="middleInitial" placeholder="{{{middleInitialHeaderText}}}" />
         </div>
         <div class="small-2 large-2 columns">
-            <input id="new-station-entry-log-last-name" placeholder="{{{lastNameHeaderText}}}" />
+            <input id="new-station-entry-log-last-name" name="lastName" placeholder="{{{lastNameHeaderText}}}" />
         </div>
     </div>
     <div class="row collapse">
@@ -27,13 +31,13 @@
             </label>
         </div>
         <div class="small-2 large-2 columns">
-            <input id="new-station-entry-log-contact-number" placeholder="{{{contactNumberHeaderText}}}" />
+            <input id="new-station-entry-log-contact-number" name="contactNumber" placeholder="{{{contactNumberHeaderText}}}" />
         </div>
         <div class="small-3 large-3 columns">
             &nbsp;
         </div>
         <div class="small-3 large-3 columns">
-            <input id="new-station-entry-log-email" placeholder="email" />
+            <input id="new-station-entry-log-email" name="email" placeholder="{{{emailHeaderText}}}" />
         </div>
         <div class="small-3 large-3 columns">
             &nbsp;
@@ -45,8 +49,8 @@
             </label>
         </div>
         <div class="small-11 large-11 columns">
-            <select id="new-station-entry-log-station-id">
-                <option disabled="disabled" selected="selected">{{{stationIdDefaultOption}}}</option>
+            <select id="new-station-entry-log-station-id" name="stationId">
+                <option disabled="disabled" selected="selected" value="">{{{stationIdDefaultOption}}}</option>
             </select>
         </div>
     </div>
@@ -56,8 +60,8 @@
             </label>
         </div>
         <div class="small-2 large-2 columns">
-            <select id="new-station-entry-log-purpose">
-                <option disabled="disabled" selected="selected">{{{purposeDefaultOption}}}</option>
+            <select id="new-station-entry-log-purpose" name="purpose" >
+                <option disabled="disabled" selected="selected" value="">{{{purposeDefaultOption}}}</option>
             </select>
         </div>
         <div class="small-1 large-1 columns">
@@ -65,8 +69,8 @@
             </label>
         </div>
         <div class="small-2 large-2 columns">
-            <select id="new-station-entry-log-duration">
-                <option disabled="disabled" selected="selected">{{{durationDefaultOption}}}</option>
+            <select id="new-station-entry-log-duration" name="duration">
+                <option disabled="disabled" selected="selected" value="">{{{durationDefaultOption}}}</option>
             </select>
         </div>
         <div class="small-1 large-1 columns">
@@ -80,13 +84,15 @@
             &nbsp;
         </div>
     </div>
-    <div class="row collapse">
-        <div class="large-1 columns">
-            <label for="new-station-entry-log-purpose-other">{{{purposeOtherHeaderText}}}
-            </label>
-        </div>
-        <div class="large-11 columns">
-            <textarea id="new-station-entry-log-purpose-other" placeholder="{{{purposeOtherHeaderText}}}" rows="2"></textarea>
+    <div id="new-station-entry-log-purpose-other-container" class="hidden">
+        <div class="row collapse">
+            <div class="large-1 columns">
+                <label for="new-station-entry-log-purpose-other">{{{purposeOtherHeaderText}}}
+                </label>
+            </div>
+            <div class="large-11 columns">
+                <textarea id="new-station-entry-log-purpose-other" name="purposeOther" placeholder="{{{purposeOtherHeaderText}}}" rows="2"></textarea>
+            </div>
         </div>
     </div>
     <div class="row collapse">
@@ -95,7 +101,7 @@
             </label>
         </div>
         <div class="small-5 large-5 columns">
-            <textarea id="new-station-entry-log-additional-info" placeholder="{{{additionalInfoHeaderText}}}" rows="2" ></textarea>
+            <textarea id="new-station-entry-log-additional-info" name="additionalInfo" placeholder="{{{additionalInfoHeaderText}}}" rows="2" ></textarea>
         </div>
         <div class="small-1 large-1 columns">
             <label for="new-station-entry-log-station-has-crew">{{{hasCrewHeaderText}}}
@@ -103,8 +109,8 @@
         </div>
         <div class="small-5 large-5 columns">
             <select id="new-station-entry-log-has-crew">
-                <option selected="selected" value="true">{{{hasCrewNoOption}}}</option>
-                <option value="false">{{{hasCrewYesOption}}}</option>
+                <option selected="selected" value="false" name="hasCrew" >{{{hasCrewNoOption}}}</option>
+                <option value="true">{{{hasCrewYesOption}}}</option>
             </select>
         </div>
     </div>

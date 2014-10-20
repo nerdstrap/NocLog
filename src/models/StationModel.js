@@ -11,6 +11,9 @@ define(function (require) {
         urlRoot: function () {
             return env.getApiUrl() + '/station';
         },
+        sync: function(method, model, options) {
+            console.trace('Backbone.sync methods have been disabled.');
+        },
         getStationById: function() {
             var currentContext = this;
             return $.ajax({

@@ -27,6 +27,7 @@ require.config({
         
         /* Backbone */
         'backbone': 'libs/backbone',
+        'backbone.validation': 'libs/backbone.validation',
         
         /* Handlebars */
         'Handlebars': 'libs/handlebars',

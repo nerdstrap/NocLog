@@ -652,7 +652,7 @@ define(function (require) {
         },
         {
             'key': 'NewStationEntryLogView.emailHeaderText',
-            'value': 'Email'
+            'value': 'E-mail'
         },
         {
             'key': 'NewStationEntryLogView.purposeHeaderText',

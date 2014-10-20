@@ -12,6 +12,9 @@ define(function (require) {
         url: function () {
             return env.getApiUrl() + '/lookupDataItem';
         },
+        sync: function(method, model, options) {
+            console.trace('Backbone.sync methods have been disabled.');
+        },
         getLookupDataItems: function (options) {
             var currentContext = this;
 

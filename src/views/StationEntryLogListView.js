@@ -1,6 +1,5 @@
 define(function(require) {
     'use strict';
-
     var $ = require('jquery'),
             _ = require('underscore'),
             Backbone = require('backbone'),
@@ -9,12 +8,12 @@ define(function(require) {
             NewStationEntryLogModel = require('models/NewStationEntryLogModel'),
             NewStationEntryLogView = require('views/NewStationEntryLogView'),
             AppEventNamesEnum = require('enums/AppEventNamesEnum'),
+            UserRoleEnum = require('enums/UserRoleEnum'),
             appEvents = require('events'),
             appResources = require('resources'),
             template = require('hbs!templates/StationEntryLogList'),
             regionListTemplate = require('hbs!templates/RegionList'),
             areaListTemplate = require('hbs!templates/AreaList');
-
     var StationEntryLogListView = CompositeView.extend({
         resources: function(culture) {
             return {
@@ -50,23 +49,22 @@ define(function(require) {
             this.areaCollection = options.areaCollection;
             this.purposeCollection = options.purposeCollection;
             this.durationCollection = options.durationCollection;
-
             this.listenTo(this.collection, 'reset', this.addAll);
             this.listenTo(this.collection, 'sort', this.addAll);
             this.listenTo(this.regionCollection, 'reset', this.addAllRegions);
             this.listenTo(this.areaCollection, 'reset', this.addAllAreas);
-            
             this.listenTo(appEvents, AppEventNamesEnum.cancelCheckIn, this.showNewStationEntryLogButton);
+            this.listenTo(appEvents, AppEventNamesEnum.checkInSuccess, this.onCheckInSuccess);
+//            this.listenTo(appEvents, AppEventNamesEnum.checkInError, this.onCheckInError);
+            this.listenTo(appEvents, AppEventNamesEnum.checkOutSuccess, this.onCheckOutSuccess);
+            this.listenTo(appEvents, AppEventNamesEnum.checkOutError, this.onCheckOutError);
         },
         render: function() {
             console.trace('StationEntryLogListView.render()');
             var currentContext = this;
-
             var renderModel = _.extend({}, currentContext.resources(), currentContext.model);
             currentContext.$el.html(template(renderModel));
-
             _.each(this.collection.models, this.addOne, this);
-
             return this;
         },
         events: {
@@ -86,7 +84,8 @@ define(function(require) {
             var currentContext = this;
             var stationEntryLogListItemView = new StationEntryLogListItemView({
                 model: stationEntryLog,
-                dispatcher: currentContext.dispatcher
+                dispatcher: currentContext.dispatcher,
+                userRole: currentContext.userRole
             });
             this.appendChildTo(stationEntryLogListItemView, '#station-entry-log-list');
         },
@@ -112,16 +111,13 @@ define(function(require) {
             }
 
             this.showLoading();
-
             var status = this.$('#station-entry-log-list-status-filter').val();
             var region = this.$('#station-entry-log-list-region-filter').val();
             var area = this.$('#station-entry-log-list-area-filter').val();
-
             var options = {
                 region: region,
                 area: area
             };
-
             if (status === 'open') {
                 this.dispatcher.trigger(AppEventNamesEnum.showOpenStationEntryLogs, options);
             }
@@ -135,21 +131,17 @@ define(function(require) {
             }
 
             this.showLoading();
-
             this.$('#station-entry-log-list-status-filter').val('open');
             this.$('#station-entry-log-list-region-filter').val('');
             this.$('#station-entry-log-list-area-filter').val('');
-
             this.$('#station-entry-log-list-region-sort-button').removeData('sort-direction');
             this.$('#station-entry-log-list-area-sort-button').removeData('sort-direction');
-
             var sortAttributes = [{
                     sortAttribute: 'expectedOutTime',
                     sortDirection: 1
                 }];
             this.showSortIndicators(sortAttributes);
             this.collection.sortAttributes = sortAttributes;
-
             this.dispatcher.trigger(AppEventNamesEnum.showOpenStationEntryLogs);
         },
         updateStationEntryLogListExpectedOutTimeSort: function(event) {
@@ -159,14 +151,12 @@ define(function(require) {
 
             this.$('#station-entry-log-list-region-sort-button').removeData('sort-direction');
             this.$('#station-entry-log-list-area-sort-button').removeData('sort-direction');
-
             var sortAttributes = [{
                     sortAttribute: 'expectedOutTime',
                     sortDirection: 1
                 }];
             this.showSortIndicators(sortAttributes);
             this.collection.sortAttributes = sortAttributes;
-            
             this.collection.sort();
         },
         updateStationEntryLogListRegionSort: function(event) {
@@ -175,7 +165,6 @@ define(function(require) {
             }
 
             var regionSortDirection = this.getDataSortDirection(this.$('#station-entry-log-list-region-sort-button'));
-
             var sortAttributes = [
                 {
                     sortAttribute: 'region',
@@ -186,13 +175,10 @@ define(function(require) {
                     sortDirection: 1
                 }
             ];
-
             this.$('#station-entry-log-list-region-sort-button').data('sort-direction', regionSortDirection.toString());
             this.$('#station-entry-log-list-area-sort-button').removeData('sort-direction');
-
             this.showSortIndicators(sortAttributes);
             this.collection.sortAttributes = sortAttributes;
-
             this.collection.sort();
         },
         updateStationEntryLogListAreaSort: function(event) {
@@ -201,7 +187,6 @@ define(function(require) {
             }
 
             var areaSortDirection = this.getDataSortDirection(this.$('#station-entry-log-list-area-sort-button'));
-
             var sortAttributes = [
                 {
                     sortAttribute: 'area',
@@ -212,13 +197,10 @@ define(function(require) {
                     sortDirection: 1
                 }
             ];
-
             this.$('#station-entry-log-list-area-sort-button').data('sort-direction', areaSortDirection.toString());
             this.$('#station-entry-log-list-region-sort-button').removeData('sort-direction');
-
             this.showSortIndicators(sortAttributes);
             this.collection.sortAttributes = sortAttributes;
-
             this.collection.sort();
         },
         showSortIndicators: function(sortAttributes) {
@@ -226,7 +208,6 @@ define(function(require) {
             this.$('#station-entry-log-list-region-sort-descending-indicator').addClass('hidden');
             this.$('#station-entry-log-list-area-sort-ascending-indicator').addClass('hidden');
             this.$('#station-entry-log-list-area-sort-descending-indicator').addClass('hidden');
-
             if (sortAttributes && sortAttributes.length > 0) {
                 for (var i in sortAttributes) {
                     var sortAttribute = sortAttributes[i].sortAttribute;
@@ -264,11 +245,60 @@ define(function(require) {
             }
             return sortDirection;
         },
+        onCheckInSuccess: function() {
+            var msg = 'Check in was successful.',
+                    currentContext = this;
+            this.showInfo(msg);
+            this.showNewStationEntryLogButton();
+            setTimeout(function() {
+                currentContext.hideInfo();
+            }, 10000);
+        },
+        onCheckOutSuccess: function() {
+            var msg = 'Check out was successful.',
+                    currentContext = this;
+            this.showInfo(msg);
+            setTimeout(function() {
+                currentContext.hideInfo();
+            }, 10000);
+        },
+        onCheckOutError: function(message) {
+            this.showError(message);
+        },
+        checkUserRole: function() {
+            if (this.userRole === UserRoleEnum.NocAdmin || this.userRole === UserRoleEnum.NocUser) {
+                this.showNewStationEntryLogButton();
+            }
+        },
         showLoading: function() {
             this.$('.view-status').removeClass('hidden');
         },
         hideLoading: function() {
             this.$('.view-status').addClass('hidden');
+        },
+        showError: function(message) {
+            if (message) {
+                this.$('.list-view-error .text-detail').html(message);
+            }
+            else {
+                this.$('.list-view-error .text-detail').html(this.searchAttributes.errorMessage);
+            }
+            this.$('.list-view-error').removeClass('hidden');
+        },
+        hideError: function() {
+            this.$('.list-view-error').addClass('hidden');
+        },
+        showInfo: function(message) {
+            if (message) {
+                this.$('.list-view-info .text-detail').html(message);
+            }
+            else {
+                this.$('.list-view-info .text-detail').html(this.searchAttributes.errorMessage);
+            }
+            this.$('.list-view-info').removeClass('hidden');
+        },
+        hideInfo: function() {
+            this.$('.list-view-info').addClass('hidden');
         },
         goToNewStationEntryLog: function() {
             var currentContext = this;
@@ -288,6 +318,5 @@ define(function(require) {
             this.$('#new-station-entry-log-button').removeClass('hidden');
         }
     });
-
     return StationEntryLogListView;
 });

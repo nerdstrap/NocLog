@@ -19,13 +19,20 @@ define(function(require) {
             return new Handlebars.SafeString(defaultValue);
         }
     };
-    helpers.formatPhone = function(phone, format) {
+    helpers.cleanPhone = function(phone) {
         if (phone) {
             var originalPhone = phone;
             var cleanedPhone = originalPhone.replace(/[^0-9]/g, '');
             if (cleanedPhone.length > 10) {
                 cleanedPhone = cleanedPhone.substring(cleanedPhone.length - 10);
             }
+            return cleanedPhone;
+        }
+        return phone;
+    };
+    helpers.formatPhone = function(phone, format) {
+        if (phone) {
+            var cleanedPhone = helpers.cleanPhone(phone);
             var formattedPhone = cleanedPhone;
             if (cleanedPhone.length === 10) {
                 formattedPhone = '(' + cleanedPhone.substr(0, 3) + ') ' + cleanedPhone.substr(3, 3) + '-' + cleanedPhone.substr(6, 4);
@@ -57,4 +64,6 @@ define(function(require) {
     for (var helper in helpers) {
         Handlebars.registerHelper(helper, helpers[helper]);
     }
+    
+    return helpers;
 });

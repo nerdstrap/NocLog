@@ -120,6 +120,14 @@ body:before {
     overflow-x:hidden;
 }
 
+.error{
+    color: red;
+}
+
+.info{
+    color: green;
+}
+
 /* overriding font size for the various input types */
 select, 
 input[type="text"], 
@@ -176,6 +184,15 @@ span.detail {
     padding: 5px 0px;
 }
 
+#station-entry-log-collapse-button,
+.row-button {
+    color: #008cba;
+    font-size: 1.2em;
+    line-height: 1.2em;
+    border-bottom: 1px;
+    float:right;
+}
+
 #new-station-entry-log-station-identifier,
 #new-station-entry-log-purpose,
 #new-station-entry-log-duration,
@@ -184,5 +201,10 @@ span.detail {
     width: 199px;
     min-width: 199px;
     max-width: 199px;
-   resize: none;
+    resize: none;
+}
+
+.new-station-entry-log-view .invalid {
+    color: #ef7a24;
+    border: 1px solid #ef7a24;
 }
