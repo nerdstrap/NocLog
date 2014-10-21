@@ -17,7 +17,7 @@ define(function(require) {
 
     utils.addMinutes = function(date, minutes) {
         var minutesToAdd = minutes * 60000;
-        return new Date(date + minutesToAdd);
+        return new Date(date.getTime() + minutesToAdd);
     };
 
     utils.addDays = function(date, days) {

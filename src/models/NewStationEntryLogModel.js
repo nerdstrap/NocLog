@@ -18,9 +18,9 @@ define(function(require) {
             firstName: {
                 required: true
             },
-            middleInitial: {
-                required: true
-            },
+//            middleInitial: {
+//                required: true
+//            },
             lastName: {
                 required: true
             },

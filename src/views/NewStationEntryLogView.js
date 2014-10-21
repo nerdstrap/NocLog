@@ -146,7 +146,7 @@ define(function(require) {
             var duration = this.$('#new-station-entry-log-duration').val();
             if (duration && !isNaN(duration)) {
                 duration = Number(duration);
-                var expectedOutTime = utils.addMinutes(Date.now(), duration);
+                var expectedOutTime = utils.addMinutes(new Date(), duration);
                 this.$('#new-station-entry-log-expected-out-time').html(helpers.formatDateWithDefault(expectedOutTime, "%r", "&nbsp;"));
             }
         },
@@ -207,6 +207,9 @@ define(function(require) {
         onValidated: function(isValid, model, errors) {
             if (isValid) {
                 this.goToCheckIn();
+            }else{
+                 var message = "One or more fields are invalid, please try again."; 
+                 this.showError(message);
             }
         },
         goToCheckIn: function() {

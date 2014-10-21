@@ -121,11 +121,11 @@ body:before {
 }
 
 .error{
-    color: red;
+    color: #c22222;
 }
 
 .info{
-    color: green;
+    color: #388e3a;
 }
 
 /* overriding font size for the various input types */
@@ -205,6 +205,6 @@ span.detail {
 }
 
 .new-station-entry-log-view .invalid {
-    color: #ef7a24;
-    border: 1px solid #ef7a24;
+    color: #c22222;
+    border: 1px solid #c22222;
 }

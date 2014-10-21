@@ -381,8 +381,7 @@ define(function(require) {
                 appEvents.trigger(AppEventNamesEnum.checkInSuccess, checkInResults);
                 deferred.resolve(checkInResults);
             }).fail(function(jqXHR, textStatus, errorThrown) {
-                var msg = 'Error checking in. Please call the dispatch center.';
-                appEvents.trigger(AppEventNamesEnum.checkInError, msg);
+                var msg = 'Error checking in.';
                 if (jqXHR.status === 409 && jqXHR.responseText) {
                     msg = jqXHR.responseText;
                 }
@@ -391,6 +390,7 @@ define(function(require) {
                     msg = jqXHR.responseText;
                 }
 
+                appEvents.trigger(AppEventNamesEnum.checkInError, msg);
                 deferred.reject(msg);
             });
 
