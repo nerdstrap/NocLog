@@ -14,12 +14,12 @@ define(function(require) {
     var PersonnelView = CompositeView.extend({
         resources: function(culture) {
             return {
-                hazardIconSrc: appResources.getResource('hazardIconSrc').value,
-                hazardIconSvgSrc: appResources.getResource('hazardIconSvgSrc').value,
-                hazardIconAlt: appResources.getResource('hazardIconAlt').value,
-                checkedInIconSvgSrc: appResources.getResource('checkedInIconSvgSrc').value,
-                checkedInIconAlt: appResources.getResource('checkedInIconAlt').value,
-                checkOutButtonText: appResources.getResource('Personnel.checkOutButtonText').value
+                hazardIconSrc: appResources.getResource('hazardIconSrc'),
+                hazardIconSvgSrc: appResources.getResource('hazardIconSvgSrc'),
+                hazardIconAlt: appResources.getResource('hazardIconAlt'),
+                checkedInIconSvgSrc: appResources.getResource('checkedInIconSvgSrc'),
+                checkedInIconAlt: appResources.getResource('checkedInIconAlt'),
+                checkOutButtonText: appResources.getResource('Personnel.checkOutButtonText')
             };
         },
         initialize: function(options) {

@@ -13,12 +13,12 @@ define(function(require) {
     var HeaderView = CompositeView.extend({
         resources: function(culture) {
             return {
-                'appTitleText': appResources.getResource('appTitleText').value,
-                'goToStationEntryLogListButtonText': appResources.getResource('goToStationEntryLogListButtonText').value,
-                'goToStationEntryLogHistoryListButtonText': appResources.getResource('goToStationEntryLogHistoryListButtonText').value,
-                'goToStationListButtonText': appResources.getResource('goToStationListButtonText').value,
-                'goToPersonnelListButtonText': appResources.getResource('goToPersonnelListButtonText').value,
-                'goToReportListButtonText': appResources.getResource('goToReportListButtonText').value
+                'appTitleText': appResources.getResource('appTitleText'),
+                'goToStationEntryLogListButtonText': appResources.getResource('goToStationEntryLogListButtonText'),
+                'goToStationEntryLogHistoryListButtonText': appResources.getResource('goToStationEntryLogHistoryListButtonText'),
+                'goToStationListButtonText': appResources.getResource('goToStationListButtonText'),
+                'goToPersonnelListButtonText': appResources.getResource('goToPersonnelListButtonText'),
+                'goToReportListButtonText': appResources.getResource('goToReportListButtonText')
             };
         },
         initialize: function(options) {

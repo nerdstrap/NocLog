@@ -13,9 +13,9 @@ define(function (require) {
     var FooterView = CompositeView.extend({
         resources: function (culture) {
             return {
-                'logoImageSrc': appResources.getResource('logoImageSrc').value,
-                'logoImageSvgSrc': appResources.getResource('logoImageSvgSrc').value,
-                'logoImageAlt': appResources.getResource('logoImageAlt').value
+                'logoImageSrc': appResources.getResource('logoImageSrc'),
+                'logoImageSvgSrc': appResources.getResource('logoImageSvgSrc'),
+                'logoImageAlt': appResources.getResource('logoImageAlt')
             };
         },
         initialize: function (options) {

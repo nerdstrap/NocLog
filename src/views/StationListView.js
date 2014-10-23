@@ -18,19 +18,19 @@ define(function(require) {
     var StationListView = CompositeView.extend({
         resources: function(culture) {
             return {
-                loadingIconSrc: appResources.getResource('loadingIconSrc').value,
-                loadingMessage: appResources.getResource('StationListView.loadingMessage').value,
-                errorMessage: appResources.getResource('StationListView.errorMessage').value,
-                infoMessage: appResources.getResource('StationListView.infoMessage').value,
-                listViewTitleText: appResources.getResource('StationListView.listViewTitleText').value,
-                refreshListButtonText: appResources.getResource('StationListView.refreshListButtonText').value,
-                resetListOptionsButtonText: appResources.getResource('StationListView.resetListOptionsButtonText').value,
-                regionFilterDefaultOption: appResources.getResource('StationListView.regionFilterDefaultOption').value,
-                areaFilterDefaultOption: appResources.getResource('StationListView.areaFilterDefaultOption').value,
-                stationIdentifierSelectDefaultOption: appResources.getResource('StationListView.stationIdentifierSelectDefaultOption').value,
-                stationNameHeaderText: appResources.getResource('StationListView.stationNameHeaderText').value,
-                regionHeaderText: appResources.getResource('StationListView.regionHeaderText').value,
-                areaHeaderText: appResources.getResource('StationListView.areaHeaderText').value
+                loadingIconSrc: appResources.getResource('loadingIconSrc'),
+                loadingMessage: appResources.getResource('StationListView.loadingMessage'),
+                errorMessage: appResources.getResource('StationListView.errorMessage'),
+                infoMessage: appResources.getResource('StationListView.infoMessage'),
+                listViewTitleText: appResources.getResource('StationListView.listViewTitleText'),
+                refreshListButtonText: appResources.getResource('StationListView.refreshListButtonText'),
+                resetListOptionsButtonText: appResources.getResource('StationListView.resetListOptionsButtonText'),
+                regionFilterDefaultOption: appResources.getResource('StationListView.regionFilterDefaultOption'),
+                areaFilterDefaultOption: appResources.getResource('StationListView.areaFilterDefaultOption'),
+                stationIdentifierSelectDefaultOption: appResources.getResource('StationListView.stationIdentifierSelectDefaultOption'),
+                stationNameHeaderText: appResources.getResource('StationListView.stationNameHeaderText'),
+                regionHeaderText: appResources.getResource('StationListView.regionHeaderText'),
+                areaHeaderText: appResources.getResource('StationListView.areaHeaderText')
             };
         },
         initialize: function(options) {

@@ -14,30 +14,33 @@ define(function(require) {
             template = require('hbs!templates/StationEntryLogList'),
             regionListTemplate = require('hbs!templates/RegionList'),
             areaListTemplate = require('hbs!templates/AreaList');
+
+    var checkExpireInterval;
+
     var StationEntryLogListView = CompositeView.extend({
         resources: function(culture) {
             return {
-                loadingIconSrc: appResources.getResource('loadingIconSrc').value,
-                loadingMessage: appResources.getResource('StationEntryLogListView.loadingMessage').value,
-                errorMessage: appResources.getResource('StationEntryLogListView.errorMessage').value,
-                infoMessage: appResources.getResource('StationEntryLogListView.infoMessage').value,
-                listViewTitleText: appResources.getResource('StationEntryLogListView.listViewTitleText').value,
-                statusFilterOpenOption: appResources.getResource('StationEntryLogListView.statusFilterOpenOption').value,
-                statusFilterExpiredOption: appResources.getResource('StationEntryLogListView.statusFilterExpiredOption').value,
-                regionFilterDefaultOption: appResources.getResource('StationEntryLogListView.regionFilterDefaultOption').value,
-                areaFilterDefaultOption: appResources.getResource('StationEntryLogListView.areaFilterDefaultOption').value,
-                refreshListButtonText: appResources.getResource('StationEntryLogListView.refreshListButtonText').value,
-                resetListOptionsButtonText: appResources.getResource('StationEntryLogListView.resetListOptionsButtonText').value,
-                newStationEntryLogButtonText: appResources.getResource('StationEntryLogListView.newStationEntryLogButtonText').value,
-                stationNameHeaderText: appResources.getResource('StationEntryLogListView.stationNameHeaderText').value,
-                personnelNameHeaderText: appResources.getResource('StationEntryLogListView.personnelNameHeaderText').value,
-                contactHeaderText: appResources.getResource('StationEntryLogListView.contactHeaderText').value,
-                inTimeHeaderText: appResources.getResource('StationEntryLogListView.inTimeHeaderText').value,
-                expectedOutTimeHeaderText: appResources.getResource('StationEntryLogListView.expectedOutTimeHeaderText').value,
-                purposeHeaderText: appResources.getResource('StationEntryLogListView.purposeHeaderText').value,
-                additionalInfoHeaderText: appResources.getResource('StationEntryLogListView.additionalInfoHeaderText').value,
-                regionHeaderText: appResources.getResource('StationEntryLogListView.regionHeaderText').value,
-                areaHeaderText: appResources.getResource('StationEntryLogListView.areaHeaderText').value
+                loadingIconSrc: appResources.getResource('loadingIconSrc'),
+                loadingMessage: appResources.getResource('StationEntryLogListView.loadingMessage'),
+                errorMessage: appResources.getResource('StationEntryLogListView.errorMessage'),
+                infoMessage: appResources.getResource('StationEntryLogListView.infoMessage'),
+                listViewTitleText: appResources.getResource('StationEntryLogListView.listViewTitleText'),
+                statusFilterOpenOption: appResources.getResource('StationEntryLogListView.statusFilterOpenOption'),
+                statusFilterExpiredOption: appResources.getResource('StationEntryLogListView.statusFilterExpiredOption'),
+                regionFilterDefaultOption: appResources.getResource('StationEntryLogListView.regionFilterDefaultOption'),
+                areaFilterDefaultOption: appResources.getResource('StationEntryLogListView.areaFilterDefaultOption'),
+                refreshListButtonText: appResources.getResource('StationEntryLogListView.refreshListButtonText'),
+                resetListOptionsButtonText: appResources.getResource('StationEntryLogListView.resetListOptionsButtonText'),
+                newStationEntryLogButtonText: appResources.getResource('StationEntryLogListView.newStationEntryLogButtonText'),
+                stationNameHeaderText: appResources.getResource('StationEntryLogListView.stationNameHeaderText'),
+                personnelNameHeaderText: appResources.getResource('StationEntryLogListView.personnelNameHeaderText'),
+                contactHeaderText: appResources.getResource('StationEntryLogListView.contactHeaderText'),
+                inTimeHeaderText: appResources.getResource('StationEntryLogListView.inTimeHeaderText'),
+                expectedOutTimeHeaderText: appResources.getResource('StationEntryLogListView.expectedOutTimeHeaderText'),
+                purposeHeaderText: appResources.getResource('StationEntryLogListView.purposeHeaderText'),
+                additionalInfoHeaderText: appResources.getResource('StationEntryLogListView.additionalInfoHeaderText'),
+                regionHeaderText: appResources.getResource('StationEntryLogListView.regionHeaderText'),
+                areaHeaderText: appResources.getResource('StationEntryLogListView.areaHeaderText')
             };
         },
         initialize: function(options) {
@@ -49,13 +52,16 @@ define(function(require) {
             this.areaCollection = options.areaCollection;
             this.purposeCollection = options.purposeCollection;
             this.durationCollection = options.durationCollection;
+
+            this.listenTo(this, 'leave', this.onLeave);
+
             this.listenTo(this.collection, 'reset', this.addAll);
             this.listenTo(this.collection, 'sort', this.addAll);
             this.listenTo(this.regionCollection, 'reset', this.addAllRegions);
             this.listenTo(this.areaCollection, 'reset', this.addAllAreas);
-            this.listenTo(appEvents, AppEventNamesEnum.cancelCheckIn, this.showNewStationEntryLogButton);
+
+            this.listenTo(appEvents, AppEventNamesEnum.leaveNewStationEntryLogView, this.showNewStationEntryLogButton);
             this.listenTo(appEvents, AppEventNamesEnum.checkInSuccess, this.onCheckInSuccess);
-//            this.listenTo(appEvents, AppEventNamesEnum.checkInError, this.onCheckInError);
             this.listenTo(appEvents, AppEventNamesEnum.checkOutSuccess, this.onCheckOutSuccess);
             this.listenTo(appEvents, AppEventNamesEnum.checkOutError, this.onCheckOutError);
         },
@@ -65,6 +71,7 @@ define(function(require) {
             var renderModel = _.extend({}, currentContext.resources(), currentContext.model);
             currentContext.$el.html(template(renderModel));
             _.each(this.collection.models, this.addOne, this);
+            this.checkDurationExpiredEveryMinute();
             return this;
         },
         events: {
@@ -76,7 +83,7 @@ define(function(require) {
             'click #new-station-entry-log-button': 'goToNewStationEntryLog'
         },
         addAll: function() {
-            this._leaveChildren();
+            this.removeAll();
             _.each(this.collection.models, this.addOne, this);
             this.hideLoading();
         },
@@ -88,6 +95,15 @@ define(function(require) {
                 userRole: currentContext.userRole
             });
             this.appendChildTo(stationEntryLogListItemView, '#station-entry-log-list');
+        },
+        removeAll: function() {
+            this.children.chain().clone().each(function(view) {
+                if (view.$('.new-station-entry-log-view').length === 0) {
+                    if (view.leave) {
+                        view.leave();
+                    }
+                }
+            });
         },
         addAllRegions: function() {
             var currentContext = this;
@@ -105,11 +121,13 @@ define(function(require) {
             };
             this.$('#station-entry-log-list-area-filter').html(areaListTemplate(areaListRenderModel));
         },
-        refreshStationEntryLogList: function(event) {
+        dispatchRefreshStationEntryLogList: function(event) {
             if (event) {
                 event.preventDefault();
             }
-
+            this.dispatchRefreshStationEntryListEvent();
+        },
+        refreshStationEntryLogList: function() {
             this.showLoading();
             var status = this.$('#station-entry-log-list-status-filter').val();
             var region = this.$('#station-entry-log-list-region-filter').val();
@@ -262,43 +280,16 @@ define(function(require) {
                 currentContext.hideInfo();
             }, 10000);
         },
-        onCheckOutError: function(message) {
-            this.showError(message);
-        },
         checkUserRole: function() {
             if (this.userRole === UserRoleEnum.NocAdmin || this.userRole === UserRoleEnum.NocUser) {
                 this.showNewStationEntryLogButton();
             }
         },
-        showLoading: function() {
-            this.$('.view-status').removeClass('hidden');
+        hideNewStationEntryLogButton: function() {
+            this.$('#new-station-entry-log-button').addClass('hidden');
         },
-        hideLoading: function() {
-            this.$('.view-status').addClass('hidden');
-        },
-        showError: function(message) {
-            if (message) {
-                this.$('.list-view-error .text-detail').html(message);
-            }
-            else {
-                this.$('.list-view-error .text-detail').html(this.searchAttributes.errorMessage);
-            }
-            this.$('.list-view-error').removeClass('hidden');
-        },
-        hideError: function() {
-            this.$('.list-view-error').addClass('hidden');
-        },
-        showInfo: function(message) {
-            if (message) {
-                this.$('.list-view-info .text-detail').html(message);
-            }
-            else {
-                this.$('.list-view-info .text-detail').html(this.searchAttributes.errorMessage);
-            }
-            this.$('.list-view-info').removeClass('hidden');
-        },
-        hideInfo: function() {
-            this.$('.list-view-info').addClass('hidden');
+        showNewStationEntryLogButton: function() {
+            this.$('#new-station-entry-log-button').removeClass('hidden');
         },
         goToNewStationEntryLog: function() {
             var currentContext = this;
@@ -311,11 +302,40 @@ define(function(require) {
                 durationCollection: currentContext.durationCollection
             });
             currentContext.renderChildInto(currentContext.newStationEntryLogViewInstance, currentContext.$('#new-station-entry-log-view-container'));
-            this.$('#new-station-entry-log-button').addClass('hidden');
+            this.hideNewStationEntryLogButton();
             this.dispatcher.trigger(AppEventNamesEnum.goToNewStationEntryLog);
         },
-        showNewStationEntryLogButton: function() {
-            this.$('#new-station-entry-log-button').removeClass('hidden');
+        showLoading: function() {
+            this.$('.view-status').removeClass('hidden');
+        },
+        hideLoading: function() {
+            this.$('.view-status').addClass('hidden');
+        },
+        showError: function(message) {
+            this.$('.list-view-error .text-detail').html(message);
+            this.$('.list-view-error').removeClass('hidden');
+        },
+        hideError: function() {
+            this.$('.list-view-error').addClass('hidden');
+        },
+        showInfo: function(message) {
+            this.$('.list-view-info .text-detail').html(message);
+            this.$('.list-view-info').removeClass('hidden');
+        },
+        hideInfo: function() {
+            this.$('.list-view-info').addClass('hidden');
+        },
+        autRefresh: function() {
+            var currentContext = this;
+            if (currentContext.autRefresh.timeout) {
+                
+            }
+            checkExpireInterval = setInterval(function() {
+                currentContext.refreshStationEntryLogList();
+            }, 60000);
+        },
+        onLeave: function() {
+            clearInterval(checkExpireInterval);
         }
     });
     return StationEntryLogListView;

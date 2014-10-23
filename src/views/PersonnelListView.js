@@ -14,20 +14,20 @@ define(function(require) {
     var PersonnelListView = CompositeView.extend({
         resources: function(culture) {
             return {
-                loadingIconSrc: appResources.getResource('loadingIconSrc').value,
-                loadingMessage: appResources.getResource('PersonnelListView.loadingMessage').value,
-                errorMessage: appResources.getResource('PersonnelListView.errorMessage').value,
-                infoMessage: appResources.getResource('PersonnelListView.infoMessage').value,
-                listViewTitleText: appResources.getResource('PersonnelListView.listViewTitleText').value,
-                listFilterHeaderText: appResources.getResource('PersonnelListView.listFilterHeaderText').value,
-                stationNameHeaderText: appResources.getResource('PersonnelListView.stationNameHeaderText').value,
-                personnelNameHeaderText: appResources.getResource('PersonnelListView.personnelNameHeaderText').value,
-                contactHeaderText: appResources.getResource('PersonnelListView.contactHeaderText').value,
-                inTimeHeaderText: appResources.getResource('PersonnelListView.inTimeHeaderText').value,
-                outTimeHeaderText: appResources.getResource('PersonnelListView.outTimeHeaderText').value,
-                durationHeaderText: appResources.getResource('PersonnelListView.durationHeaderText').value,
-                purposeHeaderText: appResources.getResource('PersonnelListView.purposeHeaderText').value,
-                additionalInfoHeaderText: appResources.getResource('PersonnelListView.additionalInfoHeaderText').value
+                loadingIconSrc: appResources.getResource('loadingIconSrc'),
+                loadingMessage: appResources.getResource('PersonnelListView.loadingMessage'),
+                errorMessage: appResources.getResource('PersonnelListView.errorMessage'),
+                infoMessage: appResources.getResource('PersonnelListView.infoMessage'),
+                listViewTitleText: appResources.getResource('PersonnelListView.listViewTitleText'),
+                listFilterHeaderText: appResources.getResource('PersonnelListView.listFilterHeaderText'),
+                stationNameHeaderText: appResources.getResource('PersonnelListView.stationNameHeaderText'),
+                personnelNameHeaderText: appResources.getResource('PersonnelListView.personnelNameHeaderText'),
+                contactHeaderText: appResources.getResource('PersonnelListView.contactHeaderText'),
+                inTimeHeaderText: appResources.getResource('PersonnelListView.inTimeHeaderText'),
+                outTimeHeaderText: appResources.getResource('PersonnelListView.outTimeHeaderText'),
+                durationHeaderText: appResources.getResource('PersonnelListView.durationHeaderText'),
+                purposeHeaderText: appResources.getResource('PersonnelListView.purposeHeaderText'),
+                additionalInfoHeaderText: appResources.getResource('PersonnelListView.additionalInfoHeaderText')
             };
         },
         initialize: function(options) {

@@ -14,22 +14,22 @@ define(function(require) {
     var StationEntryLog = CompositeView.extend({
         resources: function(culture) {
             return {
-                hazardIconSrc: appResources.getResource('hazardIconSrc').value,
-                hazardIconSvgSrc: appResources.getResource('hazardIconSvgSrc').value,
-                hazardIconAlt: appResources.getResource('hazardIconAlt').value,
-                checkedInIconSvgSrc: appResources.getResource('checkedInIconSvgSrc').value,
-                checkedInIconAlt: appResources.getResource('checkedInIconAlt').value,
-                checkOutButtonText: appResources.getResource('checkOutButtonText').value,
-                stationNameHeaderText: appResources.getResource('StationEntryLogView.stationNameHeaderText').value,
-                personnelNameHeaderText: appResources.getResource('StationEntryLogView.personnelNameHeaderText').value,
-                contactHeaderText: appResources.getResource('StationEntryLogView.contactHeaderText').value,
-                inTimeHeaderText: appResources.getResource('StationEntryLogView.inTimeHeaderText').value,
-                outTimeHeaderText: appResources.getResource('StationEntryLogView.outTimeHeaderText').value,
-                durationHeaderText: appResources.getResource('StationEntryLogView.durationHeaderText').value,
-                purposeHeaderText: appResources.getResource('StationEntryLogView.purposeHeaderText').value,
-                additionalInfoHeaderText: appResources.getResource('StationEntryLogView.additionalInfoHeaderText').value,
-                regionHeaderText: appResources.getResource('StationEntryLogView.regionHeaderText').value,
-                areaHeaderText: appResources.getResource('StationEntryLogView.areaHeaderText').value
+                hazardIconSrc: appResources.getResource('hazardIconSrc'),
+                hazardIconSvgSrc: appResources.getResource('hazardIconSvgSrc'),
+                hazardIconAlt: appResources.getResource('hazardIconAlt'),
+                checkedInIconSvgSrc: appResources.getResource('checkedInIconSvgSrc'),
+                checkedInIconAlt: appResources.getResource('checkedInIconAlt'),
+                checkOutButtonText: appResources.getResource('checkOutButtonText'),
+                stationNameHeaderText: appResources.getResource('StationEntryLogView.stationNameHeaderText'),
+                personnelNameHeaderText: appResources.getResource('StationEntryLogView.personnelNameHeaderText'),
+                contactHeaderText: appResources.getResource('StationEntryLogView.contactHeaderText'),
+                inTimeHeaderText: appResources.getResource('StationEntryLogView.inTimeHeaderText'),
+                outTimeHeaderText: appResources.getResource('StationEntryLogView.outTimeHeaderText'),
+                durationHeaderText: appResources.getResource('StationEntryLogView.durationHeaderText'),
+                purposeHeaderText: appResources.getResource('StationEntryLogView.purposeHeaderText'),
+                additionalInfoHeaderText: appResources.getResource('StationEntryLogView.additionalInfoHeaderText'),
+                regionHeaderText: appResources.getResource('StationEntryLogView.regionHeaderText'),
+                areaHeaderText: appResources.getResource('StationEntryLogView.areaHeaderText')
             };
         },
         initialize: function(options) {

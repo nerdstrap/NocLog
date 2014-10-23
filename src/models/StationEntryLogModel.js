@@ -9,6 +9,12 @@ define(function (require) {
 
     var StationEntryModel = Backbone.Model.extend({
         idAttribute: 'stationEntryLogId',
+        getDefaultsForRendering: function() {
+            return {
+                'minExpired': false,
+                'maxExpired': false
+            };
+        },
         urlRoot: function () {
             return env.getApiUrl() + '/stationEntryLog';
         },
@@ -44,6 +50,12 @@ define(function (require) {
                 
                 if (inTimeParsed && durationParsed) {
                     attributes.expectedOutTime = utils.addMinutes(attributes.inTime, attributes.duration);
+                    var expiredInSeconds = (new Date() - attributes.expectedOutTime)/1000;
+                    if (expiredInSeconds > 0 && expiredInSeconds < 1800){
+                        attributes.minExpired = true;
+                    }else if(expiredInSeconds >= 1800){
+                        attributes.maxExpired = true;
+                    }
                 }
                     
                 if (attributes.hasOwnProperty('outTime')) {

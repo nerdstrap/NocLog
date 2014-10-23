@@ -14,12 +14,12 @@ define(function(require) {
         tagName: 'li',
         resources: function(culture) {
             return {
-                hazardIconSrc: appResources.getResource('hazardIconSrc').value,
-                hazardIconSvgSrc: appResources.getResource('hazardIconSvgSrc').value,
-                hazardIconAlt: appResources.getResource('hazardIconAlt').value,
-                checkedInIconSvgSrc: appResources.getResource('checkedInIconSvgSrc').value,
-                checkedInIconAlt: appResources.getResource('checkedInIconAlt').value,
-                checkOutButtonText: appResources.getResource('checkOutButtonText').value
+                hazardIconSrc: appResources.getResource('hazardIconSrc'),
+                hazardIconSvgSrc: appResources.getResource('hazardIconSvgSrc'),
+                hazardIconAlt: appResources.getResource('hazardIconAlt'),
+                checkedInIconSvgSrc: appResources.getResource('checkedInIconSvgSrc'),
+                checkedInIconAlt: appResources.getResource('checkedInIconAlt'),
+                checkOutButtonText: appResources.getResource('checkOutButtonText')
             };
         },
         initialize: function(options) {
@@ -35,6 +35,7 @@ define(function(require) {
             var renderModel = _.extend({}, currentContext.resources(), currentContext.model.attributes);
             currentContext.$el.html(template(renderModel));
             this.checkUserRole();
+            this.checkExpired();
             return this;
         },
         events: {
@@ -89,6 +90,13 @@ define(function(require) {
         },
         showCheckOutToggleButton: function() {
             this.$('#station-entry-log-collapse-button').removeClass('hidden');
+        },
+        checkExpired: function() {
+            if(this.model.get("minExpired")){
+                this.$('.station-entry-log-list-item-view').addClass('minExpired');
+            }else if(this.model.get("maxExpired")){
+                this.$('.station-entry-log-list-item-view').addClass('maxExpired');
+            }
         }
     });
     return StationEntryLogListItemView;

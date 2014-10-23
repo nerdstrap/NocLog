@@ -25,7 +25,8 @@ define(function(require) {
         checkOutError: 'checkOutError',
         goToLookupUserId: 'goToLookupUserId',
         userIdFound: 'userIdFound',
-        userIdLookupError: 'userIdLookupError'
+        userIdLookupError: 'userIdLookupError',
+        leaveNewStationEntryLogView: 'leaveNewStationEntryLogView'
     };
 
     if (Object.freeze) {

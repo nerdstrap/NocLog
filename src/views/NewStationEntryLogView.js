@@ -20,27 +20,27 @@ define(function(require) {
     var NewStationEntryLog = CompositeView.extend({
         resources: function(culture) {
             return {
-                viewTitleText: appResources.getResource('NewStationEntryLogView.viewTitleText').value,
-                stationIdDefaultOption: appResources.getResource('NewStationEntryLogView.stationIdDefaultOption').value,
-                purposeDefaultOption: appResources.getResource('NewStationEntryLogView.purposeDefaultOption').value,
-                durationDefaultOption: appResources.getResource('NewStationEntryLogView.durationDefaultOption').value,
-                hasCrewYesOption: appResources.getResource('NewStationEntryLogView.hasCrewYesOption').value,
-                hasCrewNoOption: appResources.getResource('NewStationEntryLogView.hasCrewNoOption').value,
-                stationIdHeaderText: appResources.getResource('NewStationEntryLogView.stationIdHeaderText').value,
-                userIdHeaderText: appResources.getResource('NewStationEntryLogView.userIdHeaderText').value,
-                firstNameHeaderText: appResources.getResource('NewStationEntryLogView.firstNameHeaderText').value,
-                middleInitialHeaderText: appResources.getResource('NewStationEntryLogView.middleInitialHeaderText').value,
-                lastNameHeaderText: appResources.getResource('NewStationEntryLogView.lastNameHeaderText').value,
-                contactNumberHeaderText: appResources.getResource('NewStationEntryLogView.contactNumberHeaderText').value,
-                emailHeaderText: appResources.getResource('NewStationEntryLogView.emailHeaderText').value,
-                purposeHeaderText: appResources.getResource('NewStationEntryLogView.purposeHeaderText').value,
-                durationHeaderText: appResources.getResource('NewStationEntryLogView.durationHeaderText').value,
-                expectedOutTimeHeaderText: appResources.getResource('NewStationEntryLogView.expectedOutTimeHeaderText').value,
-                purposeOtherHeaderText: appResources.getResource('NewStationEntryLogView.purposeOtherHeaderText').value,
-                additionalInfoHeaderText: appResources.getResource('NewStationEntryLogView.additionalInfoHeaderText').value,
-                hasCrewHeaderText: appResources.getResource('NewStationEntryLogView.hasCrewHeaderText').value,
-                saveButtonText: appResources.getResource('NewStationEntryLogView.saveButtonText').value,
-                cancelButtonText: appResources.getResource('NewStationEntryLogView.cancelButtonText').value
+                viewTitleText: appResources.getResource('NewStationEntryLogView.viewTitleText'),
+                stationIdDefaultOption: appResources.getResource('NewStationEntryLogView.stationIdDefaultOption'),
+                purposeDefaultOption: appResources.getResource('NewStationEntryLogView.purposeDefaultOption'),
+                durationDefaultOption: appResources.getResource('NewStationEntryLogView.durationDefaultOption'),
+                hasCrewYesOption: appResources.getResource('NewStationEntryLogView.hasCrewYesOption'),
+                hasCrewNoOption: appResources.getResource('NewStationEntryLogView.hasCrewNoOption'),
+                stationIdHeaderText: appResources.getResource('NewStationEntryLogView.stationIdHeaderText'),
+                userIdHeaderText: appResources.getResource('NewStationEntryLogView.userIdHeaderText'),
+                firstNameHeaderText: appResources.getResource('NewStationEntryLogView.firstNameHeaderText'),
+                middleInitialHeaderText: appResources.getResource('NewStationEntryLogView.middleInitialHeaderText'),
+                lastNameHeaderText: appResources.getResource('NewStationEntryLogView.lastNameHeaderText'),
+                contactNumberHeaderText: appResources.getResource('NewStationEntryLogView.contactNumberHeaderText'),
+                emailHeaderText: appResources.getResource('NewStationEntryLogView.emailHeaderText'),
+                purposeHeaderText: appResources.getResource('NewStationEntryLogView.purposeHeaderText'),
+                durationHeaderText: appResources.getResource('NewStationEntryLogView.durationHeaderText'),
+                expectedOutTimeHeaderText: appResources.getResource('NewStationEntryLogView.expectedOutTimeHeaderText'),
+                purposeOtherHeaderText: appResources.getResource('NewStationEntryLogView.purposeOtherHeaderText'),
+                additionalInfoHeaderText: appResources.getResource('NewStationEntryLogView.additionalInfoHeaderText'),
+                hasCrewHeaderText: appResources.getResource('NewStationEntryLogView.hasCrewHeaderText'),
+                saveButtonText: appResources.getResource('NewStationEntryLogView.saveButtonText'),
+                cancelButtonText: appResources.getResource('NewStationEntryLogView.cancelButtonText')
             };
         },
         initialize: function(options) {
@@ -55,6 +55,7 @@ define(function(require) {
             this.listenTo(appEvents, AppEventNamesEnum.userIdFound, this.userIdFound);
             this.listenTo(appEvents, AppEventNamesEnum.userIdLookupError, this.onUserIdLookupError);
             this.listenTo(this.model, 'validated', this.onValidated);
+            this.listenTo(this, 'leave', this.onLeave);
             this.listenTo(this.stationIdentifierCollection, 'reset', this.addAllStationIdentifiers);
             this.listenTo(this.purposeCollection, 'reset', this.addAllPurposes);
             this.listenTo(this.durationCollection, 'reset', this.addAllDurations);
@@ -139,7 +140,7 @@ define(function(require) {
                 event.preventDefault();
             }
 
-            this.changeExpectedOutTime();            
+            this.changeExpectedOutTime();
             this.manualDurationEntry = true;
         },
         changeExpectedOutTime: function() {
@@ -207,10 +208,13 @@ define(function(require) {
         onValidated: function(isValid, model, errors) {
             if (isValid) {
                 this.goToCheckIn();
-            }else{
-                 var message = "One or more fields are invalid, please try again."; 
-                 this.showError(message);
+            } else {
+                var message = "One or more fields are invalid, please try again.";
+                this.showError(message);
             }
+        },
+        onLeave: function() {
+            this.dispatcher.trigger(AppEventNamesEnum.leaveNewStationEntryLogView);
         },
         goToCheckIn: function() {
             var stationEntryLogModelInstance = new StationEntryLogModel(this.model.attributes);
@@ -225,6 +229,7 @@ define(function(require) {
         },
         onCheckInSuccess: function() {
             this.leave();
+            this.dispatcher.trigger(AppEventNamesEnum.leaveNewStationEntryLogView);
         },
         onCheckInError: function(message) {
             this.showError(message);
