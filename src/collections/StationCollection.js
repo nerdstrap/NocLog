@@ -4,8 +4,7 @@ define(function(require) {
     var $ = require('jquery'),
             _ = require('underscore'),
             Backbone = require('backbone'),
-            StationModel = require('models/StationModel'),
-            env = require('env');
+            StationModel = require('models/StationModel');
 
     var StationCollection = Backbone.Collection.extend({
         model: StationModel,
@@ -47,12 +46,6 @@ define(function(require) {
                 }
             }
         ],
-        url: function() {
-            return env.getApiUrl() + '/station';
-        },
-        sync: function(method, model, options) {
-            console.trace('Backbone.sync methods have been disabled.');
-        },
         comparator: function(a, b) {
             var currentContext = this;
             var i, result = 0;
@@ -73,25 +66,6 @@ define(function(require) {
 
             // When the loop is done, or if fields was defined empty, we return the last equality
             return result;
-        },
-        getStations: function(options) {
-            var currentContext = this;
-
-            var data;
-            if (options) {
-                data = $.param({
-                    regionname: options.region,
-                    areaname: options.area
-                });
-            }
-
-            return $.ajax({
-                contentType: 'application/json',
-                data: data,
-                dataType: 'json',
-                type: "GET",
-                url: currentContext.url()
-            });
         }
     });
     return StationCollection;

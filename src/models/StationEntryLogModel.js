@@ -98,6 +98,68 @@ define(function (require) {
                 url: currentContext.url()
             });
         },
+        getStationEntryLogs: function(options) {
+            var currentContext = this;
+
+            var data;
+            if (options) {
+                data = $.param({
+                    stationid: options.stationId,
+                    regionname: options.region,
+                    areaname: options.area,
+                    startdate: options.startDate,
+                    starttime: options.startTime,
+                    enddate: options.endDate,
+                    endtime: options.endTime
+                });
+            }
+
+            return $.ajax({
+                contentType: 'application/json',
+                data: data,
+                dataType: 'json',
+                type: "GET",
+                url: currentContext.url() + '/history'
+            });
+        },
+        getOpenStationEntryLogs: function(options) {
+            var currentContext = this;
+
+            var data;
+            if (options) {
+                data = $.param({
+                    regionname: options.region,
+                    areaname: options.area
+                });
+            }
+
+            return $.ajax({
+                contentType: 'application/json',
+                data: data,
+                dataType: 'json',
+                type: "GET",
+                url: currentContext.url() + '/open'
+            });
+        },
+        getExpiredStationEntryLogs: function(options) {
+            var currentContext = this;
+
+            var data;
+            if (options) {
+                data = $.param({
+                    regionname: options.region,
+                    areaname: options.area
+                });
+            }
+
+            return $.ajax({
+                contentType: 'application/json',
+                data: data,
+                dataType: 'json',
+                type: "GET",
+                url: currentContext.url() + '/expired'
+            });
+        },
         checkIn: function (options) {
             var currentContext = this;
             

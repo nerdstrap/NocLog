@@ -2,11 +2,40 @@ define(function(require) {
     'use strict';
 
     var $ = require('jquery'),
-        _ = require('underscore'),
-        Backbone = require('backbone'),
         env = require('env');
-    
-    var stationEntryLogService = {
+
+    var DashboardService = function(options) {
+        console.trace('new DashboardService()');
+        this.initialize.apply(this, arguments);
+    };
+
+    _.extend(DashboardService.prototype, {
+        initialize: function(options) {
+            console.trace('DashboardService.initialize');
+            options || (options = {});
+        },
+        getStationById: function(id) {
+            return $.ajax({
+                contentType: 'application/json',
+                dataType: 'json',
+                type: 'GET',
+                url: env.getApiUrl() + '/station/' + id
+            });
+        },
+        getStations: function(options) {
+            var data;
+            if (options) {
+                data = JSON.stringify(options);
+            }
+
+            return $.ajax({
+                contentType: 'application/json',
+                data: data,
+                dataType: 'json',
+                type: 'GET',
+                url: env.getApiUrl() + '/station'
+            });
+        },
         getStationEntryLogById: function(id) {
             return $.ajax({
                 contentType: 'application/json',
@@ -57,7 +86,7 @@ define(function(require) {
                 url: env.getApiUrl() + '/stationEntryLog/expired'
             });
         },
-        checkIn: function (options) {
+        postCheckIn: function (options) {
             var data;
             if (options) {
                 data = JSON.stringify(options);
@@ -71,7 +100,7 @@ define(function(require) {
                 url: env.getApiUrl() + '/stationEntryLog/checkIn'
             });
         },
-        checkOut: function (options) {
+        postCheckOut: function (options) {
             var data;
             if (options) {
                 data = JSON.stringify(options);
@@ -85,7 +114,7 @@ define(function(require) {
                 url: env.getApiUrl() + '/stationEntryLog/checkOut'
             });
         },
-        updateCheckIn: function (options) {
+        postUpdateCheckIn: function (options) {
             var data;
             if (options) {
                 data = JSON.stringify(options);
@@ -98,8 +127,35 @@ define(function(require) {
                 type: 'POST',
                 url: env.getApiUrl() + '/stationEntryLog/updateCheckIn'
             });
-        }
-    };
+        },
+        getLookupDataItems: function (options) {
+            var data;
+            if (options) {
+                data = JSON.stringify(options);
+            }
 
-    return stationEntryLogService;
+            return $.ajax({
+                contentType: 'application/json',
+                data: data,
+                dataType: 'json',
+                type: 'GET',
+                url: env.getApiUrl() + '/lookupDataItem'
+            });
+        },
+        getNewStationEntryLogOptions: function (options) {
+            var data;
+            if (options) {
+                data = JSON.stringify(options);
+            }
+
+            return $.ajax({
+                contentType: 'application/json',
+                dataType: 'json',
+                type: 'GET',
+                url: env.getApiUrl() + '/lookupDataItem/newStationEntryLogOptions'
+            });
+        }
+    });
+
+    return DashboardController;
 });
