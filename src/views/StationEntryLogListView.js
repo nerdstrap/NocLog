@@ -9,18 +9,24 @@ define(function(require) {
             NewStationEntryLogView = require('views/NewStationEntryLogView'),
             AppEventNamesEnum = require('enums/AppEventNamesEnum'),
             UserRoleEnum = require('enums/UserRoleEnum'),
+            globals = require('globals'),
+            env = require('env'),
             appEvents = require('events'),
             appResources = require('resources'),
             template = require('hbs!templates/StationEntryLogList'),
             regionListTemplate = require('hbs!templates/RegionList'),
             areaListTemplate = require('hbs!templates/AreaList');
 
-    var checkExpireInterval;
+    var autoRefreshInterval;
 
     var StationEntryLogListView = CompositeView.extend({
         resources: function(culture) {
             return {
                 loadingIconSrc: appResources.getResource('loadingIconSrc'),
+                checkInSucessMessage: appResources.getResource('checkInSucessMessage'),
+                checkInErrorMessage: appResources.getResource('checkInErrorMessage'),
+                checkOutSucessMessage: appResources.getResource('checkOutSucessMessage'),
+                checkOutErrorMessage: appResources.getResource('checkOutErrorMessage'),
                 loadingMessage: appResources.getResource('StationEntryLogListView.loadingMessage'),
                 errorMessage: appResources.getResource('StationEntryLogListView.errorMessage'),
                 infoMessage: appResources.getResource('StationEntryLogListView.infoMessage'),
@@ -53,14 +59,14 @@ define(function(require) {
             this.purposeCollection = options.purposeCollection;
             this.durationCollection = options.durationCollection;
 
-            this.listenTo(this, 'leave', this.onLeave);
-
             this.listenTo(this.collection, 'reset', this.addAll);
             this.listenTo(this.collection, 'sort', this.addAll);
             this.listenTo(this.regionCollection, 'reset', this.addAllRegions);
             this.listenTo(this.areaCollection, 'reset', this.addAllAreas);
 
-            this.listenTo(appEvents, AppEventNamesEnum.leaveNewStationEntryLogView, this.showNewStationEntryLogButton);
+            this.listenTo(this, 'leave', this.onLeave);
+
+            this.listenTo(appEvents, AppEventNamesEnum.closeNewCheckIn, this.checkUserRole);
             this.listenTo(appEvents, AppEventNamesEnum.checkInSuccess, this.onCheckInSuccess);
             this.listenTo(appEvents, AppEventNamesEnum.checkOutSuccess, this.onCheckOutSuccess);
             this.listenTo(appEvents, AppEventNamesEnum.checkOutError, this.onCheckOutError);
@@ -68,14 +74,16 @@ define(function(require) {
         render: function() {
             console.trace('StationEntryLogListView.render()');
             var currentContext = this;
+            
             var renderModel = _.extend({}, currentContext.resources(), currentContext.model);
             currentContext.$el.html(template(renderModel));
-            _.each(this.collection.models, this.addOne, this);
-            this.checkDurationExpiredEveryMinute();
+            
+            currentContext.setAutRefreshInterval();
+            
             return this;
         },
         events: {
-            'click #station-entry-log-list-refresh-list-button': 'refreshStationEntryLogList',
+            'click #station-entry-log-list-refresh-list-button': 'dispatchRefreshStationEntryLogList',
             'click #station-entry-log-list-reset-list-options-button': 'resetStationEntryLogListFilter',
             'click #station-entry-log-list-expected-out-time-sort-button': 'updateStationEntryLogListExpectedOutTimeSort',
             'click #station-entry-log-list-region-sort-button': 'updateStationEntryLogListRegionSort',
@@ -125,7 +133,7 @@ define(function(require) {
             if (event) {
                 event.preventDefault();
             }
-            this.dispatchRefreshStationEntryListEvent();
+            this.refreshStationEntryLogList();
         },
         refreshStationEntryLogList: function() {
             this.showLoading();
@@ -264,25 +272,31 @@ define(function(require) {
             return sortDirection;
         },
         onCheckInSuccess: function() {
-            var msg = 'Check in was successful.',
-                    currentContext = this;
-            this.showInfo(msg);
-            this.showNewStationEntryLogButton();
-            setTimeout(function() {
+            var currentContext = this;
+            this.showInfo(currentContext.resources().checkInSucessMessage);
+            this.checkUserRole();
+            globals.window.setTimeout(function() {
                 currentContext.hideInfo();
-            }, 10000);
+            }, env.getNotificationTimeout());
         },
         onCheckOutSuccess: function() {
-            var msg = 'Check out was successful.',
-                    currentContext = this;
-            this.showInfo(msg);
-            setTimeout(function() {
+            var currentContext = this;
+            this.showInfo(currentContext.resources().checkOutSucessMessage);
+            globals.window.setTimeout(function() {
                 currentContext.hideInfo();
-            }, 10000);
+            }, env.getNotificationTimeout());
+        },
+        setUserRole: function(userRole) {
+            var currentContext = this;
+            currentContext.userRole = userRole;
+            currentContext.checkUserRole();            
         },
         checkUserRole: function() {
-            if (this.userRole === UserRoleEnum.NocAdmin || this.userRole === UserRoleEnum.NocUser) {
-                this.showNewStationEntryLogButton();
+            var currentContext = this;
+            if (currentContext.userRole === UserRoleEnum.NocAdmin || currentContext.userRole === UserRoleEnum.NocUser) {
+                currentContext.showNewStationEntryLogButton();
+            } else {
+                currentContext.hideNewStationEntryLogButton();
             }
         },
         hideNewStationEntryLogButton: function() {
@@ -325,17 +339,16 @@ define(function(require) {
         hideInfo: function() {
             this.$('.list-view-info').addClass('hidden');
         },
-        autRefresh: function() {
+        setAutRefreshInterval: function() {
             var currentContext = this;
-            if (currentContext.autRefresh.timeout) {
-                
-            }
-            checkExpireInterval = setInterval(function() {
+            autoRefreshInterval = globals.window.setInterval(function() {
                 currentContext.refreshStationEntryLogList();
-            }, 60000);
+            }, env.getAutoRefreshInterval());
         },
         onLeave: function() {
-            clearInterval(checkExpireInterval);
+            if (autoRefreshInterval) {
+                globals.window.clearInterval(autoRefreshInterval);
+            }
         }
     });
     return StationEntryLogListView;

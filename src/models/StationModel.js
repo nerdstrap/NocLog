@@ -8,21 +8,6 @@ define(function (require) {
 
     var StationModel = Backbone.Model.extend({
         idAttribute: 'stationId',
-        urlRoot: function () {
-            return env.getApiUrl() + '/station';
-        },
-        sync: function(method, model, options) {
-            console.trace('Backbone.sync methods have been disabled.');
-        },
-        getStationById: function() {
-            var currentContext = this;
-            return $.ajax({
-                contentType: 'application/json',
-                dataType: 'json',
-                type: "GET",
-                url: currentContext.url()
-            });
-        },
         set: function (key, val, options) {
             var attributes;
             if (typeof key === 'object') {

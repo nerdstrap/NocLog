@@ -41,6 +41,7 @@ define(function(require) {
         events: {
             'click .station-name-link': 'goToStationWithId',
             'click .personnel-name-link': 'goToStationEntryLogWithId',
+            'click .station-entry-log-link': 'goToStationEntryLogWithId',
             'click .check-out-link': 'goToCheckOut',
             'click #station-entry-log-collapse-button': 'toggleStationEntryLogRow',
             /*'click .station-entry-log-link': 'goToStationEntryLogWithId'*/

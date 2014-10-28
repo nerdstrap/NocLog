@@ -26,6 +26,10 @@ define(function(require) {
         'checkInButtonText': 'Check-in',
         'checkOutButtonText': 'Check-out',
         'extendDurationButtonText': 'Extend duration',
+        'checkInSucessMessage': 'check-in succes',
+        'checkInErrorMessage': 'check-in error',
+        'checkOutSucessMessage': 'check-out succes',
+        'checkOutErrorMessage': 'check-out error',
         /* station entry log list */
         'StationEntryLogListView.loadingMessage': 'loading station entries',
         'StationEntryLogListView.errorMessage': 'error',
@@ -184,7 +188,29 @@ define(function(require) {
         'NewStationEntryLogView.additionalInfoHeaderText': 'Additional Info',
         'NewStationEntryLogView.hasCrewHeaderText': 'Check-in With Crew?',
         'NewStationEntryLogView.saveButtonText': 'Save',
-        'NewStationEntryLogView.cancelButtonText': 'Cancel'
+        'NewStationEntryLogView.cancelButtonText': 'Cancel',
+        /* new station entry log */
+        'EditStationEntryLogView.viewTitleText': 'Edit Check-in',
+        'EditStationEntryLogView.stationIdDefaultOption': '&#45;&#160;station&#160;&#45;',
+        'EditStationEntryLogView.purposeDefaultOption': '&#45;&#160;purpose&#160;&#45;',
+        'EditStationEntryLogView.durationDefaultOption': '&#45;&#160;duration&#160;&#45;',
+        'EditStationEntryLogView.hasCrewYesOption': '&#45;&#160;yes&#160;&#45;',
+        'EditStationEntryLogView.hasCrewNoOption': '&#45;&#160;no&#160;&#45;',
+        'EditStationEntryLogView.stationIdHeaderText': 'Station Id',
+        'EditStationEntryLogView.userIdHeaderText': 'User Id',
+        'EditStationEntryLogView.firstNameHeaderText': 'First',
+        'EditStationEntryLogView.middleInitialHeaderText': 'MI',
+        'EditStationEntryLogView.lastNameHeaderText': 'Last',
+        'EditStationEntryLogView.contactNumberHeaderText': 'Mobile&#160;&#35;',
+        'EditStationEntryLogView.emailHeaderText': 'E-mail',
+        'EditStationEntryLogView.purposeHeaderText': 'Purpose',
+        'EditStationEntryLogView.durationHeaderText': 'Duration',
+        'EditStationEntryLogView.expectedOutTimeHeaderText': 'Est. Check-out',
+        'EditStationEntryLogView.purposeOtherHeaderText': 'Other',
+        'EditStationEntryLogView.additionalInfoHeaderText': 'Additional Info',
+        'EditStationEntryLogView.hasCrewHeaderText': 'Check-in With Crew?',
+        'EditStationEntryLogView.saveButtonText': 'Save',
+        'EditStationEntryLogView.cancelButtonText': 'Cancel'
     };
     
     var defaultResource = '';

@@ -1,82 +1,145 @@
 <div class="station-entry-log-view">
-    <div class="row collapse">
-        <div class="small-2 columns">
-            <span>{{{stationNameHeaderText}}}</span>
+    <fieldset class="edit-station-entry-log-view">
+        <legend>Edit Check-In</legend>
+
+        <div class="row collapse">
+            <div class="error view-error hidden">
+                <span class="text-detail">{{errorMessage}}</span>
+            </div>
+            <div class="small-1 large-1 columns">
+                <label for="edit-station-entry-log-user-id">{{{userIdHeaderText}}}
+                </label>
+            </div>
+            <div class="small-2 large-4 columns">
+                <input id="edit-station-entry-log-user-id" name="userId" placeholder="{{{userIdHeaderText}}}" />
+                <a id="edit-station-entry-log-user-id-search-button">lookup</a>
+            </div>
+            <div class="small-1 large-1 columns">
+                &nbsp;
+            </div>
+            <div class="small-2 large-2 columns">
+                <input disabled id="edit-station-entry-log-first-name" name="firstName" placeholder="{{{firstNameHeaderText}}}" />
+            </div>
+            <div class="small-2 large-2 columns">
+                <input disabled id="edit-station-entry-log-middle-initial" name="middleInitial" placeholder="{{{middleInitialHeaderText}}}" />
+            </div>
+            <div class="small-2 large-2 columns">
+                <input disabled id="edit-station-entry-log-last-name" name="lastName" placeholder="{{{lastNameHeaderText}}}" />
+            </div>
         </div>
-        <div class="small-10 columns">
-            <h1 data-stationid="{{stationId}}">{{stationName}}</h1>
+        <div class="row collapse">
+            <div class="small-1 large-1 columns">
+                <label for="edit-station-entry-log-contact-number">{{{contactNumberHeaderText}}}
+                </label>
+            </div>
+            <div class="small-2 large-2 columns">
+                <input id="edit-station-entry-log-contact-number" name="contactNumber" placeholder="{{{contactNumberHeaderText}}}" value="{{formatPhoneWithDefault contact "%D %r" "&nbsp;"}}" />
+            </div>
+            <div class="small-3 large-3 columns">
+                &nbsp;
+            </div>
+            <div class="small-3 large-3 columns">
+                <input disabled id="edit-station-entry-log-email" name="email" placeholder="{{{emailHeaderText}}}" />
+            </div>
+            <div class="small-3 large-3 columns">
+                &nbsp;
+            </div>
         </div>
-    </div>
-    <div class="row collapse">
-        <div class="small-2 columns">
-            <span>{{{personnelNameHeaderText}}}</span>
+        <div class="row collapse">
+            <div class="small-1 large-1 columns">
+                <label for="edit-station-entry-log-station-id">{{{stationIdHeaderText}}}
+                </label>
+            </div>
+            <div class="small-11 large-11 columns">
+                <select id="edit-station-entry-log-station-id" name="stationId">
+                    <option disabled="disabled" selected="selected" value="">{{{stationName}}}</option>
+                </select>
+            </div>
         </div>
-        <div class="small-10 columns">
-            <h1 data-personnelid="{{outsideId}}">{{userName}}</h1>
+        <div class="row collapse">
+            <div class="small-1 large-1 columns">
+                <label for="edit-station-entry-log-purpose">{{{purposeHeaderText}}}
+                </label>
+            </div>
+            <div class="small-2 large-2 columns">
+                <select id="edit-station-entry-log-purpose" name="purpose" >
+                    <option disabled="disabled" selected="selected" value="">{{{withDefault purpose "&nbsp;"}}}</option>
+                </select>
+            </div>
+            <div class="small-1 large-1 columns">
+                <label for="edit-station-entry-log-duration">{{{durationHeaderText}}}
+                </label>
+            </div>
+            <div class="small-2 large-2 columns">
+                <select id="edit-station-entry-log-duration" name="duration">
+                    <option disabled="disabled" selected="selected" value="">{{{withDefault duration "&nbsp;"}}}</option>
+                </select>
+            </div>
+            <div class="small-1 large-1 columns">
+                <label for="edit-station-entry-log-expected-out-time">{{{expectedOutTimeHeaderText}}}
+                </label>
+            </div>
+            <div class="small-2 large-2 columns">
+                <span id="edit-station-entry-log-expected-out-time">{{{expectedOutTimeHeaderText}}}</span>
+            </div>
+            <div class="small-3 large-3 columns">
+                &nbsp;
+            </div>
         </div>
-    </div>
-    <div class="row collapse">
-        <div class="small-2 columns">
-            <span>{{{contactHeaderText}}}</span>
+        <div id="edit-station-entry-log-purpose-other-container" class="hidden">
+            <div class="row collapse">
+                <div class="large-1 columns">
+                    <label for="edit-station-entry-log-purpose-other">{{{purposeOtherHeaderText}}}
+                    </label>
+                </div>
+                <div class="large-11 columns">
+                    <textarea id="edit-station-entry-log-purpose-other" name="purposeOther" placeholder="{{{purposeOtherHeaderText}}}" rows="2"></textarea>
+                </div>
+            </div>
         </div>
-        <div class="small-10 columns">
-            <span>{{formatPhoneWithDefault contact "%D %r" "&nbsp;"}}</span>
+        <div class="row collapse">
+            <div class="small-1 large-1 columns">
+                <label for="edit-station-entry-log-additional-info">{{{additionalInfoHeaderText}}}
+                </label>
+            </div>
+            <div class="small-5 large-5 columns">
+                <textarea id="edit-station-entry-log-additional-info" name="additionalInfo" placeholder="{{{withDefault additionalInfo "&nbsp;"}}}" rows="2" ></textarea>
+            </div>
+            <div class="small-1 large-1 columns">
+                <label for="edit-station-entry-log-station-has-crew">{{{hasCrewHeaderText}}}
+                </label>
+            </div>
+            <div class="small-5 large-5 columns">
+                <select id="edit-station-entry-log-has-crew">
+                    <option selected="selected" value="false" name="hasCrew" >{{{hasCrewNoOption}}}</option>
+                    <option value="true">{{{hasCrewYesOption}}}</option>
+                </select>
+            </div>
         </div>
-    </div>
-    <div class="row collapse">
-        <div class="small-2 columns">
-            <span>{{{inTimeHeaderText}}}</span>
+        <div class="row collapse">
+            <div class="large-6 columns">
+                &nbsp;
+            </div>
+            <div class="large-6 columns">
+                <a id="edit-station-entry-log-save-button" class="button">{{{saveButtonText}}}</a>
+                <a id="edit-station-entry-log-cancel-button" class="button secondary">{{{cancelButtonText}}}</a>
+            </div>
         </div>
-        <div class="small-10 columns">
-            <span>{{formatDateWithDefault inTime "%D %r" "&nbsp;"}}</span>
-        </div>
-    </div>
-    <div class="row collapse">
-        <div class="small-2 columns">
-            <span>{{{durationHeaderText}}}</span>
-        </div>
-        <div class="small-10 columns">
-            <span>{{withDefault duration "&nbsp;"}}</span>
-        </div>
-    </div>
-    <div class="row collapse">
-        <div class="small-2 columns">
-            <span>{{{outTimeHeaderText}}}</span>
-        </div>
-        <div class="small-10 columns">
-            <span>{{formatDateWithDefault outTime "%D %r" "&nbsp;"}}</span>
-        </div>
-    </div>
-    <div class="row collapse">
-        <div class="small-2 columns">
-            <span>{{{purposeHeaderText}}}</span>
-        </div>
-        <div class="small-10 columns">
-            <span>{{withDefault purpose "&nbsp;"}}</span>
-        </div>
-    </div>
-    <div class="row collapse">
-        <div class="small-2 columns">
-            <span>{{{additionalInfoHeaderText}}}</span>
-        </div>
-        <div class="small-10 columns">
-            <span>{{withDefault additionalInfo "&nbsp;"}}</span>
-        </div>
-    </div>
-    <div class="row collapse">
-        <div class="small-2 columns">
-            <span>{{{regionHeaderText}}}</span>
-        </div>
-        <div class="small-10 columns">
-            <span>{{withDefault region "&nbsp;"}}</span>
-        </div>
-    </div>
-    <div class="row collapse">
-        <div class="small-2 columns">
-            <span>{{{areaHeaderText}}}</span>
-        </div>
-        <div class="small-10 columns">
-            <span>{{withDefault area "&nbsp;"}}</span>
-        </div>
-    </div>
+
+    </fieldset>
+    
+    <!-- BREAK -->
+    <hr>
+    <div><h2>Fields Displayed Previously</h2></div>
+    <div><h3>{{{stationNameHeaderText}}}: {{stationName}}</h3></div>
+    <div><h3>{{{personnelNameHeaderText}}}: {{userName}}</h3></div>
+    <div><b>{{{contactHeaderText}}}:</b> {{formatPhoneWithDefault contact "%D %r" "&nbsp;"}}</div>
+    <div><b>{{{inTimeHeaderText}}}:</b> {{formatDateWithDefault inTime "%D %r" "&nbsp;"}}</div>
+    <div><b>{{{durationHeaderText}}}:</b> {{withDefault duration "&nbsp;"}}</div>
+    <div><b>{{{outTimeHeaderText}}}:</b> {{formatDateWithDefault outTime "%D %r" "&nbsp;"}}</div>
+    <div><b>{{{purposeHeaderText}}}:</b> {{withDefault purpose "&nbsp;"}}</div>
+    <div><b>{{{additionalInfoHeaderText}}}:</b> {{withDefault additionalInfo "&nbsp;"}}</div>
+    <div><b>{{{regionHeaderText}}}:</b> {{withDefault region "&nbsp;"}}</div>
+    <div><b>{{{areaHeaderText}}}:</b> {{withDefault area "&nbsp;"}}</div>
+
 </div>

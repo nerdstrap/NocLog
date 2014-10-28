@@ -50,28 +50,36 @@ define(function(require) {
             this.stationIdentifierCollection = options.stationIdentifierCollection;
             this.purposeCollection = options.purposeCollection;
             this.durationCollection = options.durationCollection;
+
+            this.listenTo(this.model, 'validated', this.onValidated);
+            this.listenTo(this.stationIdentifierCollection, 'reset', this.addAllStationIdentifiers);
+            this.listenTo(this.purposeCollection, 'reset', this.addAllPurposes);
+            this.listenTo(this.durationCollection, 'reset', this.addAllDurations);
+
+            this.listenTo(this, 'leave', this.onLeave);
+
             this.listenTo(appEvents, AppEventNamesEnum.checkInSuccess, this.onCheckInSuccess);
             this.listenTo(appEvents, AppEventNamesEnum.checkInError, this.onCheckInError);
             this.listenTo(appEvents, AppEventNamesEnum.userIdFound, this.userIdFound);
             this.listenTo(appEvents, AppEventNamesEnum.userIdLookupError, this.onUserIdLookupError);
-            this.listenTo(this.model, 'validated', this.onValidated);
-            this.listenTo(this, 'leave', this.onLeave);
-            this.listenTo(this.stationIdentifierCollection, 'reset', this.addAllStationIdentifiers);
-            this.listenTo(this.purposeCollection, 'reset', this.addAllPurposes);
-            this.listenTo(this.durationCollection, 'reset', this.addAllDurations);
         },
         render: function() {
             console.trace('NewStationEntryLog.render()');
             var currentContext = this;
+
             validation.unbind(currentContext);
+
             var renderModel = _.extend({}, currentContext.resources(), currentContext.model.attributes);
             currentContext.$el.html(template(renderModel));
+
             currentContext.addAllStationIdentifiers();
             currentContext.addAllPurposes();
             currentContext.addAllDurations();
+
             validation.bind(this, {
                 selector: 'name'
             });
+
             return this;
         },
         addAllStationIdentifiers: function() {
@@ -178,9 +186,8 @@ define(function(require) {
             if (this.$('#new-station-entry-log-purpose').prop('selectedIndex') === 0) {
                 purpose = '';
             }
-            var purposeOther;
             if (purpose === 'Other') {
-                purposeOther = this.$('#new-station-entry-log-purpose-other').val();
+                purpose = this.$('#new-station-entry-log-purpose-other').val();
             }
 
             var duration = $('#new-station-entry-log-duration').val();
@@ -194,7 +201,6 @@ define(function(require) {
                 lastName: lastName,
                 middleInitial: middleInitial,
                 purpose: purpose,
-                purposeOther: purposeOther,
                 contactNumber: cleanedContactNumber,
                 email: email,
                 stationId: stationId,
@@ -224,12 +230,12 @@ define(function(require) {
             if (event) {
                 event.preventDefault();
             }
-            this.dispatcher.trigger(AppEventNamesEnum.cancelCheckIn);
+            this.dispatcher.trigger(AppEventNamesEnum.closeNewCheckIn);
             this.leave();
         },
         onCheckInSuccess: function() {
+            this.dispatcher.trigger(AppEventNamesEnum.closeNewCheckIn);
             this.leave();
-            this.dispatcher.trigger(AppEventNamesEnum.leaveNewStationEntryLogView);
         },
         onCheckInError: function(message) {
             this.showError(message);
@@ -238,9 +244,7 @@ define(function(require) {
             this.showError(message);
         },
         showError: function(message) {
-            if (message) {
-                this.$('.view-error .text-detail').html(message);
-            }
+            this.$('.view-error .text-detail').html(message);
             this.$('.view-error').removeClass('hidden');
         },
         hideError: function() {

@@ -32,6 +32,7 @@ define(function(require) {
      */
     var DashboardController = function(options) {
         console.trace('new DashboardController()');
+        options || (options = {});
         this.initialize.apply(this, arguments);
     };
 
@@ -107,8 +108,7 @@ define(function(require) {
 
             stationEntryLogListViewInstance.showLoading();
             $.when(currentContext.dashboardService.getStationEntryLogsByOpen()).done(function(getStationEntryLogsResponse) {
-                stationEntryLogListViewInstance.userRole = getStationEntryLogsResponse.userRole;
-                stationEntryLogListViewInstance.checkUserRole();
+                stationEntryLogListViewInstance.setUserRole(getStationEntryLogsResponse.userRole);
                 currentContext.stationEntryLogSearchResults.reset(getStationEntryLogsResponse.stationEntryLogs);
                 currentContext.stationIdentifierResults.reset(getStationEntryLogsResponse.stationIdentifiers);
                 currentContext.regionResults.reset(getStationEntryLogsResponse.regions);

@@ -5,7 +5,8 @@ define(function(require) {
         globals = require('globals'),
         masterConfig = module.config(),
         apiUrl = masterConfig.apiUrl || '',
-        siteRoot = masterConfig.siteRoot || '';
+        siteRoot = masterConfig.siteRoot || '',
+        autoRefreshInterval = masterConfig.getAutoRefreshInterval || 60000;
 
     var env = {
         getApiUrl: function() {
@@ -13,6 +14,9 @@ define(function(require) {
         },
         getSiteRoot: function() {
             return siteRoot;
+        },
+        getAutoRefreshInterval: function() {
+            return autoRefreshInterval;
         }
     };
     return env;

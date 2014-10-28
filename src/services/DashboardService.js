@@ -6,6 +6,7 @@ define(function(require) {
 
     var DashboardService = function(options) {
         console.trace('new DashboardService()');
+        options || (options = {});
         this.initialize.apply(this, arguments);
     };
 
@@ -157,5 +158,5 @@ define(function(require) {
         }
     });
 
-    return DashboardController;
+    return DashboardService;
 });
