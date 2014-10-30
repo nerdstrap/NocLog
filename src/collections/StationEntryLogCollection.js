@@ -4,9 +4,7 @@ define(function(require) {
     var $ = require('jquery'),
             _ = require('underscore'),
             Backbone = require('backbone'),
-            StationEntryLogModel = require('models/StationEntryLogModel'),
-            env = require('env'),
-            dates = require('dates');
+            StationEntryLogModel = require('models/StationEntryLogModel');
 
     var StationEntryLogCollection = Backbone.Collection.extend({
         model: StationEntryLogModel,
@@ -50,12 +48,6 @@ define(function(require) {
                 }
             }
         ],
-        url: function() {
-            return env.getApiUrl() + '/stationEntryLog';
-        },
-        sync: function(method, model, options) {
-            console.trace('Backbone.sync methods have been disabled.');
-        },
         comparator: function(a, b) {
             var currentContext = this;
             var i, result = 0;
@@ -74,78 +66,6 @@ define(function(require) {
 
             // When the loop is done, or if fields was defined empty, we return the last equality
             return result;
-        },
-//        getAllStationEntryLogs: function() {
-//            var currentContext = this;
-//
-//            return $.ajax({
-//                contentType: 'application/json',
-//                dataType: 'json',
-//                type: "GET",
-//                url: currentContext.url()
-//            });
-//        },
-        getStationEntryLogsByHistory: function(options) {
-            var currentContext = this;
-
-            var data;
-            if (options) {
-                data = $.param({
-                    stationid: options.stationId,
-                    regionname: options.region,
-                    areaname: options.area,
-                    startdate: options.startDate,
-                    starttime: options.startTime,
-                    enddate: options.endDate,
-                    endtime: options.endTime
-                });
-            }
-
-            return $.ajax({
-                contentType: 'application/json',
-                data: data,
-                dataType: 'json',
-                type: "GET",
-                url: currentContext.url() + '/history'
-            });
-        },
-        getStationEntryLogsByOpen: function(options) {
-            var currentContext = this;
-
-            var data;
-            if (options) {
-                data = $.param({
-                    regionname: options.region,
-                    areaname: options.area
-                });
-            }
-
-            return $.ajax({
-                contentType: 'application/json',
-                data: data,
-                dataType: 'json',
-                type: "GET",
-                url: currentContext.url() + '/open'
-            });
-        },
-        getStationEntryLogsByExpired: function(options) {
-            var currentContext = this;
-
-            var data;
-            if (options) {
-                data = $.param({
-                    regionname: options.region,
-                    areaname: options.area
-                });
-            }
-
-            return $.ajax({
-                contentType: 'application/json',
-                data: data,
-                dataType: 'json',
-                type: "GET",
-                url: currentContext.url() + '/expired'
-            });
         }
     });
 

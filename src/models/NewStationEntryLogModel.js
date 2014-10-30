@@ -3,24 +3,24 @@ define(function(require) {
 
     var $ = require('jquery'),
             _ = require('underscore'),
-            Backbone = require('backbone'),
-            validation = require('backbone.validation'),
-            env = require('env'),
-            utils = require('utils');
+            Backbone = require('backbone');
 
     var NewStationEntryLogModel = Backbone.Model.extend({
         idAttribute: 'stationEntryLogId',
         validation: {
             userId: {
-                required: true,
-                minLength: 1
+                required: function() {
+                    return (this.get('thirdParty') !== true);
+                }
+            },
+            companyName: {
+                required: function() {
+                    return (this.get('thirdParty') === true);
+                }
             },
             firstName: {
                 required: true
             },
-//            middleInitial: {
-//                required: true
-//            },
             lastName: {
                 required: true
             },
@@ -53,9 +53,6 @@ define(function(require) {
                     return (this.get('purpose') === 'Other');
                 }
             }
-        },
-        sync: function(method, model, options) {
-            console.trace('Backbone.sync methods have been disabled.');
         }
     });
 

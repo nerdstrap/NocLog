@@ -133,8 +133,8 @@ define(function(require) {
 
             var options = {
                 stationId: stationId,
-                region: region,
-                area: area,
+                regionName: region,
+                areaName: area,
                 startDate: startDate,
                 startTime: startTime,
                 endDate: endDate,

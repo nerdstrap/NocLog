@@ -1,16 +1,38 @@
 <fieldset class="new-station-entry-log-view">
     <legend>{{{viewTitleText}}}</legend>
     <div class="row collapse">
+        <div class="small-2 large-2 columns">
+            <label for="new-station-entry-log-third-party">{{{thirdPartyHeaderText}}}</label>
+        </div>
+        <div class="small-1 large-1 columns">
+            <input id="new-station-entry-log-third-party-indicator" type="checkbox" name="thirdParty" class="left" />
+        </div>
+        <div class="small-9 large-9 columns">
+            &nbsp;
+        </div>
+    </div>
+    <div class="row collapse">
         <div class="error view-error hidden">
             <span class="text-detail">{{errorMessage}}</span>
         </div>
         <div class="small-1 large-1 columns">
-            <label for="new-station-entry-log-user-id">{{{userIdHeaderText}}}
-            </label>
+            <div id="user-label-container">
+                <label for="new-station-entry-log-user-id">{{{userIdHeaderText}}}
+                </label>
+            </div>
+            <div id="third-party-user-label-container" class="hidden">
+                <label for="new-station-entry-log-company-name">{{{companyNameHeaderText}}}
+                </label>
+            </div>
         </div>
         <div class="small-2 large-4 columns">
-            <input id="new-station-entry-log-user-id" name="userId" placeholder="{{{userIdHeaderText}}}" />
-            <a id="new-station-entry-log-user-id-search-button">lookup</a>
+            <div id="user-container">
+                <input id="new-station-entry-log-user-id" name="userId" placeholder="{{{userIdHeaderText}}}" />
+                <a id="new-station-entry-log-user-id-search-button">lookup</a>
+            </div>
+            <div id="third-party-user-container" class="hidden">
+                <input id="new-station-entry-log-company-name" name="companyName" placeholder="{{{companyNameHeaderText}}}" />
+            </div>
         </div>
         <div class="small-1 large-1 columns">
             &nbsp;

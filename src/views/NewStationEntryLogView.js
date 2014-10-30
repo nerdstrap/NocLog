@@ -21,6 +21,7 @@ define(function(require) {
         resources: function(culture) {
             return {
                 viewTitleText: appResources.getResource('NewStationEntryLogView.viewTitleText'),
+                thirdPartyHeaderText: appResources.getResource('NewStationEntryLogView.thirdPartyHeaderText'),
                 stationIdDefaultOption: appResources.getResource('NewStationEntryLogView.stationIdDefaultOption'),
                 purposeDefaultOption: appResources.getResource('NewStationEntryLogView.purposeDefaultOption'),
                 durationDefaultOption: appResources.getResource('NewStationEntryLogView.durationDefaultOption'),
@@ -28,6 +29,7 @@ define(function(require) {
                 hasCrewNoOption: appResources.getResource('NewStationEntryLogView.hasCrewNoOption'),
                 stationIdHeaderText: appResources.getResource('NewStationEntryLogView.stationIdHeaderText'),
                 userIdHeaderText: appResources.getResource('NewStationEntryLogView.userIdHeaderText'),
+                companyNameHeaderText: appResources.getResource('NewStationEntryLogView.companyNameHeaderText'),
                 firstNameHeaderText: appResources.getResource('NewStationEntryLogView.firstNameHeaderText'),
                 middleInitialHeaderText: appResources.getResource('NewStationEntryLogView.middleInitialHeaderText'),
                 lastNameHeaderText: appResources.getResource('NewStationEntryLogView.lastNameHeaderText'),
@@ -71,7 +73,7 @@ define(function(require) {
 
             var renderModel = _.extend({}, currentContext.resources(), currentContext.model.attributes);
             currentContext.$el.html(template(renderModel));
-
+            
             currentContext.addAllStationIdentifiers();
             currentContext.addAllPurposes();
             currentContext.addAllDurations();
@@ -107,11 +109,47 @@ define(function(require) {
             this.$('#new-station-entry-log-duration').html(durationListTemplate(durationListRenderModel));
         },
         events: {
+            'change #new-station-entry-log-third-party-indicator': 'changeCheckInType',
             'click #new-station-entry-log-user-id-search-button': 'goToLookupUserId',
             'click #new-station-entry-log-save-button': 'validateAndSubmitCheckIn',
             'click #new-station-entry-log-cancel-button': 'cancelCheckIn',
             'change #new-station-entry-log-purpose': 'purposeChanged',
             'change #new-station-entry-log-duration': 'durationChanged'
+        },
+        changeCheckInType: function(event) {
+            if (event) {
+                event.preventDefault();
+            }
+            var thirdPartyCheckIn = this.$('#new-station-entry-log-third-party-indicator').is(':checked');
+            if (thirdPartyCheckIn) {
+                this.$('#user-label-container').addClass('hidden');
+                this.$('#user-container').addClass('hidden');
+                this.$('#third-party-user-container').removeClass('hidden');
+                this.$('#third-party-user-label-container').removeClass('hidden');
+                
+                this.$('#new-station-entry-log-user-id').val('').prop('disabled', true);
+                this.$('#new-station-entry-log-company-name').val('').prop('disabled', false);
+                
+                this.$('#new-station-entry-log-first-name').val('').prop('disabled', false);
+                this.$('#new-station-entry-log-middle-initial').val('').prop('disabled', false);
+                this.$('#new-station-entry-log-last-name').val('').prop('disabled', false);
+                this.$('#new-station-entry-log-email').val('').prop('disabled', false);
+                this.$('#new-station-entry-log-contact-number').val('').prop('disabled', false);
+            } else {
+                this.$('#user-container').removeClass('hidden');
+                this.$('#user-label-container').removeClass('hidden');
+                this.$('#third-party-user-container').addClass('hidden');
+                this.$('#third-party-user-label-container').addClass('hidden');
+                
+                this.$('#new-station-entry-log-user-id').val('').prop('disabled', false);
+                this.$('#new-station-entry-log-company-name').val('').prop('disabled', true);
+                
+                this.$('#new-station-entry-log-first-name').val('').prop('disabled', true);
+                this.$('#new-station-entry-log-middle-initial').val('').prop('disabled', true);
+                this.$('#new-station-entry-log-last-name').val('').prop('disabled', true);
+                this.$('#new-station-entry-log-email').val('').prop('disabled', true);
+                this.$('#new-station-entry-log-contact-number').val('').prop('disabled', true);
+            }
         },
         goToLookupUserId: function(event) {
             if (event) {
@@ -174,7 +212,9 @@ define(function(require) {
             this.model.validate();
         },
         getStationEntryModelFromView: function() {
+            var thirdParty = this.$('#new-station-entry-log-third-party-indicator').is(':checked');
             var userId = this.$('#new-station-entry-log-user-id').val();
+            var companyName = this.$('#new-station-entry-log-company-name').val();
             var firstName = this.$('#new-station-entry-log-first-name').val();
             var middleInitial = this.$('#new-station-entry-log-middle-initial').val();
             var lastName = this.$('#new-station-entry-log-last-name').val();
@@ -196,7 +236,9 @@ define(function(require) {
             var dispatchCenterId = '777';
             var stationType = 'TC';
             this.model.set({
+                thirdParty: thirdParty,
                 userId: userId,
+                companyName: companyName,
                 firstName: firstName,
                 lastName: lastName,
                 middleInitial: middleInitial,
@@ -224,6 +266,7 @@ define(function(require) {
         },
         goToCheckIn: function() {
             var stationEntryLogModelInstance = new StationEntryLogModel(this.model.attributes);
+            stationEntryLogModelInstance.unset('thirdParty');
             this.dispatcher.trigger(AppEventNamesEnum.goToCheckIn, stationEntryLogModelInstance);
         },
         cancelCheckIn: function(event) {

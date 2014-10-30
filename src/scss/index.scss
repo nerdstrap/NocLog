@@ -185,7 +185,7 @@ span.detail {
 }
 
 #station-entry-log-collapse-button,
-.row-button {
+.elevated-functions-toggle {
     color: #008cba;
     font-size: 1.2em;
     line-height: 1.2em;
@@ -209,10 +209,10 @@ span.detail {
     border: 1px solid #c22222;
 }
 
-.minExpired {
+.checkOutExpired {
     background-color: #ffffcc;
 }
 
-.maxExpired {
+.checkOutOverdue {
     background-color: #ffcccc;
 }

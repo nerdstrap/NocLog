@@ -26,22 +26,16 @@
         </div>
         <div class="small-1 columns">
             <span>{{withDefault area "&nbsp;"}}</span>
-            <span id="station-entry-log-collapse-button" class="collapse row-button hidden">
-                    <i id="station-entry-log-hide-row-icon" class="fa fa-angle-double-up"></i>
-                    <i id="station-entry-log-show-row-icon" class="fa fa-angle-double-down hidden"></i>
+            <span class="collapse elevated-functions-toggle hidden">
+                <i class="fa fa-angle-double-up hide-container-icon"></i>
+                <i class="fa fa-angle-double-down show-container-icon hidden"></i>
             </span>
         </div>
-        <!--
-        <div class="small-1 columns">
-            <a class="station-entry-log-link" data-stationentrylogid="{{stationEntryLogId}}">{{{checkOutButtonText}}}</a>
-        </div>
-        -->
-
     </div>
-    <div id="station-entry-log-check-out-row" class="row collapse hidden">
-        <div class="small-2 columns large-offset-11">
-            <a class="station-entry-log-link button tiny">Edit</a>
-            <a class="check-out-link button tiny alert">Check Out</a>
+    <div class="row collapse elevated-functions-container hidden">
+        <div class="small-2 columns large-offset-10">
+            <a class="station-entry-log-link button tiny">{{{editCheckInButtonText}}}</a>
+            <a class="check-out-link button tiny alert">{{{checkOutButtonText}}}</a>
         </div>
     </div>
 </div>

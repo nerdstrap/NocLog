@@ -1,7 +1,8 @@
-define(function (require) {
+define(function(require) {
     'use strict';
 
-    var $ = require('jquery'),
+    var module = require('module'),
+            $ = require('jquery'),
             _ = require('underscore'),
             Backbone = require('backbone'),
             env = require('env'),
@@ -9,19 +10,7 @@ define(function (require) {
 
     var StationEntryModel = Backbone.Model.extend({
         idAttribute: 'stationEntryLogId',
-        getDefaultsForRendering: function() {
-            return {
-                'minExpired': false,
-                'maxExpired': false
-            };
-        },
-        urlRoot: function () {
-            return env.getApiUrl() + '/stationEntryLog';
-        },
-        sync: function(method, model, options) {
-            console.trace('Backbone.sync methods have been disabled.');
-        },
-        set: function (key, val, options) {
+        set: function(key, val, options) {
             var attributes;
             if (typeof key === 'object') {
                 attributes = key;
@@ -39,7 +28,7 @@ define(function (require) {
                         inTimeParsed = true;
                     }
                 }
-                
+
                 if (attributes.hasOwnProperty('duration')) {
                     var duration = attributes.duration;
                     if (duration && !isNaN(duration)) {
@@ -47,39 +36,45 @@ define(function (require) {
                         durationParsed = true;
                     }
                 }
-                
+
                 if (inTimeParsed && durationParsed) {
                     attributes.expectedOutTime = utils.addMinutes(attributes.inTime, attributes.duration);
-                    var expiredInSeconds = (new Date() - attributes.expectedOutTime)/1000;
-                    if (expiredInSeconds > 0 && expiredInSeconds < 1800){
-                        attributes.minExpired = true;
-                    }else if(expiredInSeconds >= 1800){
-                        attributes.maxExpired = true;
-                    }
                 }
-                    
+
+                var checkedOut = false;
                 if (attributes.hasOwnProperty('outTime')) {
                     var outTime = attributes.outTime;
                     if (outTime && !isNaN(outTime)) {
                         attributes.outTime = new Date(outTime);
-                        attributes.checkedOut = true;
+                        checkedOut = true;
                     }
                 }
-                
+                attributes.checkedOut = checkedOut;
+
+                if (checkedOut === false && attributes.expectedOutTime) {
+                    var expectedOutTimeElapsed = new Date() - attributes.expectedOutTime;
+                    if (expectedOutTimeElapsed > 0) {
+                        attributes.checkOutExpired = true;
+                        if (expectedOutTimeElapsed >= env.getExpirationThreshold()) {
+                            attributes.checkOutOverdue = true;
+                        }
+                    }
+                }
+
                 if (attributes.hasOwnProperty('latitude')) {
                     var latitude = attributes.latitude;
                     if (latitude && !isNaN(latitude)) {
                         attributes.latitude = Number(latitude);
                     }
                 }
-                
+
                 if (attributes.hasOwnProperty('longitude')) {
                     var longitude = attributes.longitude;
                     if (longitude && !isNaN(longitude)) {
                         attributes.longitude = Number(longitude);
                     }
                 }
-                
+
                 if (attributes.hasOwnProperty('distanceInMiles')) {
                     var distanceInMiles = attributes.distanceInMiles;
                     if (distanceInMiles && !isNaN(distanceInMiles)) {
@@ -88,110 +83,6 @@ define(function (require) {
                 }
             }
             return Backbone.Model.prototype.set.call(this, attributes, options);
-        },
-        getStationEntryLogById: function() {
-            var currentContext = this;
-            return $.ajax({
-                contentType: 'application/json',
-                dataType: 'json',
-                type: "GET",
-                url: currentContext.url()
-            });
-        },
-        getStationEntryLogs: function(options) {
-            var currentContext = this;
-
-            var data;
-            if (options) {
-                data = $.param({
-                    stationid: options.stationId,
-                    regionname: options.region,
-                    areaname: options.area,
-                    startdate: options.startDate,
-                    starttime: options.startTime,
-                    enddate: options.endDate,
-                    endtime: options.endTime
-                });
-            }
-
-            return $.ajax({
-                contentType: 'application/json',
-                data: data,
-                dataType: 'json',
-                type: "GET",
-                url: currentContext.url() + '/history'
-            });
-        },
-        getOpenStationEntryLogs: function(options) {
-            var currentContext = this;
-
-            var data;
-            if (options) {
-                data = $.param({
-                    regionname: options.region,
-                    areaname: options.area
-                });
-            }
-
-            return $.ajax({
-                contentType: 'application/json',
-                data: data,
-                dataType: 'json',
-                type: "GET",
-                url: currentContext.url() + '/open'
-            });
-        },
-        getExpiredStationEntryLogs: function(options) {
-            var currentContext = this;
-
-            var data;
-            if (options) {
-                data = $.param({
-                    regionname: options.region,
-                    areaname: options.area
-                });
-            }
-
-            return $.ajax({
-                contentType: 'application/json',
-                data: data,
-                dataType: 'json',
-                type: "GET",
-                url: currentContext.url() + '/expired'
-            });
-        },
-        checkIn: function (options) {
-            var currentContext = this;
-            
-            return $.ajax({
-                contentType: 'application/json',
-                data: JSON.stringify(options),
-                dataType: 'json',
-                type: "POST",
-                url: currentContext.url() + '/checkIn'
-            });
-        },
-        checkOut: function (options) {
-            var currentContext = this;
-            
-            return $.ajax({
-                contentType: 'application/json',
-                data: JSON.stringify({stationEntryLogId: options.stationEntryLogId}),
-                dataType: 'json',
-                type: "PUT",
-                url: currentContext.url() + '/checkOut'
-            });
-        },
-        updateCheckIn: function (options) {
-            var currentContext = this;
-            
-            return $.ajax({
-                contentType: 'application/json',
-                data: JSON.stringify(options),
-                dataType: 'json',
-                type: "PUT",
-                url: currentContext.url() + '/updateCheckIn'
-            });
         }
     });
 

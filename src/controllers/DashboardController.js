@@ -2,28 +2,28 @@ define(function(require) {
     'use strict';
 
     var $ = require('jquery'),
-        _ = require('underscore'),
-        Backbone = require('backbone'),
-        DashboardService = require('services/DashboardService'),
-        StationEntryLogListView = require('views/StationEntryLogListView'),
-        StationEntryLogHistoryListView = require('views/StationEntryLogHistoryListView'),
-        StationListView = require('views/StationListView'),
-        PersonnelListView = require('views/PersonnelListView'),
-        StationEntryLogView = require('views/StationEntryLogView'),
-        StationView = require('views/StationView'),
-        PersonnelView = require('views/PersonnelView'),
-        StationEntryLogModel = require('models/StationEntryLogModel'),
-        StationModel = require('models/StationModel'),
-        PersonnelModel = require('models/PersonnelModel'),
-        StationEntryLogCollection = require('collections/StationEntryLogCollection'),
-        StationCollection = require('collections/StationCollection'),
-        PersonnelCollection = require('collections/PersonnelCollection'),
-        LookupDataItemCollection = require('collections/LookupDataItemCollection'),
-        AppEventNamesEnum = require('enums/AppEventNamesEnum'),
-        appEvents = require('events'),
-        appResources = require('resources'),
-        globals = require('globals'),
-        env = require('env');
+            _ = require('underscore'),
+            Backbone = require('backbone'),
+            DashboardService = require('services/DashboardService'),
+            StationEntryLogListView = require('views/StationEntryLogListView'),
+            StationEntryLogHistoryListView = require('views/StationEntryLogHistoryListView'),
+            StationListView = require('views/StationListView'),
+            PersonnelListView = require('views/PersonnelListView'),
+            StationEntryLogView = require('views/StationEntryLogView'),
+            StationView = require('views/StationView'),
+            PersonnelView = require('views/PersonnelView'),
+            StationEntryLogModel = require('models/StationEntryLogModel'),
+            StationModel = require('models/StationModel'),
+            PersonnelModel = require('models/PersonnelModel'),
+            StationEntryLogCollection = require('collections/StationEntryLogCollection'),
+            StationCollection = require('collections/StationCollection'),
+            PersonnelCollection = require('collections/PersonnelCollection'),
+            LookupDataItemCollection = require('collections/LookupDataItemCollection'),
+            AppEventNamesEnum = require('enums/AppEventNamesEnum'),
+            appEvents = require('events'),
+            appResources = require('resources'),
+            globals = require('globals'),
+            env = require('env');
 
     /**
      * Creates a new DashboardController with the specified attributes.
@@ -77,10 +77,13 @@ define(function(require) {
             this.listenTo(appEvents, AppEventNamesEnum.goToNewStationEntryLog, this.goToNewStationEntryLog);
             this.listenTo(appEvents, AppEventNamesEnum.goToCheckIn, this.goToCheckIn);
             this.listenTo(appEvents, AppEventNamesEnum.goToCheckOut, this.goToCheckOut);
+            this.listenTo(appEvents, AppEventNamesEnum.goToUpdateCheckIn, this.goToUpdateCheckIn);
+            this.listenTo(appEvents, AppEventNamesEnum.updateCheckInSuccess, this.showOpenStationEntryLogs);
+
 
             this.listenTo(appEvents, AppEventNamesEnum.goToLookupUserId, this.goToLookupUserId);
         },
-        goToStationEntryLogList: function() {
+        goToStationEntryLogList: function(options) {
             console.trace('DashboardController.goToStationEntryLogList');
             var currentContext = this,
                     deferred = $.Deferred();
@@ -107,7 +110,8 @@ define(function(require) {
             currentContext.router.navigate('stationEntryLog', {replace: fragmentAlreadyMatches});
 
             stationEntryLogListViewInstance.showLoading();
-            $.when(currentContext.dashboardService.getStationEntryLogsByOpen()).done(function(getStationEntryLogsResponse) {
+
+            $.when(currentContext.dashboardService.getStationEntryLogsByOpen(options)).done(function(getStationEntryLogsResponse) {
                 stationEntryLogListViewInstance.setUserRole(getStationEntryLogsResponse.userRole);
                 currentContext.stationEntryLogSearchResults.reset(getStationEntryLogsResponse.stationEntryLogs);
                 currentContext.stationIdentifierResults.reset(getStationEntryLogsResponse.stationIdentifiers);
@@ -232,14 +236,16 @@ define(function(require) {
             var stationEntryLogViewInstance = new StationEntryLogView({
                 controller: currentContext,
                 dispatcher: currentContext.dispatcher,
-                model: stationEntryLogModelInstance
+                model: stationEntryLogModelInstance,
+                durationCollection: currentContext.durationResults
             });
 
             currentContext.router.swapContent(stationEntryLogViewInstance);
             currentContext.router.navigate('stationEntryLog/' + stationEntryLogId);
 
-            $.when(currentContext.dashboardService.getStationEntryLogById(stationEntryLogId)).done(function(getStationEntryLogByIdResponse) {
-                stationEntryLogModelInstance.set(getStationEntryLogByIdResponse);
+            $.when(currentContext.dashboardService.getStationEntryLogById(stationEntryLogModelInstance.attributes), currentContext.dashboardService.getNewStationEntryLogOptions()).done(function(getStationEntryLogResults, getNewStationEntryLogOptionsResults) {
+                stationEntryLogModelInstance.set(getStationEntryLogResults[0]);
+                currentContext.durationResults.reset(getNewStationEntryLogOptionsResults[0].durations);
                 deferred.resolve(stationEntryLogViewInstance);
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 deferred.reject(textStatus);
@@ -263,7 +269,7 @@ define(function(require) {
             currentContext.router.swapContent(stationViewInstance);
             currentContext.router.navigate('station/' + stationId);
 
-            $.when(currentContext.dashboardService.getStationById(stationId)).done(function(getStationByIdResponse) {
+            $.when(currentContext.dashboardService.getStationById(stationModelInstance.attributes)).done(function(getStationByIdResponse) {
                 stationModelInstance.set(getStationByIdResponse);
                 deferred.resolve(stationViewInstance);
             }).fail(function(jqXHR, textStatus, errorThrown) {
@@ -288,7 +294,7 @@ define(function(require) {
             currentContext.router.swapContent(personnelViewInstance);
             currentContext.router.navigate('personnel/' + personnelId);
 
-            $.when(currentContext.dashboardService.getPersonnelById(personnelId)).done(function(getPersonnelByIdResponse) {
+            $.when(currentContext.dashboardService.getPersonnelById(personnelModelInstance.attributes)).done(function(getPersonnelByIdResponse) {
                 personnelModelInstance.set(getPersonnelByIdResponse);
                 deferred.resolve(personnelViewInstance);
             }).fail(function(jqXHR, textStatus, errorThrown) {
@@ -312,6 +318,7 @@ define(function(require) {
             return deferred.promise();
         },
         showOpenStationEntryLogs: function(options) {
+        //showOpenStationEntryLogs: function(stationEntryLogCollection, options) {
             console.trace('DashboardController.showOpenStationEntryLogs');
             var currentContext = this,
                     deferred = $.Deferred();
@@ -353,11 +360,6 @@ define(function(require) {
 
             return deferred.promise();
         },
-        goToDirectionsWithLatLng: function(latitude, longitude) {
-            console.trace('DashboardController.goToDirectionsWithLatLng');
-            var directionsUri = 'http://maps.google.com?daddr=' + latitude + "," + longitude;
-            globals.window.open(directionsUri);
-        },
         goToNewStationEntryLog: function() {
             console.trace('DashboardController.goToNewStationEntryLog');
             var currentContext = this,
@@ -378,7 +380,7 @@ define(function(require) {
             var currentContext = this,
                     deferred = $.Deferred();
 
-            $.when(currentContext.dashboardService.checkIn(stationEntryLogModel.attributes)).done(function(checkInResponse) {
+            $.when(currentContext.dashboardService.postCheckIn(stationEntryLogModel.attributes)).done(function(checkInResponse) {
                 currentContext.purposeResults.reset(checkInResponse);
                 currentContext.stationEntryLogSearchResults.add(checkInResponse);
                 appEvents.trigger(AppEventNamesEnum.checkInSuccess, checkInResponse);
@@ -404,14 +406,45 @@ define(function(require) {
             var currentContext = this,
                     deferred = $.Deferred();
 
-            $.when(currentContext.dashboardService.checkOut(stationEntryLogModel.attributes)).done(function(checkOutResponse) {
-                var model = currentContext.stationEntryLogSearchResults.findWhere({stationEntryLogId: checkOutResults.stationEntryLogId});
-                model.destroy();
+            var options;
+            if (stationEntryLogModel) {
+                options = {
+                    stationEntryLogId: stationEntryLogModel.get('stationEntryLogId')
+                };
+            }
+
+            $.when(currentContext.dashboardService.postCheckOut(options)).done(function(checkOutResponse) {
+                stationEntryLogModel.destroy();
                 appEvents.trigger(AppEventNamesEnum.checkOutSuccess, checkOutResponse);
                 deferred.resolve(checkOutResponse);
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 var msg = 'Error checking out. Please call the dispatch center.';
                 appEvents.trigger(AppEventNamesEnum.checkOutError, msg);
+                if (jqXHR.status === 409 && jqXHR.responseText) {
+                    msg = jqXHR.responseText;
+                }
+                //currentContext.showErrorView(msg);
+                if (jqXHR.status === 409 || jqXHR.status === 403) {
+                    msg = jqXHR.responseText;
+                }
+
+                deferred.reject(msg);
+            });
+
+            return deferred.promise();
+        },
+        goToUpdateCheckIn: function(stationEntryLogModel) {
+            console.trace('DashboardController.goToUpdateCheckIn');
+            var currentContext = this,
+                    deferred = $.Deferred();
+
+            $.when(currentContext.dashboardService.postUpdateCheckIn(stationEntryLogModel.attributes)).done(function(updateCheckInResults) {
+                var model = currentContext.stationEntryLogSearchResults.findWhere({stationEntryLogId: updateCheckInResults.stationEntryLogId});
+                appEvents.trigger(AppEventNamesEnum.updateCheckInSuccess, updateCheckInResults);
+                deferred.resolve(updateCheckInResults);
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                var msg = 'Error updating entry.';
+                appEvents.trigger(AppEventNamesEnum.updateCheckInError, msg);
                 if (jqXHR.status === 409 && jqXHR.responseText) {
                     msg = jqXHR.responseText;
                 }
@@ -447,6 +480,11 @@ define(function(require) {
             });
 
             return deferred.promise();
+        },
+        goToDirectionsWithLatLng: function(latitude, longitude) {
+            console.trace('DashboardController.goToDirectionsWithLatLng');
+            var directionsUri = 'http://maps.google.com?daddr=' + latitude + "," + longitude;
+            globals.window.open(directionsUri);
         }
     });
 

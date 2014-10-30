@@ -10,15 +10,12 @@ define(function(require) {
             appEvents = require('events'),
             appResources = require('resources'),
             template = require('hbs!templates/StationEntryLogListItem');
+
     var StationEntryLogListItemView = CompositeView.extend({
         tagName: 'li',
         resources: function(culture) {
             return {
-                hazardIconSrc: appResources.getResource('hazardIconSrc'),
-                hazardIconSvgSrc: appResources.getResource('hazardIconSvgSrc'),
-                hazardIconAlt: appResources.getResource('hazardIconAlt'),
-                checkedInIconSvgSrc: appResources.getResource('checkedInIconSvgSrc'),
-                checkedInIconAlt: appResources.getResource('checkedInIconAlt'),
+                editCheckInButtonText: appResources.getResource('editCheckInButtonText'),
                 checkOutButtonText: appResources.getResource('checkOutButtonText')
             };
         },
@@ -34,25 +31,52 @@ define(function(require) {
             var currentContext = this;
             var renderModel = _.extend({}, currentContext.resources(), currentContext.model.attributes);
             currentContext.$el.html(template(renderModel));
+
+            this.updateCheckOutStatus();
             this.checkUserRole();
-            this.checkExpired();
+
             return this;
         },
         events: {
             'click .station-name-link': 'goToStationWithId',
-            'click .personnel-name-link': 'goToStationEntryLogWithId',
+            'click .personnel-name-link': 'goToPersonnelWithId',
+            'click .elevated-functions-toggle': 'toggleElevatedFunctions',
             'click .station-entry-log-link': 'goToStationEntryLogWithId',
-            'click .check-out-link': 'goToCheckOut',
-            'click #station-entry-log-collapse-button': 'toggleStationEntryLogRow',
-            /*'click .station-entry-log-link': 'goToStationEntryLogWithId'*/
+            'click .check-out-link': 'goToCheckOut'
         },
-        toggleStationEntryLogRow: function(event) {
+        updateCheckOutStatus: function() {
+            if (this.model.get("checkOutOverdue")) {
+                this.$('.station-entry-log-list-item-view').addClass('checkOutOverdue');
+            } else if (this.model.get("checkOutExpired")) {
+                this.$('.station-entry-log-list-item-view').addClass('checkOutExpired');
+            }
+        },
+        setUserRole: function(userRole) {
+            var currentContext = this;
+            currentContext.userRole = userRole;
+            currentContext.checkUserRole();
+        },
+        checkUserRole: function() {
+            var currentContext = this;
+            if (currentContext.userRole === UserRoleEnum.NocAdmin || currentContext.userRole === UserRoleEnum.NocUser) {
+                currentContext.showElevatedFunctionToggle();
+            } else {
+                currentContext.hideElevatedFunctionToggle();
+            }
+        },
+        showElevatedFunctionToggle: function() {
+            this.$('.elevated-functions-toggle').removeClass('hidden');
+        },
+        hideElevatedFunctionToggle: function() {
+            this.$('.elevated-functions-toggle').addClass('hidden');
+        },
+        toggleElevatedFunctions: function(event) {
             if (event) {
                 event.preventDefault();
             }
-            this.$('#station-entry-log-hide-row-icon').toggle('hidden');
-            this.$('#station-entry-log-show-row-icon').toggle('hidden');
-            this.$('#station-entry-log-check-out-row').toggle('hidden');
+            this.$('.hide-container-icon').toggle('hidden');
+            this.$('.show-container-icon').toggle('hidden');
+            this.$('.elevated-functions-container').toggle('hidden');
         },
         goToStationWithId: function(event) {
             if (event) {
@@ -83,21 +107,6 @@ define(function(require) {
         },
         onCheckOutSuccess: function() {
             this.$el.remove();
-        },
-        checkUserRole: function() {
-            if (this.userRole === UserRoleEnum.NocAdmin || this.userRole === UserRoleEnum.NocUser) {
-                this.showCheckOutToggleButton();
-            }
-        },
-        showCheckOutToggleButton: function() {
-            this.$('#station-entry-log-collapse-button').removeClass('hidden');
-        },
-        checkExpired: function() {
-            if(this.model.get("minExpired")){
-                this.$('.station-entry-log-list-item-view').addClass('minExpired');
-            }else if(this.model.get("maxExpired")){
-                this.$('.station-entry-log-list-item-view').addClass('maxExpired');
-            }
         }
     });
     return StationEntryLogListItemView;

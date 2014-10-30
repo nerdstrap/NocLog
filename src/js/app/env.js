@@ -6,7 +6,9 @@ define(function(require) {
         masterConfig = module.config(),
         apiUrl = masterConfig.apiUrl || '',
         siteRoot = masterConfig.siteRoot || '',
-        autoRefreshInterval = masterConfig.getAutoRefreshInterval || 60000;
+        autoRefreshInterval = masterConfig.autoRefreshInterval || 60000,
+        notificationTimeout = masterConfig.notificationTimeout || 5000,
+        expirationThreshold = masterConfig.expirationThreshold || 1800000;
 
     var env = {
         getApiUrl: function() {
@@ -17,6 +19,12 @@ define(function(require) {
         },
         getAutoRefreshInterval: function() {
             return autoRefreshInterval;
+        },
+        getNotificationTimeout: function() {
+            return notificationTimeout;
+        },
+        getExpirationThreshold: function() {
+            return expirationThreshold;
         }
     };
     return env;

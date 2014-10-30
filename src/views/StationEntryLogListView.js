@@ -141,8 +141,8 @@ define(function(require) {
             var region = this.$('#station-entry-log-list-region-filter').val();
             var area = this.$('#station-entry-log-list-area-filter').val();
             var options = {
-                region: region,
-                area: area
+                regionName: region,
+                areaName: area
             };
             if (status === 'open') {
                 this.dispatcher.trigger(AppEventNamesEnum.showOpenStationEntryLogs, options);
@@ -326,14 +326,14 @@ define(function(require) {
             this.$('.view-status').addClass('hidden');
         },
         showError: function(message) {
-            this.$('.list-view-error .text-detail').html(message);
+            this.$('.list-view-error .view-message').html(message);
             this.$('.list-view-error').removeClass('hidden');
         },
         hideError: function() {
             this.$('.list-view-error').addClass('hidden');
         },
         showInfo: function(message) {
-            this.$('.list-view-info .text-detail').html(message);
+            this.$('.list-view-info .view-message').html(message);
             this.$('.list-view-info').removeClass('hidden');
         },
         hideInfo: function() {

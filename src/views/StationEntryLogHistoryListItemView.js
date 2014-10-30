@@ -39,7 +39,7 @@ define(function(require) {
         },
         events: {
             'click .station-name-link': 'goToStationWithId',
-            'click .personnel-name-link': 'goToStationEntryLogWithId'
+            'click .personnel-name-link': 'goToPersonnelWithId'
             /*'click .station-entry-log-link': 'goToStationEntryLogWithId'*/
         },
         goToStationWithId: function(event) {
