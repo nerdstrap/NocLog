@@ -366,8 +366,8 @@ define(function(require) {
                     deferred = $.Deferred();
 
             $.when(currentContext.dashboardService.getNewStationEntryLogOptions()).done(function(getNewStationEntryLogOptionsResponse) {
-                currentContext.purposeResults.reset(getNewStationEntryLogOptionsResponse.purposes);
-                currentContext.durationResults.reset(getNewStationEntryLogOptionsResponse.durations);
+                //currentContext.purposeResults.reset(getNewStationEntryLogOptionsResponse.purposes);
+                //currentContext.durationResults.reset(getNewStationEntryLogOptionsResponse.durations);
                 deferred.resolve(getNewStationEntryLogOptionsResponse);
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 deferred.reject(textStatus);

@@ -1,167 +1,211 @@
-define(function(require) {
+define(function (require) {
     'use strict';
 
     var $ = require('jquery'),
-            env = require('env');
+        env = require('env');
 
     var inMemoryStations = [];
     var inMemoryStationEntryLogs = [{'stationEntryLogId':20,'stationId':'COLUS','userName':'CheckOut, CheckIn','firstName':'CheckIn','lastName':'CheckOut','outsideId':'s210749','purpose':'Battery Inspection','inTime':1409155717114,'outTime':1409156265536,'createdDate':1409155717114,'createdBy':5999,'modifiedDate':1409156265536,'modifiedBy':5999,'hasCrew':'N','contact':'9-1-6147163015','duration':30,'region':'Ohio','area':'Groveport','stationName':'Columbus POP'}];
     var inMemoryPersonnel = [];
+    var inMemoryLookupDataItems = [];
     var inMemoryStationIdentifiers = [{'stationId': 'AEPHS', 'stationName': 'AEP Headquarters POP'}, {'stationId': 'AMSTH', 'stationName': 'AM South Bank Building'}, {'stationId': 'ABILD', 'stationName': 'Abilene T&D Office TS'}, {'stationId': 'ABILE', 'stationName': 'Abilene TS'}, {'stationId': 'ABGON', 'stationName': 'Abingdon TS'}, {'stationId': 'ADAR', 'stationName': 'Adair TS'}, {'stationId': 'ADARI', 'stationName': 'Adario TS'}, {'stationId': 'ADENA', 'stationName': 'Adena TS'}, {'stationId': 'AGUAD', 'stationName': 'Agua Dulce TS/HPL'}, {'stationId': 'AKRON', 'stationName': 'Akron POP'}, {'stationId': 'AKRFE', 'stationName': 'Akron POP (First Energy)'}, {'stationId': 'ALBAY', 'stationName': 'Albany TS'}, {'stationId': 'ALBIN', 'stationName': 'Albion TS'}, {'stationId': 'ALICE', 'stationName': 'Alice LMR TS'}, {'stationId': 'ALIC', 'stationName': 'Alice SC TS'}, {'stationId': 'ALLST', 'stationName': 'Allen Stuart TS'}, {'stationId': 'ALLHT', 'stationName': 'Allenhurst POP (GPU)'}, {'stationId': 'ALLTN', 'stationName': 'Allentown POP (GPU)'}, {'stationId': 'ALPN', 'stationName': 'Alpine TS'}, {'stationId': 'ALTA', 'stationName': 'Altavista POP'}, {'stationId': 'ALTNA', 'stationName': 'Altoona POP (GPU)'}, {'stationId': 'AMITY', 'stationName': 'Amity TS'}, {'stationId': 'AMLIN', 'stationName': 'Amlin TS'}, {'stationId': 'AMOSP', 'stationName': 'Amos Plant TS'}, {'stationId': 'ANDER', 'stationName': 'Anderson POP'}, {'stationId': 'ANTTS', 'stationName': 'Antlers TS'}, {'stationId': 'ANTWP', 'stationName': 'Antwerp TS'}, {'stationId': 'ARART', 'stationName': 'Ararat TS'}, {'stationId': 'ARIST', 'stationName': 'Arista TS'}, {'stationId': 'ARMSG', 'stationName': 'Armstrong TS'}, {'stationId': 'ARSHL', 'stationName': 'Arsenal Hill TS'}, {'stationId': 'ARWTX', 'stationName': 'Artesia Wells TS'}, {'stationId': 'ASHDO', 'stationName': 'Ashdown TS'}, {'stationId': 'ASHER', 'stationName': 'Asherton TS'}, {'stationId': 'ASHLD', 'stationName': 'Ashland POP'}, {'stationId': 'ASHL', 'stationName': 'Ashland TS'}, {'stationId': 'ASPRM', 'stationName': 'Aspermont TS'}, {'stationId': 'ATHEN', 'stationName': 'Athens POP'}, {'stationId': 'ATHNS', 'stationName': 'Athens TS'}, {'stationId': 'ATKAR', 'stationName': 'Atkins TS (McLeod)'}, {'stationId': 'ATLTA', 'stationName': 'Atlanta TS'}, {'stationId': 'ATOMR', 'stationName': 'Atoka AO'}, {'stationId': 'ATOKW', 'stationName': 'Atoka WFEC TS'}, {'stationId': 'ATWTS', 'stationName': 'Atwoods TS'}, {'stationId': 'AUSTX', 'stationName': 'Austin POP (ICG)'}, {'stationId': 'AUSTI', 'stationName': 'Austin POP (Uni-Point)'}, {'stationId': 'POPAU', 'stationName': 'Austin POP Brazos (Grande)'}, {'stationId': 'POPAS', 'stationName': 'Austin POP Riverside (Grande)'}, {'stationId': 'AVILA', 'stationName': 'Avilla TS'}, {'stationId': 'AVOCA', 'stationName': 'Avoca TS'}, {'stationId': 'BLDKN', 'stationName': 'Bald Knob TS'}, {'stationId': 'BALMH', 'stationName': 'Balmorhea TS'}, {'stationId': 'BANGO', 'stationName': 'Bangor TS'}, {'stationId': 'BARKD', 'stationName': 'Barksdale TS'}, {'stationId': 'BRNV2', 'stationName': 'Barnesville (2) TS'}, {'stationId': 'BARNV', 'stationName': 'Barnesville TS'}, {'stationId': 'BMDPS', 'stationName': 'Barney M Davis PS TS'}, {'stationId': 'BARNH', 'stationName': 'Barnhart TS'}, {'stationId': 'BARND', 'stationName': 'Barnsdall Radio Tower TS'}, {'stationId': 'BARVL', 'stationName': 'Bartlesville LMR TS'}, {'stationId': 'BARTX', 'stationName': 'Bartlett TS (Level 3)'}, {'stationId': 'BAS72', 'stationName': 'Bashan Tower 72'}, {'stationId': 'BATVL', 'stationName': 'Batesville TS'}, {'stationId': 'BAYCT', 'stationName': 'Bay City TS (Liberman)'}, {'stationId': 'BAYMT', 'stationName': 'Bays Mountain TS'}, {'stationId': 'BEALV', 'stationName': 'Beallsville TS'}, {'stationId': 'BEARW', 'stationName': 'Bearwallow TS'}, {'stationId': 'BEATT', 'stationName': 'Beatty TS'}, {'stationId': 'BECKY', 'stationName': 'Beckley POP'}, {'stationId': 'BMTTS', 'stationName': 'Bee Mountain TS'}, {'stationId': 'BEEBE', 'stationName': 'Beebe TS'}, {'stationId': 'BCHFK', 'stationName': 'Beech Fork TS'}, {'stationId': 'BEECH', 'stationName': 'Beech Mountain TS'}, {'stationId': 'BEEST', 'stationName': 'Beeville STEC TS'}, {'stationId': 'BEVIL', 'stationName': 'Beeville TS'}, {'stationId': 'BLDTS', 'stationName': 'Belding TS'}, {'stationId': 'BLFON', 'stationName': 'Bellefontaine TS'}, {'stationId': 'BELMR', 'stationName': 'Bellevue Station (MARS)'}, {'stationId': 'BLLVU', 'stationName': 'Bellevue TS'}, {'stationId': 'BELVL', 'stationName': 'Bellville TS'}, {'stationId': 'BELMT', 'stationName': 'Belmont TS'}, {'stationId': 'BELPE', 'stationName': 'Belpre TS'}, {'stationId': 'BENHB', 'stationName': 'Benton Harbor TS'}, {'stationId': 'BENT2', 'stationName': 'Bentonville #2 TS'}, {'stationId': 'BENVL', 'stationName': 'Bentonville TS'}, {'stationId': 'BERCO', 'stationName': 'Berrien County Empire EOC'}, {'stationId': 'BEST', 'stationName': 'Best TS'}, {'stationId': 'BETHY', 'stationName': 'Bethany TS'}, {'stationId': 'BIGA', 'stationName': 'Big A Mountain TS'}, {'stationId': 'BIGHL', 'stationName': 'Big Hill TS'}, {'stationId': 'BIGSD', 'stationName': 'Big Sandy TS'}, {'stationId': 'BIGUG', 'stationName': 'Big Ugly Creek TS'}, {'stationId': 'BISAR', 'stationName': 'Biscoe TS (Level 3 AMP)'}, {'stationId': 'BISTX', 'stationName': 'Bishop TS'}, {'stationId': 'BIXY', 'stationName': 'Bixby TS'}, {'stationId': 'BIXTS', 'stationName': 'Bixby TS (OK)'}, {'stationId': 'BIXXX', 'stationName': 'Bixby Tower XX'}, {'stationId': 'NEWCA', 'stationName': 'Blanchard TS'}, {'stationId': 'BLANC', 'stationName': 'Blanconia TS'}, {'stationId': 'BLWTS', 'stationName': 'Blevins/Washington TS'}, {'stationId': 'BLFLD', 'stationName': 'Bloomfield TS'}, {'stationId': 'BLOMV', 'stationName': 'Bloomville TS'}, {'stationId': 'BLUCK', 'stationName': 'Blue Creek TS'}, {'stationId': 'BLUMO', 'stationName': 'Blue Lick TS (Velocita Herndon)'}, {'stationId': 'BLUFD', 'stationName': 'Bluefield POP'}, {'stationId': 'BLUVN', 'stationName': 'Bluefield POP (Valleynet)'}, {'stationId': 'BLUEF', 'stationName': 'Bluefield VA TS'}, {'stationId': 'BLUFT', 'stationName': 'Bluffton TS'}, {'stationId': 'BOONV', 'stationName': 'Booneville TS'}, {'stationId': 'BOONB', 'stationName': 'Boonsboro TS'}, {'stationId': 'BORDN', 'stationName': 'Borden Building POP'}, {'stationId': 'BOSLA', 'stationName': 'Bossier TS (McLeod)'}, {'stationId': 'BOWSM', 'stationName': 'Bowen Smith Tower-Karnes City LMR TS'}, {'stationId': 'BOWSH', 'stationName': 'Bowen Smith Tower-Zapata LMR TS'}, {'stationId': 'BOWKY', 'stationName': 'Bowling Green POP (Qwest AMP)'}, {'stationId': 'BRKTV', 'stationName': 'Brackettville TS'}, {'stationId': 'BRADL', 'stationName': 'Bradley POP'}, {'stationId': 'BREET', 'stationName': 'Breed Plant TS'}, {'stationId': 'BRMFD', 'stationName': 'Brimfield TS'}, {'stationId': 'BRKHN', 'stationName': 'Brinkhaven TS'}, {'stationId': 'BKNAW', 'stationName': 'Broken Arrow MW TS'}, {'stationId': 'BKNBW', 'stationName': 'Broken Bow LMR TS'}, {'stationId': 'BKNBO', 'stationName': 'Broken Bow MW TS'}, {'stationId': 'BRUCV', 'stationName': 'Bruceville TS'}, {'stationId': 'BRMMT', 'stationName': 'Brumley Mountain TS'}, {'stationId': 'BRYTX', 'stationName': 'Bryan C3 POP'}, {'stationId': 'BUCAN', 'stationName': 'Buchanan POP'}, {'stationId': 'BUCHN', 'stationName': 'Buchanan TS'}, {'stationId': 'BUCKH', 'stationName': 'Buckhorn TS'}, {'stationId': 'BCYUS', 'stationName': 'Bucyrus TS'}, {'stationId': 'BUEVA', 'stationName': 'Buena Vista TS'}, {'stationId': 'BFFMN', 'stationName': 'Buffalo Mountain TS'}, {'stationId': 'BUFMT', 'stationName': 'Buffalo Mtn LMR TS'}, {'stationId': 'BFFMT', 'stationName': 'Buffalo Mtn Rpt TS'}, {'stationId': 'BULMT', 'stationName': 'Bull Mountain TS'}, {'stationId': 'BULFG', 'stationName': 'Bullfrog Mtn TS'}, {'stationId': 'BRGRK', 'stationName': 'Burning Rock TS'}, {'stationId': 'BUTLE', 'stationName': 'Butler TS'}, {'stationId': 'BUTTM', 'stationName': 'Butt Mountain TS'}, {'stationId': 'CECDP', 'stationName': 'CEC Dispatch TS'}, {'stationId': 'CADZ', 'stationName': 'Cadiz TS'}, {'stationId': 'CALTS', 'stationName': 'Calvin TS'}, {'stationId': 'CAMBR', 'stationName': 'Cambridge POP'}, {'stationId': 'CAMBD', 'stationName': 'Cambridge TS'}, {'stationId': 'CAMRN', 'stationName': 'Cameron TS'}, {'stationId': 'CMPTS', 'stationName': 'Camp TS'}, {'stationId': 'CANTO', 'stationName': 'Canton POP'}, {'stationId': 'CNAFN', 'stationName': 'Canton POP (AFN)'}, {'stationId': 'CANTN', 'stationName': 'Canton TS'}, {'stationId': 'CANTE', 'stationName': 'Canute TS'}, {'stationId': 'CARLI', 'stationName': 'Carlisle POP (ValleyNet)'}, {'stationId': 'CARSP', 'stationName': 'Carrizo Springs TS'}, {'stationId': 'CARTR', 'stationName': 'Carter Mtn TS'}, {'stationId': 'CRTHG', 'stationName': 'Carthage TS'}, {'stationId': 'CASTL', 'stationName': 'Castlewood TS'}, {'stationId': 'CATAL', 'stationName': 'Catalpa TS'}, {'stationId': 'CAVMT', 'stationName': 'Cavanal Mountain TS'}, {'stationId': 'CDRTS', 'stationName': 'Cedar Bayou TS/HPL'}, {'stationId': 'CGPTS', 'stationName': 'Cedar Gap TS'}, {'stationId': 'CNTER', 'stationName': 'Center TS'}, {'stationId': 'CHDPK', 'stationName': 'Chandler Park TS'}, {'stationId': 'CHAND', 'stationName': 'Chandler TS'}, {'stationId': 'CHLTX', 'stationName': 'Chandler TS (McLeod)'}, {'stationId': 'CHRNT', 'stationName': 'Charleston NTelos POP'}, {'stationId': 'CHARS', 'stationName': 'Charleston POP'}, {'stationId': 'CHARN', 'stationName': 'Charleston TS'}, {'stationId': 'CHRLT', 'stationName': 'Charlotte TS'}, {'stationId': 'CHESP', 'stationName': 'Chesapeake Connectlink POP'}, {'stationId': 'CHEPK', 'stationName': 'Chesapeake TS (CSP)'}, {'stationId': 'CHESA', 'stationName': 'Chesapeake TS (OP)'}, {'stationId': 'CHEKS', 'stationName': 'Chetopa POP (Velocita Faulker)'}, {'stationId': 'CHETS', 'stationName': 'Cheyenne TS'}, {'stationId': 'CHCKA', 'stationName': 'Chickasha (Norge) TS'}, {'stationId': 'CHCKH', 'stationName': 'Chickasha TS'}, {'stationId': 'CHKOK', 'stationName': 'Chickasha TS (McLeod)'}, {'stationId': 'CHILB', 'stationName': 'Childress LOW Band TS'}, {'stationId': 'CHILR', 'stationName': 'Childress TS'}, {'stationId': 'CHLDS', 'stationName': 'Childress TS (OLD)'}, {'stationId': 'CHLTH', 'stationName': 'Chillicothe POP'}, {'stationId': 'CHRBG', 'stationName': 'Christiansburg TS'}, {'stationId': 'CIENG', 'stationName': 'Cienega Peak TS'}, {'stationId': 'CIRCL', 'stationName': 'Circleville POP'}, {'stationId': 'CIRCV', 'stationName': 'Circleville TS'}, {'stationId': 'CISCT', 'stationName': 'Cisco TS'}, {'stationId': 'CLARN', 'stationName': 'Clarendon TS'}, {'stationId': 'CLKBG', 'stationName': 'Clarksburg POP (ACC)'}, {'stationId': 'CLATS', 'stationName': 'Clayton TS'}, {'stationId': 'CLAYR', 'stationName': 'Claytor TS'}, {'stationId': 'CLEVD', 'stationName': 'Cleveland POP (First Energy)'}, {'stationId': 'CLHRV', 'stationName': 'Clinch River TS'}, {'stationId': 'CLINE', 'stationName': 'Cline TS'}, {'stationId': 'CLINT', 'stationName': 'Clinton POP (GPU)'}, {'stationId': 'CLNTN', 'stationName': 'Clinton TS'}, {'stationId': 'CLNTW', 'stationName': 'Clintwood Base Radio'}, {'stationId': 'CLTWD', 'stationName': 'Clintwood TS'}, {'stationId': 'CLDMT', 'stationName': 'Cloudy Mtn LMR TS'}, {'stationId': 'CLYMT', 'stationName': 'Cloudy Mtn TS'}, {'stationId': 'COLFK', 'stationName': 'Coal Fork TS'}, {'stationId': 'PURCL', 'stationName': 'Cole TS'}, {'stationId': 'COLE', 'stationName': 'Cole TS (OLD)'}, {'stationId': 'CLETO', 'stationName': 'Coleto Creek TS'}, {'stationId': 'COLLH', 'stationName': 'College Hills MW TS'}, {'stationId': 'COLCN', 'stationName': 'Columbia Center TS'}, {'stationId': 'COLMO', 'stationName': 'Columbia POP (Velocita Midway)'}, {'stationId': 'COLGV', 'stationName': 'Columbus Grove TS'}, {'stationId': 'COLUS', 'stationName': 'Columbus POP'}, {'stationId': 'COLTX', 'stationName': 'Columbus TS (Qwest)'}, {'stationId': 'CLMBS', 'stationName': 'Columbus TS (TX)'}, {'stationId': 'COMCH', 'stationName': 'Comanche TS'}, {'stationId': 'CONCH', 'stationName': 'Concho TS'}, {'stationId': 'CONCD', 'stationName': 'Concordia TS'}, {'stationId': 'CONVE', 'stationName': 'Conesville POP'}, {'stationId': 'CNSVL', 'stationName': 'Conesville TS'}, {'stationId': 'CONVL', 'stationName': 'Connersville TS'}, {'stationId': 'COK', 'stationName': 'Cook TS'}, {'stationId': 'POPCC', 'stationName': 'Corpus Christi POP Wilson Plaza (Grande)'}, {'stationId': 'CCTEL', 'stationName': 'Corpus Christi Telco POP (Grande)'}, {'stationId': 'CCMCI', 'stationName': 'Corpus Christi-MCI POP'}, {'stationId': 'CORDR', 'stationName': 'Corridor TS'}, {'stationId': 'CORTX', 'stationName': 'Corsicana TS (Qwest)'}, {'stationId': 'COSHC', 'stationName': 'Coshocton TS'}, {'stationId': 'COTHL', 'stationName': 'Cotton Hill TS'}, {'stationId': 'COTWD', 'stationName': 'Cottonwood TS'}, {'stationId': 'CTULA', 'stationName': 'Cotulla TS'}, {'stationId': 'COVET', 'stationName': 'Covert TS'}, {'stationId': 'CRAJC', 'stationName': 'Craig Junction TS'}, {'stationId': 'CRAWV', 'stationName': 'Crawfordsville TS'}, {'stationId': 'CRSTO', 'stationName': 'Crestonio TS'}, {'stationId': 'CRKVL', 'stationName': 'Crooksville TS'}, {'stationId': 'CRSPL', 'stationName': 'Cross Plains TS'}, {'stationId': 'CROWE', 'stationName': 'Crowell TS'}, {'stationId': 'CROWN', 'stationName': 'Crown City TS'}, {'stationId': 'CUTLR', 'stationName': 'Cutler TS'}, {'stationId': 'CYRL', 'stationName': 'Cyril CS TS'}, {'stationId': 'DCONT', 'stationName': 'DCON Training Center'}, {'stationId': 'DABNY', 'stationName': 'Dabney TS'}, {'stationId': 'DANGD', 'stationName': 'Daingerfield TS'}, {'stationId': 'DASTX', 'stationName': 'Dallas C3 POP Ste 2440'}, {'stationId': 'DLOVE', 'stationName': 'Dallas Love Field TS'}, {'stationId': 'DALMC', 'stationName': 'Dallas MCI POP'}, {'stationId': 'DLLAS', 'stationName': 'Dallas POP (ICG)'}, {'stationId': 'DANVL', 'stationName': 'Danville POP'}, {'stationId': 'DARRH', 'stationName': 'Darrah POP'}, {'stationId': 'DARWN', 'stationName': 'Darwin TS'}, {'stationId': 'DEQEN', 'stationName': 'De Queen TS'}, {'stationId': 'DEKLM', 'stationName': 'DeKalb LMR Tower'}, {'stationId': 'DECTR', 'stationName': 'Decatur TS'}, {'stationId': 'DECTX', 'stationName': 'Decatur TS (McLeod)'}, {'stationId': 'DEETS', 'stationName': 'Deer Park TS/HPL'}, {'stationId': 'DEERV', 'stationName': 'Deersville TS'}, {'stationId': 'DLRIO', 'stationName': 'Del Rio TS'}, {'stationId': 'DELAW', 'stationName': 'Delaware POP'}, {'stationId': 'DELWR', 'stationName': 'Delaware TS'}, {'stationId': 'DELBA', 'stationName': 'Delbarton TS'}, {'stationId': 'DEQUE', 'stationName': 'Dequine TS'}, {'stationId': 'DESTS', 'stationName': 'Desert Sky Wind TS'}, {'stationId': 'DICKN', 'stationName': 'Dickens LMR TS'}, {'stationId': 'DKSNB', 'stationName': 'Dicks Knob TS'}, {'stationId': 'DILEY', 'stationName': 'Dilley TS'}, {'stationId': 'DLNVL', 'stationName': 'Dillonvale TS'}, {'stationId': 'DINGT', 'stationName': 'Dingess TS'}, {'stationId': 'DISPK', 'stationName': 'Dismal Peak TS'}, {'stationId': 'DBLMT', 'stationName': 'Double Mountain TS'}, {'stationId': 'DOUGH', 'stationName': 'Dougherty TS'}, {'stationId': 'DOWGC', 'stationName': 'Dowagiac TS'}, {'stationId': 'DRESN', 'stationName': 'Dresden TS'}, {'stationId': 'DNKK', 'stationName': 'Dunkirk TS'}, {'stationId': 'EAGLP', 'stationName': 'Eagle Pass LMR TS'}, {'stationId': 'EAGEP', 'stationName': 'Eagle Pass MW/LMR TS'}, {'stationId': 'ELIVP', 'stationName': 'East Liverpool TS'}, {'stationId': 'EZANS', 'stationName': 'East Zanesville TS'}, {'stationId': 'EDINB', 'stationName': 'Edinburg POP (ValleyNet)'}, {'stationId': 'EDITS', 'stationName': 'Edinburg TS/HPL'}, {'stationId': 'F1004', 'stationName': 'Edna Facility Communication Bldg'}, {'stationId': 'EDNAT', 'stationName': 'Edna TS'}, {'stationId': 'ELCAM', 'stationName': 'El Campo TS'}, {'stationId': 'ELTTX', 'stationName': 'El Toro TS (McLeod)'}, {'stationId': 'ELDTX', 'stationName': 'Eldorado (TX) Station'}, {'stationId': 'ELECT', 'stationName': 'Electra TS'}, {'stationId': 'ELKCY', 'stationName': 'Elk City LMR TS'}, {'stationId': 'ELIOT', 'stationName': 'Elliott TS'}, {'stationId': 'ELMCK', 'stationName': 'Elm Creek TS'}, {'stationId': 'MENRD', 'stationName': 'Erna TS'}, {'stationId': 'ERNA', 'stationName': 'Erna TS'}, {'stationId': 'ETN', 'stationName': 'Etna TS'}, {'stationId': 'EURSP', 'stationName': 'Eureka Springs TS'}, {'stationId': 'EVANS', 'stationName': 'Evans TS'}, {'stationId': 'FALFR', 'stationName': 'Falfurrias TS'}, {'stationId': 'FALBG', 'stationName': 'Fallsburg TS'}, {'stationId': 'FANGP', 'stationName': 'Fancy Gap TS'}, {'stationId': 'FAYDO', 'stationName': 'Fayetteville Division Office (Telco POP)'}, {'stationId': 'FAYIM', 'stationName': 'Fayetteville IMC TS'}, {'stationId': 'FAYTV', 'stationName': 'Fayetteville LMR TS'}, {'stationId': 'FAYVS', 'stationName': 'Fayetteville Station (MARS)'}, {'stationId': 'FERRM', 'stationName': 'Ferrum TS'}, {'stationId': 'FLDAL', 'stationName': 'Fieldale TS'}, {'stationId': 'FINDY', 'stationName': 'Findlay TS'}, {'stationId': 'FITCH', 'stationName': 'Fitch TS'}, {'stationId': 'FLTTP', 'stationName': 'Flat Top TS'}, {'stationId': 'FLTWD', 'stationName': 'Flatwoods TS (KY)'}, {'stationId': 'FLEMI', 'stationName': 'Fleming TS'}, {'stationId': 'FOREM', 'stationName': 'Foreman TS'}, {'stationId': 'FKRDG', 'stationName': 'Fork Ridge TS'}, {'stationId': 'FTDLM', 'stationName': 'Fort Davis LMR TS'}, {'stationId': 'MARBG', 'stationName': 'Fort Wayne POP (ValleyNet)'}, {'stationId': 'FTWAY', 'stationName': 'Fort Wayne TS'}, {'stationId': 'FTWOR', 'stationName': 'Fort Worth TS (Level 3)'}, {'stationId': 'FOSTA', 'stationName': 'Fostoria TS'}, {'stationId': 'FRANC', 'stationName': 'Francitas TS'}, {'stationId': 'FREDK', 'stationName': 'Frederick Junction Station TS'}, {'stationId': 'HOLSR', 'stationName': 'Frederick TS'}, {'stationId': 'FRDIA', 'stationName': 'Fredonia TS'}, {'stationId': 'FRER', 'stationName': 'Freer TS'}, {'stationId': 'FREMO', 'stationName': 'Fremont TS'}, {'stationId': 'FNDSP', 'stationName': 'Friendship TS'}, {'stationId': 'FTCTS', 'stationName': 'Ft Cobb TS'}, {'stationId': 'FTDAV', 'stationName': 'Ft Davis TS'}, {'stationId': 'FTPHA', 'stationName': 'Ft Phantom Plant Station TS'}, {'stationId': 'FTSTN', 'stationName': 'Ft Stockton TS'}, {'stationId': 'FTWYE', 'stationName': 'Ft Wayne POP'}, {'stationId': 'DFWTX', 'stationName': 'Ft Worth C3 POP'}, {'stationId': 'GALTS', 'stationName': 'Galax TS'}, {'stationId': 'GALLP', 'stationName': 'Gallipolis TS'}, {'stationId': 'GARDN', 'stationName': 'Garden POP'}, {'stationId': 'GARKS', 'stationName': 'Garland TS (Velocita Dry Wood)'}, {'stationId': 'GRY', 'stationName': 'Gary POP'}, {'stationId': 'GATCY', 'stationName': 'Gate City TS'}, {'stationId': 'GLYMT', 'stationName': 'Gauley Mountain TS'}, {'stationId': 'GIDTX', 'stationName': 'Giddings TS (Qwest)'}, {'stationId': 'GILLD', 'stationName': 'Gilliland TS'}, {'stationId': 'GLNLC', 'stationName': 'Glen Lyn Conv. TS'}, {'stationId': 'GLENL', 'stationName': 'Glen Lyn POP (VA)'}, {'stationId': 'GLNLN', 'stationName': 'Glen Lyn TS'}, {'stationId': 'GOMPK', 'stationName': 'Gomez Peak TS'}, {'stationId': 'GONZL', 'stationName': 'Gonzales TS'}, {'stationId': 'GOSHN', 'stationName': 'Goshen TS'}, {'stationId': 'GRALA', 'stationName': 'Grambling TS (McLeod)'}, {'stationId': 'GRSTS', 'stationName': 'Grand Saline TS'}, {'stationId': 'GRNDF', 'stationName': 'Grandfield TS'}, {'stationId': 'GRNLK', 'stationName': 'Green Lake TS'}, {'stationId': 'GRNKB', 'stationName': 'Greens Knob TS'}, {'stationId': 'GRENB', 'stationName': 'Greensboro POP'}, {'stationId': 'GRNBG', 'stationName': 'Greensburg POP (ACC)'}, {'stationId': 'GRNUP', 'stationName': 'Greenup TS'}, {'stationId': 'GREWD', 'stationName': 'Greenwood TS (ARK)'}, {'stationId': 'GREGR', 'stationName': 'Gregory TS/HPL'}, {'stationId': 'GROV', 'stationName': 'Grove LMR TS'}, {'stationId': 'GRVE', 'stationName': 'Grove MW TS'}, {'stationId': 'GROPT', 'stationName': 'Groveport TS'}, {'stationId': 'GRNDY', 'stationName': 'Grundy TS'}, {'stationId': 'GUYTS', 'stationName': 'Guy TS'}, {'stationId': 'GUYDT', 'stationName': 'Guyandotte TS'}, {'stationId': 'HAGHL', 'stationName': 'Hager Hill TS'}, {'stationId': 'HALMN', 'stationName': 'Hallman TS'}, {'stationId': 'HAMAR', 'stationName': 'Hamburg TS (McLeod)'}, {'stationId': 'HAMLI', 'stationName': 'Hamlin TS'}, {'stationId': 'POPNA', 'stationName': 'Harlingen POP (Grande)'}, {'stationId': 'HARBG', 'stationName': 'Harrisburg POP (GPU)'}, {'stationId': 'HARCY', 'stationName': 'Hartford City TS'}, {'stationId': 'PTEAU', 'stationName': 'Hartford TS'}, {'stationId': 'HAYEN', 'stationName': 'Hayden TS'}, {'stationId': 'HAYSJ', 'stationName': 'Haysi TS'}, {'stationId': 'HAZRD', 'stationName': 'Hazard TS'}, {'stationId': 'HRDMT', 'stationName': 'Heard Mountain TS'}, {'stationId': 'HEDLY', 'stationName': 'Hedley TS'}, {'stationId': 'HENDN', 'stationName': 'Henderson TS'}, {'stationId': 'HENTX', 'stationName': 'Henrietta (McLeod)'}, {'stationId': 'HNRY', 'stationName': 'Henryetta LMR TS'}, {'stationId': 'HERND', 'stationName': 'Herndon POP (ValleyNet)'}, {'stationId': 'HGHLL', 'stationName': 'High Hill TS'}, {'stationId': 'HIKNB', 'stationName': 'High Knob TS'}, {'stationId': 'HIPEK', 'stationName': 'High Peak TS'}, {'stationId': 'HITOP', 'stationName': 'High Top TS'}, {'stationId': 'HLBOR', 'stationName': 'Hillsboro TS'}, {'stationId': 'HILVL', 'stationName': 'Hillsville TS'}, {'stationId': 'HINDM', 'stationName': 'Hindman TS'}, {'stationId': 'HIPPO', 'stationName': 'Hippo TS'}, {'stationId': 'HOBA', 'stationName': 'Hobart LMR TS'}, {'stationId': 'HBART', 'stationName': 'Hobart MW TS'}, {'stationId': 'HOBMW', 'stationName': 'Hobart MW TS (MARS)'}, {'stationId': 'HORNT', 'stationName': 'Hornbeck TS'}, {'stationId': 'HORPN', 'stationName': 'Horsepen Mountain TS'}, {'stationId': 'HOSTN', 'stationName': 'Hosston TS'}, {'stationId': 'HOUTX', 'stationName': 'Houston C3 POP'}, {'stationId': 'HOUTN', 'stationName': 'Houston POP (Qwest)'}, {'stationId': 'HOUTW', 'stationName': 'Houston Twr LMR TS'}, {'stationId': 'HUGLM', 'stationName': 'Hugo LMR TS'}, {'stationId': 'HUGMW', 'stationName': 'Hugo MW TS'}, {'stationId': 'HUNTN', 'stationName': 'Huntington POP'}, {'stationId': 'HYATT', 'stationName': 'Hyatt TS'}, {'stationId': 'HYDEN', 'stationName': 'Hyden TS'}, {'stationId': 'IDALM', 'stationName': 'Idabel LMR TS'}, {'stationId': 'IDAB', 'stationName': 'Idabel Station (MARS)'}, {'stationId': 'IDABE', 'stationName': 'Idabel TS'}, {'stationId': 'IDNCP', 'stationName': 'Indian Camp TS'}, {'stationId': 'INEZT', 'stationName': 'Inez TS'}, {'stationId': 'INSTI', 'stationName': 'Institute TS'}, {'stationId': 'IRNLM', 'stationName': 'Iraan LMR TS'}, {'stationId': 'IRON', 'stationName': 'Ironton POP'}, {'stationId': 'IROTN', 'stationName': 'Ironton Radio Site'}, {'stationId': 'IROTS', 'stationName': 'Ironton TS'}, {'stationId': 'ITATX', 'stationName': 'Itasca TS (Level 3)'}, {'stationId': 'IVYKB', 'stationName': 'Ivy Knob TS'}, {'stationId': 'JLBTS', 'stationName': 'J L Bates TS'}, {'stationId': 'JCKSN', 'stationName': 'Jackson (OH) TS'}, {'stationId': 'JCKCH', 'stationName': 'Jackson Chapel TS'}, {'stationId': 'JCKSO', 'stationName': 'Jackson TS (KY)'}, {'stationId': 'JACKS', 'stationName': 'Jacksons Ferry TS'}, {'stationId': 'JAYLK', 'stationName': 'Jay Lake TS'}, {'stationId': 'JOHNC', 'stationName': 'Johnson City POP (ValleyNet)'}, {'stationId': 'JOHNS', 'stationName': 'Johnstown POP (GPU)'}, {'stationId': 'JUNED', 'stationName': 'Junction EDAC Tower'}, {'stationId': 'JUNTW', 'stationName': 'Junction Tower LMR TS'}, {'stationId': 'VINIT', 'stationName': 'KAMO Vinita TS'}, {'stationId': 'KIOX', 'stationName': 'KIOX LMR TS'}, {'stationId': 'KRBC', 'stationName': 'KRBC Tower TS'}, {'stationId': 'KANAH', 'stationName': 'Kanawha TS'}, {'stationId': 'KANKE', 'stationName': 'Kankakee POP'}, {'stationId': 'MKCMO', 'stationName': 'Kansas City POP (Velocita)'}, {'stationId': 'KANAS', 'stationName': 'Kansas TS (OK)'}, {'stationId': 'KARCY', 'stationName': 'Karnes City LMR TS'}, {'stationId': 'KEENT', 'stationName': 'Keen Mountain TS'}, {'stationId': 'KEEKN', 'stationName': 'Keeney Knob TS'}, {'stationId': 'KELYV', 'stationName': 'Kelleysville TS'}, {'stationId': 'KELLY', 'stationName': 'Kellysville (WV) TS'}, {'stationId': 'KENTX', 'stationName': 'Kendleton TS (McLeod)'}, {'stationId': 'KENNA', 'stationName': 'Kenna TS'}, {'stationId': 'KIEOK', 'stationName': 'Kiefer TS (McLeod)'}, {'stationId': 'KILGO', 'stationName': 'Kilgore TS'}, {'stationId': 'KNGRH', 'stationName': 'King Ranch TS'}, {'stationId': 'KNGV', 'stationName': 'Kingsville Station (MARS)'}, {'stationId': 'KRK', 'stationName': 'Kirk TS'}, {'stationId': 'KOKMO', 'stationName': 'Kokomo TS'}, {'stationId': 'KOSTX', 'stationName': 'Kosse TS (Qwest)'}, {'stationId': 'KYRCK', 'stationName': 'Kyger Creek TS'}, {'stationId': 'LCDT1', 'stationName': 'LCD Test Location 1'}, {'stationId': 'LCDT2', 'stationName': 'LCD Test Location 2'}, {'stationId': 'LDDS', 'stationName': 'LDDS POP'}, {'stationId': 'LACKS', 'stationName': 'La Cygne TS (Velocita Jingo)'}, {'stationId': 'LAPLM', 'stationName': 'La Palma TS'}, {'stationId': 'LAQNT', 'stationName': 'La Quinta TS'}, {'stationId': 'LKEUC', 'stationName': 'Lake Eucha TS'}, {'stationId': 'LAMKB', 'stationName': 'Lamberts Knob TS'}, {'stationId': 'LANCA', 'stationName': 'Lancaster POP'}, {'stationId': 'LANCR', 'stationName': 'Lancaster TS'}, {'stationId': 'LREDO', 'stationName': 'Laredo D O TS'}, {'stationId': 'LAREN', 'stationName': 'Laredo North TS'}, {'stationId': 'LARD', 'stationName': 'Laredo TS'}, {'stationId': 'LARTC', 'stationName': 'Laredo Telecomm Office'}, {'stationId': 'LATHM', 'stationName': 'Latham TS'}, {'stationId': 'LAVAL', 'stationName': 'Lavalette TS'}, {'stationId': 'LAWRB', 'stationName': 'Lawrenceburg TS'}, {'stationId': 'LAW7C', 'stationName': 'Lawton 7&C TS'}, {'stationId': 'LAWET', 'stationName': 'Lawton Eastside TS'}, {'stationId': 'LWTN', 'stationName': 'Lawton TS (MARS)'}, {'stationId': 'LWTON', 'stationName': 'Lawton TS (MI)'}, {'stationId': 'LWT', 'stationName': 'Lawton TS (MI)'}, {'stationId': 'LAWT', 'stationName': 'Lawton TS (OK)'}, {'stationId': 'LAYLN', 'stationName': 'Layland TS'}, {'stationId': 'LEAWD', 'stationName': 'Leatherwood TS'}, {'stationId': 'LEBON', 'stationName': 'Lebanon POP (GPU)'}, {'stationId': 'LEBAN', 'stationName': 'Lebanon TS'}, {'stationId': 'LEEVL', 'stationName': 'Leesville TS'}, {'stationId': 'LEOND', 'stationName': 'Leonard TS'}, {'stationId': 'LEONB', 'stationName': 'Leonardsburg TS'}, {'stationId': 'LEWTN', 'stationName': 'Lewistown POP (GPU)'}, {'stationId': 'LKKNB', 'stationName': 'Lick Knob TS'}, {'stationId': 'LIEBR', 'stationName': 'Lieberman TS'}, {'stationId': 'LIGNR', 'stationName': 'Ligonier POP'}, {'stationId': 'LIM', 'stationName': 'Lima POP'}, {'stationId': 'LIMAR', 'stationName': 'Lima Rockhill TS'}, {'stationId': 'LIMA', 'stationName': 'Lima TS'}, {'stationId': 'LIMEH', 'stationName': 'Limestone Hill TS'}, {'stationId': 'LINCN', 'stationName': 'Lincoln TS'}, {'stationId': 'LINN', 'stationName': 'Linn TS'}, {'stationId': 'LITAR', 'stationName': 'Little Rock POP (McLeod)'}, {'stationId': 'LOBOT', 'stationName': 'Lobo TS'}, {'stationId': 'LOEB', 'stationName': 'Loeb TS'}, {'stationId': 'LOGA', 'stationName': 'Logan TS (WV)'}, {'stationId': 'LGNPT', 'stationName': 'Logansport TS'}, {'stationId': 'LCHLL', 'stationName': 'Lon Hill TS'}, {'stationId': 'LOND', 'stationName': 'London TS'}, {'stationId': 'LNGMT', 'stationName': 'Long Mountain TS'}, {'stationId': 'LNGST', 'stationName': 'Longstreet TS'}, {'stationId': 'LONTX', 'stationName': 'Longview POP (Grande)'}, {'stationId': 'LNGVW', 'stationName': 'Longview TS'}, {'stationId': 'LOOKA', 'stationName': 'Lookeba TS'}, {'stationId': 'LOOKB', 'stationName': 'Lookeba TS (MARS)'}, {'stationId': 'LOSFS', 'stationName': 'Los Fresnos TS'}, {'stationId': 'LOUKY', 'stationName': 'Louisville POP (Qwest)'}, {'stationId': 'LWRNP', 'stationName': 'Lower Newport TS'}, {'stationId': 'LUTTN', 'stationName': 'Lutts TS (Level 3 AMP)'}, {'stationId': 'LYFRD', 'stationName': 'Lyford TS'}, {'stationId': 'LBGOF', 'stationName': 'Lynchburg Office'}, {'stationId': 'LYNBG', 'stationName': 'Lynchburg POP'}, {'stationId': 'LYNVE', 'stationName': 'Lynchburg Verizon Wire Center'}, {'stationId': 'MCJ', 'stationName': 'M.C.J. POP'}, {'stationId': 'MFSPO', 'stationName': 'MFS POP'}, {'stationId': 'MFS', 'stationName': 'MFS POP (Telco POP)'}, {'stationId': 'MABTX', 'stationName': 'Mabank TS (McLeod)'}, {'stationId': 'MACKS', 'stationName': 'Macksburg TS'}, {'stationId': 'MADSN', 'stationName': 'Madison TS'}, {'stationId': 'MASBC', 'stationName': 'Madison TWP (OH) SBC POP (837)'}, {'stationId': 'MALVR', 'stationName': 'Malvern TS'}, {'stationId': 'MCHTS', 'stationName': 'Manchester TS'}, {'stationId': 'MANGM', 'stationName': 'Mangum TS'}, {'stationId': 'MANSD', 'stationName': 'Mansfield SC TS'}, {'stationId': 'MANVL', 'stationName': 'Manvel TS'}, {'stationId': 'MANY', 'stationName': 'Many TS'}, {'stationId': 'MARF', 'stationName': 'Marfa TS'}, {'stationId': 'MARIT', 'stationName': 'Marietta TS'}, {'stationId': 'MARIO', 'stationName': 'Marion POP'}, {'stationId': 'MARON', 'stationName': 'Marion TS'}, {'stationId': 'MARSL', 'stationName': 'Marshall TS'}, {'stationId': 'MARVL', 'stationName': 'Martinsville POP'}, {'stationId': 'MARYE', 'stationName': 'Marysville POP'}, {'stationId': 'MARYV', 'stationName': 'Marysville TS'}, {'stationId': 'MASTW', 'stationName': 'Mason LCRA Tower TS'}, {'stationId': 'MAUD', 'stationName': 'Maud TS'}, {'stationId': 'MAYAR', 'stationName': 'Mayflower TS (McLeod)'}, {'stationId': 'MAYFL', 'stationName': 'Mayhew Flats TS'}, {'stationId': 'MAYVL', 'stationName': 'Maysville TS'}, {'stationId': 'MCARP', 'stationName': 'McAlester Repeater TS'}, {'stationId': 'MFETX', 'stationName': 'McAllen POP (Grande)'}, {'stationId': 'MCHUB', 'stationName': 'McCamey Hub'}, {'stationId': 'MCCTS', 'stationName': 'McCamey TS'}, {'stationId': 'MCCON', 'stationName': 'McConnelsville Radio Station (OLD)'}, {'stationId': 'MCCRP', 'stationName': 'McConnelsville TS (Repeater Building)'}, {'stationId': 'MCOOK', 'stationName': 'McCook TS/HPL'}, {'stationId': 'MEMTN', 'stationName': 'Memphis POP (Level 3)'}, {'stationId': 'MEMPS', 'stationName': 'Memphis TS'}, {'stationId': 'MENLM', 'stationName': 'Mena LMR TS'}, {'stationId': 'MENAR', 'stationName': 'Menard Road TS'}, {'stationId': 'MNRD', 'stationName': 'Menard TS'}, {'stationId': 'MCHCY', 'stationName': 'Michigan City POP'}, {'stationId': 'MIDBY', 'stationName': 'Middlebury TS'}, {'stationId': 'MIDPT', 'stationName': 'Middleport #2 TS'}, {'stationId': 'MIDPR', 'stationName': 'Middleport TS'}, {'stationId': 'MIDLD', 'stationName': 'Midland TS'}, {'stationId': 'MIFTX', 'stationName': 'Mifflin TS (Grande)'}, {'stationId': 'MILN', 'stationName': 'Milan TS'}, {'stationId': 'MILLD', 'stationName': 'Millersburg District TS'}, {'stationId': 'MILBG', 'stationName': 'Millersburg TS'}, {'stationId': 'MIN2C', 'stationName': 'Mine 2 Concrete Silo'}, {'stationId': 'MIN2G', 'stationName': 'Mine 2 Guard Booth'}, {'stationId': 'MIN2W', 'stationName': 'Mine 2 Warehouse'}, {'stationId': 'MI2WA', 'stationName': 'Mine 2 Watertank'}, {'stationId': 'MINEA', 'stationName': 'Mineola TS'}, {'stationId': 'MINMO', 'stationName': 'Mineola TS (Velocita)'}, {'stationId': 'MINVA', 'stationName': 'Minerva TS'}, {'stationId': 'MINFD', 'stationName': 'Minford TS'}, {'stationId': 'MOCBD', 'stationName': 'Mockingbird TS'}, {'stationId': 'MONLA', 'stationName': 'Monroe POP (McLeod)'}, {'stationId': 'MONBR', 'stationName': 'Montgomery Base Radio (Bee Mtn.)'}, {'stationId': 'MONAR', 'stationName': 'Monticello TS (McLeod)'}, {'stationId': 'MORTX', 'stationName': 'Moore TS (McLeod)'}, {'stationId': 'MORGT', 'stationName': 'Morgantown POP (ACC)'}, {'stationId': 'MORTN', 'stationName': 'Morristown POP (GPU)'}, {'stationId': 'MNDVE', 'stationName': 'Moundsville SW TS'}, {'stationId': 'MNDVL', 'stationName': 'Moundsville TS (OH)'}, {'stationId': 'MTNLK', 'stationName': 'Mountain Lake TS'}, {'stationId': 'MNTVW', 'stationName': 'Mountain View TS'}, {'stationId': 'MONTR', 'stationName': 'Mountaineer TS'}, {'stationId': 'MTHCD', 'stationName': 'Mouthcard TS'}, {'stationId': 'MTCRS', 'stationName': 'Mt Cross TS'}, {'stationId': 'MTJOY', 'stationName': 'Mt Joy TS'}, {'stationId': 'MTPLS', 'stationName': 'Mt Pleasant TS'}, {'stationId': 'MTSTG', 'stationName': 'Mt Sterling TS'}, {'stationId': 'MNTVR', 'stationName': 'Mt Vernon TS'}, {'stationId': 'MUDCK', 'stationName': 'Mud Creek TS'}, {'stationId': 'MULCK', 'stationName': 'Mulberry Creek TS'}, {'stationId': 'MUNCI', 'stationName': 'Muncie POP'}, {'stationId': 'MUNCE', 'stationName': 'Muncie TS'}, {'stationId': 'MUNDY', 'stationName': 'Munday TS'}, {'stationId': 'MUSOK', 'stationName': 'Muskogee POP (McLeod)'}, {'stationId': 'NOC', 'stationName': 'NOC TS'}, {'stationId': 'BNATN', 'stationName': 'Nashville POP (Level 3)'}, {'stationId': 'NASVL', 'stationName': 'Nashville TS'}, {'stationId': 'NEEDV', 'stationName': 'Needville TS/HPL'}, {'stationId': 'NELVL', 'stationName': 'Nelsonville TS'}, {'stationId': 'NEWAL', 'stationName': 'New Alexandria TS'}, {'stationId': 'NNBOS', 'stationName': 'New Boston TS'}, {'stationId': 'NEWBF', 'stationName': 'New Buffalo TS'}, {'stationId': 'NEWHO', 'stationName': 'New Hope TS'}, {'stationId': 'NEWLX', 'stationName': 'New Lexington TS'}, {'stationId': 'NEWMV', 'stationName': 'New Martinsville TS'}, {'stationId': 'NPHIA', 'stationName': 'New Philadelphia POP'}, {'stationId': 'NEWPH', 'stationName': 'New Philadelphia TS'}, {'stationId': 'NEWRI', 'stationName': 'New Richmond TS'}, {'stationId': 'NEWRG', 'stationName': 'New Riegel TS'}, {'stationId': 'NEWCN', 'stationName': 'Newark Center POP'}, {'stationId': 'NEWAK', 'stationName': 'Newark POP'}, {'stationId': 'NEWAR', 'stationName': 'Newark TS'}, {'stationId': 'NEWCM', 'stationName': 'Newcomerstown TS'}, {'stationId': 'NEWPT', 'stationName': 'Newport TS'}, {'stationId': 'NILE', 'stationName': 'Niles TS'}, {'stationId': 'NOBUS', 'stationName': 'No Business Mountain TS'}, {'stationId': 'NOLAN', 'stationName': 'Nolan TS'}, {'stationId': 'NORFK', 'stationName': 'Norfolk POP (ValleyNet)'}, {'stationId': 'NORG', 'stationName': 'Norge TS'}, {'stationId': 'NORGE', 'stationName': 'Norge TS (MARS)'}, {'stationId': 'NRMOK', 'stationName': 'Norman TS (McLeod)'}, {'stationId': 'NCHAR', 'stationName': 'North Charleston Service Center TS'}, {'stationId': 'NEDBG', 'stationName': 'North Edinburg Sub TS'}, {'stationId': 'NMCCY', 'stationName': 'North McCamey TS'}, {'stationId': 'NMUDY', 'stationName': 'North Munday TS'}, {'stationId': 'NPOR', 'stationName': 'North Portsmouth TS'}, {'stationId': 'NPRTM', 'stationName': 'North Portsmouth TS POP'}, {'stationId': 'NOTBK', 'stationName': 'Notch Block TS'}, {'stationId': 'NOWTA', 'stationName': 'Nowata TS'}, {'stationId': 'NUEBY', 'stationName': 'Nueces Bay TS'}, {'stationId': 'NURSY', 'stationName': 'Nursery TS'}, {'stationId': 'OFAMO', 'stationName': 'O\'Fallon TS (Velocita Wentzville)'}, {'stationId': 'OAKBK', 'stationName': 'Oak Brook POP'}, {'stationId': 'OAKTX', 'stationName': 'Oak Creek TS'}, {'stationId': 'OAKHL', 'stationName': 'Oak Hill (OH) TS'}, {'stationId': 'OKHLL', 'stationName': 'Oak Hill (WV) TS'}, {'stationId': 'OAKLD', 'stationName': 'Oakland TS'}, {'stationId': 'ODMCP', 'stationName': 'Odem Compressor Station/HPL'}, {'stationId': 'ODMTS', 'stationName': 'Odem TS/HPL'}, {'stationId': 'ODEMO', 'stationName': 'Odessa TS (Velocita)'}, {'stationId': 'OGDEN', 'stationName': 'Ogden Microwave Site'}, {'stationId': 'OILTN', 'stationName': 'Oilton TS'}, {'stationId': 'POPOK', 'stationName': 'Oklahoma City C3 POP'}, {'stationId': 'OKLUN', 'stationName': 'Oklaunion TS (PSO)'}, {'stationId': 'OKLON', 'stationName': 'Oklaunion TS (TNC)'}, {'stationId': 'OLDCH', 'stationName': 'Old Chickasha SC TS'}, {'stationId': 'OLIV', 'stationName': 'Olive TS'}, {'stationId': 'ONDPK', 'stationName': 'Oneida Peak TS'}, {'stationId': 'ORIEN', 'stationName': 'Orient LMR TS'}, {'stationId': 'OVRTS', 'stationName': 'Overton TS'}, {'stationId': 'OWASO', 'stationName': 'Owasso TS'}, {'stationId': 'OYSTS', 'stationName': 'Oyster Lake TS/HPL'}, {'stationId': 'OZAAR', 'stationName': 'Ozark TS (McLeod)'}, {'stationId': 'OZNA', 'stationName': 'Ozona TS'}, {'stationId': 'PADEN', 'stationName': 'Paden City TS'}, {'stationId': 'PADST', 'stationName': 'Paducah City Station'}, {'stationId': 'PNTCR', 'stationName': 'Paint Creek TS'}, {'stationId': 'PANTR', 'stationName': 'Panther TS'}, {'stationId': 'PARKB', 'stationName': 'Parkersburg POP (ACC)'}, {'stationId': 'PATRN', 'stationName': 'Patterson TS'}, {'stationId': 'PAULG', 'stationName': 'Paulding TS'}, {'stationId': 'PAWHK', 'stationName': 'Pawhuska TS'}, {'stationId': 'PEACK', 'stationName': 'Peacock TS'}, {'stationId': 'PEAK2', 'stationName': 'Peak Knob #2 TS'}, {'stationId': 'PEAKB', 'stationName': 'Peak Knob TS'}, {'stationId': 'PEARB', 'stationName': 'Pearisburg TS'}, {'stationId': 'PRSAL', 'stationName': 'Pearsall Service Center (MARS) TS'}, {'stationId': 'PEBLS', 'stationName': 'Peebles #2 TS'}, {'stationId': 'PEEBL', 'stationName': 'Peebles TS'}, {'stationId': 'PETTN', 'stationName': 'Peterstown TS'}, {'stationId': 'PHLBG', 'stationName': 'Phillipsburg POP (GPU)'}, {'stationId': 'PHILO', 'stationName': 'Philo TS'}, {'stationId': 'PIKTN', 'stationName': 'Piketon POP'}, {'stationId': 'PIKE', 'stationName': 'Pikeville Office Building'}, {'stationId': 'PINAR', 'stationName': 'Pine Bluff POP (McLeod)'}, {'stationId': 'PINVL', 'stationName': 'Pineville TS'}, {'stationId': 'PIRKE', 'stationName': 'Pirkey Plant TS'}, {'stationId': 'PITBR', 'stationName': 'Pittsburg POP (ACC)'}, {'stationId': 'PLADL', 'stationName': 'Plain Dealing TS'}, {'stationId': 'PLSBD', 'stationName': 'Pleasant Bend TS'}, {'stationId': 'PLSN', 'stationName': 'Pleasant City TS'}, {'stationId': 'PLCHR', 'stationName': 'Pletcher Station'}, {'stationId': 'PLYM', 'stationName': 'Plymouth TS'}, {'stationId': 'POMR', 'stationName': 'Pomery TS'}, {'stationId': 'PRMT1', 'stationName': 'Poor Mountain #1 TS'}, {'stationId': 'PRMT2', 'stationName': 'Poor Mountain #2 TS'}, {'stationId': 'PORTN', 'stationName': 'Portland TS'}, {'stationId': 'PORTH', 'stationName': 'Portsmouth POP'}, {'stationId': 'PORTM', 'stationName': 'Portsmouth TS Lowband'}, {'stationId': 'PZOOM', 'stationName': 'Portsmouth Zoomnet TS'}, {'stationId': 'PRAGV', 'stationName': 'Prairie Grove TS'}, {'stationId': 'PRETN', 'stationName': 'Preston TS'}, {'stationId': 'PRITN', 'stationName': 'Princeton TS'}, {'stationId': 'PRISM', 'stationName': 'Prism POP'}, {'stationId': 'PROCL', 'stationName': 'Proctorville Low Band (PENDING DELETION)'}, {'stationId': 'PRCVL', 'stationName': 'Proctorville TS'}, {'stationId': 'PROFR', 'stationName': 'Protocol Frame Relay Office Leavenworth'}, {'stationId': 'PRYOR', 'stationName': 'Pryor TS'}, {'stationId': 'PTLOK', 'stationName': 'Pt Lookout Mountain TS'}, {'stationId': 'PTPLE', 'stationName': 'Pt Pleasant TS'}, {'stationId': 'PULSK', 'stationName': 'Pulaski TS'}, {'stationId': 'PURGA', 'stationName': 'Purgatory TS'}, {'stationId': 'RACON', 'stationName': 'Raccoon TS'}, {'stationId': 'RACHL', 'stationName': 'Rachal TS'}, {'stationId': 'RANEL', 'stationName': 'Rainelle TS'}, {'stationId': 'RANOK', 'stationName': 'Randlett TS (McLeod)'}, {'stationId': 'RATCL', 'stationName': 'Ratcliffburg TS'}, {'stationId': 'RSRDG', 'stationName': 'Rattle Snake Ridge TS'}, {'stationId': 'RAVWO', 'stationName': 'Ravenswood POP'}, {'stationId': 'RAYTX', 'stationName': 'Raymondville TS'}, {'stationId': 'READG', 'stationName': 'Reading POP (GPU)'}, {'stationId': 'REDCR', 'stationName': 'Red Creek TS'}, {'stationId': 'REDFK', 'stationName': 'Red Fork TS'}, {'stationId': 'REEDV', 'stationName': 'Reedsville TS'}, {'stationId': 'REFGO', 'stationName': 'Refugio TS'}, {'stationId': 'RFGTX', 'stationName': 'Refugio TS (McLeod)'}, {'stationId': 'RENRK', 'stationName': 'Renrock TS'}, {'stationId': 'RICHN', 'stationName': 'Richardson TS'}, {'stationId': 'RICHM', 'stationName': 'Richmond TS'}, {'stationId': 'RNGLD', 'stationName': 'Ringgold (Hwy 4) LMR TS'}, {'stationId': 'RINGD', 'stationName': 'Ringgold TS'}, {'stationId': 'RGCME', 'stationName': 'Rio Grande City (Medina) TS'}, {'stationId': 'RGCLM', 'stationName': 'Rio Grande City LMR TS'}, {'stationId': 'RIOTS', 'stationName': 'Rio Grande City Median TS'}, {'stationId': 'RGRCY', 'stationName': 'Rio Grande City TS'}, {'stationId': 'RIOTX', 'stationName': 'Rio Grande City TS (McLeod)'}, {'stationId': 'RGREL', 'stationName': 'Rio Grande Electric Coop TS'}, {'stationId': 'RIOHN', 'stationName': 'Rio Hondo TS'}, {'stationId': 'ROAGR', 'stationName': 'Roanoke Garage TS'}, {'stationId': 'ROANE', 'stationName': 'Roanoke POP'}, {'stationId': 'ROANK', 'stationName': 'Roanoke POP TS - DELETE'}, {'stationId': 'ROBPA', 'stationName': 'Robison Park TS'}, {'stationId': 'ROCKB', 'stationName': 'Rockbridge TS'}, {'stationId': 'ROCTN', 'stationName': 'Rockdale TS (Level 3 AMP)'}, {'stationId': 'ROCKH', 'stationName': 'Rockhill POP'}, {'stationId': 'RCKHL', 'stationName': 'Rockhill TS'}, {'stationId': 'ROCKT', 'stationName': 'Rockport Plant TS'}, {'stationId': 'ROCKP', 'stationName': 'Rockport TS'}, {'stationId': 'RCKSP', 'stationName': 'Rocksprings TS'}, {'stationId': 'ROKSP', 'stationName': 'Rocksprings TS N/A'}, {'stationId': 'ROGRT', 'stationName': 'Rogers LMR TS'}, {'stationId': 'ROSTX', 'stationName': 'Rosenberg TS (Qwest)'}, {'stationId': 'ROSWD', 'stationName': 'Rosewood TS'}, {'stationId': 'ROSSI', 'stationName': 'Ross IMC'}, {'stationId': 'ROSSP', 'stationName': 'Ross POP'}, {'stationId': 'ROS', 'stationName': 'Ross TS'}, {'stationId': 'RT19', 'stationName': 'Route 19 TS'}, {'stationId': 'RUL', 'stationName': 'Rule TS'}, {'stationId': 'RUSTS', 'stationName': 'Rush Springs TS'}, {'stationId': 'RUSTG', 'stationName': 'Rustburg TS'}, {'stationId': 'STALN', 'stationName': 'Saint Albans TS'}, {'stationId': 'SALM', 'stationName': 'Salem TS'}, {'stationId': 'SALYR', 'stationName': 'Salyersville TS'}, {'stationId': 'SANAM', 'stationName': 'San Angelo Armstrong TS'}, {'stationId': 'SANAG', 'stationName': 'San Angelo LMR TS'}, {'stationId': 'SAPS', 'stationName': 'San Angelo PS TS'}, {'stationId': 'SAPTS', 'stationName': 'San Angelo Station TS'}, {'stationId': 'SATTX', 'stationName': 'San Antonio C3 POP'}, {'stationId': 'SANAT', 'stationName': 'San Antonio POP (ICG)'}, {'stationId': 'SANDM', 'stationName': 'Sand Mountain TS'}, {'stationId': 'SNDSP', 'stationName': 'Sand Springs LMR TS'}, {'stationId': 'SMARI', 'stationName': 'Santa Maria TS'}, {'stationId': 'SROSA', 'stationName': 'Santa Rosa TS'}, {'stationId': 'SARGS', 'stationName': 'Saragosa TS'}, {'stationId': 'SARAH', 'stationName': 'Sarahsville TS'}, {'stationId': 'SARDN', 'stationName': 'Sardinia TS'}, {'stationId': 'SAYTS', 'stationName': 'Sayre TS'}, {'stationId': 'SCHIF', 'stationName': 'Schiff TS'}, {'stationId': 'SCHKB', 'stationName': 'Schoonover Knob TS'}, {'stationId': 'SCHDR', 'stationName': 'Schreoder TS'}, {'stationId': 'SCIOO', 'stationName': 'Scio TS'}, {'stationId': 'SELVN', 'stationName': 'Selvin TS'}, {'stationId': 'SEGTX', 'stationName': 'Sequin TS (Qwest)'}, {'stationId': 'SMRCK', 'stationName': 'Shamrock TS'}, {'stationId': 'SHAWE', 'stationName': 'Shawnee TS'}, {'stationId': 'SHEFL', 'stationName': 'Sheffield TS'}, {'stationId': 'SHIST', 'stationName': 'Shinnick Street POP'}, {'stationId': 'SHRC3', 'stationName': 'Shreveport POP (Grande)'}, {'stationId': 'SHRMC', 'stationName': 'Shreveport POP (MCI)'}, {'stationId': 'SHRPT', 'stationName': 'Shreveport TS'}, {'stationId': 'SINTS', 'stationName': 'Sinton TS'}, {'stationId': 'SISSV', 'stationName': 'Sissonville TS'}, {'stationId': 'SMMTN', 'stationName': 'Smith Mountain TS'}, {'stationId': 'SNYDE', 'stationName': 'Snyder TS'}, {'stationId': 'SONTW', 'stationName': 'Sonora Tower LMR TS'}, {'stationId': 'SOREN', 'stationName': 'Sorenson TS'}, {'stationId': 'SBEND', 'stationName': 'South Bend POP-DELETE use KANKE'}, {'stationId': 'SCREG', 'stationName': 'South Charleston Regen (OH)'}, {'stationId': 'SLANT', 'stationName': 'South Lancaster TS POP'}, {'stationId': 'SMETR', 'stationName': 'South Metro TS'}, {'stationId': 'SPRTM', 'stationName': 'South Portsmouth TS'}, {'stationId': 'SSHR2', 'stationName': 'South Shore #2 TS'}, {'stationId': 'SSHOR', 'stationName': 'South Shore TS'}, {'stationId': 'SWILN', 'stationName': 'South Williamson TS'}, {'stationId': 'SWOOS', 'stationName': 'South Wooster TS'}, {'stationId': 'SPAVW', 'stationName': 'Spavinaw TS'}, {'stationId': 'SPONS', 'stationName': 'Sponseller TS'}, {'stationId': 'SPRN', 'stationName': 'Sporn Plant TS'}, {'stationId': 'SPUTS', 'stationName': 'Spur TS'}, {'stationId': 'SPRUN', 'stationName': 'Spy Run TS'}, {'stationId': 'STCLS', 'stationName': 'St Clairsville POP'}, {'stationId': 'STLMO', 'stationName': 'St Louis POP (Velocita)'}, {'stationId': 'STMAR', 'stationName': 'St Marys TS'}, {'stationId': 'STAFD', 'stationName': 'Stafford TS'}, {'stationId': 'STATS', 'stationName': 'Stamford TS'}, {'stationId': 'STCOL', 'stationName': 'State College POP (GPU)'}, {'stationId': 'STECY', 'stationName': 'Sterling City TS'}, {'stationId': 'SLGOK', 'stationName': 'Sterling TS (McLeod)'}, {'stationId': 'STIGE', 'stationName': 'Stigler TS'}, {'stationId': 'STCKP', 'stationName': 'Stockport TS'}, {'stationId': 'STNCK', 'stationName': 'Stone Creek TS'}, {'stationId': 'STRBG', 'stationName': 'Strasburg TS'}, {'stationId': 'SDTOK', 'stationName': 'Stroud TS (McLeod)'}, {'stationId': 'SLINE', 'stationName': 'Stuart Line TS'}, {'stationId': 'STUTS', 'stationName': 'Stuart TS'}, {'stationId': 'SUGGR', 'stationName': 'Sugar Grove TS'}, {'stationId': 'SWHBK', 'stationName': 'Switchback TS'}, {'stationId': 'TALP', 'stationName': 'Talpa TS'}, {'stationId': 'TAZLL', 'stationName': 'Tazewell TS'}, {'stationId': 'TTC', 'stationName': 'Telecom Training Center'}, {'stationId': 'TELCG', 'stationName': 'Teleport Comm Group'}, {'stationId': 'TXAR', 'stationName': 'Texarkana Area TS'}, {'stationId': 'TXCTY', 'stationName': 'Texas City TS/HPL'}, {'stationId': 'TEXCM', 'stationName': 'Texas Comm Tower TS'}, {'stationId': 'TEXCT', 'stationName': 'Texas Communications Tower TS'}, {'stationId': 'TEXN', 'stationName': 'Texon TS'}, {'stationId': 'THALI', 'stationName': 'Thalia TS'}, {'stationId': 'THMAS', 'stationName': 'Thomas TS'}, {'stationId': 'THOMP', 'stationName': 'Thompsonville TS/HPL'}, {'stationId': 'TRIVR', 'stationName': 'Three Rivers LMR TS (TX)'}, {'stationId': 'TRERV', 'stationName': 'Three Rivers TS (MI)'}, {'stationId': 'THRTS', 'stationName': 'Three Rivers TS (TX)'}, {'stationId': 'TMNTN', 'stationName': 'Throckmorton TS'}, {'stationId': 'TIDPF', 'stationName': 'Tidd Passive Reflector'}, {'stationId': 'TIFF', 'stationName': 'Tiffin TS'}, {'stationId': 'TGRHL', 'stationName': 'Tiger Hill TS'}, {'stationId': 'TILLM', 'stationName': 'Tillman TS'}, {'stationId': 'TINKM', 'stationName': 'Tinker Mountain TS'}, {'stationId': 'TOMRV', 'stationName': 'Toms River POP (GPU)'}, {'stationId': 'TW56', 'stationName': 'Tower 56'}, {'stationId': 'TWTEX', 'stationName': 'Towers of Texas LMR TS'}, {'stationId': 'TRIMB', 'stationName': 'Trimble TS'}, {'stationId': 'TROUS', 'stationName': 'Trousdale TS'}, {'stationId': 'TRYON', 'stationName': 'Tryon Road TS'}, {'stationId': 'POPTU', 'stationName': 'Tulsa POP (Grande)'}, {'stationId': 'TUSSE', 'stationName': 'Tulsa Southeast MW TS'}, {'stationId': 'TULYL', 'stationName': 'Tulsa Yale TS'}, {'stationId': 'TURKT', 'stationName': 'Turk PS Telecom Building'}, {'stationId': 'TURKL', 'stationName': 'Turkey LMR'}, {'stationId': 'TRKEY', 'stationName': 'Turkey TS'}, {'stationId': 'TURNR', 'stationName': 'Turner TS'}, {'stationId': 'TWBRA', 'stationName': 'Twin Branch TS'}, {'stationId': 'UNIST', 'stationName': 'Union Street TS'}, {'stationId': 'UNION', 'stationName': 'Union TS'}, {'stationId': 'UNIVL', 'stationName': 'Unionville TS'}, {'stationId': 'UPTKY', 'stationName': 'Upton POP (Qwest AMP)'}, {'stationId': 'UVMEC', 'stationName': 'Uvalde MEC TS'}, {'stationId': 'UVAL', 'stationName': 'Uvalde TS'}, {'stationId': 'VALLS', 'stationName': 'Valliant 345KV Station TS'}, {'stationId': 'VANAR', 'stationName': 'Van Buren TS (McLeod)'}, {'stationId': 'VWERT', 'stationName': 'Van Wert TS'}, {'stationId': 'MCISH', 'stationName': 'Verizon Business Shreveport POP'}, {'stationId': 'VERON', 'stationName': 'Vernon TS'}, {'stationId': 'VIAOK', 'stationName': 'Vian TS (McLeod)'}, {'stationId': 'VICTA', 'stationName': 'Victoria POP'}, {'stationId': 'VCTTX', 'stationName': 'Victoria POP (McLeod)'}, {'stationId': 'VICTR', 'stationName': 'Victoria SC TS'}, {'stationId': 'VICGR', 'stationName': 'Victoria-Grande POP'}, {'stationId': 'VINTB', 'stationName': 'Vinita TS'}, {'stationId': 'VINOK', 'stationName': 'Vinita TS (Velocita Chelsea)'}, {'stationId': 'VIOLT', 'stationName': 'Violet TS'}, {'stationId': 'WCJC', 'stationName': 'WCJC TS'}, {'stationId': 'WERK', 'stationName': 'WERK TS'}, {'stationId': 'WPS', 'stationName': 'WPS TS'}, {'stationId': 'WACTX', 'stationName': 'Waco POP (Level 3)'}, {'stationId': 'WALDO', 'stationName': 'Waldo TS'}, {'stationId': 'WALDR', 'stationName': 'Waldron TS'}, {'stationId': 'WALMT', 'stationName': 'Walker Mountain TS'}, {'stationId': 'WALLV', 'stationName': 'Wallisville TS/HPL'}, {'stationId': 'WALMS', 'stationName': 'Walnut TS (Level 3 AMP)'}, {'stationId': 'WLTER', 'stationName': 'Walters TS (New Location)'}, {'stationId': 'WALTE', 'stationName': 'Walters TS (OLD)'}, {'stationId': 'WARRN', 'stationName': 'Warren TS'}, {'stationId': 'WATTS', 'stationName': 'Watts TS'}, {'stationId': 'WAVRY', 'stationName': 'Waverly TS'}, {'stationId': 'WAYN', 'stationName': 'Wayne TS'}, {'stationId': 'WAYBO', 'stationName': 'Waynesboro POP (Ntelos)'}, {'stationId': 'WEATH', 'stationName': 'Weatherford TS'}, {'stationId': 'WEBB', 'stationName': 'Webb LMR TS'}, {'stationId': 'WEBMW', 'stationName': 'Webb MW TS'}, {'stationId': 'WEDTN', 'stationName': 'Weddington TS'}, {'stationId': 'WELH', 'stationName': 'Welch TS'}, {'stationId': 'WELKA', 'stationName': 'Weleetka LMR TS'}, {'stationId': 'WELLN', 'stationName': 'Wellington TS'}, {'stationId': 'WELLV', 'stationName': 'Wellsville TS'}, {'stationId': 'WALKN', 'stationName': 'West Alikanna TS'}, {'stationId': 'WCAM', 'stationName': 'West Cambridge TS'}, {'stationId': 'WLIBY', 'stationName': 'West Liberty TS'}, {'stationId': 'WNPHA', 'stationName': 'West New Philadelphia POP'}, {'stationId': 'WNPHI', 'stationName': 'West New Philadelphia TS'}, {'stationId': 'WPORT', 'stationName': 'West Portsmouth TS'}, {'stationId': 'WPOWN', 'stationName': 'West Powhatan TS'}, {'stationId': 'HUGOW', 'stationName': 'Western Farmers Hugo TS'}, {'stationId': 'WFMUN', 'stationName': 'Western Farmers Union Twr TS'}, {'stationId': 'WHECP', 'stationName': 'Wheeling C&P TS'}, {'stationId': 'WHMOZ', 'stationName': 'Wheeling TS (Mozart Base Station)'}, {'stationId': 'WHELW', 'stationName': 'Wheelwright TS'}, {'stationId': 'WTEOK', 'stationName': 'White Oak TS'}, {'stationId': 'WHBB2', 'stationName': 'Whitesburg #2 TS'}, {'stationId': 'WHTBG', 'stationName': 'Whitesburg TS'}, {'stationId': 'WHTOP', 'stationName': 'Whitetop Mountain TS'}, {'stationId': 'WHITY', 'stationName': 'Whitney TS'}, {'stationId': 'WIDAR', 'stationName': 'Widener TS (Level 3 AMP)'}, {'stationId': 'WILKE', 'stationName': 'Wilkes TS'}, {'stationId': 'WILKU', 'stationName': 'Wilkesville UHF Repeater'}, {'stationId': 'WILMT', 'stationName': 'Willis Mountain TS'}, {'stationId': 'WINTR', 'stationName': 'Winchester TS'}, {'stationId': 'WINBR', 'stationName': 'Winnsboro TS'}, {'stationId': 'WNTTS', 'stationName': 'Winters TS'}, {'stationId': 'WOOSR', 'stationName': 'Wooster District TS'}, {'stationId': 'WOOSE', 'stationName': 'Wooster POP'}, {'stationId': 'WOOST', 'stationName': 'Wooster TS'}, {'stationId': 'WT168', 'stationName': 'Wyoming Station Tower 168-B1 TS'}, {'stationId': 'WYHVL', 'stationName': 'Wytheville TS'}, {'stationId': 'YRK', 'stationName': 'York POP (GPU)'}, {'stationId': 'ZANV', 'stationName': 'Zanesville District TS'}, {'stationId': 'ZANVE', 'stationName': 'Zanesville East TS'}, {'stationId': 'ZANES', 'stationName': 'Zanesville TS'}, {'stationId': 'ZAPTA', 'stationName': 'Zapata TS'}, {'stationId': 'ZAPTX', 'stationName': 'Zapata TS (McLeod)'}];
     var inMemoryRegions = [{'regionId': 1, 'regionName': 'AP/KP'}, {'regionId': 2, 'regionName': 'Central'}, {'regionId': 3, 'regionName': 'Eastern'}, {'regionId': 4, 'regionName': 'IM'}, {'regionId': 5, 'regionName': 'Midwest'}, {'regionId': 6, 'regionName': 'Northern'}, {'regionId': 7, 'regionName': 'Ohio'}, {'regionId': 8, 'regionName': 'PSO'}, {'regionId': 9, 'regionName': 'Region Support'}, {'regionId': 10, 'regionName': 'SWEPCO'}, {'regionId': 11, 'regionName': 'Southern'}, {'regionId': 12, 'regionName': 'Southwest'}, {'regionId': 13, 'regionName': 'Texas'}, {'regionId': 14, 'regionName': 'Western'}];
     var inMemoryAreas = [{'areaId': 1, 'areaName': 'AEPHQ'}, {'areaId': 2, 'areaName': 'Abilene'}, {'areaId': 3, 'areaName': 'Ashland'}, {'areaId': 4, 'areaName': 'Bluefield'}, {'areaId': 5, 'areaName': 'C3 Central'}, {'areaId': 6, 'areaName': 'C3 North'}, {'areaId': 7, 'areaName': 'C3 South'}, {'areaId': 8, 'areaName': 'Canton'}, {'areaId': 9, 'areaName': 'Charleston'}, {'areaId': 10, 'areaName': 'Coastal Texas'}, {'areaId': 11, 'areaName': 'Columbus'}, {'areaId': 12, 'areaName': 'Corpus Christi'}, {'areaId': 13, 'areaName': 'Dallas'}, {'areaId': 14, 'areaName': 'East Texas'}, {'areaId': 15, 'areaName': 'Fort Wayne'}, {'areaId': 16, 'areaName': 'Groveport'}, {'areaId': 17, 'areaName': 'Laredo'}, {'areaId': 18, 'areaName': 'Lawton'}, {'areaId': 19, 'areaName': 'Muncie'}, {'areaId': 20, 'areaName': 'Oklahoma'}, {'areaId': 21, 'areaName': 'Pharr'}, {'areaId': 22, 'areaName': 'Roanoke'}, {'areaId': 23, 'areaName': 'Shreveport'}, {'areaId': 24, 'areaName': 'South Bend'}, {'areaId': 25, 'areaName': 'Southern Ohio'}, {'areaId': 26, 'areaName': 'Texarkana'}, {'areaId': 27, 'areaName': 'Tulsa'}];
+    var inMemoryUserRole = 'NOC_Admin';
 
-    var DashboardService = function(options) {
+
+    var DashboardService = function (options) {
         console.trace('new DashboardService()');
         options || (options = {});
         this.initialize.apply(this, arguments);
     };
 
     _.extend(DashboardService.prototype, {
-        initialize: function(options) {
+        initialize: function (options) {
             console.trace('DashboardService.initialize');
             options || (options = {});
         },
-        getStationById: function(id) {
-            return $.ajax({
-                contentType: 'application/json',
-                dataType: 'json',
-                type: 'GET',
-                url: env.getApiUrl() + '/station/' + id
-            });
+        getStationById: function (options) {
+            options || (options = {});
+            var data = JSON.stringify(options);
+
+            var deferred = $.Deferred();
+            var results = {
+                station: inMemoryStation,
+                userRole: inMemoryUserRole
+            };
+            setTimeout(function () {
+                deferred.resolve(results, 'success', null);
+            }, 1000);
+            return deferred.promise();
         },
-        getStations: function(options) {
+        getStations: function (options) {
+            options || (options = {});
+            var data = JSON.stringify(options);
+
+            var deferred = $.Deferred();
+            var results = {
+                stations: inMemoryStations,
+                regions: inMemoryRegions,
+                areas: inMemoryAreas,
+                userRole: inMemoryUserRole
+            };
+            setTimeout(function () {
+                deferred.resolve(results, 'success', null);
+            }, 1000);
+            return deferred.promise();
+        },
+        getStationEntryLogById: function (options) {
+            options || (options = {});
+            var data = JSON.stringify(options);
+
+            var deferred = $.Deferred();
+            var results = {
+                stationEntryLog: inMemoryStationEntryLog,
+                userRole: inMemoryUserRole
+            };
+            setTimeout(function () {
+                deferred.resolve(results, 'success', null);
+            }, 1000);
+            return deferred.promise();
+        },
+        getStationEntryLogs: function (options) {
             var data;
             if (options) {
                 data = JSON.stringify(options);
             }
 
-            return $.ajax({
-                contentType: 'application/json',
-                data: data,
-                dataType: 'json',
-                type: 'GET',
-                url: env.getApiUrl() + '/station'
-            });
+            var deferred = $.Deferred();
+            var results = {
+                stationEntryLogs: inMemoryStationEntryLogs,
+                stationIdentifiers: inMemoryStationIdentifiers,
+                regions: inMemoryRegions,
+                areas: inMemoryAreas,
+                userRole: inMemoryUserRole
+            };
+            setTimeout(function () {
+                deferred.resolve(results, 'success', null);
+            }, 1000);
+            return deferred.promise();
         },
-        getStationEntryLogById: function(id) {
-            return $.ajax({
-                contentType: 'application/json',
-                dataType: 'json',
-                type: 'GET',
-                url: env.getApiUrl() + '/stationEntryLog/' + id
-            });
-        },
-        getStationEntryLogs: function(options) {
-            var data;
-            if (options) {
-                data = JSON.stringify(options);
-            }
+        getStationEntryLogsByOpen: function (options) {
+            options || (options = {});
+            var data = JSON.stringify(options);
 
-            return $.ajax({
-                contentType: 'application/json',
-                data: data,
-                dataType: 'json',
-                type: 'GET',
-                url: env.getApiUrl() + '/stationEntryLog/history'
-            });
+            var deferred = $.Deferred();
+            var results = {
+                stationEntryLogs: inMemoryStationEntryLogs,
+                stationIdentifiers: inMemoryStationIdentifiers,
+                regions: inMemoryRegions,
+                areas: inMemoryAreas,
+                userRole: inMemoryUserRole
+            };
+            setTimeout(function () {
+                deferred.resolve(results, 'success', null);
+            }, 1000);
+            return deferred.promise();
         },
-        getStationEntryLogsByOpen: function(options) {
-            var data;
-            if (options) {
-                data = JSON.stringify(options);
-            }
+        getStationEntryLogsByExpired: function (options) {
+            options || (options = {});
+            var data = JSON.stringify(options);
 
-            return $.ajax({
-                contentType: 'application/json',
-                data: data,
-                dataType: 'json',
-                type: 'GET',
-                url: env.getApiUrl() + '/stationEntryLog/open'
-            });
+            var deferred = $.Deferred();
+            var results = {
+                stationEntryLogs: inMemoryStationEntryLogs,
+                stationIdentifiers: inMemoryStationIdentifiers,
+                regions: inMemoryRegions,
+                areas: inMemoryAreas,
+                userRole: inMemoryUserRole
+            };
+            setTimeout(function () {
+                deferred.resolve(results, 'success', null);
+            }, 1000);
+            return deferred.promise();
         },
-        getStationEntryLogsByExpired: function(options) {
-            var data;
-            if (options) {
-                data = JSON.stringify(options);
-            }
+        postCheckIn: function (options) {
+            options || (options = {});
+            var data = JSON.stringify(options);
 
-            return $.ajax({
-                contentType: 'application/json',
-                data: data,
-                dataType: 'json',
-                type: 'GET',
-                url: env.getApiUrl() + '/stationEntryLog/expired'
-            });
+            var deferred = $.Deferred();
+            var results = {
+                stationEntryLog: inMemoryStationEntryLog,
+                userRole: inMemoryUserRole
+            };
+            setTimeout(function () {
+                deferred.resolve(results, 'success', null);
+            }, 1000);
+            return deferred.promise();
         },
-        postCheckIn: function(options) {
-            var data;
-            if (options) {
-                data = JSON.stringify(options);
-            }
+        postCheckOut: function (options) {
+            options || (options = {});
+            var data = JSON.stringify(options);
 
-            return $.ajax({
-                contentType: 'application/json',
-                data: JSON.stringify(options),
-                dataType: 'json',
-                type: 'POST',
-                url: env.getApiUrl() + '/stationEntryLog/checkIn'
-            });
+            var deferred = $.Deferred();
+            var results = {
+                stationEntryLog: inMemoryStationEntryLog
+            };
+            setTimeout(function () {
+                deferred.resolve(results, 'success', null);
+            }, 1000);
+            return deferred.promise();
         },
-        postCheckOut: function(options) {
-            var data;
-            if (options) {
-                data = JSON.stringify(options);
-            }
+        postUpdateCheckIn: function (options) {
+            options || (options = {});
+            var data = JSON.stringify(options);
 
-            return $.ajax({
-                contentType: 'application/json',
-                data: data,
-                dataType: 'json',
-                type: 'POST',
-                url: env.getApiUrl() + '/stationEntryLog/checkOut'
-            });
+            var deferred = $.Deferred();
+            var results = {
+                stationEntryLog: inMemoryStationEntryLog,
+                userRole: inMemoryUserRole
+            };
+            setTimeout(function () {
+                deferred.resolve(results, 'success', null);
+            }, 1000);
+            return deferred.promise();
         },
-        postUpdateCheckIn: function(options) {
-            var data;
-            if (options) {
-                data = JSON.stringify(options);
-            }
+        getLookupDataItems: function (options) {
+            options || (options = {});
+            var data = JSON.stringify(options);
 
-            return $.ajax({
-                contentType: 'application/json',
-                data: data,
-                dataType: 'json',
-                type: 'POST',
-                url: env.getApiUrl() + '/stationEntryLog/updateCheckIn'
-            });
+            var deferred = $.Deferred();
+            var results = {
+                lookupDataItems: inMemoryLookupDataItems,
+                userRole: inMemoryUserRole
+            };
+            setTimeout(function () {
+                deferred.resolve(results, 'success', null);
+            }, 1000);
+            return deferred.promise();
         },
-        getLookupDataItems: function(options) {
-            var data;
-            if (options) {
-                data = JSON.stringify(options);
-            }
+        getPersonnelByUserId: function (options) {
+            options || (options = {});
+            var data = JSON.stringify(options);
 
-            return $.ajax({
-                contentType: 'application/json',
-                data: data,
-                dataType: 'json',
-                type: 'GET',
-                url: env.getApiUrl() + '/lookupDataItem'
-            });
+            var deferred = $.Deferred();
+            var results = {
+                personnel: inMemoryPersonnel,
+                userRole: inMemoryUserRole
+            };
+            setTimeout(function () {
+                deferred.resolve(results, 'success', null);
+            }, 1000);
+            return deferred.promise();
         },
-        getNewStationEntryLogOptions: function(options) {
-            var data;
-            if (options) {
-                data = JSON.stringify(options);
-            }
+        getNewStationEntryLogOptions: function (options) {
+            options || (options = {});
+            var data = JSON.stringify(options);
 
-            return $.ajax({
-                contentType: 'application/json',
-                dataType: 'json',
-                type: 'GET',
-                url: env.getApiUrl() + '/lookupDataItem/newStationEntryLogOptions'
-            });
+            var deferred = $.Deferred();
+            var results = {
+                stationIdentifiers: inMemoryStationIdentifiers,
+                regions: inMemoryRegions,
+                areas: inMemoryAreas,
+                userRole: inMemoryUserRole
+            };
+            setTimeout(function () {
+                deferred.resolve(results, 'success', null);
+            }, 1000);
+            return deferred.promise();
         }
     });
 
