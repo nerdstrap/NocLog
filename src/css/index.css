@@ -6186,6 +6186,7 @@ span.detail {
 .section-header i {
   float: right; }
 
+.station-entry-log-view .row,
 .new-station-entry-log-view .row {
   padding: 5px 0px; }
 
@@ -6201,13 +6202,16 @@ span.detail {
 #new-station-entry-log-purpose,
 #new-station-entry-log-duration,
 #new-station-entry-log-purpose-other,
-#new-station-entry-log-additional-info {
+#new-station-entry-log-additional-info,
+#edit-station-entry-log-duration,
+#edit-station-entry-log-additional-info {
   width: 199px;
   min-width: 199px;
   max-width: 199px;
   resize: none; }
 
-.new-station-entry-log-view .invalid {
+.new-station-entry-log-view .invalid,
+.edit-station-entry-log-view .invalid {
   color: #c22222;
   border: 1px solid #c22222; }
 

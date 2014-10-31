@@ -2,7 +2,8 @@ define(function(require) {
     'use strict';
 
     var $ = require('jquery'),
-        env = require('env');
+            _ = require('underscore'),
+            env = require('env');
 
     var DashboardService = function(options) {
         console.trace('new DashboardService()');
@@ -18,7 +19,7 @@ define(function(require) {
         getStationById: function(options) {
             options || (options = {});
             var data = JSON.stringify(options);
-            
+
             return $.ajax({
                 contentType: 'application/json',
                 dataType: 'json',
@@ -35,13 +36,13 @@ define(function(require) {
                 data: data,
                 dataType: 'json',
                 type: 'POST',
-                url: env.getApiUrl() + '/station'
+                url: env.getApiUrl() + '/station/all'
             });
         },
         getStationEntryLogById: function(options) {
             options || (options = {});
             var data = JSON.stringify(options);
-            
+
             return $.ajax({
                 contentType: 'application/json',
                 data: data,
@@ -88,7 +89,7 @@ define(function(require) {
                 url: env.getApiUrl() + '/stationEntryLog/expired'
             });
         },
-        postCheckIn: function (options) {
+        postCheckIn: function(options) {
             options || (options = {});
             var data = JSON.stringify(options);
 
@@ -100,7 +101,7 @@ define(function(require) {
                 url: env.getApiUrl() + '/stationEntryLog/checkIn'
             });
         },
-        postCheckOut: function (options) {
+        postCheckOut: function(options) {
             options || (options = {});
             var data = JSON.stringify(options);
 
@@ -112,7 +113,7 @@ define(function(require) {
                 url: env.getApiUrl() + '/stationEntryLog/checkOut'
             });
         },
-        postUpdateCheckIn: function (options) {
+        postUpdateCheckIn: function(options) {
             options || (options = {});
             var data = JSON.stringify(options);
 
@@ -124,7 +125,7 @@ define(function(require) {
                 url: env.getApiUrl() + '/stationEntryLog/updateCheckIn'
             });
         },
-        getLookupDataItems: function (options) {
+        getLookupDataItems: function(options) {
             options || (options = {});
             var data = JSON.stringify(options);
 
@@ -148,7 +149,7 @@ define(function(require) {
                 url: env.getApiUrl() + '/personnel/find'
             });
         },
-        getNewStationEntryLogOptions: function (options) {
+        getNewStationEntryLogOptions: function(options) {
             options || (options = {});
             var data = JSON.stringify(options);
 

@@ -6,7 +6,7 @@ define(function(require) {
             Backbone = require('backbone'),
             CompositeView = require('views/CompositeView'),
             AppEventNamesEnum = require('enums/AppEventNamesEnum'),
-            UserRoleEnum = require('enums/UserRoleEnum'),
+            UserRolesEnum = require('enums/UserRolesEnum'),
             appEvents = require('events'),
             appResources = require('resources'),
             template = require('hbs!templates/StationEntryLogListItem');
@@ -58,7 +58,7 @@ define(function(require) {
         },
         checkUserRole: function() {
             var currentContext = this;
-            if (currentContext.userRole === UserRoleEnum.NocAdmin || currentContext.userRole === UserRoleEnum.NocUser) {
+            if (currentContext.userRole === UserRolesEnum.NocAdmin || currentContext.userRole === UserRolesEnum.NocUser) {
                 currentContext.showElevatedFunctionToggle();
             } else {
                 currentContext.hideElevatedFunctionToggle();

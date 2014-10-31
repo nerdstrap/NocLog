@@ -3,8 +3,15 @@
         <legend>Edit Check-In</legend>
 
         <div class="row collapse">
-            <!-- ERROR Message -->
+            <div class="row collapse view-status">
+                <!--Loading icon-->
+                <div class="small-12 columns">
+                    <span class="view-message">{{{loadingMessage}}}</span>
+                    <img src="{{loadingIconSrc}}" class="view-loading" />
+                </div>
+            </div>
             <div class="error view-error hidden">
+                <!-- ERROR Message -->
                 <span class="text-detail">{{errorMessage}}</span>
             </div>
 
@@ -45,7 +52,7 @@
                 </label>
             </div>
             <div class="small-2 large-2 columns">
-                <input disabled id="edit-station-entry-log-contact-number" name="contactNumber" placeholder="{{{contactNumberHeaderText}}}" />
+                <input disabled id="edit-station-entry-log-contact-number" name="contact" placeholder="{{{contactNumberHeaderText}}}" />
             </div>
             <div class="small-3 large-3 columns">
                 &nbsp;
@@ -104,7 +111,7 @@
                 <label for="edit-station-entry-log-duration">{{{durationHeaderTextNew}}}</label>
             </div>
             <div class="small-2 large-2 columns">
-                <select id="edit-station-entry-log-duration" name="duration">
+                <select id="edit-station-entry-log-duration">
                     <option disabled="disabled" selected="selected" value="">{{{withDefault duration "&nbsp;"}}}</option>
                 </select>
             </div>

@@ -246,6 +246,7 @@ define(function(require) {
             $.when(currentContext.dashboardService.getStationEntryLogById(stationEntryLogModelInstance.attributes), currentContext.dashboardService.getNewStationEntryLogOptions()).done(function(getStationEntryLogResults, getNewStationEntryLogOptionsResults) {
                 stationEntryLogModelInstance.set(getStationEntryLogResults[0]);
                 currentContext.durationResults.reset(getNewStationEntryLogOptionsResults[0].durations);
+                stationEntryLogViewInstance.updateViewFromModel();
                 deferred.resolve(stationEntryLogViewInstance);
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 deferred.reject(textStatus);
@@ -366,8 +367,8 @@ define(function(require) {
                     deferred = $.Deferred();
 
             $.when(currentContext.dashboardService.getNewStationEntryLogOptions()).done(function(getNewStationEntryLogOptionsResponse) {
-                //currentContext.purposeResults.reset(getNewStationEntryLogOptionsResponse.purposes);
-                //currentContext.durationResults.reset(getNewStationEntryLogOptionsResponse.durations);
+                currentContext.purposeResults.reset(getNewStationEntryLogOptionsResponse.purposes);
+                currentContext.durationResults.reset(getNewStationEntryLogOptionsResponse.durations);
                 deferred.resolve(getNewStationEntryLogOptionsResponse);
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 deferred.reject(textStatus);

@@ -12,27 +12,20 @@ define(function(require) {
             appEvents = require('events'),
             appResources = require('resources'),
             utils = require('utils'),
-            PersonnelModel = require('models/PersonnelModel'),
             StationEntryLogModel = require('models/StationEntryLogModel'),
             template = require('hbs!templates/StationEntryLog'),
-            stationIdentifierListTemplate = require('hbs!templates/StationIdentifierList'),
-            purposeListTemplate = require('hbs!templates/PurposeList'),
             durationListTemplate = require('hbs!templates/DurationList');
 
     var StationEntryLog = CompositeView.extend({
         resources: function(culture) {
             return {
-                additionalInfoHeaderText: appResources.getResource('StationEntryLogView.additionalInfoHeaderText'),
-                areaHeaderText: appResources.getResource('StationEntryLogView.areaHeaderText'),
+                additionalInfoHeaderText: appResources.getResource('EditStationEntryLogView.additionalInfoHeaderText'),
                 cancelButtonText: appResources.getResource('EditStationEntryLogView.cancelButtonText'),
                 checkOutButtonText: appResources.getResource('checkOutButtonText'),
-                checkedInIconAlt: appResources.getResource('checkedInIconAlt'),
-                checkedInIconSvgSrc: appResources.getResource('checkedInIconSvgSrc'),
-                companyNameHeaderText: appResources.getResource('NewStationEntryLogView.companyNameHeaderText'),
-                contactHeaderText: appResources.getResource('StationEntryLogView.contactHeaderText'),
+                companyNameHeaderText: appResources.getResource('EditStationEntryLogView.companyNameHeaderText'),
                 contactNumberHeaderText: appResources.getResource('EditStationEntryLogView.contactNumberHeaderText'),
                 durationDefaultOption: appResources.getResource('EditStationEntryLogView.durationDefaultOption'),
-                durationHeaderText: appResources.getResource('StationEntryLogView.durationHeaderText'),
+                durationHeaderText: appResources.getResource('EditStationEntryLogView.durationHeaderText'),
                 durationHeaderTextNew: appResources.getResource('EditStationEntryLogView.durationHeaderTextNew'),
                 emailHeaderText: appResources.getResource('EditStationEntryLogView.emailHeaderText'),
                 expectedOutTimeHeaderText: appResources.getResource('EditStationEntryLogView.expectedOutTimeHeaderText'),
@@ -41,23 +34,16 @@ define(function(require) {
                 hasCrewHeaderText: appResources.getResource('EditStationEntryLogView.hasCrewHeaderText'),
                 hasCrewNoOption: appResources.getResource('EditStationEntryLogView.hasCrewNoOption'),
                 hasCrewYesOption: appResources.getResource('EditStationEntryLogView.hasCrewYesOption'),
-                hazardIconAlt: appResources.getResource('hazardIconAlt'),
-                hazardIconSrc: appResources.getResource('hazardIconSrc'),
-                hazardIconSvgSrc: appResources.getResource('hazardIconSvgSrc'),
-                inTimeHeaderText: appResources.getResource('StationEntryLogView.inTimeHeaderText'),
                 lastNameHeaderText: appResources.getResource('EditStationEntryLogView.lastNameHeaderText'),
+                loadingIconSrc: appResources.getResource('loadingIconSrc'),
+                loadingMessage: appResources.getResource('EditStationEntryLogView.loadingMessage'),
                 middleInitialHeaderText: appResources.getResource('EditStationEntryLogView.middleInitialHeaderText'),
-                outTimeHeaderText: appResources.getResource('StationEntryLogView.outTimeHeaderText'),
-                personnelNameHeaderText: appResources.getResource('StationEntryLogView.personnelNameHeaderText'),
                 purposeDefaultOption: appResources.getResource('EditStationEntryLogView.purposeDefaultOption'),
-                purposeHeaderText: appResources.getResource('StationEntryLogView.purposeHeaderText'),
+                purposeHeaderText: appResources.getResource('EditStationEntryLogView.purposeHeaderText'),
                 purposeOtherHeaderText: appResources.getResource('EditStationEntryLogView.purposeOtherHeaderText'),
-                regionHeaderText: appResources.getResource('StationEntryLogView.regionHeaderText'),
                 saveButtonText: appResources.getResource('EditStationEntryLogView.saveButtonText'),
                 stationIdDefaultOption: appResources.getResource('EditStationEntryLogView.stationIdDefaultOption'),
                 stationIdHeaderText: appResources.getResource('EditStationEntryLogView.stationIdHeaderText'),
-                stationNameHeaderText: appResources.getResource('StationEntryLogView.stationNameHeaderText'),
-                thirdPartyHeaderText: appResources.getResource('NewStationEntryLogView.thirdPartyHeaderText'),
                 userIdHeaderText: appResources.getResource('EditStationEntryLogView.userIdHeaderText')
             };
         },
@@ -67,21 +53,27 @@ define(function(require) {
             this.dispatcher = options.dispatcher || this;
             this.durationCollection = options.durationCollection;
 
-            this.listenTo(this.model, 'change', this.updateViewFromModel);
-
+            //this.listenTo(this.model, 'change', this.updateViewFromModel); 
+            this.listenTo(this.model, 'validated', this.onValidated);
             this.listenTo(this.durationCollection, 'reset', this.addAllDurations);
+
             this.listenTo(appEvents, AppEventNamesEnum.updateCheckInSuccess, this.onUpdateCheckInSuccess);
             this.listenTo(appEvents, AppEventNamesEnum.updateCheckInError, this.onUpdateCheckInError);
-
         },
         render: function() {
             console.trace('StationEntryLog.render()');
             var currentContext = this;
 
+            validation.unbind(currentContext);
+
             var renderModel = _.extend({}, currentContext.resources(), currentContext.model.attributes);
             currentContext.$el.html(template(renderModel));
             
             currentContext.addAllDurations();
+
+            validation.bind(this, {
+                selector: 'name'
+            });
 
             return this;
         },
@@ -94,7 +86,7 @@ define(function(require) {
             this.$('#edit-station-entry-log-duration').html(durationListTemplate(durationListRenderModel));
         },
         events: {
-            'click #edit-station-entry-log-save-button': 'saveUpdatedCheckIn',
+            'click #edit-station-entry-log-save-button': 'validateAndSubmitUpdatedCheckIn',
             'click #edit-station-entry-log-cancel-button': 'cancelEditCheckIn',
             'change #edit-station-entry-log-duration': 'durationChanged'
         },
@@ -114,6 +106,7 @@ define(function(require) {
             currentContext.$('#edit-station-entry-log-has-crew').html(currentContext.decodeHasCrew());
             currentContext.$('#edit-station-entry-log-additional-info').text(currentContext.model.get('additionalInfo'));
             currentContext.changeCheckInType();
+            this.hideLoading();
         },
         decodeHasCrew: function(){
             var currentContext = this;
@@ -154,7 +147,7 @@ define(function(require) {
                 this.$('#edit-station-entry-log-expected-out-time').html('');
             }
         },
-        changeCheckInType: function(event) {
+        changeCheckInType: function() {
             var currentContext = this;
             if (currentContext.model.has('company')) {
                 //Third Party
@@ -188,24 +181,25 @@ define(function(require) {
                 this.$('#edit-station-entry-log-contact-number').prop('disabled', true);
             }
         },
-        saveUpdatedCheckIn: function(event) {
+        validateAndSubmitUpdatedCheckIn: function(event) {
             if (event) {
                 event.preventDefault();
             }
             this.getStationEntryModelFromView();
-            this.goToUpdateCheckIn();
+            this.model.validate();
         },
         getStationEntryModelFromView: function() {
-            var companyName = this.$('#edit-station-entry-log-company-name').val();
-            var firstName = this.$('#edit-station-entry-log-first-name').val();
-            var middleInitial = this.$('#edit-station-entry-log-middle-initial').val();
-            var lastName = this.$('#edit-station-entry-log-last-name').val();
-            var contactNumber = this.$('#edit-station-entry-log-contact-number').val();
-            var email = this.$('#edit-station-entry-log-email').val();
-            var duration = this.model.calculatedNewDuration;
+            var currentContext = this;
+            var companyName = currentContext.$('#edit-station-entry-log-company-name').val();
+            var firstName = currentContext.$('#edit-station-entry-log-first-name').val();
+            var middleInitial = currentContext.$('#edit-station-entry-log-middle-initial').val();
+            var lastName = currentContext.$('#edit-station-entry-log-last-name').val();
+            var contactNumber = currentContext.$('#edit-station-entry-log-contact-number').val();
+            var email = currentContext.$('#edit-station-entry-log-email').val();
+            var duration = currentContext.model.calculatedNewDuration;
             var additionalInfo = $('#edit-station-entry-log-additional-info').val();
             if (companyName){
-                this.model.set({
+                currentContext.model.set({
                         companyName: companyName,
                         firstName: firstName,
                         lastName: lastName,
@@ -215,16 +209,23 @@ define(function(require) {
                     });
             }
             if (duration) {
-                this.model.set({
+                currentContext.model.set({
                     duration: duration,
                     additionalInfo: additionalInfo
                 });
             } else {
-                this.model.set({
+                currentContext.model.set({
                     additionalInfo: additionalInfo
                 });
             }
-           
+        },
+        onValidated: function(isValid, model, errors) {
+            if (isValid) {
+                this.goToUpdateCheckIn();
+            } else {
+                var message = "One or more fields are invalid, please try again.";
+                this.showError(message);
+            }
         },
         goToUpdateCheckIn: function() {
             var stationEntryLogModelInstance = new StationEntryLogModel(this.model.attributes);
@@ -243,6 +244,19 @@ define(function(require) {
             }
             this.dispatcher.trigger(AppEventNamesEnum.goToStationEntryLogList);
             this.leave();
+        },
+        showLoading: function() {
+            this.$('.view-status').removeClass('hidden');
+        },
+        hideLoading: function() {
+            this.$('.view-status').addClass('hidden');
+        },
+        showError: function(message) {
+            this.$('.view-error .text-detail').html(message);
+            this.$('.view-error').removeClass('hidden');
+        },
+        hideError: function() {
+            this.$('.view-error').addClass('hidden');
         }
     });
 

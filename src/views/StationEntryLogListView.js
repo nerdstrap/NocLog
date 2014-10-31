@@ -8,7 +8,7 @@ define(function(require) {
             NewStationEntryLogModel = require('models/NewStationEntryLogModel'),
             NewStationEntryLogView = require('views/NewStationEntryLogView'),
             AppEventNamesEnum = require('enums/AppEventNamesEnum'),
-            UserRoleEnum = require('enums/UserRoleEnum'),
+            UserRolesEnum = require('enums/UserRolesEnum'),
             globals = require('globals'),
             env = require('env'),
             appEvents = require('events'),
@@ -293,7 +293,7 @@ define(function(require) {
         },
         checkUserRole: function() {
             var currentContext = this;
-            if (currentContext.userRole === UserRoleEnum.NocAdmin || currentContext.userRole === UserRoleEnum.NocUser) {
+            if (currentContext.userRole === UserRolesEnum.NocAdmin || currentContext.userRole === UserRolesEnum.NocUser) {
                 currentContext.showNewStationEntryLogButton();
             } else {
                 currentContext.hideNewStationEntryLogButton();

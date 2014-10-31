@@ -19,6 +19,19 @@ define(function(require) {
                 (attributes = {})[key] = val;
             }
             if (attributes) {
+                if (attributes.hasOwnProperty('outsideId')) {
+                    var outsideId = attributes.outsideId;
+                    if (outsideId.length > 0) {
+                        attributes.thirdParty = false;
+                    }
+                }
+                if (attributes.hasOwnProperty('company')) {
+                    var company = attributes.company;
+                    if (company.length > 0) {
+                        attributes.thirdParty = true;
+                    }
+                }
+                
                 var inTimeParsed = false;
                 var durationParsed = false;
                 if (attributes.hasOwnProperty('inTime')) {
@@ -83,6 +96,49 @@ define(function(require) {
                 }
             }
             return Backbone.Model.prototype.set.call(this, attributes, options);
+        },
+        validation: {
+            outsideId: {
+                required: function() {
+                    return (this.get('thirdParty') !== true);
+                }
+            },
+            companyName: {
+                required: function() {
+                    return (this.get('thirdParty') === true);
+                }
+            },
+            firstName: {
+                required: true,
+                minLength: 1
+            },
+            lastName: {
+                required: true,
+                minLength: 1
+            },
+            contact: {
+                required: true,
+                pattern: 'digits',
+                length: 10
+            },
+            email: {
+                required: true,
+                pattern: 'email'
+            },
+            stationId: {
+                required: true,
+                minLength: 1
+            },
+            purpose: {
+                required: true,
+                minLength: 1
+            },
+            duration: {
+                required: true
+            },
+            dcId: {
+                required: true
+            }
         }
     });
 
