@@ -14,6 +14,8 @@ define(function(require) {
     var StationView = CompositeView.extend({
         resources: function(culture) {
             return {
+                loadingIconSrc: appResources.getResource('loadingIconSrc'),
+                loadingMessage: appResources.getResource('StationView.loadingMessage'),
                 goToMapButtonText: appResources.getResource('StationView.goToMapButtonText'),
                 locationSectionTitleText: appResources.getResource('StationView.locationSectionTitleText'),
                 contactSectionTitleText: appResources.getResource('StationView.contactSectionTitleText'),
@@ -158,6 +160,12 @@ define(function(require) {
             var latitude = this.model.get('latitude');
             var longitude = this.model.get('longitude');
             this.dispatcher.trigger(AppEventNamesEnum.goToDirectionsWithLatLng, latitude, longitude);
+        },
+        showLoading: function() {
+            this.$('.view-status').removeClass('hidden');
+        },
+        hideLoading: function() {
+            this.$('.view-status').addClass('hidden');
         }
     });
 

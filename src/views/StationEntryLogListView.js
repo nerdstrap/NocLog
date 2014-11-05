@@ -15,7 +15,8 @@ define(function(require) {
             appResources = require('resources'),
             template = require('hbs!templates/StationEntryLogList'),
             regionListTemplate = require('hbs!templates/RegionList'),
-            areaListTemplate = require('hbs!templates/AreaList');
+            areaListTemplate = require('hbs!templates/AreaList'),
+            alertTemplate = require('hbs!templates/Alert');
 
     var autoRefreshInterval;
 
@@ -74,12 +75,12 @@ define(function(require) {
         render: function() {
             console.trace('StationEntryLogListView.render()');
             var currentContext = this;
-            
+
             var renderModel = _.extend({}, currentContext.resources(), currentContext.model);
             currentContext.$el.html(template(renderModel));
-            
+
             currentContext.setAutRefreshInterval();
-            
+
             return this;
         },
         events: {
@@ -88,7 +89,8 @@ define(function(require) {
             'click #station-entry-log-list-expected-out-time-sort-button': 'updateStationEntryLogListExpectedOutTimeSort',
             'click #station-entry-log-list-region-sort-button': 'updateStationEntryLogListRegionSort',
             'click #station-entry-log-list-area-sort-button': 'updateStationEntryLogListAreaSort',
-            'click #new-station-entry-log-button': 'goToNewStationEntryLog'
+            'click #new-station-entry-log-button': 'goToNewStationEntryLog',
+            'click .close-alert-box-button': 'closeAlertBox'
         },
         addAll: function() {
             this.removeAll();
@@ -128,6 +130,12 @@ define(function(require) {
                 areas: currentContext.areaCollection.models
             };
             this.$('#station-entry-log-list-area-filter').html(areaListTemplate(areaListRenderModel));
+        },
+        setAutRefreshInterval: function() {
+            var currentContext = this;
+            autoRefreshInterval = globals.window.setInterval(function() {
+                currentContext.refreshStationEntryLogList();
+            }, env.getAutoRefreshInterval());
         },
         dispatchRefreshStationEntryLogList: function(event) {
             if (event) {
@@ -271,25 +279,10 @@ define(function(require) {
             }
             return sortDirection;
         },
-        onCheckInSuccess: function() {
-            var currentContext = this;
-            this.showInfo(currentContext.resources().checkInSucessMessage);
-            this.checkUserRole();
-            globals.window.setTimeout(function() {
-                currentContext.hideInfo();
-            }, env.getNotificationTimeout());
-        },
-        onCheckOutSuccess: function() {
-            var currentContext = this;
-            this.showInfo(currentContext.resources().checkOutSucessMessage);
-            globals.window.setTimeout(function() {
-                currentContext.hideInfo();
-            }, env.getNotificationTimeout());
-        },
         setUserRole: function(userRole) {
             var currentContext = this;
             currentContext.userRole = userRole;
-            currentContext.checkUserRole();            
+            currentContext.checkUserRole();
         },
         checkUserRole: function() {
             var currentContext = this;
@@ -325,25 +318,77 @@ define(function(require) {
         hideLoading: function() {
             this.$('.view-status').addClass('hidden');
         },
-        showError: function(message) {
-            this.$('.list-view-error .view-message').html(message);
-            this.$('.list-view-error').removeClass('hidden');
-        },
-        hideError: function() {
-            this.$('.list-view-error').addClass('hidden');
-        },
         showInfo: function(message) {
-            this.$('.list-view-info .view-message').html(message);
-            this.$('.list-view-info').removeClass('hidden');
+            var level;
+            this.addAutoCloseAlertBox(level, message);
         },
-        hideInfo: function() {
-            this.$('.list-view-info').addClass('hidden');
+        showSuccess: function(message) {
+            this.addAutoCloseAlertBox('success', message);
         },
-        setAutRefreshInterval: function() {
+        showError: function(message) {
+            this.addAutoCloseAlertBox('alert', message);
+        },
+        addAlertBox: function(guid, level, message) {
+            var renderModel = {
+                guid: guid,
+                level: level,
+                message: message
+            };
+            this.$('.view-alerts .columns').prepend(alertTemplate(renderModel));
+        },
+        addAutoCloseAlertBox: function(level, message) {
             var currentContext = this;
-            autoRefreshInterval = globals.window.setInterval(function() {
-                currentContext.refreshStationEntryLogList();
-            }, env.getAutoRefreshInterval());
+            var guid = env.getNewGuid();
+            this.addAlertBox(guid, level, message);
+            globals.window.setTimeout(function() {
+                currentContext.autoCloseAlertBox(guid);
+            }, env.getNotificationTimeout());
+        },
+        closeAlertBox: function(event) {
+            if (event) {
+                event.preventDefault();
+            }
+            if (event.target) {
+                var closeAlertButton = $(event.target);
+                if (closeAlertButton) {
+                    var alert = closeAlertButton.closest('[data-alert]');
+                    if (alert) {
+                        alert.trigger('close').trigger('close.fndtn.alert').remove();
+                    }
+                }
+            }
+        },
+        autoCloseAlertBox: function(guid) {
+            if (guid) {
+                var closeAlertButton = $('#' + guid);
+                if (closeAlertButton) {
+                    var alert = closeAlertButton.closest('[data-alert]');
+                    if (alert) {
+                        alert.trigger('close').trigger('close.fndtn.alert').remove();
+                    }
+                }
+            }
+        },
+        onCheckInSuccess: function(stationEntryLog) {
+            var checkInSucessMessage = this.resources().checkInSucessMessage;
+            if (stationEntryLog) {
+                var userName = stationEntryLog.userName;
+                var stationName = stationEntryLog.stationName;
+                checkInSucessMessage = 'Successful check-in for ' + userName + ' at ' + stationName;
+            }
+            this.showSuccess(checkInSucessMessage);
+        },
+        onCheckOutSuccess: function(stationEntryLog) {
+            var checkOutSucessMessage = this.resources().checkOutSucessMessage;
+            if (stationEntryLog) {
+                var userName = stationEntryLog.userName;
+                var stationName = stationEntryLog.stationName;
+                checkOutSucessMessage = 'Successful check-out for ' + userName + ' at ' + stationName;
+            }
+            this.showSuccess(checkOutSucessMessage);
+        },
+        onCheckOutError: function(errorMessage, stationEntryLog) {
+            this.showError(errorMessage);
         },
         onLeave: function() {
             if (autoRefreshInterval) {

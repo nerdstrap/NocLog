@@ -30,7 +30,9 @@ define(function(require) {
                 length: 10
             },
             email: {
-                required: true,
+                required: function() {
+                    return (this.get('thirdParty') !== true);
+                },
                 pattern: 'email'
             },
             stationId: {

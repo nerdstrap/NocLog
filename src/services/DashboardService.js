@@ -18,25 +18,26 @@ define(function(require) {
         },
         getStationById: function(options) {
             options || (options = {});
-            var data = JSON.stringify(options);
-
-            return $.ajax({
-                contentType: 'application/json',
-                dataType: 'json',
-                type: 'POST',
-                url: env.getApiUrl() + '/station'
-            });
-        },
-        getStations: function(options) {
-            options || (options = {});
-            var data = JSON.stringify(options);
+            var data = $.param(options);
 
             return $.ajax({
                 contentType: 'application/json',
                 data: data,
                 dataType: 'json',
-                type: 'POST',
-                url: env.getApiUrl() + '/station/all'
+                type: 'GET',
+                url: env.getApiUrl() + '/station/find'
+            });
+        },
+        getStations: function(options) {
+            options || (options = {});
+            var data = $.param(options);
+
+            return $.ajax({
+                contentType: 'application/json',
+                data: data,
+                dataType: 'json',
+                type: 'GET',
+                url: env.getApiUrl() + '/station/find'
             });
         },
         getStationEntryLogById: function(options) {
@@ -155,6 +156,7 @@ define(function(require) {
 
             return $.ajax({
                 contentType: 'application/json',
+                data: data,
                 dataType: 'json',
                 type: 'POST',
                 url: env.getApiUrl() + '/lookupDataItem/newStationEntryLogOptions'

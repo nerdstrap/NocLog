@@ -53,7 +53,7 @@ define(function(require) {
             this.dispatcher = options.dispatcher || this;
             this.durationCollection = options.durationCollection;
 
-            //this.listenTo(this.model, 'change', this.updateViewFromModel); 
+            this.listenTo(this.model, 'sync', this.updateViewFromModel);
             this.listenTo(this.model, 'validated', this.onValidated);
             this.listenTo(this.durationCollection, 'reset', this.addAllDurations);
 
@@ -68,7 +68,7 @@ define(function(require) {
 
             var renderModel = _.extend({}, currentContext.resources(), currentContext.model.attributes);
             currentContext.$el.html(template(renderModel));
-            
+
             currentContext.addAllDurations();
 
             validation.bind(this, {
@@ -97,20 +97,20 @@ define(function(require) {
             currentContext.$('#edit-station-entry-log-first-name').val(currentContext.model.get('firstName'));
             currentContext.$('#edit-station-entry-log-middle-initial').val(currentContext.model.get('middleName'));
             currentContext.$('#edit-station-entry-log-last-name').val(currentContext.model.get('lastName'));
-            currentContext.$('#edit-station-entry-log-contact-number').val(currentContext.model.get('contact'));
+            currentContext.$('#edit-station-entry-log-contact-number').val(helpers.formatPhoneWithDefault(currentContext.model.get('contactNumber'), '', '&nbsp;'));
             currentContext.$('#edit-station-entry-log-email').val(currentContext.model.get('email'));
-            currentContext.$('#edit-station-entry-log-station-id').html(currentContext.model.get('stationId'));
+            currentContext.$('#edit-station-entry-log-station-id').html(currentContext.model.get('stationName'));
             currentContext.$('#edit-station-entry-log-purpose').html(currentContext.model.get('purpose'));
-            currentContext.$('#edit-station-entry-log-duration-old').html((currentContext.model.get('duration')/60)+" hours");
+            currentContext.$('#edit-station-entry-log-duration-old').html((currentContext.model.get('duration') / 60) + " hours");
             currentContext.oldExpectedOutTime();
             currentContext.$('#edit-station-entry-log-has-crew').html(currentContext.decodeHasCrew());
-            currentContext.$('#edit-station-entry-log-additional-info').text(currentContext.model.get('additionalInfo'));
+            currentContext.$('#edit-station-entry-log-additional-info').val(currentContext.model.get('additionalInfo'));
             currentContext.changeCheckInType();
             this.hideLoading();
         },
-        decodeHasCrew: function(){
+        decodeHasCrew: function() {
             var currentContext = this;
-            if(currentContext.model.get('hasCrew')) {
+            if (currentContext.model.get('hasCrew')) {
                 return 'Yes';
             } else {
                 return 'No';
@@ -155,10 +155,10 @@ define(function(require) {
                 this.$('#user-label-container').addClass('hidden');
                 this.$('#third-party-user-label-container').removeClass('hidden');
                 this.$('#third-party-user-container').removeClass('hidden');
-                
+
                 this.$('#edit-station-entry-log-user-id').prop('disabled', true);
                 this.$('#edit-station-entry-log-company-name').prop('disabled', false);
-                
+
                 this.$('#edit-station-entry-log-first-name').prop('disabled', false);
                 this.$('#edit-station-entry-log-middle-initial').prop('disabled', false);
                 this.$('#edit-station-entry-log-last-name').prop('disabled', false);
@@ -170,10 +170,10 @@ define(function(require) {
                 this.$('#user-label-container').removeClass('hidden');
                 this.$('#third-party-user-container').addClass('hidden');
                 this.$('#third-party-user-label-container').addClass('hidden');
-                
+
                 this.$('#edit-station-entry-log-user-id').prop('disabled', true);
                 this.$('#edit-station-entry-log-company-name').prop('disabled', true);
-                
+
                 this.$('#edit-station-entry-log-first-name').prop('disabled', true);
                 this.$('#edit-station-entry-log-middle-initial').prop('disabled', true);
                 this.$('#edit-station-entry-log-last-name').prop('disabled', true);
@@ -190,33 +190,33 @@ define(function(require) {
         },
         getStationEntryModelFromView: function() {
             var currentContext = this;
-            var companyName = currentContext.$('#edit-station-entry-log-company-name').val();
-            var firstName = currentContext.$('#edit-station-entry-log-first-name').val();
-            var middleInitial = currentContext.$('#edit-station-entry-log-middle-initial').val();
-            var lastName = currentContext.$('#edit-station-entry-log-last-name').val();
-            var contactNumber = currentContext.$('#edit-station-entry-log-contact-number').val();
-            var email = currentContext.$('#edit-station-entry-log-email').val();
-            var duration = currentContext.model.calculatedNewDuration;
-            var additionalInfo = $('#edit-station-entry-log-additional-info').val();
-            if (companyName){
-                currentContext.model.set({
-                        companyName: companyName,
-                        firstName: firstName,
-                        lastName: lastName,
-                        middleInitial: middleInitial,
-                        email: email,
-                        contact: contactNumber
-                    });
+            //if values have changed, set new values in modle
+            if (currentContext.model.get('thirdParty')) {
+                if ($('#edit-station-entry-log-company-name').val() !== currentContext.model.get('company')) {
+                    currentContext.model.set({company: $('#edit-station-entry-log-company-name').val()});
+                }
+                if ($('#edit-station-entry-log-first-name').val() !== currentContext.model.get('firstName')) {
+                    currentContext.model.set({firstName: $('#edit-station-entry-log-first-name').val()});
+                }
+                if ($('#edit-station-entry-log-middle-initial').val() !== currentContext.model.get('middleName')) {
+                    currentContext.model.set({middleInitial: $('#edit-station-entry-log-middle-initial').val()});
+                }
+                if ($('#edit-station-entry-log-last-name').val() !== currentContext.model.get('lastName')) {
+                    currentContext.model.set({lastName: $('#edit-station-entry-log-last-name').val()});
+                }
+                var cleanedPhone = helpers.cleanPhone($('#edit-station-entry-log-contact-number').val());
+                if (cleanedPhone !== currentContext.model.get('contactNumber')) {
+                    currentContext.model.set({contactNumber: cleanedPhone});
+                }
+                if ($('#edit-station-entry-log-email').val() !== currentContext.model.get('email')) {
+                    currentContext.model.set({email: $('#edit-station-entry-log-email').val()});
+                }
             }
-            if (duration) {
-                currentContext.model.set({
-                    duration: duration,
-                    additionalInfo: additionalInfo
-                });
-            } else {
-                currentContext.model.set({
-                    additionalInfo: additionalInfo
-                });
+            if (currentContext.model.calculatedNewDuration > "0") {
+                currentContext.model.set({duration: currentContext.model.calculatedNewDuration});
+            }
+            if ($('#edit-station-entry-log-additional-info').val() !== currentContext.model.get('additionalInfo')) {
+                currentContext.model.set({additionalInfo: $('#edit-station-entry-log-additional-info').val()});
             }
         },
         onValidated: function(isValid, model, errors) {
@@ -232,7 +232,7 @@ define(function(require) {
             this.dispatcher.trigger(AppEventNamesEnum.goToUpdateCheckIn, stationEntryLogModelInstance);
         },
         onUpdateCheckInSuccess: function() {
-            this.dispatcher.trigger(AppEventNamesEnum.goToStationEntryLogList);
+            this.dispatcher.trigger(AppEventNamesEnum.goToStationEntryLogList, {stationEntryLog: this.model.attributes});
             this.leave();
         },
         onUpdateCheckInError: function(message) {

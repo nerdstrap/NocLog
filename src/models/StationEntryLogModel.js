@@ -6,7 +6,8 @@ define(function(require) {
             _ = require('underscore'),
             Backbone = require('backbone'),
             env = require('env'),
-            utils = require('utils');
+            utils = require('utils'),
+            helpers = require('handlebars.helpers');
 
     var StationEntryModel = Backbone.Model.extend({
         idAttribute: 'stationEntryLogId',
@@ -31,7 +32,7 @@ define(function(require) {
                         attributes.thirdParty = true;
                     }
                 }
-                
+
                 var inTimeParsed = false;
                 var durationParsed = false;
                 if (attributes.hasOwnProperty('inTime')) {
@@ -94,6 +95,11 @@ define(function(require) {
                         attributes.distanceInMiles = Number(distanceInMiles);
                     }
                 }
+
+                if (attributes.hasOwnProperty('contact')) {
+                    var cleanedPhone = helpers.cleanPhone(attributes.contact);
+                    attributes.contactNumber = cleanedPhone;
+                }
             }
             return Backbone.Model.prototype.set.call(this, attributes, options);
         },
@@ -103,7 +109,7 @@ define(function(require) {
                     return (this.get('thirdParty') !== true);
                 }
             },
-            companyName: {
+            company: {
                 required: function() {
                     return (this.get('thirdParty') === true);
                 }
@@ -116,13 +122,15 @@ define(function(require) {
                 required: true,
                 minLength: 1
             },
-            contact: {
+            contactNumber: {
                 required: true,
                 pattern: 'digits',
                 length: 10
             },
             email: {
-                required: true,
+                required: function() {
+                    return (this.get('thirdParty') !== true);
+                },
                 pattern: 'email'
             },
             stationId: {

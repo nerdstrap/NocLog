@@ -14,7 +14,6 @@ ol, ul {
     margin: 0;
     padding: 0; }
 
-/* stickey footer http://www.cssstickyfooter.com/using-sticky-footer-code.html*/
 html, body {
     height: 100%; }
 
@@ -24,7 +23,9 @@ body {
 
 .shell-view {
     min-height: 100%;
-    background-color: #DEDEDE; }
+    background-color: #DEDEDE;
+    min-width: 1254px;
+}
 
 .shell-view {
     overflow: auto;
@@ -54,6 +55,10 @@ body:before {
     margin-top: -32767px; }
 
 /* app */
+.columns {
+    overflow-wrap: break-word;
+}
+
 .row {
     margin-left: 0;
     margin-right: 0;
@@ -200,7 +205,7 @@ span.detail {
 #new-station-entry-log-purpose-other,
 #new-station-entry-log-additional-info,
 #edit-station-entry-log-duration,
-#edit-station-entry-log-additional-info,
+#edit-station-entry-log-additional-info
 {
     width: 199px;
     min-width: 199px;
@@ -220,4 +225,24 @@ span.detail {
 
 .checkOutOverdue {
     background-color: #ffcccc;
+}
+
+input::-webkit-input-placeholder, textarea::-webkit-input-placeholder { 
+    color:    #B6B6B4;
+}
+input:-moz-placeholder, textarea:-moz-placeholder { 
+    color:    #B6B6B4;
+    opacity:  1;
+}
+input::-moz-placeholder, textarea::-moz-placeholder { 
+    color:    #B6B6B4;
+    opacity:  1;
+}
+input:-ms-input-placeholder, textarea:-ms-input-placeholder { 
+    color:    #B6B6B4;
+}
+
+.view-alerts .alert-box {
+    display: inline-block;
+    margin: 3px 3px 3px 0;
 }

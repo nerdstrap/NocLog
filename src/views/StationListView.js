@@ -7,13 +7,15 @@ define(function(require) {
             globals = require('globals'),
             CompositeView = require('views/CompositeView'),
             StationListItemView = require('views/StationListItemView'),
+            env = require('env'),
             AppEventNamesEnum = require('enums/AppEventNamesEnum'),
             appEvents = require('events'),
             appResources = require('resources'),
             template = require('hbs!templates/StationList'),
             stationIdentifierListTemplate = require('hbs!templates/StationIdentifierList'),
             regionListTemplate = require('hbs!templates/RegionList'),
-            areaListTemplate = require('hbs!templates/AreaList');
+            areaListTemplate = require('hbs!templates/AreaList'),
+            alertTemplate = require('hbs!templates/Alert');
 
     var StationListView = CompositeView.extend({
         resources: function(culture) {
@@ -46,6 +48,8 @@ define(function(require) {
             this.listenTo(this.stationIdentifierCollection, 'reset', this.addAllStationIdentifiers);
             this.listenTo(this.regionCollection, 'reset', this.addAllRegions);
             this.listenTo(this.areaCollection, 'reset', this.addAllAreas);
+
+            this.listenTo(this, 'leave', this.onLeave);
         },
         render: function() {
             console.trace('StationListView.render()');
@@ -64,7 +68,8 @@ define(function(require) {
             'click #station-list-station-name-sort-button': 'updateStationListStationNameSort',
             'change #station-list-station-identifier-select': 'selectStation',
             'click #station-list-region-sort-button': 'updateStationListRegionSort',
-            'click #station-list-area-sort-button': 'updateStationListAreaSort'
+            'click #station-list-area-sort-button': 'updateStationListAreaSort',
+            'click .close-alert-box-button': 'closeAlertBox'
         },
         addAll: function() {
             this._leaveChildren();
@@ -115,8 +120,8 @@ define(function(require) {
             var area = this.$('#station-list-area-filter').val();
 
             var options = {
-                region: region,
-                area: area
+                regionName: region,
+                areaName: area
             };
 
             if (status === 'all') {
@@ -129,19 +134,19 @@ define(function(require) {
             }
 
             this.showLoading();
-            
+
             this.$('#station-list-region-filter').val('');
             this.$('#station-list-area-filter').val('');
-            
+
             this.$('#station-list-station-name-sort-button').data('sort-direction', '1');
             this.$('#station-list-region-sort-button').removeData('sort-direction');
             this.$('#station-list-area-sort-button').removeData('sort-direction');
-            
+
             var sortAttributes = [{
                     sortAttribute: 'stationName',
                     sortDirection: 1
                 }];
-            
+
             this.showSortIndicators(sortAttributes);
             this.collection.sortAttributes = sortAttributes;
 
@@ -165,7 +170,7 @@ define(function(require) {
 
             this.showSortIndicators(sortAttributes);
             this.collection.sortAttributes = sortAttributes;
-            
+
             this.collection.sort();
         },
         selectStation: function(event) {
@@ -176,10 +181,10 @@ define(function(require) {
             var list = this.$('#station-list').parent();
             var row = list.find('.station-name-link[data-stationid=' + stationId + ']').parent().parent();
             row.addClass('highlighted');
-            setTimeout(function(){
+            setTimeout(function() {
                 row.removeClass('highlighted');
             }, 2000);
-            
+
             var topPosition = row.position().top;
             list.scrollTop(topPosition);
         },
@@ -293,6 +298,59 @@ define(function(require) {
         },
         hideLoading: function() {
             this.$('.view-status').addClass('hidden');
+        },
+        showInfo: function(message) {
+            var level;
+            this.addAutoCloseAlert(level, message);
+        },
+        showSuccess: function(message) {
+            this.addAutoCloseAlert('success', message);
+        },
+        showError: function(message) {
+            this.addAutoCloseAlert('alert', message);
+        },
+        addAlertBox: function(guid, level, message) {
+            var renderModel = {
+                guid: guid,
+                level: level,
+                message: message
+            };
+            this.$('.view-alerts .columns').prepend(alertTemplate(renderModel));
+        },
+        addAutoCloseAlertBox: function(level, message) {
+            var currentContext = this;
+            var guid = env.getNewGuid();
+            this.addAlert(guid, level, message);
+            globals.window.setTimeout(function() {
+                currentContext.autoCloseAlertBox(guid);
+            }, env.getNotificationTimeout());
+        },
+        closeAlertBox: function(event) {
+            if (event) {
+                event.preventDefault();
+            }
+            if (event.target) {
+                var closeAlertButton = $(event.target);
+                if (closeAlertButton) {
+                    var alert = closeAlertButton.closest('[data-alert]');
+                    if (alert) {
+                        alert.trigger('close').trigger('close.fndtn.alert').remove();
+                    }
+                }
+            }
+        },
+        autoCloseAlertBox: function(guid) {
+            if (guid) {
+                var closeAlertButton = $('#' + guid);
+                if (closeAlertButton) {
+                    var alert = closeAlertButton.closest('[data-alert]');
+                    if (alert) {
+                        alert.trigger('close').trigger('close.fndtn.alert').remove();
+                    }
+                }
+            }
+        },
+        onLeave: function() {
         }
     });
 

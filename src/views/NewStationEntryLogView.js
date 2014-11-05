@@ -134,7 +134,7 @@ define(function(require) {
                 this.$('#new-station-entry-log-middle-initial').val('').prop('disabled', false);
                 this.$('#new-station-entry-log-last-name').val('').prop('disabled', false);
                 this.$('#new-station-entry-log-email').val('').prop('disabled', false);
-                this.$('#new-station-entry-log-contact-number').val('').prop('disabled', false);
+                this.$('#new-station-entry-log-contact-number').val('');
             } else {
                 this.$('#user-container').removeClass('hidden');
                 this.$('#user-label-container').removeClass('hidden');
@@ -148,7 +148,7 @@ define(function(require) {
                 this.$('#new-station-entry-log-middle-initial').val('').prop('disabled', true);
                 this.$('#new-station-entry-log-last-name').val('').prop('disabled', true);
                 this.$('#new-station-entry-log-email').val('').prop('disabled', true);
-                this.$('#new-station-entry-log-contact-number').val('').prop('disabled', true);
+                this.$('#new-station-entry-log-contact-number').val('');
             }
         },
         goToLookupUserId: function(event) {

@@ -78,8 +78,6 @@ define(function(require) {
             this.listenTo(appEvents, AppEventNamesEnum.goToCheckIn, this.goToCheckIn);
             this.listenTo(appEvents, AppEventNamesEnum.goToCheckOut, this.goToCheckOut);
             this.listenTo(appEvents, AppEventNamesEnum.goToUpdateCheckIn, this.goToUpdateCheckIn);
-            this.listenTo(appEvents, AppEventNamesEnum.updateCheckInSuccess, this.showOpenStationEntryLogs);
-
 
             this.listenTo(appEvents, AppEventNamesEnum.goToLookupUserId, this.goToLookupUserId);
         },
@@ -110,15 +108,20 @@ define(function(require) {
             currentContext.router.navigate('stationEntryLog', {replace: fragmentAlreadyMatches});
 
             stationEntryLogListViewInstance.showLoading();
-
-            $.when(currentContext.dashboardService.getStationEntryLogsByOpen(options)).done(function(getStationEntryLogsResponse) {
+            $.when(currentContext.dashboardService.getStationEntryLogsByOpen()).done(function(getStationEntryLogsResponse) {
                 stationEntryLogListViewInstance.setUserRole(getStationEntryLogsResponse.userRole);
                 currentContext.stationEntryLogSearchResults.reset(getStationEntryLogsResponse.stationEntryLogs);
                 currentContext.stationIdentifierResults.reset(getStationEntryLogsResponse.stationIdentifiers);
                 currentContext.regionResults.reset(getStationEntryLogsResponse.regions);
                 currentContext.areaResults.reset(getStationEntryLogsResponse.areas);
-                deferred.resolve(stationEntryLogListViewInstance);
                 stationEntryLogListViewInstance.hideLoading();
+                if (options && options.stationEntryLog) {
+                    var userName = options.stationEntryLog.userName;
+                    var stationName = options.stationEntryLog.stationName;
+                    var updateCheckInSucessMessage = 'Successful update of check-in for ' + userName + ' at ' + stationName;
+                    stationEntryLogListViewInstance.showSuccess(updateCheckInSucessMessage);
+                }
+                deferred.resolve(stationEntryLogListViewInstance);
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 currentContext.stationEntryLogSearchResults.reset();
                 deferred.reject(textStatus);
@@ -190,6 +193,9 @@ define(function(require) {
             stationListViewInstance.showLoading();
             $.when(currentContext.dashboardService.getStations()).done(function(getStationsResponse) {
                 currentContext.stationSearchResults.reset(getStationsResponse.stations);
+                if (getStationsResponse.stations.length === 0) {
+                    stationListViewInstance.showInfo('No results.');
+                }
                 currentContext.stationIdentifierResults.reset(getStationsResponse.stationIdentifiers);
                 currentContext.regionResults.reset(getStationsResponse.regions);
                 currentContext.areaResults.reset(getStationsResponse.areas);
@@ -197,6 +203,7 @@ define(function(require) {
                 stationListViewInstance.hideLoading();
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 currentContext.stationSearchResults.reset();
+                stationListViewInstance.showError(textStatus);
                 deferred.reject(textStatus);
             });
 
@@ -244,9 +251,9 @@ define(function(require) {
             currentContext.router.navigate('stationEntryLog/' + stationEntryLogId);
 
             $.when(currentContext.dashboardService.getStationEntryLogById(stationEntryLogModelInstance.attributes), currentContext.dashboardService.getNewStationEntryLogOptions()).done(function(getStationEntryLogResults, getNewStationEntryLogOptionsResults) {
-                stationEntryLogModelInstance.set(getStationEntryLogResults[0]);
+                stationEntryLogModelInstance.set(getStationEntryLogResults[0], {silent: true});
                 currentContext.durationResults.reset(getNewStationEntryLogOptionsResults[0].durations);
-                stationEntryLogViewInstance.updateViewFromModel();
+                stationEntryLogModelInstance.trigger('sync', stationEntryLogModelInstance, getStationEntryLogResults[0]);
                 deferred.resolve(stationEntryLogViewInstance);
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 deferred.reject(textStatus);
@@ -270,8 +277,13 @@ define(function(require) {
             currentContext.router.swapContent(stationViewInstance);
             currentContext.router.navigate('station/' + stationId);
 
+            stationViewInstance.showLoading();
             $.when(currentContext.dashboardService.getStationById(stationModelInstance.attributes)).done(function(getStationByIdResponse) {
-                stationModelInstance.set(getStationByIdResponse);
+                if (getStationByIdResponse.stations && getStationByIdResponse.stations.length > 0) {
+                    stationModelInstance.set(getStationByIdResponse.stations[0]);
+                } else {
+                }
+                stationViewInstance.hideLoading();
                 deferred.resolve(stationViewInstance);
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 deferred.reject(textStatus);
@@ -319,7 +331,7 @@ define(function(require) {
             return deferred.promise();
         },
         showOpenStationEntryLogs: function(options) {
-        //showOpenStationEntryLogs: function(stationEntryLogCollection, options) {
+            //showOpenStationEntryLogs: function(stationEntryLogCollection, options) {
             console.trace('DashboardController.showOpenStationEntryLogs');
             var currentContext = this,
                     deferred = $.Deferred();
@@ -354,8 +366,11 @@ define(function(require) {
 
             $.when(currentContext.dashboardService.getStations(options)).done(function(getStationsResponse) {
                 currentContext.stationSearchResults.reset(getStationsResponse.stations);
+                if (getStationsResponse.stations.length === 0) {
+                }
                 deferred.resolve(getStationsResponse);
             }).fail(function(jqXHR, textStatus, errorThrown) {
+                currentContext.stationSearchResults.reset();
                 deferred.reject(textStatus);
             });
 
@@ -415,20 +430,20 @@ define(function(require) {
             }
 
             $.when(currentContext.dashboardService.postCheckOut(options)).done(function(checkOutResponse) {
-                stationEntryLogModel.destroy();
+                stationEntryLogModel.trigger('destroy', stationEntryLogModel, stationEntryLogModel.collection, options);
                 appEvents.trigger(AppEventNamesEnum.checkOutSuccess, checkOutResponse);
                 deferred.resolve(checkOutResponse);
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 var msg = 'Error checking out. Please call the dispatch center.';
-                appEvents.trigger(AppEventNamesEnum.checkOutError, msg);
                 if (jqXHR.status === 409 && jqXHR.responseText) {
-                    msg = jqXHR.responseText;
+                    msg = 'You are already checked-out.';
                 }
                 //currentContext.showErrorView(msg);
                 if (jqXHR.status === 409 || jqXHR.status === 403) {
-                    msg = jqXHR.responseText;
+                    msg = 'You do not have permission to check-out this user.';
                 }
 
+                appEvents.trigger(AppEventNamesEnum.checkOutError, msg);
                 deferred.reject(msg);
             });
 
@@ -445,7 +460,6 @@ define(function(require) {
                 deferred.resolve(updateCheckInResults);
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 var msg = 'Error updating entry.';
-                appEvents.trigger(AppEventNamesEnum.updateCheckInError, msg);
                 if (jqXHR.status === 409 && jqXHR.responseText) {
                     msg = jqXHR.responseText;
                 }
@@ -454,6 +468,7 @@ define(function(require) {
                     msg = jqXHR.responseText;
                 }
 
+                appEvents.trigger(AppEventNamesEnum.updateCheckInError, msg);
                 deferred.reject(msg);
             });
 
@@ -469,7 +484,6 @@ define(function(require) {
                 deferred.resolve(getPersonnelByUserIdResponse);
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 var msg = 'Error looking up the personnel user id.';
-                appEvents.trigger(AppEventNamesEnum.userIdLookupError, msg);
                 if (jqXHR.status === 409 && jqXHR.responseText) {
                     msg = jqXHR.responseText;
                 }
@@ -477,6 +491,7 @@ define(function(require) {
                 if (jqXHR.status === 409 || jqXHR.status === 403) {
                     msg = jqXHR.responseText;
                 }
+                appEvents.trigger(AppEventNamesEnum.userIdLookupError, msg);
                 deferred.reject(msg);
             });
 

@@ -21,10 +21,10 @@ define(function(require) {
         /* header */
         'checkInButtonText': 'Check-in',
         'checkInErrorMessage': 'check-in error',
-        'checkInSucessMessage': 'check-in succes',
+        'checkInSucessMessage': 'check-in success',
         'checkOutButtonText': 'Check-out',
         'checkOutErrorMessage': 'check-out error',
-        'checkOutSucessMessage': 'check-out succes',
+        'checkOutSucessMessage': 'check-out success',
         'editCheckInButtonText': 'Edit Check-in',
         'extendDurationButtonText': 'Extend duration',
         'goToPersonnelListButtonText': 'Personnel',
@@ -113,6 +113,7 @@ define(function(require) {
         'StationView.faaSectionTitleText': 'FAA Information',
         'StationView.goToMapButtonText': 'View Station in Google Maps',
         'StationView.itfoSectionTitleText': 'IT FO Information',
+        'StationView.loadingMessage': 'loading station',
         'StationView.locationSectionTitleText': 'Location Details',
         'StationView.otherSectionTitleText': 'Other Information',
         /* location */
@@ -188,7 +189,7 @@ define(function(require) {
         'NewStationEntryLogView.purposeOtherHeaderText': 'Other',
         'NewStationEntryLogView.saveButtonText': 'Save',
         'NewStationEntryLogView.stationIdDefaultOption': '&#45;&#160;station&#160;&#45;',
-        'NewStationEntryLogView.stationIdHeaderText': 'Station Id',
+        'NewStationEntryLogView.stationIdHeaderText': 'Station',
         'NewStationEntryLogView.thirdPartyHeaderText': 'Third Party',
         'NewStationEntryLogView.userIdHeaderText': 'User Id',
         'NewStationEntryLogView.viewTitleText': 'Manual Check-in',
@@ -215,7 +216,7 @@ define(function(require) {
         'EditStationEntryLogView.purposeOtherHeaderText': 'Other',
         'EditStationEntryLogView.saveButtonText': 'Save',
         'EditStationEntryLogView.stationIdDefaultOption': '&#45;&#160;station&#160;&#45;',
-        'EditStationEntryLogView.stationIdHeaderText': 'Station Id',
+        'EditStationEntryLogView.stationIdHeaderText': 'Station',
         'EditStationEntryLogView.userIdHeaderText': 'User Id',
         'EditStationEntryLogView.viewTitleText': 'Edit Check-in'
 
