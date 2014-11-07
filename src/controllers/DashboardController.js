@@ -108,7 +108,7 @@ define(function(require) {
             currentContext.router.navigate('stationEntryLog', {replace: fragmentAlreadyMatches});
 
             stationEntryLogListViewInstance.showLoading();
-            $.when(currentContext.dashboardService.getStationEntryLogsByOpen()).done(function(getStationEntryLogsResponse) {
+            $.when(currentContext.dashboardService.getStationEntryLogs({onlyOpen: true})).done(function(getStationEntryLogsResponse) {
                 stationEntryLogListViewInstance.setUserRole(getStationEntryLogsResponse.userRole);
                 currentContext.stationEntryLogSearchResults.reset(getStationEntryLogsResponse.stationEntryLogs);
                 currentContext.stationIdentifierResults.reset(getStationEntryLogsResponse.stationIdentifiers);
@@ -153,7 +153,7 @@ define(function(require) {
             currentContext.router.navigate('stationEntryLogHistory');
 
             stationEntryLogHistoryListViewInstance.showLoading();
-            $.when(currentContext.dashboardService.getStationEntryLogs()).done(function(getStationEntryLogsResponse) {
+            $.when(currentContext.dashboardService.getStationEntryLogs({onlyCheckedOut: true})).done(function(getStationEntryLogsResponse) {
                 currentContext.stationEntryLogSearchResults.reset(getStationEntryLogsResponse.stationEntryLogs);
                 currentContext.stationIdentifierResults.reset(getStationEntryLogsResponse.stationIdentifiers);
                 currentContext.regionResults.reset(getStationEntryLogsResponse.regions);
@@ -250,8 +250,9 @@ define(function(require) {
             currentContext.router.swapContent(stationEntryLogViewInstance);
             currentContext.router.navigate('stationEntryLog/' + stationEntryLogId);
 
-            $.when(currentContext.dashboardService.getStationEntryLogById(stationEntryLogModelInstance.attributes), currentContext.dashboardService.getNewStationEntryLogOptions()).done(function(getStationEntryLogResults, getNewStationEntryLogOptionsResults) {
-                stationEntryLogModelInstance.set(getStationEntryLogResults[0], {silent: true});
+            $.when(currentContext.dashboardService.getStationEntryLogs(stationEntryLogModelInstance.attributes), currentContext.dashboardService.getNewStationEntryLogOptions()).done(function(getStationEntryLogResults, getNewStationEntryLogOptionsResults) {
+                stationEntryLogViewInstance.setUserRole(getStationEntryLogResults[0].userRole);
+                stationEntryLogModelInstance.set(getStationEntryLogResults[0].stationEntryLogs[0], {silent: true});
                 currentContext.durationResults.reset(getNewStationEntryLogOptionsResults[0].durations);
                 stationEntryLogModelInstance.trigger('sync', stationEntryLogModelInstance, getStationEntryLogResults[0]);
                 deferred.resolve(stationEntryLogViewInstance);
@@ -278,7 +279,7 @@ define(function(require) {
             currentContext.router.navigate('station/' + stationId);
 
             stationViewInstance.showLoading();
-            $.when(currentContext.dashboardService.getStationById(stationModelInstance.attributes)).done(function(getStationByIdResponse) {
+            $.when(currentContext.dashboardService.getStations({stationId: stationId})).done(function(getStationByIdResponse) {
                 if (getStationByIdResponse.stations && getStationByIdResponse.stations.length > 0) {
                     stationModelInstance.set(getStationByIdResponse.stations[0]);
                 } else {
@@ -330,35 +331,6 @@ define(function(require) {
 
             return deferred.promise();
         },
-        showOpenStationEntryLogs: function(options) {
-            //showOpenStationEntryLogs: function(stationEntryLogCollection, options) {
-            console.trace('DashboardController.showOpenStationEntryLogs');
-            var currentContext = this,
-                    deferred = $.Deferred();
-
-            $.when(currentContext.dashboardService.getStationEntryLogsByOpen(options)).done(function(getStationEntryLogsByOpenResponse) {
-                currentContext.stationEntryLogSearchResults.reset(getStationEntryLogsByOpenResponse.stationEntryLogs);
-                deferred.resolve(getStationEntryLogsByOpenResponse);
-            }).fail(function(jqXHR, textStatus, errorThrown) {
-                deferred.reject(textStatus);
-            });
-
-            return deferred.promise();
-        },
-        showExpiredStationEntryLogs: function(options) {
-            console.trace('DashboardController.showExpiredStationEntryLogs');
-            var currentContext = this,
-                    deferred = $.Deferred();
-
-            $.when(currentContext.dashboardService.getStationEntryLogsByExpired(options)).done(function(getStationEntryLogsByExpiredResponse) {
-                currentContext.stationEntryLogSearchResults.reset(getStationEntryLogsByExpiredResponse.stationEntryLogs);
-                deferred.resolve(getStationEntryLogsByExpiredResponse);
-            }).fail(function(jqXHR, textStatus, errorThrown) {
-                deferred.reject(textStatus);
-            });
-
-            return deferred.promise();
-        },
         showStations: function(options) {
             console.trace('DashboardController.showStations');
             var currentContext = this,
@@ -398,8 +370,8 @@ define(function(require) {
 
             $.when(currentContext.dashboardService.postCheckIn(stationEntryLogModel.attributes)).done(function(checkInResponse) {
                 currentContext.purposeResults.reset(checkInResponse);
-                currentContext.stationEntryLogSearchResults.add(checkInResponse);
-                appEvents.trigger(AppEventNamesEnum.checkInSuccess, checkInResponse);
+                currentContext.stationEntryLogSearchResults.add(checkInResponse.stationEntryLog);
+                appEvents.trigger(AppEventNamesEnum.checkInSuccess, checkInResponse.stationEntryLog);
                 deferred.resolve(checkInResponse);
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 var msg = 'Error checking in.';
@@ -431,7 +403,7 @@ define(function(require) {
 
             $.when(currentContext.dashboardService.postCheckOut(options)).done(function(checkOutResponse) {
                 stationEntryLogModel.trigger('destroy', stationEntryLogModel, stationEntryLogModel.collection, options);
-                appEvents.trigger(AppEventNamesEnum.checkOutSuccess, checkOutResponse);
+                appEvents.trigger(AppEventNamesEnum.checkOutSuccess, checkOutResponse.stationEntryLog);
                 deferred.resolve(checkOutResponse);
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 var msg = 'Error checking out. Please call the dispatch center.';
@@ -456,7 +428,7 @@ define(function(require) {
 
             $.when(currentContext.dashboardService.postUpdateCheckIn(stationEntryLogModel.attributes)).done(function(updateCheckInResults) {
                 var model = currentContext.stationEntryLogSearchResults.findWhere({stationEntryLogId: updateCheckInResults.stationEntryLogId});
-                appEvents.trigger(AppEventNamesEnum.updateCheckInSuccess, updateCheckInResults);
+                appEvents.trigger(AppEventNamesEnum.updateCheckInSuccess, updateCheckInResults.stationEntryLog);
                 deferred.resolve(updateCheckInResults);
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 var msg = 'Error updating entry.';

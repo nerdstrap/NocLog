@@ -20,7 +20,8 @@ define(function(require) {
                 hazardIconAlt: appResources.getResource('hazardIconAlt'),
                 checkedInIconSvgSrc: appResources.getResource('checkedInIconSvgSrc'),
                 checkedInIconAlt: appResources.getResource('checkedInIconAlt'),
-                checkOutButtonText: appResources.getResource('checkOutButtonText')
+                checkOutButtonText: appResources.getResource('checkOutButtonText'),
+                viewCheckInButtonText: appResources.getResource('viewCheckInButtonText')
             };
         },
         initialize: function(options) {
@@ -34,13 +35,20 @@ define(function(require) {
 
             var renderModel = _.extend({}, currentContext.resources(), currentContext.model.attributes);
             currentContext.$el.html(template(renderModel));
-
+            this.updateThirdPartyStatus()
             return this;
         },
         events: {
             'click .station-name-link': 'goToStationWithId',
-            'click .personnel-name-link': 'goToPersonnelWithId'
-            /*'click .station-entry-log-link': 'goToStationEntryLogWithId'*/
+            'click .personnel-name-link': 'goToPersonnelWithId',
+            'click .elevated-functions-toggle': 'toggleElevatedFunctions',
+            'click .view-station-entry-log-link': 'goToStationEntryLogWithId'
+                    /*'click .station-entry-log-link': 'goToStationEntryLogWithId'*/
+        },
+        updateThirdPartyStatus: function() {
+            if (this.model.get('thirdParty')) {
+                this.$('#third-party-icon').removeClass('hidden');
+            }
         },
         goToStationWithId: function(event) {
             if (event) {
@@ -62,6 +70,14 @@ define(function(require) {
             }
             var stationEntryLogId = this.model.get('stationEntryLogId');
             this.dispatcher.trigger(AppEventNamesEnum.goToStationEntryLogWithId, stationEntryLogId);
+        },
+        toggleElevatedFunctions: function(event) {
+            if (event) {
+                event.preventDefault();
+            }
+            this.$('.hide-container-icon').toggle('hidden');
+            this.$('.show-container-icon').toggle('hidden');
+            this.$('.elevated-functions-container').toggle('hidden');
         }
     });
 

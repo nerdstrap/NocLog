@@ -23,31 +23,31 @@ define(function(require) {
     var StationEntryLogListView = CompositeView.extend({
         resources: function(culture) {
             return {
-                loadingIconSrc: appResources.getResource('loadingIconSrc'),
-                checkInSucessMessage: appResources.getResource('checkInSucessMessage'),
+                additionalInfoHeaderText: appResources.getResource('StationEntryLogListView.additionalInfoHeaderText'),
+                areaFilterDefaultOption: appResources.getResource('StationEntryLogListView.areaFilterDefaultOption'),
+                areaHeaderText: appResources.getResource('StationEntryLogListView.areaHeaderText'),
                 checkInErrorMessage: appResources.getResource('checkInErrorMessage'),
-                checkOutSucessMessage: appResources.getResource('checkOutSucessMessage'),
+                checkInSucessMessage: appResources.getResource('checkInSucessMessage'),
                 checkOutErrorMessage: appResources.getResource('checkOutErrorMessage'),
-                loadingMessage: appResources.getResource('StationEntryLogListView.loadingMessage'),
+                checkOutSucessMessage: appResources.getResource('checkOutSucessMessage'),
+                contactHeaderText: appResources.getResource('StationEntryLogListView.contactHeaderText'),
                 errorMessage: appResources.getResource('StationEntryLogListView.errorMessage'),
+                expectedOutTimeHeaderText: appResources.getResource('StationEntryLogListView.expectedOutTimeHeaderText'),
+                inTimeHeaderText: appResources.getResource('StationEntryLogListView.inTimeHeaderText'),
                 infoMessage: appResources.getResource('StationEntryLogListView.infoMessage'),
                 listViewTitleText: appResources.getResource('StationEntryLogListView.listViewTitleText'),
-                statusFilterOpenOption: appResources.getResource('StationEntryLogListView.statusFilterOpenOption'),
-                statusFilterExpiredOption: appResources.getResource('StationEntryLogListView.statusFilterExpiredOption'),
-                regionFilterDefaultOption: appResources.getResource('StationEntryLogListView.regionFilterDefaultOption'),
-                areaFilterDefaultOption: appResources.getResource('StationEntryLogListView.areaFilterDefaultOption'),
-                refreshListButtonText: appResources.getResource('StationEntryLogListView.refreshListButtonText'),
-                resetListOptionsButtonText: appResources.getResource('StationEntryLogListView.resetListOptionsButtonText'),
+                loadingIconSrc: appResources.getResource('loadingIconSrc'),
+                loadingMessage: appResources.getResource('StationEntryLogListView.loadingMessage'),
                 newStationEntryLogButtonText: appResources.getResource('StationEntryLogListView.newStationEntryLogButtonText'),
-                stationNameHeaderText: appResources.getResource('StationEntryLogListView.stationNameHeaderText'),
                 personnelNameHeaderText: appResources.getResource('StationEntryLogListView.personnelNameHeaderText'),
-                contactHeaderText: appResources.getResource('StationEntryLogListView.contactHeaderText'),
-                inTimeHeaderText: appResources.getResource('StationEntryLogListView.inTimeHeaderText'),
-                expectedOutTimeHeaderText: appResources.getResource('StationEntryLogListView.expectedOutTimeHeaderText'),
                 purposeHeaderText: appResources.getResource('StationEntryLogListView.purposeHeaderText'),
-                additionalInfoHeaderText: appResources.getResource('StationEntryLogListView.additionalInfoHeaderText'),
+                refreshListButtonText: appResources.getResource('StationEntryLogListView.refreshListButtonText'),
+                regionFilterDefaultOption: appResources.getResource('StationEntryLogListView.regionFilterDefaultOption'),
                 regionHeaderText: appResources.getResource('StationEntryLogListView.regionHeaderText'),
-                areaHeaderText: appResources.getResource('StationEntryLogListView.areaHeaderText')
+                resetListOptionsButtonText: appResources.getResource('StationEntryLogListView.resetListOptionsButtonText'),
+                stationNameHeaderText: appResources.getResource('StationEntryLogListView.stationNameHeaderText'),
+                statusFilterExpiredOption: appResources.getResource('StationEntryLogListView.statusFilterExpiredOption'),
+                statusFilterOpenOption: appResources.getResource('StationEntryLogListView.statusFilterOpenOption')
             };
         },
         initialize: function(options) {
@@ -153,11 +153,11 @@ define(function(require) {
                 areaName: area
             };
             if (status === 'open') {
-                this.dispatcher.trigger(AppEventNamesEnum.showOpenStationEntryLogs, options);
+                options.onlyOpen = true;
+            } else {
+                options.onlyExpired = true;
             }
-            if (status === 'expired') {
-                this.dispatcher.trigger(AppEventNamesEnum.showExpiredStationEntryLogs, options);
-            }
+            this.dispatcher.trigger(AppEventNamesEnum.showStationEntryLogs, options);
         },
         resetStationEntryLogListFilter: function(event) {
             if (event) {
@@ -176,7 +176,7 @@ define(function(require) {
                 }];
             this.showSortIndicators(sortAttributes);
             this.collection.sortAttributes = sortAttributes;
-            this.dispatcher.trigger(AppEventNamesEnum.showOpenStationEntryLogs);
+            this.dispatcher.trigger(AppEventNamesEnum.showStationEntryLogs);
         },
         updateStationEntryLogListExpectedOutTimeSort: function(event) {
             if (event) {

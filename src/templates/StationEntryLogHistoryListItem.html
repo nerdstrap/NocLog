@@ -4,7 +4,8 @@
             <a class="station-name-link" data-stationid="{{stationId}}">{{withDefault stationName "&nbsp;"}}</a>
         </div>
         <div class="small-1 columns">
-            <a class="personnel-name-link" data-outsideid="{{outsideId}}">{{withDefault userName "&nbsp;"}}</a>
+            <i id="third-party-icon" class="fa fa-globe hidden"></i>
+            <a class="personnel-name-link" data-userid="{{userId}}">{{withDefault userName "&nbsp;"}}</a>
         </div>
         <div class="small-1 columns">
             <span>{{formatPhoneWithDefault contact "%D %r" "&nbsp;"}}</span>
@@ -22,15 +23,24 @@
             <span>{{withDefault additionalInfo "&nbsp;"}}</span>
         </div>
         <div class="small-1 columns">
-            <span>{{withDefault region "&nbsp;"}}</span>
+            <span>{{withDefault regionName "&nbsp;"}}</span>
         </div>
         <div class="small-1 columns">
-            <span>{{withDefault area "&nbsp;"}}</span>
+            <span>{{withDefault areaName "&nbsp;"}}</span>
+            <span class="collapse elevated-functions-toggle">
+                <i class="fa fa-angle-double-up hide-container-icon"></i>
+                <i class="fa fa-angle-double-down show-container-icon hidden"></i>
+            </span>
         </div>
-        <!--
-        <div class="small-1 columns">
-            <a class="station-entry-log-link" data-stationentrylogid="{{stationEntryLogId}}">{{{checkOutButtonText}}}</a>
-        </div>
-        -->
     </div>
+    <div class="row collapse elevated-functions-container hidden">
+        <div class="small-2 columns large-offset-10">
+            <a class="view-station-entry-log-link button radius tiny secondary">{{{viewCheckInButtonText}}}</a>
+        </div>
+    </div>
+    <!--
+    <div class="small-1 columns">
+        <a class="station-entry-log-link" data-stationentrylogid="{{stationEntryLogId}}">{{{checkOutButtonText}}}</a>
+    </div>
+    -->
 </div>

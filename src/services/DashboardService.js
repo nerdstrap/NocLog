@@ -16,18 +16,6 @@ define(function(require) {
             console.trace('DashboardService.initialize');
             options || (options = {});
         },
-        getStationById: function(options) {
-            options || (options = {});
-            var data = $.param(options);
-
-            return $.ajax({
-                contentType: 'application/json',
-                data: data,
-                dataType: 'json',
-                type: 'GET',
-                url: env.getApiUrl() + '/station/find'
-            });
-        },
         getStations: function(options) {
             options || (options = {});
             var data = $.param(options);
@@ -40,54 +28,16 @@ define(function(require) {
                 url: env.getApiUrl() + '/station/find'
             });
         },
-        getStationEntryLogById: function(options) {
-            options || (options = {});
-            var data = JSON.stringify(options);
-
-            return $.ajax({
-                contentType: 'application/json',
-                data: data,
-                dataType: 'json',
-                type: 'POST',
-                url: env.getApiUrl() + '/stationEntryLog/find'
-            });
-        },
         getStationEntryLogs: function(options) {
-            var data;
-            if (options) {
-                data = JSON.stringify(options);
-            }
-
-            return $.ajax({
-                contentType: 'application/json',
-                data: data,
-                dataType: 'json',
-                type: 'POST',
-                url: env.getApiUrl() + '/stationEntryLog/history'
-            });
-        },
-        getStationEntryLogsByOpen: function(options) {
             options || (options = {});
-            var data = JSON.stringify(options);
+            var data = $.param(options);
 
             return $.ajax({
                 contentType: 'application/json',
                 data: data,
                 dataType: 'json',
-                type: 'POST',
-                url: env.getApiUrl() + '/stationEntryLog/open'
-            });
-        },
-        getStationEntryLogsByExpired: function(options) {
-            options || (options = {});
-            var data = JSON.stringify(options);
-
-            return $.ajax({
-                contentType: 'application/json',
-                data: data,
-                dataType: 'json',
-                type: 'POST',
-                url: env.getApiUrl() + '/stationEntryLog/expired'
+                type: 'GET',
+                url: env.getApiUrl() + '/stationEntryLog/find'
             });
         },
         postCheckIn: function(options) {

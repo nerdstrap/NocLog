@@ -31,6 +31,7 @@ define(function(require) {
         'goToStationEntryLogHistoryListButtonText': 'History',
         'goToStationEntryLogListButtonText': 'Entry Log',
         'goToStationListButtonText': 'Stations',
+        'viewCheckInButtonText': 'View Check-in',
         /* station entry log list */
         'StationEntryLogListView.additionalInfoHeaderText': 'Additional Info',
         'StationEntryLogListView.areaFilterDefaultOption': '&#45;&#160;area&#160;&#45;',
@@ -194,6 +195,8 @@ define(function(require) {
         'NewStationEntryLogView.userIdHeaderText': 'User Id',
         'NewStationEntryLogView.viewTitleText': 'Manual Check-in',
         /* edit station entry log */
+        'EditStationEntryLogView.actualDurationHeaderText': 'Actual Duration',
+        'EditStationEntryLogView.actualOutTimeHeaderText': 'Actual Out Time',
         'EditStationEntryLogView.additionalInfoHeaderText': 'Additional Info',
         'EditStationEntryLogView.cancelButtonText': 'Cancel',
         'EditStationEntryLogView.companyNameHeaderText': 'Company Name',
@@ -217,9 +220,7 @@ define(function(require) {
         'EditStationEntryLogView.saveButtonText': 'Save',
         'EditStationEntryLogView.stationIdDefaultOption': '&#45;&#160;station&#160;&#45;',
         'EditStationEntryLogView.stationIdHeaderText': 'Station',
-        'EditStationEntryLogView.userIdHeaderText': 'User Id',
-        'EditStationEntryLogView.viewTitleText': 'Edit Check-in'
-
+        'EditStationEntryLogView.userIdHeaderText': 'User Id'
     };
     
     var defaultResource = '';

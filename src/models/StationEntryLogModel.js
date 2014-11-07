@@ -20,15 +20,15 @@ define(function(require) {
                 (attributes = {})[key] = val;
             }
             if (attributes) {
-                if (attributes.hasOwnProperty('outsideId')) {
-                    var outsideId = attributes.outsideId;
-                    if (outsideId.length > 0) {
+                if (attributes.hasOwnProperty('userId')) {
+                    var userId = attributes.userId;
+                    if (userId.length > 0) {
                         attributes.thirdParty = false;
                     }
                 }
-                if (attributes.hasOwnProperty('company')) {
-                    var company = attributes.company;
-                    if (company.length > 0) {
+                if (attributes.hasOwnProperty('companyName')) {
+                    var companyName = attributes.companyName;
+                    if (companyName.length > 0) {
                         attributes.thirdParty = true;
                     }
                 }
@@ -104,12 +104,12 @@ define(function(require) {
             return Backbone.Model.prototype.set.call(this, attributes, options);
         },
         validation: {
-            outsideId: {
+            userId: {
                 required: function() {
                     return (this.get('thirdParty') !== true);
                 }
             },
-            company: {
+            companyName: {
                 required: function() {
                     return (this.get('thirdParty') === true);
                 }
@@ -144,7 +144,7 @@ define(function(require) {
             duration: {
                 required: true
             },
-            dcId: {
+            dispatchCenterId: {
                 required: true
             }
         }

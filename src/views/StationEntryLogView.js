@@ -9,6 +9,7 @@ define(function(require) {
             helpers = require('handlebars.helpers'),
             CompositeView = require('views/CompositeView'),
             AppEventNamesEnum = require('enums/AppEventNamesEnum'),
+            UserRolesEnum = require('enums/UserRolesEnum'),
             appEvents = require('events'),
             appResources = require('resources'),
             utils = require('utils'),
@@ -19,6 +20,8 @@ define(function(require) {
     var StationEntryLog = CompositeView.extend({
         resources: function(culture) {
             return {
+                actualDurationHeaderText: appResources.getResource('EditStationEntryLogView.actualDurationHeaderText'),
+                actualOutTimeHeaderText: appResources.getResource('EditStationEntryLogView.viewTitleText'),
                 additionalInfoHeaderText: appResources.getResource('EditStationEntryLogView.additionalInfoHeaderText'),
                 cancelButtonText: appResources.getResource('EditStationEntryLogView.cancelButtonText'),
                 checkOutButtonText: appResources.getResource('checkOutButtonText'),
@@ -54,6 +57,7 @@ define(function(require) {
             this.durationCollection = options.durationCollection;
 
             this.listenTo(this.model, 'sync', this.updateViewFromModel);
+            //this.listenTo(this.model, 'sync', this.setUserRole);
             this.listenTo(this.model, 'validated', this.onValidated);
             this.listenTo(this.durationCollection, 'reset', this.addAllDurations);
 
@@ -90,10 +94,29 @@ define(function(require) {
             'click #edit-station-entry-log-cancel-button': 'cancelEditCheckIn',
             'change #edit-station-entry-log-duration': 'durationChanged'
         },
+        setUserRole: function(userRole) {
+            var currentContext = this;
+            currentContext.userRole = userRole;
+//            currentContext.userRole = 'NOC_Admin';
+//            currentContext.userRole = 'NOC_Read';
+            currentContext.checkUserRole();
+        },
+        checkUserRole: function() {
+            var currentContext = this;
+            if (currentContext.userRole === UserRolesEnum.NocAdmin || currentContext.userRole === UserRolesEnum.NocUser) {
+                currentContext.allowEdit = 'Yes';
+                currentContext.updateViewFromModel();
+                currentContext.$('.viewTitleText').html('Edit Check-in');
+            } else {
+                currentContext.allowEdit = 'No';
+                currentContext.updateViewFromModel();
+                currentContext.$('.viewTitleText').html('View Check-in');
+            }
+        },
         updateViewFromModel: function() {
             var currentContext = this;
-            currentContext.$('#edit-station-entry-log-company-name').val(currentContext.model.get('company'));
-            currentContext.$('#edit-station-entry-log-user-id').val(currentContext.model.get('outsideId'));
+            currentContext.$('#edit-station-entry-log-company-name').val(currentContext.model.get('companyName'));
+            currentContext.$('#edit-station-entry-log-user-id').val(currentContext.model.get('userId'));
             currentContext.$('#edit-station-entry-log-first-name').val(currentContext.model.get('firstName'));
             currentContext.$('#edit-station-entry-log-middle-initial').val(currentContext.model.get('middleName'));
             currentContext.$('#edit-station-entry-log-last-name').val(currentContext.model.get('lastName'));
@@ -103,6 +126,7 @@ define(function(require) {
             currentContext.$('#edit-station-entry-log-purpose').html(currentContext.model.get('purpose'));
             currentContext.$('#edit-station-entry-log-duration-old').html((currentContext.model.get('duration') / 60) + " hours");
             currentContext.oldExpectedOutTime();
+            currentContext.$('#view-station-entry-log-actual-out-time').html((currentContext.model.get('outTime')));
             currentContext.$('#edit-station-entry-log-has-crew').html(currentContext.decodeHasCrew());
             currentContext.$('#edit-station-entry-log-additional-info').val(currentContext.model.get('additionalInfo'));
             currentContext.changeCheckInType();
@@ -149,37 +173,68 @@ define(function(require) {
         },
         changeCheckInType: function() {
             var currentContext = this;
-            if (currentContext.model.has('company')) {
+            if (currentContext.model.has('companyName')) {
                 //Third Party
-                this.$('#user-container').addClass('hidden');
-                this.$('#user-label-container').addClass('hidden');
-                this.$('#third-party-user-label-container').removeClass('hidden');
-                this.$('#third-party-user-container').removeClass('hidden');
-
-                this.$('#edit-station-entry-log-user-id').prop('disabled', true);
-                this.$('#edit-station-entry-log-company-name').prop('disabled', false);
-
-                this.$('#edit-station-entry-log-first-name').prop('disabled', false);
-                this.$('#edit-station-entry-log-middle-initial').prop('disabled', false);
-                this.$('#edit-station-entry-log-last-name').prop('disabled', false);
-                this.$('#edit-station-entry-log-email').prop('disabled', false);
-                this.$('#edit-station-entry-log-contact-number').prop('disabled', false);
+                currentContext.$('#user-container').addClass('hidden');
+                currentContext.$('#user-label-container').addClass('hidden');
+                currentContext.$('#third-party-user-label-container').removeClass('hidden');
+                currentContext.$('#third-party-user-container').removeClass('hidden');
             } else {
                 //Not Third Party
-                this.$('#user-container').removeClass('hidden');
-                this.$('#user-label-container').removeClass('hidden');
-                this.$('#third-party-user-container').addClass('hidden');
-                this.$('#third-party-user-label-container').addClass('hidden');
-
-                this.$('#edit-station-entry-log-user-id').prop('disabled', true);
-                this.$('#edit-station-entry-log-company-name').prop('disabled', true);
-
-                this.$('#edit-station-entry-log-first-name').prop('disabled', true);
-                this.$('#edit-station-entry-log-middle-initial').prop('disabled', true);
-                this.$('#edit-station-entry-log-last-name').prop('disabled', true);
-                this.$('#edit-station-entry-log-email').prop('disabled', true);
-                this.$('#edit-station-entry-log-contact-number').prop('disabled', true);
+                currentContext.$('#user-container').removeClass('hidden');
+                currentContext.$('#user-label-container').removeClass('hidden');
+                currentContext.$('#third-party-user-container').addClass('hidden');
+                currentContext.$('#third-party-user-label-container').addClass('hidden');
             }
+
+            if (currentContext.model.has('outTime')) {
+                //Checked Out
+                currentContext.$('#view-station-entry-log-new-duration').addClass('hidden');
+                currentContext.$('#view-station-entry-log-actual-duration').removeClass('hidden');
+
+                currentContext.$('#edit-station-entry-log-user-id').prop('disabled', true);
+                currentContext.$('#edit-station-entry-log-company-name').prop('disabled', true);
+                currentContext.$('#edit-station-entry-log-first-name').prop('disabled', true);
+                currentContext.$('#edit-station-entry-log-middle-initial').prop('disabled', true);
+                currentContext.$('#edit-station-entry-log-last-name').prop('disabled', true);
+                currentContext.$('#edit-station-entry-log-email').prop('disabled', true);
+                currentContext.$('#edit-station-entry-log-contact-number').prop('disabled', true);
+                currentContext.$('#edit-station-entry-log-additional-info').prop('disabled', true);
+                currentContext.$('#edit-station-entry-log-save-button').addClass('hidden');
+                
+                currentContext.$('.viewTitleText').html('View Check-in');
+            } else {
+                //Not Checked Out
+                if (currentContext.allowEdit === 'Yes') {
+                    currentContext.$('#edit-station-entry-log-additional-info').prop('disabled', false);
+                    currentContext.$('#view-station-entry-log-new-duration').removeClass('hidden');
+                    currentContext.$('#edit-station-entry-log-save-button').removeClass('hidden');
+                    if (currentContext.model.has('company')) {
+                        //Third Party
+                        currentContext.$('#edit-station-entry-log-user-id').prop('disabled', true);
+                        currentContext.$('#edit-station-entry-log-company-name').prop('disabled', false);
+
+                        currentContext.$('#edit-station-entry-log-first-name').prop('disabled', false);
+                        currentContext.$('#edit-station-entry-log-middle-initial').prop('disabled', false);
+                        currentContext.$('#edit-station-entry-log-last-name').prop('disabled', false);
+                        currentContext.$('#edit-station-entry-log-email').prop('disabled', false);
+                        currentContext.$('#edit-station-entry-log-contact-number').prop('disabled', false);
+                    } else {
+                        //Not Third Party
+                        currentContext.$('#edit-station-entry-log-user-id').prop('disabled', true);
+                        currentContext.$('#edit-station-entry-log-company-name').prop('disabled', true);
+
+                        currentContext.$('#edit-station-entry-log-first-name').prop('disabled', true);
+                        currentContext.$('#edit-station-entry-log-middle-initial').prop('disabled', true);
+                        currentContext.$('#edit-station-entry-log-last-name').prop('disabled', true);
+                        currentContext.$('#edit-station-entry-log-email').prop('disabled', true);
+                        currentContext.$('#edit-station-entry-log-contact-number').prop('disabled', true);
+                    }
+                }
+
+            }
+
+
         },
         validateAndSubmitUpdatedCheckIn: function(event) {
             if (event) {
@@ -192,8 +247,8 @@ define(function(require) {
             var currentContext = this;
             //if values have changed, set new values in modle
             if (currentContext.model.get('thirdParty')) {
-                if ($('#edit-station-entry-log-company-name').val() !== currentContext.model.get('company')) {
-                    currentContext.model.set({company: $('#edit-station-entry-log-company-name').val()});
+                if ($('#edit-station-entry-log-company-name').val() !== currentContext.model.get('companyName')) {
+                    currentContext.model.set({companyName: $('#edit-station-entry-log-company-name').val()});
                 }
                 if ($('#edit-station-entry-log-first-name').val() !== currentContext.model.get('firstName')) {
                     currentContext.model.set({firstName: $('#edit-station-entry-log-first-name').val()});
@@ -242,8 +297,9 @@ define(function(require) {
             if (event) {
                 event.preventDefault();
             }
-            this.dispatcher.trigger(AppEventNamesEnum.goToStationEntryLogList);
-            this.leave();
+//            this.dispatcher.trigger(AppEventNamesEnum.goToStationEntryLogList);
+//            this.leave();
+            window.history.back();
         },
         showLoading: function() {
             this.$('.view-status').removeClass('hidden');

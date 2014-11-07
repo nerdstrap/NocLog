@@ -138,7 +138,8 @@ define(function(require) {
                 startDate: startDate,
                 startTime: startTime,
                 endDate: endDate,
-                endTime: endTime
+                endTime: endTime,
+                onlyCheckedOut: true
             };
 
             this.dispatcher.trigger(AppEventNamesEnum.showStationEntryLogs, options);
@@ -171,8 +172,12 @@ define(function(require) {
 
             this.showSortIndicators(sortAttributes);
             this.collection.sortAttributes = sortAttributes;
+            
+            var options = {
+                onlyCheckedOut: true
+            };
 
-            this.dispatcher.trigger(AppEventNamesEnum.showStationEntryLogs);
+            this.dispatcher.trigger(AppEventNamesEnum.showStationEntryLogs, options);
         },
         updateStationEntryLogHistoryListOutTimeSort: function(event) {
             if (event) {

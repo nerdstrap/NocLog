@@ -15,8 +15,9 @@ define(function(require) {
         tagName: 'li',
         resources: function(culture) {
             return {
+                checkOutButtonText: appResources.getResource('checkOutButtonText'),
                 editCheckInButtonText: appResources.getResource('editCheckInButtonText'),
-                checkOutButtonText: appResources.getResource('checkOutButtonText')
+                viewCheckInButtonText: appResources.getResource('viewCheckInButtonText')
             };
         },
         initialize: function(options) {
@@ -33,7 +34,9 @@ define(function(require) {
             currentContext.$el.html(template(renderModel));
 
             this.updateCheckOutStatus();
+            this.updateThirdPartyStatus();
             this.checkUserRole();
+//            this.setUserRole();
 
             return this;
         },
@@ -41,6 +44,7 @@ define(function(require) {
             'click .station-name-link': 'goToStationWithId',
             'click .personnel-name-link': 'goToPersonnelWithId',
             'click .elevated-functions-toggle': 'toggleElevatedFunctions',
+            'click .view-station-entry-log-link': 'goToStationEntryLogWithId',
             'click .station-entry-log-link': 'goToStationEntryLogWithId',
             'click .check-out-link': 'goToCheckOut'
         },
@@ -51,17 +55,29 @@ define(function(require) {
                 this.$('.station-entry-log-list-item-view').addClass('checkOutExpired');
             }
         },
-        setUserRole: function(userRole) {
-            var currentContext = this;
-            currentContext.userRole = userRole;
-            currentContext.checkUserRole();
+        updateThirdPartyStatus: function() {
+            if (this.model.get('thirdParty')) {
+                this.$('#third-party-icon').removeClass('hidden');
+            }
         },
+//        setUserRole: function(userRole) {
+//            var currentContext = this;
+//            currentContext.userRole = userRole;
+//            currentContext.checkUserRole();
+//        },
         checkUserRole: function() {
             var currentContext = this;
+//            currentContext.userRole = 'NOC_Read';
             if (currentContext.userRole === UserRolesEnum.NocAdmin || currentContext.userRole === UserRolesEnum.NocUser) {
                 currentContext.showElevatedFunctionToggle();
+                currentContext.$('.view-station-entry-log-link').addClass('hidden');
+                currentContext.$('.station-entry-log-link').removeClass('hidden');
+                currentContext.$('.check-out-link').removeClass('hidden');
             } else {
-                currentContext.hideElevatedFunctionToggle();
+                currentContext.showElevatedFunctionToggle();
+                currentContext.$('.view-station-entry-log-link').removeClass('hidden');
+                currentContext.$('.station-entry-log-link').addClass('hidden');
+                currentContext.$('.check-out-link').addClass('hidden');
             }
         },
         showElevatedFunctionToggle: function() {

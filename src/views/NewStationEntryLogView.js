@@ -73,7 +73,7 @@ define(function(require) {
 
             var renderModel = _.extend({}, currentContext.resources(), currentContext.model.attributes);
             currentContext.$el.html(template(renderModel));
-            
+
             currentContext.addAllStationIdentifiers();
             currentContext.addAllPurposes();
             currentContext.addAllDurations();
@@ -126,10 +126,10 @@ define(function(require) {
                 this.$('#user-container').addClass('hidden');
                 this.$('#third-party-user-container').removeClass('hidden');
                 this.$('#third-party-user-label-container').removeClass('hidden');
-                
+
                 this.$('#new-station-entry-log-user-id').val('').prop('disabled', true);
                 this.$('#new-station-entry-log-company-name').val('').prop('disabled', false);
-                
+
                 this.$('#new-station-entry-log-first-name').val('').prop('disabled', false);
                 this.$('#new-station-entry-log-middle-initial').val('').prop('disabled', false);
                 this.$('#new-station-entry-log-last-name').val('').prop('disabled', false);
@@ -140,10 +140,10 @@ define(function(require) {
                 this.$('#user-label-container').removeClass('hidden');
                 this.$('#third-party-user-container').addClass('hidden');
                 this.$('#third-party-user-label-container').addClass('hidden');
-                
+
                 this.$('#new-station-entry-log-user-id').val('').prop('disabled', false);
                 this.$('#new-station-entry-log-company-name').val('').prop('disabled', true);
-                
+
                 this.$('#new-station-entry-log-first-name').val('').prop('disabled', true);
                 this.$('#new-station-entry-log-middle-initial').val('').prop('disabled', true);
                 this.$('#new-station-entry-log-last-name').val('').prop('disabled', true);
@@ -237,8 +237,6 @@ define(function(require) {
             var stationType = 'TC';
             this.model.set({
                 thirdParty: thirdParty,
-                userId: userId,
-                companyName: companyName,
                 firstName: firstName,
                 lastName: lastName,
                 middleInitial: middleInitial,
@@ -252,6 +250,16 @@ define(function(require) {
                 stationType: stationType,
                 additionalInfo: additionalInfo
             });
+            if (userId) {
+                this.model.set({
+                    userId: userId
+                });
+            }
+            if (companyName) {
+                this.model.set({
+                    companyName: companyName
+                });
+            }
         },
         onValidated: function(isValid, model, errors) {
             if (isValid) {
