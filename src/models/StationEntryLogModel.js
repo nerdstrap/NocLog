@@ -67,11 +67,10 @@ define(function(require) {
 
                 if (checkedOut === false && attributes.expectedOutTime) {
                     var expectedOutTimeElapsed = new Date() - attributes.expectedOutTime;
-                    if (expectedOutTimeElapsed > 0) {
+                    if (expectedOutTimeElapsed >= env.getExpirationThreshold()) {
+                        attributes.checkOutOverdue = true;
+                    } else if (expectedOutTimeElapsed > 0) {
                         attributes.checkOutExpired = true;
-                        if (expectedOutTimeElapsed >= env.getExpirationThreshold()) {
-                            attributes.checkOutOverdue = true;
-                        }
                     }
                 }
 

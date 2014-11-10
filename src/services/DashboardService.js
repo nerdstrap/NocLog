@@ -78,37 +78,37 @@ define(function(require) {
         },
         getLookupDataItems: function(options) {
             options || (options = {});
-            var data = JSON.stringify(options);
+            var data = $.param(options);
 
             return $.ajax({
                 contentType: 'application/json',
                 data: data,
                 dataType: 'json',
-                type: 'POST',
-                url: env.getApiUrl() + '/lookupDataItem'
+                type: 'GET',
+                url: env.getApiUrl() + '/lookupDataItem/find'
             });
         },
         getPersonnelByUserId: function(options) {
             options || (options = {});
-            var data = JSON.stringify(options);
+            var data = $.param(options);
 
             return $.ajax({
                 contentType: 'application/json',
                 data: data,
                 dataType: 'json',
-                type: 'POST',
+                type: 'GET',
                 url: env.getApiUrl() + '/personnel/find'
             });
         },
         getNewStationEntryLogOptions: function(options) {
             options || (options = {});
-            var data = JSON.stringify(options);
+            var data = $.param(options);
 
             return $.ajax({
                 contentType: 'application/json',
                 data: data,
                 dataType: 'json',
-                type: 'POST',
+                type: 'GET',
                 url: env.getApiUrl() + '/lookupDataItem/newStationEntryLogOptions'
             });
         }

@@ -24,14 +24,15 @@ define(function(require) {
         checkInSuccess: 'checkInSuccess',
         checkInError: 'checkInError',
         closeNewCheckIn: 'closeNewCheckIn',
-		updateCheckInSuccess: 'updateCheckInSuccess',
+        updateCheckInSuccess: 'updateCheckInSuccess',
         updateCheckInError: 'updateCheckInError',
         checkOutSuccess: 'checkOutSuccess',
         checkOutError: 'checkOutError',
         goToLookupUserId: 'goToLookupUserId',
         userIdFound: 'userIdFound',
         userIdLookupError: 'userIdLookupError',
-        leaveNewStationEntryLogView: 'leaveNewStationEntryLogView'
+        leaveNewStationEntryLogView: 'leaveNewStationEntryLogView',
+        countExpiredEntriesUpdated: 'countExpiredEntriesUpdated'
     };
 
     if (Object.freeze) {

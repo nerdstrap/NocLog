@@ -111,6 +111,7 @@ define(function(require) {
             $.when(currentContext.dashboardService.getStationEntryLogs({onlyOpen: true})).done(function(getStationEntryLogsResponse) {
                 stationEntryLogListViewInstance.setUserRole(getStationEntryLogsResponse.userRole);
                 currentContext.stationEntryLogSearchResults.reset(getStationEntryLogsResponse.stationEntryLogs);
+                currentContext.countExpiredStationEntryLogs(currentContext.stationEntryLogSearchResults);
                 currentContext.stationIdentifierResults.reset(getStationEntryLogsResponse.stationIdentifiers);
                 currentContext.regionResults.reset(getStationEntryLogsResponse.regions);
                 currentContext.areaResults.reset(getStationEntryLogsResponse.areas);
@@ -324,12 +325,21 @@ define(function(require) {
 
             $.when(currentContext.dashboardService.getStationEntryLogs(options)).done(function(getStationEntryLogsResponse) {
                 currentContext.stationEntryLogSearchResults.reset(getStationEntryLogsResponse.stationEntryLogs);
+                currentContext.countExpiredStationEntryLogs(currentContext.stationEntryLogSearchResults);
                 deferred.resolve(getStationEntryLogsResponse);
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 deferred.reject(textStatus);
             });
 
             return deferred.promise();
+        },
+        countExpiredStationEntryLogs: function(stationEntryLogSearchResults) {
+            console.trace('DashboardController.countExpiredStationEntryLogs');
+            var expiredCount, overdueCount, openCount;
+            overdueCount = stationEntryLogSearchResults.where({checkOutOverdue: true}).length;
+            expiredCount = stationEntryLogSearchResults.where({checkOutExpired: true}).length;
+            openCount = stationEntryLogSearchResults.length - expiredCount - overdueCount;
+            appEvents.trigger(AppEventNamesEnum.countExpiredEntriesUpdated, {'overdueCount': overdueCount, 'expiredCount': expiredCount, 'openCount': openCount});
         },
         showStations: function(options) {
             console.trace('DashboardController.showStations');
@@ -372,6 +382,7 @@ define(function(require) {
                 currentContext.purposeResults.reset(checkInResponse);
                 currentContext.stationEntryLogSearchResults.add(checkInResponse.stationEntryLog);
                 appEvents.trigger(AppEventNamesEnum.checkInSuccess, checkInResponse.stationEntryLog);
+                currentContext.countExpiredStationEntryLogs(currentContext.stationEntryLogSearchResults);
                 deferred.resolve(checkInResponse);
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 var msg = 'Error checking in.';
@@ -404,6 +415,7 @@ define(function(require) {
             $.when(currentContext.dashboardService.postCheckOut(options)).done(function(checkOutResponse) {
                 stationEntryLogModel.trigger('destroy', stationEntryLogModel, stationEntryLogModel.collection, options);
                 appEvents.trigger(AppEventNamesEnum.checkOutSuccess, checkOutResponse.stationEntryLog);
+                currentContext.countExpiredStationEntryLogs(currentContext.stationEntryLogSearchResults);
                 deferred.resolve(checkOutResponse);
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 var msg = 'Error checking out. Please call the dispatch center.';
@@ -429,6 +441,7 @@ define(function(require) {
             $.when(currentContext.dashboardService.postUpdateCheckIn(stationEntryLogModel.attributes)).done(function(updateCheckInResults) {
                 var model = currentContext.stationEntryLogSearchResults.findWhere({stationEntryLogId: updateCheckInResults.stationEntryLogId});
                 appEvents.trigger(AppEventNamesEnum.updateCheckInSuccess, updateCheckInResults.stationEntryLog);
+                currentContext.countExpiredStationEntryLogs(currentContext.stationEntryLogSearchResults);
                 deferred.resolve(updateCheckInResults);
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 var msg = 'Error updating entry.';
