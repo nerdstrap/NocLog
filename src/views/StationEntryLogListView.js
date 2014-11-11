@@ -289,6 +289,9 @@ define(function(require) {
             var currentContext = this;
             if (currentContext.userRole === UserRolesEnum.NocAdmin || currentContext.userRole === UserRolesEnum.NocUser) {
                 currentContext.showNewStationEntryLogButton();
+                if (currentContext.userRole === UserRolesEnum.NocAdmin) {
+                    currentContext.dispatcher.trigger(AppEventNamesEnum.showAdminHeaderButtons);
+                }
             } else {
                 currentContext.hideNewStationEntryLogButton();
             }

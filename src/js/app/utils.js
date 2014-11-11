@@ -38,5 +38,23 @@ define(function(require) {
         return yyyy + '-' + mm + '-' + dd;
     };
 
+    utils.milliSecondsToTime = function(milliSecs) {
+
+        var msSecs = (1000),
+        msMins = (msSecs * 60),
+        msHours = (msMins * 60),
+        numHours = Math.floor(milliSecs / msHours),
+        numMins = Math.floor((milliSecs - (numHours * msHours)) / msMins),
+        numSecs = Math.floor((milliSecs - (numHours * msHours) - (numMins * msMins)) / msSecs);
+
+        if (numSecs > 0){
+            numMins = Number(numMins) + 1;
+        }
+
+        var resultString = numHours + " hrs " + numMins + " mins";
+
+        return resultString;
+    };
+
     return utils;
 });

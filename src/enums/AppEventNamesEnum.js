@@ -32,7 +32,14 @@ define(function(require) {
         userIdFound: 'userIdFound',
         userIdLookupError: 'userIdLookupError',
         leaveNewStationEntryLogView: 'leaveNewStationEntryLogView',
-        countExpiredEntriesUpdated: 'countExpiredEntriesUpdated'
+        countExpiredEntriesUpdated: 'countExpiredEntriesUpdated',
+        showAdminHeaderButtons: 'showAdminHeaderButtons',
+        goToAddItem: 'goToAddItem',
+        goToUpdateItem: 'goToUpdateItem',
+        AddItemSuccess: 'AddItemSuccess',
+        AddItemError: 'AddItemError',
+        UpdateItemSuccess: 'UpdateItemSuccess',
+        UpdateItemError: 'UpdateItemError'
     };
 
     if (Object.freeze) {

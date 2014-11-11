@@ -21,7 +21,7 @@ define(function(require) {
         resources: function(culture) {
             return {
                 actualDurationHeaderText: appResources.getResource('EditStationEntryLogView.actualDurationHeaderText'),
-                actualOutTimeHeaderText: appResources.getResource('EditStationEntryLogView.viewTitleText'),
+                actualOutTimeHeaderText: appResources.getResource('EditStationEntryLogView.actualOutTimeHeaderText'),
                 additionalInfoHeaderText: appResources.getResource('EditStationEntryLogView.additionalInfoHeaderText'),
                 cancelButtonText: appResources.getResource('EditStationEntryLogView.cancelButtonText'),
                 checkOutButtonText: appResources.getResource('checkOutButtonText'),
@@ -124,9 +124,10 @@ define(function(require) {
             currentContext.$('#edit-station-entry-log-email').val(currentContext.model.get('email'));
             currentContext.$('#edit-station-entry-log-station-id').html(currentContext.model.get('stationName'));
             currentContext.$('#edit-station-entry-log-purpose').html(currentContext.model.get('purpose'));
-            currentContext.$('#edit-station-entry-log-duration-old').html((currentContext.model.get('duration') / 60) + " hours");
+            currentContext.$('#edit-station-entry-log-duration-old').html((currentContext.model.get('duration') / 60) + " hrs");
+            currentContext.$('#view-station-entry-log-actual-duration').html(utils.milliSecondsToTime(currentContext.model.get('actualDuration')));
             currentContext.oldExpectedOutTime();
-            currentContext.$('#view-station-entry-log-actual-out-time').html((currentContext.model.get('outTime')));
+            currentContext.$('#view-station-entry-log-actual-out-time').html(helpers.formatDateWithDefault(currentContext.model.get('outTime'), "%D %r", "&nbsp;"));
             currentContext.$('#edit-station-entry-log-has-crew').html(currentContext.decodeHasCrew());
             currentContext.$('#edit-station-entry-log-additional-info').val(currentContext.model.get('additionalInfo'));
             currentContext.changeCheckInType();
@@ -146,7 +147,7 @@ define(function(require) {
             if (duration && !isNaN(duration)) {
                 duration = Number(duration);
                 var expectedOutTime = utils.addMinutes(new Date(inTime.getTime()), duration);
-                this.$('#edit-station-entry-log-expected-out-time-old').html(helpers.formatDateWithDefault(expectedOutTime, "%r", "&nbsp;"));
+                this.$('#edit-station-entry-log-expected-out-time-old').html(helpers.formatDateWithDefault(expectedOutTime, "%D %r", "&nbsp;"));
             }
         },
         durationChanged: function(event) {
@@ -189,8 +190,8 @@ define(function(require) {
 
             if (currentContext.model.has('outTime')) {
                 //Checked Out
-                currentContext.$('#view-station-entry-log-new-duration').addClass('hidden');
-                currentContext.$('#view-station-entry-log-actual-duration').removeClass('hidden');
+                currentContext.$('#view-station-entry-log-new-duration-sec').addClass('hidden');
+                currentContext.$('#view-station-entry-log-actual-duration-sec').removeClass('hidden');
 
                 currentContext.$('#edit-station-entry-log-user-id').prop('disabled', true);
                 currentContext.$('#edit-station-entry-log-company-name').prop('disabled', true);
@@ -201,13 +202,13 @@ define(function(require) {
                 currentContext.$('#edit-station-entry-log-contact-number').prop('disabled', true);
                 currentContext.$('#edit-station-entry-log-additional-info').prop('disabled', true);
                 currentContext.$('#edit-station-entry-log-save-button').addClass('hidden');
-                
+
                 currentContext.$('.viewTitleText').html('View Check-in');
             } else {
                 //Not Checked Out
                 if (currentContext.allowEdit === 'Yes') {
                     currentContext.$('#edit-station-entry-log-additional-info').prop('disabled', false);
-                    currentContext.$('#view-station-entry-log-new-duration').removeClass('hidden');
+                    currentContext.$('#view-station-entry-log-new-duration-sec').removeClass('hidden');
                     currentContext.$('#edit-station-entry-log-save-button').removeClass('hidden');
                     if (currentContext.model.has('company')) {
                         //Third Party

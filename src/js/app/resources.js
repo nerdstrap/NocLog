@@ -31,6 +31,7 @@ define(function(require) {
         'goToStationEntryLogHistoryListButtonText': 'History',
         'goToStationEntryLogListButtonText': 'Entry Log',
         'goToStationListButtonText': 'Stations',
+        'goToMaintainPurposesButtonText': 'Maintain Purposes',
         'viewCheckInButtonText': 'View Check-in',
         /* station entry log list */
         'StationEntryLogListView.additionalInfoHeaderText': 'Additional Info',
@@ -222,11 +223,11 @@ define(function(require) {
         'EditStationEntryLogView.stationIdHeaderText': 'Station',
         'EditStationEntryLogView.userIdHeaderText': 'User Id'
     };
-    
+
     var defaultResource = '';
 
     var resourceHelpers = {
-        getResource: function (key) {
+        getResource: function(key) {
             if (resources.hasOwnProperty(key)) {
                 return resources[key];
             }

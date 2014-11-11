@@ -18,13 +18,15 @@ define(function(require) {
                 'goToStationEntryLogHistoryListButtonText': appResources.getResource('goToStationEntryLogHistoryListButtonText'),
                 'goToStationListButtonText': appResources.getResource('goToStationListButtonText'),
                 'goToPersonnelListButtonText': appResources.getResource('goToPersonnelListButtonText'),
-                'goToReportListButtonText': appResources.getResource('goToReportListButtonText')
+                'goToReportListButtonText': appResources.getResource('goToReportListButtonText'),
+                'goToMaintainPurposesButtonText': appResources.getResource('goToMaintainPurposesButtonText'),
             };
         },
         initialize: function(options) {
             console.trace('HeaderView.initialize');
             options || (options = {});
             this.dispatcher = options.dispatcher || this;
+            this.listenTo(appEvents, AppEventNamesEnum.showAdminHeaderButtons, this.showAdminHeaderButtons);
         },
         events: {
             'click #app-title-button': 'titleButtonClick',
@@ -41,6 +43,9 @@ define(function(require) {
             currentContext.$el.html(template(renderModel));
 
             return this;
+        },
+        showAdminHeaderButtons: function() {
+            this.$('#go-to-maintain-purposes-button-div').removeClass('hidden');
         },
         titleButtonClick: function(event) {
             if (event) {

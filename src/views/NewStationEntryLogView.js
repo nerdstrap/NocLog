@@ -162,10 +162,10 @@ define(function(require) {
         userIdFound: function(personnelModel) {
             if (personnelModel) {
                 this.$('#new-station-entry-log-first-name').val(personnelModel.firstName);
-                this.$('#new-station-entry-log-middle-initial').val(personnelModel.middleName);
+                this.$('#new-station-entry-log-middle-initial').val(personnelModel.middleInitial);
                 this.$('#new-station-entry-log-last-name').val(personnelModel.lastName);
                 this.$('#new-station-entry-log-email').val(personnelModel.email);
-                this.$('#new-station-entry-log-contact-number').val(helpers.formatPhoneWithDefault(personnelModel.telephoneNumber, '', '&nbsp;'));
+                this.$('#new-station-entry-log-contact-number').val(helpers.formatPhoneWithDefault(personnelModel.contactNumber, '', '&nbsp;'));
             }
             this.hideError();
         },

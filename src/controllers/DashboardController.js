@@ -65,6 +65,7 @@ define(function(require) {
             this.listenTo(appEvents, AppEventNamesEnum.goToStationEntryLogWithId, this.goToStationEntryLogWithId);
             this.listenTo(appEvents, AppEventNamesEnum.goToStationWithId, this.goToStationWithId);
             this.listenTo(appEvents, AppEventNamesEnum.goToPersonnelWithId, this.goToPersonnelWithId);
+            this.listenTo(appEvents, AppEventNamesEnum.goToMaintainPurposes, this.goToMaintainPurposes);
 
             this.listenTo(appEvents, AppEventNamesEnum.showOpenStationEntryLogs, this.showOpenStationEntryLogs);
             this.listenTo(appEvents, AppEventNamesEnum.showExpiredStationEntryLogs, this.showExpiredStationEntryLogs);
@@ -251,10 +252,10 @@ define(function(require) {
             currentContext.router.swapContent(stationEntryLogViewInstance);
             currentContext.router.navigate('stationEntryLog/' + stationEntryLogId);
 
-            $.when(currentContext.dashboardService.getStationEntryLogs(stationEntryLogModelInstance.attributes), currentContext.dashboardService.getNewStationEntryLogOptions()).done(function(getStationEntryLogResults, getNewStationEntryLogOptionsResults) {
+            $.when(currentContext.dashboardService.getStationEntryLogs(stationEntryLogModelInstance.attributes), currentContext.dashboardService.getOptions()).done(function(getStationEntryLogResults, getOptionsResults) {
                 stationEntryLogViewInstance.setUserRole(getStationEntryLogResults[0].userRole);
                 stationEntryLogModelInstance.set(getStationEntryLogResults[0].stationEntryLogs[0], {silent: true});
-                currentContext.durationResults.reset(getNewStationEntryLogOptionsResults[0].durations);
+                currentContext.durationResults.reset(getOptionsResults[0].durations);
                 stationEntryLogModelInstance.trigger('sync', stationEntryLogModelInstance, getStationEntryLogResults[0]);
                 deferred.resolve(stationEntryLogViewInstance);
             }).fail(function(jqXHR, textStatus, errorThrown) {
@@ -363,10 +364,10 @@ define(function(require) {
             var currentContext = this,
                     deferred = $.Deferred();
 
-            $.when(currentContext.dashboardService.getNewStationEntryLogOptions()).done(function(getNewStationEntryLogOptionsResponse) {
-                currentContext.purposeResults.reset(getNewStationEntryLogOptionsResponse.purposes);
-                currentContext.durationResults.reset(getNewStationEntryLogOptionsResponse.durations);
-                deferred.resolve(getNewStationEntryLogOptionsResponse);
+            $.when(currentContext.dashboardService.getOptions()).done(function(getOptionsResponse) {
+                currentContext.purposeResults.reset(getOptionsResponse.purposes);
+                currentContext.durationResults.reset(getOptionsResponse.durations);
+                deferred.resolve(getOptionsResponse);
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 deferred.reject(textStatus);
             });
@@ -464,9 +465,14 @@ define(function(require) {
             var currentContext = this,
                     deferred = $.Deferred();
 
-            $.when(currentContext.dashboardService.getPersonnelByUserId(personnelModel.attributes)).done(function(getPersonnelByUserIdResponse) {
-                currentContext.dispatcher.trigger(AppEventNamesEnum.userIdFound, getPersonnelByUserIdResponse);
-                deferred.resolve(getPersonnelByUserIdResponse);
+            $.when(currentContext.dashboardService.getPersonnels(personnelModel.attributes)).done(function(getPersonnelByUserIdResponse) {
+                if (getPersonnelByUserIdResponse && getPersonnelByUserIdResponse.personnels && getPersonnelByUserIdResponse.personnels.length > 0) {
+                    currentContext.dispatcher.trigger(AppEventNamesEnum.userIdFound, getPersonnelByUserIdResponse.personnels[0]);
+                    deferred.resolve(getPersonnelByUserIdResponse);
+                } else {
+                    appEvents.trigger(AppEventNamesEnum.userIdLookupError, msg);
+                    deferred.reject(getPersonnelByUserIdResponse);
+                }
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 var msg = 'Error looking up the personnel user id.';
                 if (jqXHR.status === 409 && jqXHR.responseText) {
@@ -478,6 +484,36 @@ define(function(require) {
                 }
                 appEvents.trigger(AppEventNamesEnum.userIdLookupError, msg);
                 deferred.reject(msg);
+            });
+
+            return deferred.promise();
+        },
+        goToAddItem: function(attributes) {
+            console.trace('DashboardController.goToAddItem');
+            var currentContext = this,
+                    deferred = $.Deferred();
+
+            $.when(currentContext.dashboardService.postAddItem(attributes)).done(function(postAddItemResponse) {
+                appEvents.trigger(AppEventNamesEnum.addItemSuccess, postAddItemResponse.lookupDataItem);
+                deferred.resolve(postAddItemResponse);
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                appEvents.trigger(AppEventNamesEnum.checkInError, "error");
+                deferred.reject("error");
+            });
+
+            return deferred.promise();
+        },
+        goToUpdateItem: function(attributes) {
+            console.trace('DashboardController.goToUpdateItem');
+            var currentContext = this,
+                    deferred = $.Deferred();
+
+            $.when(currentContext.dashboardService.postUpdateItem(attributes)).done(function(postUpdateItemResults) {
+                appEvents.trigger(AppEventNamesEnum.updateItemSuccess, postUpdateItemResults.lookupDataItem);
+                deferred.resolve(postUpdateItemResults);
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                appEvents.trigger(AppEventNamesEnum.checkInError, "error");
+                deferred.reject("error");
             });
 
             return deferred.promise();

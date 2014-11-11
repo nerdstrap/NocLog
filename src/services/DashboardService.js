@@ -40,6 +40,18 @@ define(function(require) {
                 url: env.getApiUrl() + '/stationEntryLog/find'
             });
         },
+        getPersonnels: function(options) {
+            options || (options = {});
+            var data = $.param(options);
+
+            return $.ajax({
+                contentType: 'application/json',
+                data: data,
+                dataType: 'json',
+                type: 'GET',
+                url: env.getApiUrl() + '/personnel/find'
+            });
+        },
         postCheckIn: function(options) {
             options || (options = {});
             var data = JSON.stringify(options);
@@ -88,7 +100,7 @@ define(function(require) {
                 url: env.getApiUrl() + '/lookupDataItem/find'
             });
         },
-        getPersonnelByUserId: function(options) {
+        getOptions: function(options) {
             options || (options = {});
             var data = $.param(options);
 
@@ -97,10 +109,10 @@ define(function(require) {
                 data: data,
                 dataType: 'json',
                 type: 'GET',
-                url: env.getApiUrl() + '/personnel/find'
+                url: env.getApiUrl() + '/lookupDataItem/find/options'
             });
         },
-        getNewStationEntryLogOptions: function(options) {
+        getFilters: function(options) {
             options || (options = {});
             var data = $.param(options);
 
@@ -109,7 +121,31 @@ define(function(require) {
                 data: data,
                 dataType: 'json',
                 type: 'GET',
-                url: env.getApiUrl() + '/lookupDataItem/newStationEntryLogOptions'
+                url: env.getApiUrl() + '/lookupDataItem/find/filters'
+            });
+        },
+        postAddItem: function(options) {
+            options || (options = {});
+            var data = JSON.stringify(options);
+
+            return $.ajax({
+                contentType: 'application/json',
+                data: data,
+                dataType: 'json',
+                type: 'PUT',
+                url: env.getApiUrl() + '/lookupDataItem/addItem'
+            });
+        },
+        postUpdateItem: function(options) {
+            options || (options = {});
+            var data = JSON.stringify(options);
+
+            return $.ajax({
+                contentType: 'application/json',
+                data: data,
+                dataType: 'json',
+                type: 'PUT',
+                url: env.getApiUrl() + '/lookupDataItem/updateItem'
             });
         }
     });

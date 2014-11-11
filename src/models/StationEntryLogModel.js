@@ -58,8 +58,10 @@ define(function(require) {
                 var checkedOut = false;
                 if (attributes.hasOwnProperty('outTime')) {
                     var outTime = attributes.outTime;
+                    var inTime = attributes.inTime;
                     if (outTime && !isNaN(outTime)) {
                         attributes.outTime = new Date(outTime);
+                        attributes.actualDuration = (outTime - inTime);
                         checkedOut = true;
                     }
                 }
