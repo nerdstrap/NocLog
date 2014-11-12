@@ -33,7 +33,8 @@ define(function(require) {
             'click #go-to-station-entry-log-list-button': 'goToStationEntryLogList',
             'click #go-to-station-entry-log-history-list-button': 'goToStationEntryLogHistoryList',
             'click #go-to-station-list-button': 'goToStationList',
-            'click #go-to-personnel-list-button': 'goToPersonnelList'
+            'click #go-to-personnel-list-button': 'goToPersonnelList',
+            'click #go-to-maintain-purposes-button': 'goToMaintainPurposes'
         },
         render: function() {
             console.trace('HeaderView.render');
@@ -75,6 +76,12 @@ define(function(require) {
                 event.preventDefault();
             }
             this.dispatcher.trigger(AppEventNamesEnum.goToStationEntryLogHistoryList);
+        },
+        goToMaintainPurposes: function(event) {
+            if (event) {
+                event.preventDefault();
+            }
+            this.dispatcher.trigger(AppEventNamesEnum.goToMaintainPurposes);
         }
     });
 

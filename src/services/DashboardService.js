@@ -132,7 +132,7 @@ define(function(require) {
                 contentType: 'application/json',
                 data: data,
                 dataType: 'json',
-                type: 'PUT',
+                type: 'POST',
                 url: env.getApiUrl() + '/lookupDataItem/addItem'
             });
         },

@@ -37,7 +37,8 @@ define(function(require) {
             'stationEntryLogHistory': 'goToStationEntryLogHistoryList',
             'stationEntryLog/:id': 'goToStationEntryLogWithId',
             'station/:id': 'goToStationWithId',
-            'personnel/:id': 'goToPersonnelWithId'
+            'personnel/:id': 'goToPersonnelWithId',
+            'maintenance': 'goToMaintainPurposes'
         },
         goToStationEntryLogList: function() {
             console.trace('appRouter.goToStationEntryLogList');
@@ -70,6 +71,10 @@ define(function(require) {
         navigate: function(fragment, options) {
             SwappingRouter.prototype.navigate.call(this, fragment, options);
             this.trigger('after-navigate', fragment, options);
+        },
+        goToMaintainPurposes: function() {
+            console.trace('appRouter.goToMaintainPurposes');
+            this.dashboardControllerInstance.goToMaintainPurposes();
         }
     });
 

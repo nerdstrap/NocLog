@@ -208,6 +208,21 @@ define(function(require) {
                 deferred.resolve(results, 'success', null);
             }, 1000);
             return deferred.promise();
+        },
+        getPurposeMaintenanceItems: function(options) {
+            options || (options = {});
+            var data = JSON.stringify(options);
+
+            var deferred = $.Deferred();
+            var results = {
+                userRole: inMemoryUserRole,
+                purposes: inMemoryPurposes,
+                durations: inMemoryDurations
+            };
+            setTimeout(function() {
+                deferred.resolve(results, 'success', null);
+            }, 1000);
+            return deferred.promise();
         }
     });
 

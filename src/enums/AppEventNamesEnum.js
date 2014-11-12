@@ -34,12 +34,13 @@ define(function(require) {
         leaveNewStationEntryLogView: 'leaveNewStationEntryLogView',
         countExpiredEntriesUpdated: 'countExpiredEntriesUpdated',
         showAdminHeaderButtons: 'showAdminHeaderButtons',
+        goToMaintainPurposes: 'goToMaintainPurposes',
         goToAddItem: 'goToAddItem',
         goToUpdateItem: 'goToUpdateItem',
-        AddItemSuccess: 'AddItemSuccess',
-        AddItemError: 'AddItemError',
-        UpdateItemSuccess: 'UpdateItemSuccess',
-        UpdateItemError: 'UpdateItemError'
+        addItemSuccess: 'addItemSuccess',
+        addItemError: 'addItemError',
+        updateItemSuccess: 'updateItemSuccess',
+        updateItemError: 'updateItemError'
     };
 
     if (Object.freeze) {
