@@ -38,9 +38,7 @@ define(function(require) {
             return this;
         },
         events: {
-            'click .personnel-name-link': 'goToPersonnelWithId',
-            'click .station-name-link': 'goToStationWithId',
-            'click .station-entry-log-link': 'goToStationEntryLogWithId'
+            'click .personnel-name-link': 'goToPersonnelWithId'
         },
         goToPersonnelWithId: function(event) {
             if (event) {
@@ -48,20 +46,6 @@ define(function(require) {
             }
             var personnelId = this.model.get('personnelId');
             this.dispatcher.trigger(AppEventNamesEnum.goToPersonnelWithId, personnelId);
-        },
-        goToStationWithId: function(event) {
-            if (event) {
-                event.preventDefault();
-            }
-            //var personnelId = this.model.get('personnelId');
-            this.dispatcher.trigger(AppEventNamesEnum.goToStationWithId);
-        },
-        goToStationEntryLogWithId: function(event) {
-            if (event) {
-                event.preventDefault();
-            }
-            //var personnelId = this.model.get('personnelId');
-            this.dispatcher.trigger(AppEventNamesEnum.goToStationEntryLogWithId);
         }
     });
 

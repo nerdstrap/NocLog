@@ -8,13 +8,13 @@
             <a class="personnel-name-link" data-userid="{{userid}}">{{withDefault userName "&nbsp;"}}</a>
         </div>
         <div class="small-1 columns">
-            <span>{{formatPhoneWithDefault contactNumber "%D %r" "&nbsp;"}}</span>
+            <span>{{formatPhoneWithDefault contactNumber "%D %I:%M %p" "&nbsp;"}}</span>
         </div>
         <div class="small-2 columns">
-            <span>{{formatDateWithDefault inTime "%D %r" "&nbsp;"}}</span>
+            <span>{{formatDateWithDefault inTime "%D %I:%M %p" "&nbsp;"}}</span>
         </div>
         <div class="small-2 columns">
-            <span>{{formatDateWithDefault expectedOutTime "%D %r" "&nbsp;"}}</span>
+            <span>{{formatDateWithDefault expectedOutTime "%D %I:%M %p" "&nbsp;"}}</span>
         </div>
         <div class="small-1 columns">
             <span>{{{withDefault purpose "&nbsp;"}}}</span>

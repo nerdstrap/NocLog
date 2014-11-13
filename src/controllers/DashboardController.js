@@ -64,7 +64,7 @@ define(function(require) {
             this.listenTo(appEvents, AppEventNamesEnum.goToStationList, this.goToStationList);
             this.listenTo(appEvents, AppEventNamesEnum.goToPersonnelList, this.goToPersonnelList);
             this.listenTo(appEvents, AppEventNamesEnum.goToMaintainPurposes, this.goToMaintainPurposes);
-            
+
             this.listenTo(appEvents, AppEventNamesEnum.goToStationEntryLogWithId, this.goToStationEntryLogWithId);
             this.listenTo(appEvents, AppEventNamesEnum.goToStationWithId, this.goToStationWithId);
             this.listenTo(appEvents, AppEventNamesEnum.goToPersonnelWithId, this.goToPersonnelWithId);
@@ -83,7 +83,7 @@ define(function(require) {
             this.listenTo(appEvents, AppEventNamesEnum.goToUpdateCheckIn, this.goToUpdateCheckIn);
 
             this.listenTo(appEvents, AppEventNamesEnum.goToLookupUserId, this.goToLookupUserId);
-            
+
             this.listenTo(appEvents, AppEventNamesEnum.goToAddItem, this.goToAddItem);
             this.listenTo(appEvents, AppEventNamesEnum.goToUpdateItem, this.goToUpdateItem);
         },
@@ -231,7 +231,7 @@ define(function(require) {
             currentContext.router.navigate('personnel');
 
             $.when(currentContext.dashboardService.getPersonnels({userName: 'baltic'})).done(function(getPersonnelResponse) {
-                currentContext.personnelSearchResults.reset(getPersonnelResponse.personnel);
+                currentContext.personnelSearchResults.reset(getPersonnelResponse.personnels);
                 deferred.resolve(personnelListViewInstance);
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 currentContext.personnelSearchResults.reset();
@@ -257,10 +257,10 @@ define(function(require) {
             currentContext.router.swapContent(stationEntryLogViewInstance);
             currentContext.router.navigate('stationEntryLog/' + stationEntryLogId);
 
-            $.when(currentContext.dashboardService.getStationEntryLogs(stationEntryLogModelInstance.attributes), currentContext.dashboardService.getNewStationEntryLogOptions()).done(function(getStationEntryLogResults, getNewStationEntryLogOptionsResults) {
+            $.when(currentContext.dashboardService.getStationEntryLogs(stationEntryLogModelInstance.attributes), currentContext.dashboardService.getOptions()).done(function(getStationEntryLogResults, getOptionsResults) {
                 stationEntryLogViewInstance.setUserRole(getStationEntryLogResults[0].userRole);
                 stationEntryLogModelInstance.set(getStationEntryLogResults[0].stationEntryLogs[0], {silent: true});
-                currentContext.durationResults.reset(getNewStationEntryLogOptionsResults[0].durations);
+                currentContext.durationResults.reset(getOptionsResults[0].durations);
                 stationEntryLogModelInstance.trigger('sync', stationEntryLogModelInstance, getStationEntryLogResults[0]);
                 deferred.resolve(stationEntryLogViewInstance);
             }).fail(function(jqXHR, textStatus, errorThrown) {
@@ -470,9 +470,14 @@ define(function(require) {
             var currentContext = this,
                     deferred = $.Deferred();
 
-            $.when(currentContext.dashboardService.getPersonnelByUserId(personnelModel.attributes)).done(function(getPersonnelByUserIdResponse) {
-                currentContext.dispatcher.trigger(AppEventNamesEnum.userIdFound, getPersonnelByUserIdResponse);
-                deferred.resolve(getPersonnelByUserIdResponse);
+            $.when(currentContext.dashboardService.getPersonnels(personnelModel.attributes)).done(function(getPersonnelsResponse) {
+                if (getPersonnelsResponse && getPersonnelsResponse.personnels && getPersonnelsResponse.personnels.length > 0) {
+                    currentContext.dispatcher.trigger(AppEventNamesEnum.userIdFound, getPersonnelsResponse.personnels[0]);
+                    deferred.resolve(getPersonnelsResponse);
+                } else {
+                    appEvents.trigger(AppEventNamesEnum.userIdLookupError, 'user id not found');
+                    deferred.reject('user id not found');
+                }
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 var msg = 'Error looking up the personnel user id.';
                 if (jqXHR.status === 409 && jqXHR.responseText) {
@@ -499,7 +504,7 @@ define(function(require) {
                     deferred = $.Deferred();
 
             currentContext.purposeResults.reset();
-            
+
 
             var purposeMaintenanceViewInstance = new EditPurposeListView({
                 controller: currentContext,

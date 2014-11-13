@@ -127,7 +127,7 @@ define(function(require) {
             currentContext.$('#edit-station-entry-log-duration-old').html((currentContext.model.get('duration') / 60) + " hrs");
             currentContext.$('#view-station-entry-log-actual-duration').html(utils.milliSecondsToTime(currentContext.model.get('actualDuration')));
             currentContext.oldExpectedOutTime();
-            currentContext.$('#view-station-entry-log-actual-out-time').html(helpers.formatDateWithDefault(currentContext.model.get('outTime'), "%D %r", "&nbsp;"));
+            currentContext.$('#view-station-entry-log-actual-out-time').html(helpers.formatDateWithDefault(currentContext.model.get('outTime'), "%D %I:%M %p", "&nbsp;"));
             currentContext.$('#edit-station-entry-log-has-crew').html(currentContext.decodeHasCrew());
             currentContext.$('#edit-station-entry-log-additional-info').val(currentContext.model.get('additionalInfo'));
             currentContext.changeCheckInType();
@@ -147,7 +147,7 @@ define(function(require) {
             if (duration && !isNaN(duration)) {
                 duration = Number(duration);
                 var expectedOutTime = utils.addMinutes(new Date(inTime.getTime()), duration);
-                this.$('#edit-station-entry-log-expected-out-time-old').html(helpers.formatDateWithDefault(expectedOutTime, "%D %r", "&nbsp;"));
+                this.$('#edit-station-entry-log-expected-out-time-old').html(helpers.formatDateWithDefault(expectedOutTime, "%D %I:%M %p", "&nbsp;"));
             }
         },
         durationChanged: function(event) {

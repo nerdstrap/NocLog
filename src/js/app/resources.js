@@ -221,7 +221,9 @@ define(function(require) {
         'EditStationEntryLogView.saveButtonText': 'Save',
         'EditStationEntryLogView.stationIdDefaultOption': '&#45;&#160;station&#160;&#45;',
         'EditStationEntryLogView.stationIdHeaderText': 'Station',
-        'EditStationEntryLogView.userIdHeaderText': 'User Id'
+        'EditStationEntryLogView.userIdHeaderText': 'User Id',
+         /* edit purpose list view */
+        'EditPurposeListView.loadingMessage': 'loading purposes'
     };
 
     var defaultResource = '';

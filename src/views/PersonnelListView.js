@@ -48,9 +48,6 @@ define(function(require) {
 
             return this;
         },
-        events: {
-            'change #station-entry-log-list-filter': 'changePersonnelListFilter'
-        },
         addAll: function() {
             this._leaveChildren();
             _.each(this.collection.models, this.addOne, this);
@@ -62,23 +59,6 @@ define(function(require) {
                 dispatcher: currentContext.dispatcher
             });
             this.appendChildTo(personnelListItemView, '.view-list');
-        },
-        changePersonnelListFilter: function(event) {
-            if (event) {
-                event.preventDefault();
-            }
-            if (event.target) {
-                var filter = event.target.value;
-                if (filter === "open") {
-                    this.dispatcher.trigger(AppEventNamesEnum.showOpenPersonnels);
-                }
-                if (filter === "expired") {
-                    this.dispatcher.trigger(AppEventNamesEnum.showExpiredPersonnels);
-                }
-                if (filter === "all") {
-                    this.dispatcher.trigger(AppEventNamesEnum.showPersonnels);
-                }
-            }
         }
     });
 

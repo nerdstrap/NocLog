@@ -21,7 +21,7 @@ define(function(require) {
         resources: function(culture) {
             return {
                 loadingIconSrc: appResources.getResource('loadingIconSrc'),
-                loadingMessage: appResources.getResource('StationListView.loadingMessage'),
+                loadingMessage: appResources.getResource('EditPurposeListView.loadingMessage'),
                 errorMessage: appResources.getResource('StationListView.errorMessage'),
                 infoMessage: appResources.getResource('StationListView.infoMessage'),
                 listViewTitleText: appResources.getResource('StationListView.listViewTitleText'),
