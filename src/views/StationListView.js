@@ -12,6 +12,7 @@ define(function(require) {
             appEvents = require('events'),
             appResources = require('resources'),
             template = require('hbs!templates/StationList'),
+            filterTemplate = require('hbs!templates/Filter'),
             stationIdentifierListTemplate = require('hbs!templates/StationIdentifierList'),
             regionListTemplate = require('hbs!templates/RegionList'),
             areaListTemplate = require('hbs!templates/AreaList'),
@@ -84,8 +85,17 @@ define(function(require) {
             });
             this.appendChildTo(stationListItemView, '#station-list');
         },
+        getFilterOptions: function(collection, valuePropertyName, textPropertyName) {
+            return _.map(collection, function(value, key, list) {
+                return {
+                    'value': value[valuePropertyName],
+                    'text': value[textPropertyName]
+                };
+            });
+        },
         addAllStationIdentifiers: function() {
             var currentContext = this;
+            var filterOptions = this.getFilterOptions(currentContext.stationIdentifierCollection.models, 'stationId', 'stationName');
             var stationIdentifierListRenderModel = {
                 defaultOption: currentContext.resources().stationIdentifierSelectDefaultOption,
                 stationIdentifiers: currentContext.stationIdentifierCollection.models

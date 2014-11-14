@@ -230,8 +230,8 @@ define(function(require) {
             currentContext.router.swapContent(personnelListViewInstance);
             currentContext.router.navigate('personnel');
 
-            $.when(currentContext.dashboardService.getPersonnels({userName: 'baltic'})).done(function(getPersonnelResponse) {
-                currentContext.personnelSearchResults.reset(getPersonnelResponse.personnels);
+            $.when(currentContext.dashboardService.getPersonnels()).done(function(getPersonnelsResponse) {
+                currentContext.personnelSearchResults.reset(getPersonnelsResponse.personnels);
                 deferred.resolve(personnelListViewInstance);
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 currentContext.personnelSearchResults.reset();

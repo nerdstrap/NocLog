@@ -1,6 +1,8 @@
-<option selected="selected" value="">{{{defaultOption}}}</option>
+{{#if defaultOption}}
+    <option selected="selected" value="">{{{defaultOption}}}</option>
+{{/if}}
 {{#if durations}}
-{{~#each durations}}
-<option value="{{attributes.itemValue}}">{{attributes.itemText}}</option>
-{{~/each}}
+    {{~#each durations}}
+        <option value="{{attributes.itemValue}}">{{attributes.itemText}}</option>
+    {{~/each}}
 {{/if}}

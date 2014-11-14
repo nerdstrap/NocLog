@@ -1,4 +1,8 @@
-<option selected="selected" value="">{{{regionFilterDefaultOption}}}</option>
-{{~#each regions}}
-<option value="{{attributes.regionName}}">{{attributes.regionName}}</option>
-{{~/each}}
+{{#if defaultOption}}
+    <option selected="selected" value="">{{{defaultOption}}}</option>
+{{/if}}
+{{#if regions}}
+    {{~#each regions}}
+        <option value="{{attributes.regionName}}">{{attributes.regionName}}</option>
+    {{~/each}}
+{{/if}}
