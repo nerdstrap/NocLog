@@ -223,9 +223,7 @@ define(function(require) {
         'EditStationEntryLogView.stationIdHeaderText': 'Station',
         'EditStationEntryLogView.userIdHeaderText': 'User Id',
          /* edit purpose list view */
-        'EditPurposeListView.loadingMessage': 'loading purposes',
-        'EditPurposeListItemView.placeholderItemDescription': 'New Purpose',
-        'EditPurposeListItemView.placeholderItemOrder': '0-99'
+        'EditPurposeListView.loadingMessage': 'loading purposes'
     };
 
     var defaultResource = '';

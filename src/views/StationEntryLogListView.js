@@ -11,11 +11,11 @@ define(function(require) {
             UserRolesEnum = require('enums/UserRolesEnum'),
             globals = require('globals'),
             env = require('env'),
+            utils = require('utils'),
             appEvents = require('events'),
             appResources = require('resources'),
             template = require('hbs!templates/StationEntryLogList'),
-            regionListTemplate = require('hbs!templates/RegionList'),
-            areaListTemplate = require('hbs!templates/AreaList'),
+            filterTemplate = require('hbs!templates/Filter'),
             alertTemplate = require('hbs!templates/Alert');
 
     var autoRefreshInterval;
@@ -116,21 +116,29 @@ define(function(require) {
                 }
             });
         },
+        addAllStationIdentifiers: function() {
+            var currentContext = this;
+            var filterRenderModel = {
+                defaultOption: currentContext.resources().stationIdentifierSelectDefaultOption,
+                options: utils.getFilterOptions(currentContext.stationIdentifierCollection.models, 'stationId', 'stationName')
+            };
+            this.$('#station-entry-log-list-station-identifier-select').html(filterTemplate(filterRenderModel));
+        },
         addAllRegions: function() {
             var currentContext = this;
-            var regionListRenderModel = {
-                regionFilterDefaultOption: currentContext.resources().regionFilterDefaultOption,
-                regions: currentContext.regionCollection.models
+            var filterRenderModel = {
+                defaultOption: currentContext.resources().regionFilterDefaultOption,
+                options: utils.getFilterOptions(currentContext.regionCollection.models, 'regionName', 'regionName')
             };
-            this.$('#station-entry-log-list-region-filter').html(regionListTemplate(regionListRenderModel));
+            this.$('#station-entry-log-list-region-filter').html(filterTemplate(filterRenderModel));
         },
         addAllAreas: function() {
             var currentContext = this;
-            var areaListRenderModel = {
-                areaFilterDefaultOption: currentContext.resources().areaFilterDefaultOption,
-                areas: currentContext.areaCollection.models
+            var filterRenderModel = {
+                defaultOption: currentContext.resources().areaFilterDefaultOption,
+                options: utils.getFilterOptions(currentContext.areaCollection.models, 'areaName', 'areaName')
             };
-            this.$('#station-entry-log-list-area-filter').html(areaListTemplate(areaListRenderModel));
+            this.$('#station-entry-log-list-area-filter').html(filterTemplate(filterRenderModel));
         },
         setAutRefreshInterval: function() {
             var currentContext = this;
@@ -177,7 +185,7 @@ define(function(require) {
                 }];
             this.showSortIndicators(sortAttributes);
             this.collection.sortAttributes = sortAttributes;
-            this.dispatcher.trigger(AppEventNamesEnum.showStationEntryLogs);
+            this.dispatcher.trigger(AppEventNamesEnum.showStationEntryLogs, {onlyOpen: true});
         },
         updateStationEntryLogListExpectedOutTimeSort: function(event) {
             if (event) {
@@ -202,7 +210,7 @@ define(function(require) {
             var regionSortDirection = this.getDataSortDirection(this.$('#station-entry-log-list-region-sort-button'));
             var sortAttributes = [
                 {
-                    sortAttribute: 'region',
+                    sortAttribute: 'regionName',
                     sortDirection: regionSortDirection
                 },
                 {
@@ -224,7 +232,7 @@ define(function(require) {
             var areaSortDirection = this.getDataSortDirection(this.$('#station-entry-log-list-area-sort-button'));
             var sortAttributes = [
                 {
-                    sortAttribute: 'area',
+                    sortAttribute: 'areaName',
                     sortDirection: areaSortDirection
                 },
                 {
@@ -247,13 +255,13 @@ define(function(require) {
                 for (var i in sortAttributes) {
                     var sortAttribute = sortAttributes[i].sortAttribute;
                     var sortDirection = sortAttributes[i].sortDirection;
-                    if (sortAttribute === 'region') {
+                    if (sortAttribute === 'regionName') {
                         if (sortDirection === 1) {
                             this.$('#station-entry-log-list-region-sort-ascending-indicator').removeClass('hidden');
                         } else {
                             this.$('#station-entry-log-list-region-sort-descending-indicator').removeClass('hidden');
                         }
-                    } else if (sortAttribute === 'area') {
+                    } else if (sortAttribute === 'areaName') {
                         if (sortDirection === 1) {
                             this.$('#station-entry-log-list-area-sort-ascending-indicator').removeClass('hidden');
                         } else {
@@ -405,21 +413,18 @@ define(function(require) {
                 this.$('#station-entry-log-overdue-count').html(options.overdueCount);
             } else {
                 this.$('#svg-station-entry-log-overdue-count').addClass('invisible');
-                this.$('#station-entry-log-overdue-count').html();
             }
             if (options.expiredCount > 0) {
                 this.$('#svg-station-entry-log-expired-count').removeClass('invisible');
                 this.$('#station-entry-log-expired-count').html(options.expiredCount);
             } else {
                 this.$('#svg-station-entry-log-expired-count').addClass('invisible');
-                this.$('#station-entry-log-expired-count').html();
             }
             if (options.openCount > 0) {
                 this.$('#svg-station-entry-log-open-count').removeClass('invisible');
                 this.$('#station-entry-log-open-count').html(options.openCount);
             } else {
                 this.$('#svg-station-entry-log-open-count').addClass('invisible');
-                this.$('#station-entry-log-open-count').html();
             }
         }
     });

@@ -9,23 +9,27 @@ define(function(require) {
             CompositeView = require('views/CompositeView'),
             globals = require('globals'),
             env = require('env'),
+            utils = require('utils'),
             AppEventNamesEnum = require('enums/AppEventNamesEnum'),
             appEvents = require('events'),
             appResources = require('resources'),
             template = require('hbs!templates/EditPurposeListItem'),
-            alertTemplate = require('hbs!templates/Alert');
+            alertTemplate = require('hbs!templates/Alert'),
+            filterTemplate = require('hbs!templates/Filter');
 
     var EditPurposeListItemView = CompositeView.extend({
         tagName: 'li',
         resources: function(culture) {
             return {
-//                parmText: appResources.getResource('parmLookupString')
+                placeholderItemDescription: appResources.getResource('EditPurposeListItemView.placeholderItemDescription'),
+                placeholderItemOrder: appResources.getResource('EditPurposeListItemView.placeholderItemOrder')
             };
         },
         initialize: function(options) {
             console.trace('EditPurposeListItemView.initialize');
             options || (options = {});
             this.dispatcher = options.dispatcher || this;
+            this.durationCollection = options.durationCollection;
 
             this.listenTo(this.model, 'validated', this.onValidated);
             this.listenTo(this, 'leave', this.onLeave);
@@ -44,15 +48,27 @@ define(function(require) {
             var renderModel = _.extend({}, currentContext.resources(), currentContext.model.attributes);
             currentContext.$el.html(template(renderModel));
 
+            currentContext.addAllDurations();
+
             validation.bind(this, {
                 selector: 'name'
             });
-
+            
+            this.$('.purpose-item-duration').val(currentContext.model.get('itemAdditionalData'));
+            this.$('.purpose-item-enabled').val(currentContext.model.get('itemEnabled'));
+            
             return this;
         },
         events: {
             'click .purpose-item-save-link': 'validateAndSubmitItem',
             'click .close-alert-box-button': 'closeAlertBox'
+        },
+        addAllDurations: function() {
+            var currentContext = this;
+            var filterRenderModel = {
+                options:  utils.getFilterOptions(currentContext.durationCollection.models, 'itemValue', 'itemText')
+            };
+            this.$('.purpose-item-duration').html(filterTemplate(filterRenderModel));
         },
         validateAndSubmitItem: function(event) {
             if (event) {
@@ -89,22 +105,12 @@ define(function(require) {
                 }
             } else {
                 var message = "One or more fields are invalid, please try again.";
-                this.showAlert(message, "alert");
+                this.showError(message);
             }
-        },
-        onLeave: function() {
-            //this.dispatcher.trigger(AppEventNamesEnum.leaveNewStationEntryLogView);
         },
         goToAddItem: function() {
             this.dispatcher.trigger(AppEventNamesEnum.goToAddItem, this.model);
         },
-//        cancelAddItem: function(event) {
-//            if (event) {
-//                event.preventDefault();
-//            }
-//            //this.dispatcher.trigger(AppEventNamesEnum.closeNewCheckIn);
-//            //this.leave();
-//        },
         onAddItemSuccess: function(lookupDataItem) {
             this.model.set({lookupDataItemId: lookupDataItem.lookupDataItemId});
             this.showSuccess('save success');
@@ -115,11 +121,6 @@ define(function(require) {
         goToUpdateItem: function() {
             this.dispatcher.trigger(AppEventNamesEnum.goToUpdateItem, this.model);
         },
-//        cancelUpdateItem: function(event) {
-//            if (event) {
-//                event.preventDefault();
-//            }
-//        },
         onUpdateItemSuccess: function() {
             this.showSuccess('save success');
         },

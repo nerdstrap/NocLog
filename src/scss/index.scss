@@ -74,11 +74,13 @@ body:before {
     display: none;
 }
 
+.purpose-list-view,
 .station-entry-log-list-view,
 .station-entry-log-history-list-view,
 .station-list-view,
 .station-entry-log-view,
-.station-view {
+.station-view,
+.personnel-view {
     background-color: #FFFFFF;
     margin: 5px;
     padding: 5px;
@@ -106,7 +108,9 @@ body:before {
 
 .station-entry-log-list-item-view,
 .station-entry-log-history-list-item-view,
-.station-list-item-view {
+.station-list-item-view,
+.station-list-item-view,
+.personnel-station-entry-log-list-item-view {
     background-color: #DEDEDE;
     border: solid 1px #C2C2C2;
     padding: 3px;
@@ -295,6 +299,7 @@ span.detail {
     resize: none;
 }
 
+.purpose-list-item-view .invalid,
 .new-station-entry-log-view .invalid,
 .edit-station-entry-log-view .invalid {
     color: #c22222;

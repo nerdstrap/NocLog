@@ -14,9 +14,7 @@ define(function(require) {
             PersonnelModel = require('models/PersonnelModel'),
             StationEntryLogModel = require('models/StationEntryLogModel'),
             template = require('hbs!templates/NewStationEntryLog'),
-            stationIdentifierListTemplate = require('hbs!templates/StationIdentifierList'),
-            purposeListTemplate = require('hbs!templates/PurposeList'),
-            durationListTemplate = require('hbs!templates/DurationList');
+            filterTemplate = require('hbs!templates/Filter');
     var NewStationEntryLog = CompositeView.extend({
         resources: function(culture) {
             return {
@@ -86,27 +84,35 @@ define(function(require) {
         },
         addAllStationIdentifiers: function() {
             var currentContext = this;
-            var stationIdentifierListRenderModel = {
+            var filterRenderModel = {
                 defaultOption: currentContext.resources().stationIdDefaultOption,
-                stationIdentifiers: currentContext.stationIdentifierCollection.models
+                options: utils.getFilterOptions(currentContext.stationIdentifierCollection.models, 'stationId', 'stationName')
             };
-            this.$('#new-station-entry-log-station-id').html(stationIdentifierListTemplate(stationIdentifierListRenderModel));
+            this.$('#new-station-entry-log-station-id').html(filterTemplate(filterRenderModel));
         },
         addAllPurposes: function() {
             var currentContext = this;
-            var purposeListRenderModel = {
+            var filterRenderModel = {
                 defaultOption: currentContext.resources().purposeDefaultOption,
-                purposes: currentContext.purposeCollection.models
+                options: utils.getFilterOptions(currentContext.purposeCollection.models, 'itemAdditionalData', 'itemText')
             };
-            this.$('#new-station-entry-log-purpose').html(purposeListTemplate(purposeListRenderModel));
+            this.$('#new-station-entry-log-purpose').html(filterTemplate(filterRenderModel));
         },
         addAllDurations: function() {
             var currentContext = this;
-            var durationListRenderModel = {
+            var filterRenderModel = {
                 defaultOption: currentContext.resources().durationDefaultOption,
-                durations: currentContext.durationCollection.models
+                options:  utils.getFilterOptions(currentContext.durationCollection.models, 'itemValue', 'itemText')
             };
-            this.$('#new-station-entry-log-duration').html(durationListTemplate(durationListRenderModel));
+            this.$('#new-station-entry-log-duration').html(filterTemplate(filterRenderModel));
+        },
+        addAllOptions: function(selector, defaultOption, optionsCollection, textPropertyName, valuePropertyName) {
+            var currentContext = this;
+            var filterRenderModel = {
+                defaultOption: defaultOption,
+                options: utils.getFilterOptions(optionsCollection, textPropertyName, valuePropertyName)
+            };
+            currentContext.$(selector).html(filterTemplate(filterRenderModel));
         },
         events: {
             'change #new-station-entry-log-third-party-indicator': 'changeCheckInType',

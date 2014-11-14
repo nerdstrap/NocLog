@@ -1,0 +1,20 @@
+<div class="personnel-station-entry-log-list-item-view">
+    <div class="row collapse">
+        <div class="small-2 columns">
+            <a class="station-name-link" data-stationid="{{stationId}}">{{withDefault stationName "&nbsp;"}}</a>
+        </div>
+        <div class="small-2 columns">
+            <span>{{formatDateWithDefault inTime "%D %I:%M %p" "&nbsp;"}}</span>
+        </div>
+        <div class="small-2 columns">
+            <span>{{formatDateWithDefault outTime "%D %I:%M %p" "&nbsp;"}}</span>
+            
+        </div>
+        <div class="small-3 columns">
+            <span>{{withDefault purpose "&nbsp;"}}</span>
+        </div>
+        <div class="small-3 columns">
+            <span>{{withDefault additionalInfo "&nbsp;"}}</span>
+        </div>
+    </div>
+</div>

@@ -11,9 +11,7 @@ define(function(require) {
             appResources = require('resources'),
             utils = require('utils'),
             template = require('hbs!templates/StationEntryLogHistoryList'),
-            stationIdentifierListTemplate = require('hbs!templates/StationIdentifierList'),
-            regionListTemplate = require('hbs!templates/RegionList'),
-            areaListTemplate = require('hbs!templates/AreaList');
+            filterTemplate = require('hbs!templates/Filter');
 
     var StationEntryLogHistoryListView = CompositeView.extend({
         resources: function(culture) {
@@ -94,27 +92,27 @@ define(function(require) {
         },
         addAllStationIdentifiers: function() {
             var currentContext = this;
-            var stationIdentifierListRenderModel = {
+            var filterRenderModel = {
                 defaultOption: currentContext.resources().stationIdentifierFilterDefaultOption,
-                stationIdentifiers: currentContext.stationIdentifierCollection.models
+                options: utils.getFilterOptions(currentContext.stationIdentifierCollection.models, 'stationId', 'stationName')
             };
-            this.$('#station-entry-log-history-list-station-identifier-filter').html(stationIdentifierListTemplate(stationIdentifierListRenderModel));
+            this.$('#station-entry-log-history-list-station-identifier-filter').html(filterTemplate(filterRenderModel));
         },
         addAllRegions: function() {
             var currentContext = this;
-            var regionListRenderModel = {
-                regionFilterDefaultOption: currentContext.resources().regionFilterDefaultOption,
-                regions: currentContext.regionCollection.models
+            var filterRenderModel = {
+                defaultOption: currentContext.resources().regionFilterDefaultOption,
+                options: utils.getFilterOptions(currentContext.regionCollection.models, 'regionName', 'regionName')
             };
-            this.$('#station-entry-log-history-list-region-filter').html(regionListTemplate(regionListRenderModel));
+            this.$('#station-entry-log-history-list-region-filter').html(filterTemplate(filterRenderModel));
         },
         addAllAreas: function() {
             var currentContext = this;
-            var areaListRenderModel = {
-                areaFilterDefaultOption: currentContext.resources().areaFilterDefaultOption,
-                areas: currentContext.areaCollection.models
+            var filterRenderModel = {
+                defaultOption: currentContext.resources().areaFilterDefaultOption,
+                options: utils.getFilterOptions(currentContext.areaCollection.models, 'areaName', 'areaName')
             };
-            this.$('#station-entry-log-history-list-area-filter').html(areaListTemplate(areaListRenderModel));
+            this.$('#station-entry-log-history-list-area-filter').html(filterTemplate(filterRenderModel));
         },
         refreshStationEntryLogHistoryList: function(event) {
             if (event) {
@@ -208,7 +206,7 @@ define(function(require) {
 
             var sortAttributes = [
                 {
-                    sortAttribute: 'region',
+                    sortAttribute: 'regionName',
                     sortDirection: regionSortDirection
                 },
                 {
@@ -234,7 +232,7 @@ define(function(require) {
 
             var sortAttributes = [
                 {
-                    sortAttribute: 'area',
+                    sortAttribute: 'areaName',
                     sortDirection: areaSortDirection
                 },
                 {
@@ -261,13 +259,13 @@ define(function(require) {
                 for (var i in sortAttributes) {
                     var sortAttribute = sortAttributes[i].sortAttribute;
                     var sortDirection = sortAttributes[i].sortDirection;
-                    if (sortAttribute === 'region') {
+                    if (sortAttribute === 'regionName') {
                         if (sortDirection === 1) {
                             this.$('#station-entry-log-history-list-region-sort-ascending-indicator').removeClass('hidden');
                         } else {
                             this.$('#station-entry-log-history-list-region-sort-descending-indicator').removeClass('hidden');
                         }
-                    } else if (sortAttribute === 'area') {
+                    } else if (sortAttribute === 'areaName') {
                         if (sortDirection === 1) {
                             this.$('#station-entry-log-history-list-area-sort-ascending-indicator').removeClass('hidden');
                         } else {

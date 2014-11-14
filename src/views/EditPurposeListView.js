@@ -90,7 +90,8 @@ define(function(require) {
             var currentContext = this;
             var purposeListItemView = new PurposeListItemView({
                 model: purpose,
-                dispatcher: currentContext.dispatcher
+                dispatcher: currentContext.dispatcher,
+                durationCollection: currentContext.durationCollection
             });
             this.appendChildTo(purposeListItemView, '#purpose-list');
         },

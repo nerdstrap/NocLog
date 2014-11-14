@@ -6091,11 +6091,13 @@ body:before {
 .hidden {
   display: none; }
 
+.purpose-list-view,
 .station-entry-log-list-view,
 .station-entry-log-history-list-view,
 .station-list-view,
 .station-entry-log-view,
-.station-view {
+.station-view,
+.personnel-view {
   background-color: #FFFFFF;
   margin: 5px;
   padding: 5px; }
@@ -6119,7 +6121,9 @@ body:before {
 
 .station-entry-log-list-item-view,
 .station-entry-log-history-list-item-view,
-.station-list-item-view {
+.station-list-item-view,
+.station-list-item-view,
+.personnel-station-entry-log-list-item-view {
   background-color: #DEDEDE;
   border: solid 1px #C2C2C2;
   padding: 3px;
@@ -6159,12 +6163,91 @@ input[type="time"],
 input[type="url"],
 textarea {
   display: inline;
-  min-width: 170px;
-  max-width: 170px;
   font-size: 1em;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-weight: normal;
   color: #000000; }
+
+.new-station-entry-log-view select,
+.new-station-entry-log-view input[type="text"],
+.new-station-entry-log-view input[type="password"],
+.new-station-entry-log-view input[type="date"],
+.new-station-entry-log-view input[type="datetime"],
+.new-station-entry-log-view input[type="datetime-local"],
+.new-station-entry-log-view input[type="month"],
+.new-station-entry-log-view input[type="week"],
+.new-station-entry-log-view input[type="email"],
+.new-station-entry-log-view input[type="number"],
+.new-station-entry-log-view input[type="search"],
+.new-station-entry-log-view input[type="tel"],
+.new-station-entry-log-view input[type="time"],
+.new-station-entry-log-view input[type="url"],
+.new-station-entry-log-view textarea {
+  min-width: 170px;
+  max-width: 170px; }
+
+.station-entry-log-list-view select,
+.station-entry-log-list-view input[type="text"],
+.station-entry-log-list-view input[type="password"],
+.station-entry-log-list-view input[type="date"],
+.station-entry-log-list-view input[type="datetime"],
+.station-entry-log-list-view input[type="datetime-local"],
+.station-entry-log-list-view input[type="month"],
+.station-entry-log-list-view input[type="week"],
+.station-entry-log-list-view input[type="email"],
+.station-entry-log-list-view input[type="number"],
+.station-entry-log-list-view input[type="search"],
+.station-entry-log-list-view input[type="tel"],
+.station-entry-log-list-view input[type="time"],
+.station-entry-log-list-view input[type="url"],
+.station-entry-log-list-view textarea,
+.station-entry-log-history-list-view select,
+.station-entry-log-history-list-view input[type="text"],
+.station-entry-log-history-list-view input[type="password"],
+.station-entry-log-history-list-view input[type="date"],
+.station-entry-log-history-list-view input[type="datetime"],
+.station-entry-log-history-list-view input[type="datetime-local"],
+.station-entry-log-history-list-view input[type="month"],
+.station-entry-log-history-list-view input[type="week"],
+.station-entry-log-history-list-view input[type="email"],
+.station-entry-log-history-list-view input[type="number"],
+.station-entry-log-history-list-view input[type="search"],
+.station-entry-log-history-list-view input[type="tel"],
+.station-entry-log-history-list-view input[type="time"],
+.station-entry-log-history-list-view input[type="url"],
+.station-entry-log-history-list-view textarea,
+.station-list-view select,
+.station-list-view input[type="text"],
+.station-list-view input[type="password"],
+.station-list-view input[type="date"],
+.station-list-view input[type="datetime"],
+.station-list-view input[type="datetime-local"],
+.station-list-view input[type="month"],
+.station-list-view input[type="week"],
+.station-list-view input[type="email"],
+.station-list-view input[type="number"],
+.station-list-view input[type="search"],
+.station-list-view input[type="tel"],
+.station-list-view input[type="time"],
+.station-list-view input[type="url"],
+.station-list-view textarea,
+.personnel-list-view select,
+.personnel-list-view input[type="text"],
+.personnel-list-view input[type="password"],
+.personnel-list-view input[type="date"],
+.personnel-list-view input[type="datetime"],
+.personnel-list-view input[type="datetime-local"],
+.personnel-list-view input[type="month"],
+.personnel-list-view input[type="week"],
+.personnel-list-view input[type="email"],
+.personnel-list-view input[type="number"],
+.personnel-list-view input[type="search"],
+.personnel-list-view input[type="tel"],
+.personnel-list-view input[type="time"],
+.personnel-list-view input[type="url"],
+.personnel-list-view textarea {
+  min-width: 170px;
+  max-width: 170px; }
 
 span.detail {
   font-size: 1em;
@@ -6214,6 +6297,7 @@ span.detail {
   max-width: 199px;
   resize: none; }
 
+.purpose-list-item-view .invalid,
 .new-station-entry-log-view .invalid,
 .edit-station-entry-log-view .invalid {
   color: #c22222;
@@ -6242,3 +6326,6 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
 .view-alerts .alert-box {
   display: inline-block;
   margin: 3px 3px 3px 0; }
+
+.invisible {
+  visibility: hidden; }

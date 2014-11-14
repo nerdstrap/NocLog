@@ -8,15 +8,20 @@ define(function(require) {
             CompositeView = require('views/CompositeView'),
             StationListItemView = require('views/StationListItemView'),
             env = require('env'),
+            utils = require('utils'),
             AppEventNamesEnum = require('enums/AppEventNamesEnum'),
             appEvents = require('events'),
             appResources = require('resources'),
             template = require('hbs!templates/StationList'),
             filterTemplate = require('hbs!templates/Filter'),
-            stationIdentifierListTemplate = require('hbs!templates/StationIdentifierList'),
-            regionListTemplate = require('hbs!templates/RegionList'),
-            areaListTemplate = require('hbs!templates/AreaList'),
             alertTemplate = require('hbs!templates/Alert');
+
+    var mapthingy = function(item, valuePropertyName, textPropertyName) {
+        return {
+            'value': item[valuePropertyName],
+            'text': item[textPropertyName]
+        };
+    };
 
     var StationListView = CompositeView.extend({
         resources: function(culture) {
@@ -85,38 +90,29 @@ define(function(require) {
             });
             this.appendChildTo(stationListItemView, '#station-list');
         },
-        getFilterOptions: function(collection, valuePropertyName, textPropertyName) {
-            return _.map(collection, function(value, key, list) {
-                return {
-                    'value': value[valuePropertyName],
-                    'text': value[textPropertyName]
-                };
-            });
-        },
         addAllStationIdentifiers: function() {
             var currentContext = this;
-            var filterOptions = this.getFilterOptions(currentContext.stationIdentifierCollection.models, 'stationId', 'stationName');
-            var stationIdentifierListRenderModel = {
+            var filterRenderModel = {
                 defaultOption: currentContext.resources().stationIdentifierSelectDefaultOption,
-                stationIdentifiers: currentContext.stationIdentifierCollection.models
+                options: utils.getFilterOptions(currentContext.stationIdentifierCollection.models, 'stationId', 'stationName')
             };
-            this.$('#station-list-station-identifier-select').html(stationIdentifierListTemplate(stationIdentifierListRenderModel));
+            this.$('#station-list-station-identifier-select').html(filterTemplate(filterRenderModel));
         },
         addAllRegions: function() {
             var currentContext = this;
-            var regionListRenderModel = {
-                regionFilterDefaultOption: currentContext.resources().regionFilterDefaultOption,
-                regions: currentContext.regionCollection.models
+            var filterRenderModel = {
+                defaultOption: currentContext.resources().regionFilterDefaultOption,
+                options: utils.getFilterOptions(currentContext.regionCollection.models, 'regionName', 'regionName')
             };
-            this.$('#station-list-region-filter').html(regionListTemplate(regionListRenderModel));
+            this.$('#station-list-region-filter').html(filterTemplate(filterRenderModel));
         },
         addAllAreas: function() {
             var currentContext = this;
-            var areaListRenderModel = {
-                areaFilterDefaultOption: currentContext.resources().areaFilterDefaultOption,
-                areas: currentContext.areaCollection.models
+            var filterRenderModel = {
+                defaultOption: currentContext.resources().areaFilterDefaultOption,
+                options: utils.getFilterOptions(currentContext.areaCollection.models, 'areaName', 'areaName')
             };
-            this.$('#station-list-area-filter').html(areaListTemplate(areaListRenderModel));
+            this.$('#station-list-area-filter').html(filterTemplate(filterRenderModel));
         },
         refreshStationList: function(event) {
             if (event) {

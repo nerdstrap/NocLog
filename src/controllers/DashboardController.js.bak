@@ -86,7 +86,6 @@ define(function(require) {
 
             this.listenTo(appEvents, AppEventNamesEnum.goToAddItem, this.goToAddItem);
             this.listenTo(appEvents, AppEventNamesEnum.goToUpdateItem, this.goToUpdateItem);
-            this.listenTo(appEvents, '_loadStationEntryLogs', this._loadStationEntryLogs);
         },
         goToStationEntryLogList: function(options) {
             console.trace('DashboardController.goToStationEntryLogList');
@@ -300,12 +299,12 @@ define(function(require) {
 
             return deferred.promise();
         },
-        goToPersonnelWithId: function(userId) {
+        goToPersonnelWithId: function(personnelId) {
             console.trace('DashboardController.goToPersonnelWithId');
             var currentContext = this,
                     deferred = $.Deferred();
 
-            var personnelModelInstance = new PersonnelModel({userId: userId});
+            var personnelModelInstance = new PersonnelModel({personnelId: personnelId});
 
             var personnelViewInstance = new PersonnelView({
                 controller: currentContext,
@@ -314,16 +313,11 @@ define(function(require) {
             });
 
             currentContext.router.swapContent(personnelViewInstance);
-            currentContext.router.navigate('personnel/' + userId);
+            currentContext.router.navigate('personnel/' + personnelId);
 
-            $.when(currentContext.dashboardService.getPersonnels(personnelModelInstance.attributes)).done(function(getPersonnelsResponse) {
-                if (getPersonnelsResponse && getPersonnelsResponse.personnels && getPersonnelsResponse.personnels.length > 0) {
-                    personnelModelInstance.set(getPersonnelsResponse.personnels[0]);
-                    personnelViewInstance.loadStationEntryLogs();
-                    deferred.resolve(personnelViewInstance);
-                } else {
-                    deferred.reject('not found');
-                }
+            $.when(currentContext.dashboardService.getPersonnelById(personnelModelInstance.attributes)).done(function(getPersonnelByIdResponse) {
+                personnelModelInstance.set(getPersonnelByIdResponse);
+                deferred.resolve(personnelViewInstance);
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 deferred.reject(textStatus);
             });
@@ -376,8 +370,8 @@ define(function(require) {
                     deferred = $.Deferred();
 
             $.when(currentContext.dashboardService.getOptions()).done(function(getOptionsResponse) {
-                currentContext.purposeResults.reset(_.where(getOptionsResponse.purposes, {itemEnabled: 'Y'}));
-                currentContext.durationResults.reset(_.where(getOptionsResponse.durations, {itemEnabled: 'Y'}));
+                currentContext.purposeResults.reset(getOptionsResponse.purposes);
+                currentContext.durationResults.reset(getOptionsResponse.durations);
                 deferred.resolve(getOptionsResponse);
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 deferred.reject(textStatus);
@@ -501,7 +495,7 @@ define(function(require) {
         },
         goToDirectionsWithLatLng: function(latitude, longitude) {
             console.trace('DashboardController.goToDirectionsWithLatLng');
-            var directionsUri = 'http://maps.google.com?daddr=' + latitude + ',' + longitude;
+            var directionsUri = 'http://maps.google.com?daddr=' + latitude + "," + longitude;
             globals.window.open(directionsUri);
         },
         goToMaintainPurposes: function() {
@@ -525,8 +519,8 @@ define(function(require) {
             purposeMaintenanceViewInstance.showLoading();
             $.when(currentContext.dashboardService.getOptions()).done(function(getOptionsResponse) {
                 purposeMaintenanceViewInstance.setUserRole(getOptionsResponse.userRole);
-                currentContext.durationResults.reset(getOptionsResponse.durations);
                 currentContext.purposeResults.reset(getOptionsResponse.purposes);
+                currentContext.durationResults.reset(getOptionsResponse.durations);
                 deferred.resolve(getOptionsResponse);
                 purposeMaintenanceViewInstance.hideLoading();
             }).fail(function(jqXHR, textStatus, errorThrown) {
@@ -547,8 +541,8 @@ define(function(require) {
                 purposeModel.trigger(AppEventNamesEnum.addItemSuccess, postAddItemResponse.lookupDataItem);
                 deferred.resolve(postAddItemResponse);
             }).fail(function(jqXHR, textStatus, errorThrown) {
-                purposeModel.trigger(AppEventNamesEnum.addItemError, 'error');
-                deferred.reject('error');
+                purposeModel.trigger(AppEventNamesEnum.addItemError, "error");
+                deferred.reject("error");
             });
 
             return deferred.promise();
@@ -562,23 +556,8 @@ define(function(require) {
                 purposeModel.trigger(AppEventNamesEnum.updateItemSuccess, postUpdateItemResults.lookupDataItem);
                 deferred.resolve(postUpdateItemResults);
             }).fail(function(jqXHR, textStatus, errorThrown) {
-                purposeModel.trigger(AppEventNamesEnum.updateItemError, 'error');
-                deferred.reject('error');
-            });
-
-            return deferred.promise();
-        },
-        _loadStationEntryLogs: function(stationEntryLogCollection, options) {
-            console.trace('DashboardController._loadStationEntryLogs');
-            var currentContext = this,
-                    deferred = $.Deferred();
-
-            $.when(currentContext.dashboardService.getStationEntryLogs(options)).done(function(getStationEntryLogsResults) {
-                stationEntryLogCollection.reset(getStationEntryLogsResults.stationEntryLogs);
-                deferred.resolve(getStationEntryLogsResults);
-            }).fail(function(jqXHR, textStatus, errorThrown) {
-                stationEntryLogCollection.reset();
-                deferred.reject('error');
+                purposeModel.trigger(AppEventNamesEnum.updateItemError, "error");
+                deferred.reject("error");
             });
 
             return deferred.promise();

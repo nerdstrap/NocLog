@@ -15,7 +15,7 @@ define(function(require) {
             utils = require('utils'),
             StationEntryLogModel = require('models/StationEntryLogModel'),
             template = require('hbs!templates/StationEntryLog'),
-            durationListTemplate = require('hbs!templates/DurationList');
+            filterTemplate = require('hbs!templates/Filter');
 
     var StationEntryLog = CompositeView.extend({
         resources: function(culture) {
@@ -83,11 +83,11 @@ define(function(require) {
         },
         addAllDurations: function() {
             var currentContext = this;
-            var durationListRenderModel = {
+            var filterRenderModel = {
                 defaultOption: currentContext.resources().durationDefaultOption,
-                durations: currentContext.durationCollection.models
+                options:  utils.getFilterOptions(currentContext.durationCollection.models, 'itemValue', 'itemText')
             };
-            this.$('#edit-station-entry-log-duration').html(durationListTemplate(durationListRenderModel));
+            this.$('#edit-station-entry-log-duration').html(filterTemplate(filterRenderModel));
         },
         events: {
             'click #edit-station-entry-log-save-button': 'validateAndSubmitUpdatedCheckIn',
@@ -210,7 +210,7 @@ define(function(require) {
                     currentContext.$('#edit-station-entry-log-additional-info').prop('disabled', false);
                     currentContext.$('#view-station-entry-log-new-duration-sec').removeClass('hidden');
                     currentContext.$('#edit-station-entry-log-save-button').removeClass('hidden');
-                    if (currentContext.model.has('company')) {
+                    if (currentContext.model.has('companyName')) {
                         //Third Party
                         currentContext.$('#edit-station-entry-log-user-id').prop('disabled', true);
                         currentContext.$('#edit-station-entry-log-company-name').prop('disabled', false);

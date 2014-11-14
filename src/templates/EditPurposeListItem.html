@@ -1,19 +1,23 @@
 <div class="purpose-list-item-view">
     <div class="row collapse">
         <div class="small-4 columns">
-            <input class="purpose-item-description" name="itemDescription" data-itemid="{{itemId}}" type="text" value="{{itemDescription}}" />
+            <input class="purpose-item-description" name="itemDescription" data-itemid="{{itemId}}" type="text" placeholder="{{{placeholderItemDescription}}}" value="{{itemDescription}}" />
         </div>
         <div class="small-2 columns">
-            <input class="purpose-item-duration" name="itemDuration" type="text" value="{{itemAdditionalData}}" />
+            <select class="purpose-item-duration" name="itemDuration">
+            </select>
         </div>
         <div class="small-2 columns">
-            <input class="purpose-item-enabled" name="itemEnabled" type="text" value="{{itemEnabled}}" />
+            <select class="purpose-item-enabled" name="itemEnabled">
+                <option value="Y">Yes</option>
+                <option value="N">No</option>
+            </select>
         </div>
         <div class="small-2 columns">
-            <input class="purpose-item-order-number" name="itemOrderNumber" type="text" value="{{itemOrder}}" />
+            <input class="purpose-item-order-number" name="itemOrder" type="text" placeholder="{{{placeholderItemOrder}}}" value="{{itemOrder}}" />
         </div>
         <div class="small-2 columns">
-            <a class="purpose-item-save-link"><i class="fa fa-save"></i></a>
+            <a class="purpose-item-save-link button radius tiny"><i class="fa fa-save"></i> Save</a>
         </div>
     </div>
     <div class="row collapse view-alert">

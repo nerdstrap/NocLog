@@ -1,7 +1,7 @@
 <div class="personnel-view">
     <div class="row collapse">
         <div class="small-12 columns">
-            <span>{{userName}}</span>
+            <span>{{firstName}}</span>&nbsp;<span>{{lastName}}</span>
         </div>
     </div>
     <div class="row collapse">
@@ -12,6 +12,32 @@
     <div class="row collapse">
         <div class="small-12 columns">
             <span>{{email}}</span>
+        </div>
+    </div>
+    <div class="row collapse">
+        <div class="small-12 columns">
+            <ol id="personnel-station-entry-log-list">
+                <div class="row collapse list-header-item-view">
+                    <div class="small-2 columns">
+                        <span>{{{stationNameHeaderText}}}</span>
+                    </div>
+                    <div class="small-2 columns">
+                        <span>{{{inTimeHeaderText}}}</span>
+                    </div>
+                    <div class="small-2 columns">
+                        <span>
+                            {{{outTimeHeaderText}}}
+                            <i class="fa fa-sort-amount-asc"></i>
+                        </span>
+                    </div>
+                    <div class="small-3 columns">
+                        <span>{{{purposeHeaderText}}}</span>
+                    </div>
+                    <div class="small-3 columns">
+                        <span>{{{additionalInfoHeaderText}}}</span>
+                    </div>
+                </div>
+            </ol>
         </div>
     </div>
 </div>

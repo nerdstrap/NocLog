@@ -5,68 +5,9 @@ define(function(require) {
             _ = require('underscore'),
             env = require('env');
 
-    var inMemoryStations = [{
-        'stationId': 'PHILO',
-        'complex': 'ohphilots',
-        'stationName': 'Philo TS',
-        'telecomPrimaryOrg': 'Ohio Power Company',
-        'telecomBenefittingOrg': '250',
-        'telecomPrimaryContact': 'CN=Charles A Hubble/OU=CA1/O=AEPIN',
-        'telecomPrimaryContactPhone': '920-7159',
-        'region': 'Ohio',
-        'area': 'Canton',
-        'telecomNpa': '740',
-        'telecomNxx': '674',
-        'telecomSiteType': 'Telecom Site',
-        'telecomLatitude': '39.85144444',
-        'telecomLongitude': '-81.88597222',
-        'telecomLandOwner': 'Kenneth/Ruby Shook and Sara Friend',
-        'telecomFuelProvider': 'Valley National Gases, Inc.\n61504 Southgate Rd., Cambridge, OH\nContact is Frank Hines/Marty Jones\nPhone # 800-825-1519',
-        'telecomUtility': 'AEP',
-        'audinetNumber': '909-5011',
-        'streetAddress': '6270 Poverty Ridge Road',
-        'city': 'Blue Rock',
-        'state': 'OH',
-        'zipcode': '43720',
-        'country': 'US',
-        'county': 'Muskingum',
-        'mailAddress': '6270 Poverty Ridge Road',
-        'mailCity': 'Blue Rock',
-        'mailState': 'OH',
-        'mailZipCode': '43720',
-        'topFloor': '0',
-        'form': 'Location'
-    }];
-    var inMemoryStationEntryLogs = [{
-        'stationEntryLogId': 20,
-        'stationId': 'COLUS',
-        'userName': 'CheckOut, CheckIn',
-        'firstName': 'CheckIn',
-        'lastName': 'CheckOut',
-        'userId': 's210749',
-        'purpose': 'Battery Inspection',
-        'inTime': 1409155717114,
-        'outTime': 1409156265536,
-        'hasCrew': 'N',
-        'contactNumber': '9-1-6147163015',
-        'duration': 30,
-        'stationName': 'Columbus POP'
-    }];
-    var inMemoryStationEntryLog = {
-        'stationEntryLogId': 20,
-        'stationId': 'COLUS',
-        'userName': 'CheckOut, CheckIn',
-        'firstName': 'CheckIn',
-        'lastName': 'CheckOut',
-        'userId': 's210749',
-        'purpose': 'Battery Inspection',
-        'inTime': 1409155717114,
-        'outTime': 1409156265536,
-        'hasCrew': 'N',
-        'contactNumber': '9-1-6147163015',
-        'duration': 30,
-        'stationName': 'Columbus POP'
-    };
+    var inMemoryStations = [];
+    var inMemoryStationEntryLogs = [];
+    var inMemoryStationEntryLog = {};
     var inMemoryLookupDataItems = [];
     var inMemoryLookupDataItem = {};
     var inMemoryPersonnels = [{"userId":"s258468","lastName":"Lawson","firstName":"Christopher","middleInitial":"J","contactNumber":"614-716-3527","email":"cjlawson@aep.com"},{"userId":"s009864","lastName":"Canary","firstName":"Richard","middleInitial":"W","contactNumber":"614-716-2300","email":"rwcanary@aep.com"},{"userId":"s210749","lastName":"Shu","firstName":"Shujing","contactNumber":"614-716-3015","email":"sshu@aep.com"},{"userId":"s253769","lastName":"Walden","firstName":"Heather","middleInitial":"M","contactNumber":"614-716-1129","email":"hmwalden@aep.com"},{"userId":"s251201","lastName":"Baltic","firstName":"Michael","middleInitial":"E","contactNumber":"614-716-3718","email":"mebaltic@aep.com"}];

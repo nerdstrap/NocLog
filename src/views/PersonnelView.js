@@ -9,17 +9,18 @@ define(function(require) {
             AppEventNamesEnum = require('enums/AppEventNamesEnum'),
             appEvents = require('events'),
             appResources = require('resources'),
-            template = require('hbs!templates/Personnel');
+            template = require('hbs!templates/Personnel'),
+            StationEntryLogCollection = require('collections/StationEntryLogCollection'),
+            PersonnelStationEntryLogListItemView = require('views/PersonnelStationEntryLogListItemView');
 
     var PersonnelView = CompositeView.extend({
         resources: function(culture) {
             return {
-                hazardIconSrc: appResources.getResource('hazardIconSrc'),
-                hazardIconSvgSrc: appResources.getResource('hazardIconSvgSrc'),
-                hazardIconAlt: appResources.getResource('hazardIconAlt'),
-                checkedInIconSvgSrc: appResources.getResource('checkedInIconSvgSrc'),
-                checkedInIconAlt: appResources.getResource('checkedInIconAlt'),
-                checkOutButtonText: appResources.getResource('Personnel.checkOutButtonText')
+                'stationNameHeaderText': 'Station',
+                'inTimeHeaderText': 'In Time',
+                'outTimeHeaderText': 'Out Time',
+                'purposeHeaderText': 'Purpose',
+                'additionalInfoHeaderText': 'Additional Info'
             };
         },
         initialize: function(options) {
@@ -39,15 +40,23 @@ define(function(require) {
 
             return this;
         },
-        events: {
-            'click .directions-link': 'goToDirectionsWithLatLng'
+        loadStationEntryLogs: function() {
+            var currentContext = this;
+            currentContext.stationEntryLogCollection = new StationEntryLogCollection();
+            this.listenToOnce(currentContext.stationEntryLogCollection, 'reset', currentContext.renderStationEntryLogs);
+            this.dispatcher.trigger('_loadStationEntryLogs', currentContext.stationEntryLogCollection, {userId: currentContext.model.get('userId')});
         },
-        goToDirectionsWithLatLng: function(event) {
-            if (event) {
-                event.preventDefault();
-            }
-            var personnelId = this.model.get('personnelId');
-            this.dispatcher.trigger(AppEventNamesEnum.goToDirectionsWithLatLng, personnelId);
+        renderStationEntryLogs: function() {
+            var currentContext = this;
+           _.each(currentContext.stationEntryLogCollection.models, currentContext.addOneStationEntryLog, currentContext);
+        },
+        addOneStationEntryLog: function(stationEntryLog) {
+            var currentContext = this;
+            var personnelStationEntryLogListItemViewInstance = new PersonnelStationEntryLogListItemView({
+                model: stationEntryLog,
+                dispatcher: currentContext.dispatcher
+            });
+            this.appendChildTo(personnelStationEntryLogListItemViewInstance, '#personnel-station-entry-log-list');
         }
     });
 

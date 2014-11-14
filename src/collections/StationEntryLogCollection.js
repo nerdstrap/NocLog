@@ -28,7 +28,7 @@ define(function(require) {
                 }
             },
             {
-                sortAttribute: 'region',
+                sortAttribute: 'regionName',
                 comparator: function(a, b, sortDirection) {
                     if (sortDirection === 1) {
                         return (a === b) ? 0 : (a > b) ? 1 : -1;
@@ -38,7 +38,7 @@ define(function(require) {
                 }
             },
             {
-                sortAttribute: 'area',
+                sortAttribute: 'areaName',
                 comparator: function(a, b, sortDirection) {
                     if (sortDirection === 1) {
                         return (a === b) ? 0 : (a > b) ? 1 : -1;

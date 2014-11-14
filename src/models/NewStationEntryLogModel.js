@@ -27,7 +27,8 @@ define(function(require) {
             contactNumber: {
                 required: true,
                 pattern: 'digits',
-                length: 10
+                minLength: 7,
+                maxLength: 10
             },
             email: {
                 required: function() {

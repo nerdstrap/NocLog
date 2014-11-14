@@ -40,20 +40,29 @@ define(function(require) {
 
     utils.milliSecondsToTime = function(milliSecs) {
 
-        var msSecs = (1000),
-        msMins = (msSecs * 60),
-        msHours = (msMins * 60),
-        numHours = Math.floor(milliSecs / msHours),
-        numMins = Math.floor((milliSecs - (numHours * msHours)) / msMins),
-        numSecs = Math.floor((milliSecs - (numHours * msHours) - (numMins * msMins)) / msSecs);
+        var ms = (1000),
+                mm = (ms * 60),
+                mh = (mm * 60),
+                hours = Math.floor(milliSecs / mh),
+                minutes = Math.floor((milliSecs - (hours * mh)) / mm),
+                seconds = Math.floor((milliSecs - (hours * mh) - (minutes * mm)) / ms);
 
-        if (numSecs > 0){
-            numMins = Number(numMins) + 1;
+        if (seconds > 0) {
+            minutes = Number(minutes) + 1;
         }
 
-        var resultString = numHours + " hrs " + numMins + " mins";
+        var resultString = hours + ' hrs ' + minutes + ' mins';
 
         return resultString;
+    };
+
+    utils.getFilterOptions = function(collection, valuePropertyName, textPropertyName) {
+        return _.map(collection, function(value, key, list) {
+            return {
+                'value': value.get(valuePropertyName),
+                'text': value.get(textPropertyName)
+            };
+        });
     };
 
     return utils;
