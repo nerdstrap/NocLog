@@ -79,7 +79,8 @@ define(function(require) {
             validation.bind(this, {
                 selector: 'name'
             });
-
+            //currentContext.model.set({hasCrew: No});
+            
             return this;
         },
         addAllStationIdentifiers: function() {
@@ -116,6 +117,7 @@ define(function(require) {
         },
         events: {
             'change #new-station-entry-log-third-party-indicator': 'changeCheckInType',
+            'change #new-station-entry-log-has-crew': 'changeHasCrew',
             'click #new-station-entry-log-user-id-search-button': 'goToLookupUserId',
             'click #new-station-entry-log-save-button': 'validateAndSubmitCheckIn',
             'click #new-station-entry-log-cancel-button': 'cancelCheckIn',
@@ -128,6 +130,8 @@ define(function(require) {
             }
             var thirdPartyCheckIn = this.$('#new-station-entry-log-third-party-indicator').is(':checked');
             if (thirdPartyCheckIn) {
+                this.$('#new-station-entry-log-third-party-label').addClass('bolder');
+                this.$('#new-station-entry-log-employee-label').removeClass('bolder');
                 this.$('#user-label-container').addClass('hidden');
                 this.$('#user-container').addClass('hidden');
                 this.$('#third-party-user-container').removeClass('hidden');
@@ -142,6 +146,8 @@ define(function(require) {
                 this.$('#new-station-entry-log-email').val('').prop('disabled', false);
                 this.$('#new-station-entry-log-contact-number').val('');
             } else {
+                this.$('#new-station-entry-log-third-party-label').removeClass('bolder');
+                this.$('#new-station-entry-log-employee-label').addClass('bolder');
                 this.$('#user-container').removeClass('hidden');
                 this.$('#user-label-container').removeClass('hidden');
                 this.$('#third-party-user-container').addClass('hidden');
@@ -155,6 +161,19 @@ define(function(require) {
                 this.$('#new-station-entry-log-last-name').val('').prop('disabled', true);
                 this.$('#new-station-entry-log-email').val('').prop('disabled', true);
                 this.$('#new-station-entry-log-contact-number').val('');
+            }
+        },
+        changeHasCrew: function(event) {
+            if (event) {
+                event.preventDefault();
+            }
+            var hasCrewYesNo = this.$('#new-station-entry-log-has-crew').is(':checked');
+            if (hasCrewYesNo) {
+                this.$('#new-station-entry-log-has-crew-yes').addClass('bolder');
+                this.$('#new-station-entry-log-has-crew-no').removeClass('bolder');
+            } else {
+                this.$('#new-station-entry-log-has-crew-yes').removeClass('bolder');
+                this.$('#new-station-entry-log-has-crew-no').addClass('bolder');
             }
         },
         goToLookupUserId: function(event) {
@@ -238,7 +257,14 @@ define(function(require) {
 
             var duration = $('#new-station-entry-log-duration').val();
             var additionalInfo = $('#new-station-entry-log-additional-info').val();
-            var hasCrew = this.$('#new-station-entry-log-has-crew').val();
+            var hasCrew = '';
+            var hasCrewYesNo = this.$('#new-station-entry-log-has-crew').is(':checked');
+            if (hasCrewYesNo) {
+                hasCrew = true;
+            } else {
+                hasCrew = false;
+            }
+            //var hasCrew = this.$('#new-station-entry-log-has-crew').val();
             var dispatchCenterId = '777';
             var stationType = 'TC';
             this.model.set({

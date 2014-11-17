@@ -11,25 +11,17 @@ define(function(require) {
             appResources = require('resources'),
             template = require('hbs!templates/Personnel'),
             StationEntryLogCollection = require('collections/StationEntryLogCollection'),
-            PersonnelStationEntryLogListItemView = require('views/PersonnelStationEntryLogListItemView');
+            PersonnelStationEntryLogListView = require('views/PersonnelStationEntryLogListView');
 
     var PersonnelView = CompositeView.extend({
         resources: function(culture) {
-            return {
-                'stationNameHeaderText': 'Station',
-                'inTimeHeaderText': 'In Time',
-                'outTimeHeaderText': 'Out Time',
-                'purposeHeaderText': 'Purpose',
-                'additionalInfoHeaderText': 'Additional Info'
-            };
+            return {};
         },
         initialize: function(options) {
             console.trace('PersonnelView.initialize');
             options || (options = {});
             this.dispatcher = options.dispatcher || this;
-
-            this.listenTo(this.model, 'change', this.render);
-            this.listenTo(this.model, 'sync', this.render);
+            this.stationIdentifierCollection = options.stationIdentifierCollection;
         },
         render: function() {
             console.trace('PersonnelView.render()');
@@ -38,25 +30,32 @@ define(function(require) {
             var renderModel = _.extend({}, currentContext.resources(), currentContext.model.attributes);
             currentContext.$el.html(template(renderModel));
 
+            currentContext.stationEntryLogCollection = new StationEntryLogCollection();
+            this.personnelStationEntryLogListViewInstance = new PersonnelStationEntryLogListView({
+                collection: currentContext.stationEntryLogCollection,
+                dispatcher: currentContext.dispatcher,
+                stationIdentifierCollection: currentContext.stationIdentifierCollection
+            });
+            this.appendChildTo(this.personnelStationEntryLogListViewInstance, '#personnel-station-entry-log-list-view');
+
             return this;
         },
-        loadStationEntryLogs: function() {
-            var currentContext = this;
-            currentContext.stationEntryLogCollection = new StationEntryLogCollection();
-            this.listenToOnce(currentContext.stationEntryLogCollection, 'reset', currentContext.renderStationEntryLogs);
-            this.dispatcher.trigger('_loadStationEntryLogs', currentContext.stationEntryLogCollection, {userId: currentContext.model.get('userId')});
+        updateViewFromModel: function(personnelModel) {
+            this.$('#personnel-first-name').html(personnelModel.firstName);
+            this.$('#personnel-last-name').html(personnelModel.lastName);
+            this.$('#personnel-contact-number').html(personnelModel.contactNumber);
+            this.$('#personnel-email').html(personnelModel.email);
         },
-        renderStationEntryLogs: function() {
+        _loadStationEntryLogs: function(options) {
             var currentContext = this;
-           _.each(currentContext.stationEntryLogCollection.models, currentContext.addOneStationEntryLog, currentContext);
+            this.personnelStationEntryLogListViewInstance.showLoading();
+            this.dispatcher.trigger('_loadStationEntryLogs', currentContext.stationEntryLogCollection, options);
         },
-        addOneStationEntryLog: function(stationEntryLog) {
-            var currentContext = this;
-            var personnelStationEntryLogListItemViewInstance = new PersonnelStationEntryLogListItemView({
-                model: stationEntryLog,
-                dispatcher: currentContext.dispatcher
-            });
-            this.appendChildTo(personnelStationEntryLogListItemViewInstance, '#personnel-station-entry-log-list');
+        showLoading: function() {
+            this.$('.view-status').removeClass('hidden');
+        },
+        hideLoading: function() {
+            this.$('.view-status').addClass('hidden');
         }
     });
 

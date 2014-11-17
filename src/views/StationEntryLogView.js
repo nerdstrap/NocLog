@@ -31,6 +31,7 @@ define(function(require) {
                 durationHeaderText: appResources.getResource('EditStationEntryLogView.durationHeaderText'),
                 durationHeaderTextNew: appResources.getResource('EditStationEntryLogView.durationHeaderTextNew'),
                 emailHeaderText: appResources.getResource('EditStationEntryLogView.emailHeaderText'),
+                checkInTimeHeaderText: appResources.getResource('EditStationEntryLogView.checkInTimeHeaderText'),
                 expectedOutTimeHeaderText: appResources.getResource('EditStationEntryLogView.expectedOutTimeHeaderText'),
                 expectedOutTimeHeaderTextNew: appResources.getResource('EditStationEntryLogView.expectedOutTimeHeaderTextNew'),
                 firstNameHeaderText: appResources.getResource('EditStationEntryLogView.firstNameHeaderText'),
@@ -123,6 +124,7 @@ define(function(require) {
             currentContext.$('#edit-station-entry-log-contact-number').val(helpers.formatPhoneWithDefault(currentContext.model.get('contactNumber'), '', '&nbsp;'));
             currentContext.$('#edit-station-entry-log-email').val(currentContext.model.get('email'));
             currentContext.$('#edit-station-entry-log-station-id').html(currentContext.model.get('stationName'));
+            currentContext.$('#edit-station-entry-log-in-time').html(helpers.formatDateWithDefault(currentContext.model.get('inTime'), "%D %I:%M %p", "&nbsp;"));
             currentContext.$('#edit-station-entry-log-purpose').html(currentContext.model.get('purpose'));
             currentContext.$('#edit-station-entry-log-duration-old').html((currentContext.model.get('duration') / 60) + " hrs");
             currentContext.$('#view-station-entry-log-actual-duration').html(utils.milliSecondsToTime(currentContext.model.get('actualDuration')));
@@ -166,7 +168,7 @@ define(function(require) {
             if (durationNew && !isNaN(durationNew)) {
                 durationNew = Number(durationNew);
                 var expectedOutTime = utils.addMinutes(new Date(inTime.getTime()), (this.model.calculatedNewDuration));
-                this.$('#edit-station-entry-log-expected-out-time').html(helpers.formatDateWithDefault(expectedOutTime, "%r", "&nbsp;"));
+                this.$('#edit-station-entry-log-expected-out-time').html(helpers.formatDateWithDefault(expectedOutTime, "%I:%M %p", "&nbsp;"));
             } else {
                 delete this.model.calculatedNewDuration;
                 this.$('#edit-station-entry-log-expected-out-time').html('');

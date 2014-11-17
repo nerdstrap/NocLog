@@ -306,26 +306,35 @@ define(function(require) {
                     deferred = $.Deferred();
 
             var personnelModelInstance = new PersonnelModel({userId: userId});
-
             var personnelViewInstance = new PersonnelView({
                 controller: currentContext,
                 dispatcher: currentContext.dispatcher,
-                model: personnelModelInstance
+                model: personnelModelInstance,
+                stationIdentifierCollection: currentContext.stationIdentifierResults
             });
 
             currentContext.router.swapContent(personnelViewInstance);
             currentContext.router.navigate('personnel/' + userId);
 
+            personnelViewInstance.showLoading();
             $.when(currentContext.dashboardService.getPersonnels(personnelModelInstance.attributes)).done(function(getPersonnelsResponse) {
                 if (getPersonnelsResponse && getPersonnelsResponse.personnels && getPersonnelsResponse.personnels.length > 0) {
                     personnelModelInstance.set(getPersonnelsResponse.personnels[0]);
-                    personnelViewInstance.loadStationEntryLogs();
+                    personnelViewInstance.updateViewFromModel(getPersonnelsResponse.personnels[0]);
+                    currentContext.stationIdentifierResults.reset(getPersonnelsResponse.stationIdentifiers);
+                    var options = {
+                        userId: userId,
+                        onlyCheckedOut: true
+                    };
+                    personnelViewInstance._loadStationEntryLogs(options);
                     deferred.resolve(personnelViewInstance);
                 } else {
                     deferred.reject('not found');
                 }
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 deferred.reject(textStatus);
+            }).always(function() {
+                personnelViewInstance.hideLoading();
             });
 
             return deferred.promise();

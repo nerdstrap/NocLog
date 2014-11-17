@@ -6094,6 +6094,7 @@ body:before {
 .purpose-list-view,
 .station-entry-log-list-view,
 .station-entry-log-history-list-view,
+.personnel-station-entry-log-list-view,
 .station-list-view,
 .station-entry-log-view,
 .station-view,
@@ -6186,6 +6187,21 @@ textarea {
   min-width: 170px;
   max-width: 170px; }
 
+.station-entry-log-view select,
+.station-entry-log-view input[type="text"],
+.station-entry-log-view input[type="password"],
+.station-entry-log-view input[type="date"],
+.station-entry-log-view input[type="datetime"],
+.station-entry-log-view input[type="datetime-local"],
+.station-entry-log-view input[type="month"],
+.station-entry-log-view input[type="week"],
+.station-entry-log-view input[type="email"],
+.station-entry-log-view input[type="number"],
+.station-entry-log-view input[type="search"],
+.station-entry-log-view input[type="tel"],
+.station-entry-log-view input[type="time"],
+.station-entry-log-view input[type="url"],
+.station-entry-log-view textarea,
 .station-entry-log-list-view select,
 .station-entry-log-list-view input[type="text"],
 .station-entry-log-list-view input[type="password"],
@@ -6245,7 +6261,22 @@ textarea {
 .personnel-list-view input[type="tel"],
 .personnel-list-view input[type="time"],
 .personnel-list-view input[type="url"],
-.personnel-list-view textarea {
+.personnel-list-view textarea,
+.personnel-station-entry-log-list-view select,
+.personnel-station-entry-log-list-view input[type="text"],
+.personnel-station-entry-log-list-view input[type="password"],
+.personnel-station-entry-log-list-view input[type="date"],
+.personnel-station-entry-log-list-view input[type="datetime"],
+.personnel-station-entry-log-list-view input[type="datetime-local"],
+.personnel-station-entry-log-list-view input[type="month"],
+.personnel-station-entry-log-list-view input[type="week"],
+.personnel-station-entry-log-list-view input[type="email"],
+.personnel-station-entry-log-list-view input[type="number"],
+.personnel-station-entry-log-list-view input[type="search"],
+.personnel-station-entry-log-list-view input[type="tel"],
+.personnel-station-entry-log-list-view input[type="time"],
+.personnel-station-entry-log-list-view input[type="url"],
+.personnel-station-entry-log-list-view textarea {
   min-width: 170px;
   max-width: 170px; }
 
@@ -6329,3 +6360,12 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
 
 .invisible {
   visibility: hidden; }
+
+.bolder {
+  font-weight: bolder; }
+
+.top-align {
+  vertical-align: top; }
+
+.inline-block {
+  display: inline-block; }

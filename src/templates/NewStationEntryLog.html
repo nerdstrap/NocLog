@@ -1,13 +1,18 @@
 <fieldset class="new-station-entry-log-view">
     <legend>{{{viewTitleText}}}</legend>
     <div class="row collapse">
-        <div class="small-2 large-2 columns">
-            <label for="new-station-entry-log-third-party">{{{thirdPartyHeaderText}}}</label>
-        </div>
         <div class="small-1 large-1 columns">
-            <input id="new-station-entry-log-third-party-indicator" type="checkbox" name="thirdParty" class="left" />
+            <label>Type</label>
         </div>
-        <div class="small-9 large-9 columns">
+        <div class="small-3 large-3 columns">
+            <span class="bolder top-align" id="new-station-entry-log-employee-label">Employee</span>
+            <div class="switch radius tiny inline-block top-align">
+                <input id="new-station-entry-log-third-party-indicator" type="checkbox" name="thirdParty"/>
+                <label for="new-station-entry-log-third-party-indicator"></label>
+            </div>
+            <span class="top-align" id="new-station-entry-log-third-party-label">{{{thirdPartyHeaderText}}}</span>
+        </div>
+        <div class="small-8 large-8 columns">
             &nbsp;
         </div>
     </div>
@@ -27,24 +32,24 @@
         </div>
         <div class="small-2 large-4 columns">
             <div id="user-container">
-                <input id="new-station-entry-log-user-id" name="userId" placeholder="{{{userIdHeaderText}}}" />
-                <a id="new-station-entry-log-user-id-search-button">lookup</a>
+                <input id="new-station-entry-log-user-id" name="userId" type="text" placeholder="{{{userIdHeaderText}}}" />
+                <a id="new-station-entry-log-user-id-search-button" class="button radius tiny top-align">lookup</a>
             </div>
             <div id="third-party-user-container" class="hidden">
-                <input id="new-station-entry-log-company-name" name="companyName" placeholder="{{{companyNameHeaderText}}}" />
+                <input id="new-station-entry-log-company-name" name="companyName" type="text" placeholder="{{{companyNameHeaderText}}}" />
             </div>
         </div>
         <div class="small-1 large-1 columns">
             &nbsp;
         </div>
         <div class="small-2 large-2 columns">
-            <input disabled id="new-station-entry-log-first-name" name="firstName" placeholder="{{{firstNameHeaderText}}}" />
+            <input disabled id="new-station-entry-log-first-name" name="firstName" type="text" placeholder="{{{firstNameHeaderText}}}" />
         </div>
         <div class="small-2 large-2 columns">
-            <input disabled id="new-station-entry-log-middle-initial" name="middleInitial" placeholder="{{{middleInitialHeaderText}}}" />
+            <input disabled id="new-station-entry-log-middle-initial" name="middleInitial" type="text" placeholder="{{{middleInitialHeaderText}}}" />
         </div>
         <div class="small-2 large-2 columns">
-            <input disabled id="new-station-entry-log-last-name" name="lastName" placeholder="{{{lastNameHeaderText}}}" />
+            <input disabled id="new-station-entry-log-last-name" name="lastName" type="text" placeholder="{{{lastNameHeaderText}}}" />
         </div>
     </div>
     <div class="row collapse">
@@ -53,13 +58,13 @@
             </label>
         </div>
         <div class="small-2 large-2 columns">
-            <input id="new-station-entry-log-contact-number" name="contactNumber" placeholder="{{{contactNumberHeaderText}}}" />
+            <input id="new-station-entry-log-contact-number" name="contactNumber" type="text" placeholder="{{{contactNumberHeaderText}}}" />
         </div>
         <div class="small-3 large-3 columns">
             &nbsp;
         </div>
         <div class="small-3 large-3 columns">
-            <input disabled id="new-station-entry-log-email" name="email" placeholder="{{{emailHeaderText}}}" />
+            <input disabled id="new-station-entry-log-email" name="email" type="text" placeholder="{{{emailHeaderText}}}" />
         </div>
         <div class="small-3 large-3 columns">
             &nbsp;
@@ -130,19 +135,22 @@
             </label>
         </div>
         <div class="small-5 large-5 columns">
-            <select id="new-station-entry-log-has-crew">
-                <option selected="selected" value="false" name="hasCrew" >{{{hasCrewNoOption}}}</option>
-                <option value="true">{{{hasCrewYesOption}}}</option>
-            </select>
+            <span class="bolder top-align" id="new-station-entry-log-has-crew-no">No</span>
+            <div class="switch radius tiny inline-block top-align">
+                <input id="new-station-entry-log-has-crew" type="checkbox" name="hasCrew"/>
+                <label for="new-station-entry-log-has-crew"></label>
+            </div>
+            <span class="top-align" id="new-station-entry-log-has-crew-yes">Yes</span>
         </div>
+
     </div>
     <div class="row collapse">
         <div class="large-6 columns">
             &nbsp;
         </div>
         <div class="large-6 columns">
-            <a id="new-station-entry-log-save-button" class="button">{{{saveButtonText}}}</a>
-            <a id="new-station-entry-log-cancel-button" class="button secondary">{{{cancelButtonText}}}</a>
+            <a id="new-station-entry-log-save-button" class="button radius">{{{saveButtonText}}}</a>
+            <a id="new-station-entry-log-cancel-button" class="button radius secondary">{{{cancelButtonText}}}</a>
         </div>
     </div>
 </fieldset>

@@ -1,0 +1,92 @@
+<div class="personnel-station-entry-log-list-view">
+    <div class="row collapse">
+        <div class="large-12 columns">
+            <h5>{{listViewTitleText}}</h5>
+        </div>
+    </div>
+    <div class="row collapse">
+        <div class="large-2 columns">
+            <label>{{{stationNameHeaderText}}}</label>
+            <select id="personnel-station-entry-log-list-station-filter">
+                <option disabled="disabled" selected="selected">{{{stationFilterDefaultOption}}}</option>
+            </select>
+        </div>
+        <div class="large-3 columns">
+            <label>{{{startDateTimeHeaderText}}}</label>
+            <input id="personnel-station-entry-log-list-start-date-filter" type="date">
+            <input id="personnel-station-entry-log-list-start-time-filter" type="time">
+        </div>
+        <div class="large-3 columns">
+            <label>{{{endDateTimeHeaderText}}}</label>
+            <input id="personnel-station-entry-log-list-end-date-filter" type="date">
+            <input id="personnel-station-entry-log-list-end-time-filter" type="time">
+        </div>
+        <div class="large-4 columns">
+            &nbsp;
+        </div>
+    </div>
+    <div class="row collapse">
+        <div class="large-4 columns">
+            <a id="personnel-station-entry-log-list-refresh-button" class="button radius">{{{refreshButtonText}}}</a>
+            <a id="personnel-station-entry-log-list-reset-button" class="button radius secondary">{{{resetButtonText}}}</a>
+        </div>
+        <div class="large-7 columns">
+            <a id="personnel-station-entry-log-list-past-week-button">show 2 weeks</a>&nbsp;||&nbsp;<a id="personnel-station-entry-log-list-past-month-button">show 30 days</a>
+        </div>
+        <div class="large-1 columns">
+            <a id="personnel-station-entry-log-list-export-button" class="button radius alert">{{{exportButtonText}}}</a>
+        </div>
+    </div>
+    <div class="row collapse">
+        <div class="large-12 columns">
+            <ol id="personnel-station-entry-log-list-header">
+                <div class="row collapse list-header-item-view">
+                    <div class="large-2 columns">
+                        <span>{{{stationNameHeaderText}}}</span>
+                    </div>
+                    <!--
+                    <div class="large-1 columns">
+                        <span>{{{personnelNameHeaderText}}}</span>
+                    </div>
+                    <div class="large-1 columns">
+                        <span>{{{contactHeaderText}}}</span>
+                    </div>
+                    -->
+                    <div class="large-2 columns">
+                        <span>{{{inTimeHeaderText}}}</span>
+                    </div>
+                    <div class="large-2 columns">
+                        <span>{{{outTimeHeaderText}}}<i class="fa fa-sort-amount-desc"></i></span>
+                    </div>
+                    <div class="large-3 columns">
+                        <span>{{{purposeHeaderText}}}</span>
+                    </div>
+                    <div class="large-3 columns">
+                        <span>{{{additionalInfoHeaderText}}}</span>
+                    </div>
+                    <!--
+                    <div class="large-1 columns">
+                        <span>{{{regionHeaderText}}}</span>
+                    </div>
+                    <div class="large-1 columns">
+                        <span>{{{areaHeaderText}}}</span>
+                    </div>
+                    -->
+                </div>
+                <div class="row collapse view-alerts">
+                    <div class="small-12 large-12 columns"></div>
+                </div>
+                <div class="row collapse view-status hidden">
+                    <div class="large-12 columns">
+                        <span class="view-message">{{{loadingMessage}}}</span>
+                        <img src="{{loadingIconSrc}}" class="view-loading" />
+                    </div>
+                </div>
+            </ol>
+        </div>
+        <div class="large-12 columns divWithScroll">
+            <ol id="personnel-station-entry-log-list">
+            </ol>
+        </div>
+    </div>
+</div>

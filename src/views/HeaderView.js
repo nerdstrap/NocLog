@@ -46,7 +46,11 @@ define(function(require) {
             return this;
         },
         showAdminHeaderButtons: function() {
-            this.$('#go-to-maintain-purposes-button-div').removeClass('hidden');
+            this.$('#header-title-div').removeClass('small-7');
+            this.$('#header-title-div').addClass('small-6');
+            this.$('#go-to-personnel-link-div').removeClass('small-2');
+            this.$('#go-to-personnel-link-div').addClass('small-1');
+            this.$('#go-to-maintain-purposes-link-div').removeClass('hidden');
         },
         titleButtonClick: function(event) {
             if (event) {

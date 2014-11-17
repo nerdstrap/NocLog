@@ -206,6 +206,7 @@ define(function(require) {
         'EditStationEntryLogView.durationHeaderText': 'Duration',
         'EditStationEntryLogView.durationHeaderTextNew': 'New Duration',
         'EditStationEntryLogView.emailHeaderText': 'E-mail',
+        'EditStationEntryLogView.checkInTimeHeaderText': 'Check In Time',
         'EditStationEntryLogView.expectedOutTimeHeaderText': 'Est. Check-out',
         'EditStationEntryLogView.expectedOutTimeHeaderTextNew': 'New Est. Check-out',
         'EditStationEntryLogView.firstNameHeaderText': 'First',
@@ -222,10 +223,31 @@ define(function(require) {
         'EditStationEntryLogView.stationIdDefaultOption': '&#45;&#160;station&#160;&#45;',
         'EditStationEntryLogView.stationIdHeaderText': 'Station',
         'EditStationEntryLogView.userIdHeaderText': 'User Id',
-         /* edit purpose list view */
+        /* edit purpose list view */
         'EditPurposeListView.loadingMessage': 'loading purposes',
         'EditPurposeListItemView.placeholderItemDescription': 'New Purpose',
-        'EditPurposeListItemView.placeholderItemOrder': '0-99'
+        'EditPurposeListItemView.placeholderItemOrder': '0-99',
+        
+        /* personnel station entry log list */
+        'additionalInfoHeaderText': 'Additional Info',
+        'areaHeaderText': 'Area',
+        'contactHeaderText': 'Contact',
+        'endDateTimeHeaderText': 'End Date/Time',
+        'PersonnelStationEntryLogListView.errorMessage': 'error',
+        'inTimeHeaderText': 'Checked-In',
+        'PersonnelStationEntryLogListView.infoMessage': 'info',
+        'PersonnelStationEntryLogListView.listViewTitleText': 'Station Entry Logs',
+        'PersonnelStationEntryLogListView.loadingMessage': 'loading station entries',
+        'outTimeHeaderText': 'Checked-out',
+        'personnelNameHeaderText': 'Personnel',
+        'purposeHeaderText': 'Purpose',
+        'refreshButtonText': 'Refresh',
+        'regionHeaderText': 'Region',
+        'resetButtonText': 'Reset',
+        'exportButtonText': 'Export',
+        'startDateTimeHeaderText': 'Start Date/Time',
+        'stationFilterDefaultOption': '&#45;&#160;select&#160;&#45;',
+        'stationNameHeaderText': 'Station'
     };
 
     var defaultResource = '';
