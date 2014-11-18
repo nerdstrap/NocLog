@@ -6,7 +6,7 @@ define(function(require) {
             env = require('env');
 
     var inMemoryStations = [];
-    var inMemoryStationEntryLogs = [];
+    var inMemoryStationEntryLogs = [{'stationEntryLogId':20,'stationId':'COLUS','userName':'Last, First','firstName':'First','lastName':'Last','userId':'s210749','purpose':'Battery Inspection','inTime':1409155717114,'outTime':1409156265536,'createdDate':1409155717114,'createdBy':5999,'modifiedDate':1409156265536,'modifiedBy':5999,'hasCrew':'N','contactNumber':'9-1-6147163015','duration':30,'regionName':'Ohio','areaName':'Groveport','stationName':'Columbus POP'}];
     var inMemoryStationEntryLog = {};
     var inMemoryLookupDataItems = [];
     var inMemoryLookupDataItem = {};
@@ -71,12 +71,15 @@ define(function(require) {
 
             var deferred = $.Deferred();
             var results = {
-                personnel: inMemoryPersonnels,
+                personnels: inMemoryPersonnels,
+                stationIdentifiers: inMemoryStationIdentifiers,
+                regions: inMemoryRegions,
+                areas: inMemoryAreas,
                 userRole: inMemoryUserRole
             };
             setTimeout(function() {
                 deferred.resolve(results, 'success', null);
-            }, 1000);
+            }, 2000);
             return deferred.promise();
         },
         postCheckIn: function(options) {

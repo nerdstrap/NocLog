@@ -229,6 +229,7 @@ define(function(require) {
         'EditPurposeListItemView.placeholderItemOrder': '0-99',
         
         /* personnel station entry log list */
+        'PersonnelView.loadingMessage': 'loading user',
         'additionalInfoHeaderText': 'Additional Info',
         'areaHeaderText': 'Area',
         'contactHeaderText': 'Contact',

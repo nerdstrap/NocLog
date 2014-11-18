@@ -322,6 +322,8 @@ define(function(require) {
                     personnelModelInstance.set(getPersonnelsResponse.personnels[0]);
                     personnelViewInstance.updateViewFromModel(getPersonnelsResponse.personnels[0]);
                     currentContext.stationIdentifierResults.reset(getPersonnelsResponse.stationIdentifiers);
+                    personnelViewInstance.hideLoading();
+                    personnelViewInstance._addStationEntryLogs();
                     var options = {
                         userId: userId,
                         onlyCheckedOut: true
@@ -329,12 +331,12 @@ define(function(require) {
                     personnelViewInstance._loadStationEntryLogs(options);
                     deferred.resolve(personnelViewInstance);
                 } else {
+                    personnelViewInstance.hideLoading();
                     deferred.reject('not found');
                 }
             }).fail(function(jqXHR, textStatus, errorThrown) {
-                deferred.reject(textStatus);
-            }).always(function() {
                 personnelViewInstance.hideLoading();
+                deferred.reject(textStatus);
             });
 
             return deferred.promise();

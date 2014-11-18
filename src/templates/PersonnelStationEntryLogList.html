@@ -28,10 +28,10 @@
     <div class="row collapse">
         <div class="large-4 columns">
             <a id="personnel-station-entry-log-list-refresh-button" class="button radius">{{{refreshButtonText}}}</a>
-            <a id="personnel-station-entry-log-list-reset-button" class="button radius secondary">{{{resetButtonText}}}</a>
+            <a id="personnel-station-entry-log-list-reset-button"  data-days-to-add="-1" class="button radius secondary">{{{resetButtonText}}}</a>
         </div>
         <div class="large-7 columns">
-            <a id="personnel-station-entry-log-list-past-week-button">show 2 weeks</a>&nbsp;||&nbsp;<a id="personnel-station-entry-log-list-past-month-button">show 30 days</a>
+            <a id="personnel-station-entry-log-list-refresh-fourteen-days-button" data-days-to-add="-14">show 2 weeks</a>&nbsp;||&nbsp;<a id="personnel-station-entry-log-list-refresh-thirty-days-button" data-days-to-add="-30">show 30 days</a>
         </div>
         <div class="large-1 columns">
             <a id="personnel-station-entry-log-list-export-button" class="button radius alert">{{{exportButtonText}}}</a>
@@ -42,21 +42,21 @@
             <ol id="personnel-station-entry-log-list-header">
                 <div class="row collapse list-header-item-view">
                     <div class="large-2 columns">
-                        <span>{{{stationNameHeaderText}}}</span>
+                        <span><a id="station-name-sort-button" data-sort-attr="stationName" data-sort-direction="1">{{{stationNameHeaderText}}}</a><i class="fa"></i></span>
                     </div>
                     <!--
                     <div class="large-1 columns">
                         <span>{{{personnelNameHeaderText}}}</span>
                     </div>
                     <div class="large-1 columns">
-                        <span>{{{contactHeaderText}}}</span>
+                        <span>{{{contactNumberHeaderText}}}</span>
                     </div>
                     -->
                     <div class="large-2 columns">
                         <span>{{{inTimeHeaderText}}}</span>
                     </div>
                     <div class="large-2 columns">
-                        <span>{{{outTimeHeaderText}}}<i class="fa fa-sort-amount-desc"></i></span>
+                        <span><a id="out-time-sort-button" data-sort-attr="outTime" data-sort-direction="1">{{{outTimeHeaderText}}}</a><i class="fa fa-sort-amount-asc"></i></span>
                     </div>
                     <div class="large-3 columns">
                         <span>{{{purposeHeaderText}}}</span>
@@ -66,10 +66,10 @@
                     </div>
                     <!--
                     <div class="large-1 columns">
-                        <span>{{{regionHeaderText}}}</span>
+                        <span>{{{regionNameHeaderText}}}</span>
                     </div>
                     <div class="large-1 columns">
-                        <span>{{{areaHeaderText}}}</span>
+                        <span>{{{areaNameHeaderText}}}</span>
                     </div>
                     -->
                 </div>
