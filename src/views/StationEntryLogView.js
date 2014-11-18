@@ -168,7 +168,7 @@ define(function(require) {
             if (durationNew && !isNaN(durationNew)) {
                 durationNew = Number(durationNew);
                 var expectedOutTime = utils.addMinutes(new Date(inTime.getTime()), (this.model.calculatedNewDuration));
-                this.$('#edit-station-entry-log-expected-out-time').html(helpers.formatDateWithDefault(expectedOutTime, "%I:%M %p", "&nbsp;"));
+                this.$('#edit-station-entry-log-expected-out-time').html(helpers.formatDateWithDefault(expectedOutTime, "%D %I:%M %p", "&nbsp;"));
             } else {
                 delete this.model.calculatedNewDuration;
                 this.$('#edit-station-entry-log-expected-out-time').html('');

@@ -6,6 +6,14 @@ define(function(require) {
             Backbone = require('backbone'),
             StationEntryLogModel = require('models/StationEntryLogModel');
 
+    var simpleComparator = function(a, b, sortDirection) {
+        if (sortDirection === 1) {
+            return (a === b) ? 0 : (a > b) ? 1 : -1;
+        } else {
+            return (a === b) ? 0 : (a < b) ? 1 : -1;
+        }
+    };
+
     var StationEntryLogCollection = Backbone.Collection.extend({
         model: StationEntryLogModel,
         sortAttributes: [
@@ -16,36 +24,28 @@ define(function(require) {
         ],
         sortableFields: [
             {
+                sortAttribute: 'stationName',
+                comparator: simpleComparator
+            },
+            {
+                sortAttribute: 'userName',
+                comparator: simpleComparator
+            },
+            {
                 sortAttribute: 'outTime',
-                comparator: function(a, b) {
-                    return (a === b) ? 0 : (a > b) ? 1 : -1;
-                }
+                comparator: simpleComparator
             },
             {
                 sortAttribute: 'expectedOutTime',
-                comparator: function(a, b) {
-                    return (a === b) ? 0 : (a > b) ? 1 : -1;
-                }
+                comparator: simpleComparator
             },
             {
                 sortAttribute: 'regionName',
-                comparator: function(a, b, sortDirection) {
-                    if (sortDirection === 1) {
-                        return (a === b) ? 0 : (a > b) ? 1 : -1;
-                    } else {
-                        return (a === b) ? 0 : (a < b) ? 1 : -1;
-                    }
-                }
+                comparator: simpleComparator
             },
             {
                 sortAttribute: 'areaName',
-                comparator: function(a, b, sortDirection) {
-                    if (sortDirection === 1) {
-                        return (a === b) ? 0 : (a > b) ? 1 : -1;
-                    } else {
-                        return (a === b) ? 0 : (a < b) ? 1 : -1;
-                    }
-                }
+                comparator: simpleComparator
             }
         ],
         comparator: function(a, b) {
@@ -54,7 +54,9 @@ define(function(require) {
             for (i in currentContext.sortAttributes) {
                 var sortAttribute = currentContext.sortAttributes[i].sortAttribute;
                 var sortDirection = currentContext.sortAttributes[i].sortDirection;
-                var sortableField = _.find(currentContext.sortableFields, function(s){ return s.sortAttribute === sortAttribute; });
+                var sortableField = _.find(currentContext.sortableFields, function(s) {
+                    return s.sortAttribute === sortAttribute;
+                });
                 if (sortableField) {
                     result = sortableField.comparator(a.get(sortAttribute), b.get(sortAttribute), sortDirection);
                 }
