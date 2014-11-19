@@ -11,6 +11,27 @@ define(function(require) {
 
     var StationEntryModel = Backbone.Model.extend({
         idAttribute: 'stationEntryLogId',
+        csvHeaders: function() {
+            return ['stationEntryLogId', 'stationId', 'stationName', 'userId', 'userName', 'purpose', 'duration', 'inTime', 'expectedOutTime', 'outTime', 'actualDuration', 'contactNumber', 'email', 'regionName', 'areaName', 'hasCrew'];
+        },
+        toCsv: function() {
+            var currentContext = this;
+            var line = '';
+            var csvHeaders = currentContext.csvHeaders();
+            for (var i in csvHeaders) {
+                var csvHeader = csvHeaders[i];
+                var csvValue = '""';
+                if (this.has(csvHeader)) {
+                    var propertyValue = this.get(csvHeader);
+                    if (propertyValue) {
+                        csvValue = '"' + propertyValue.toString().replace(/"/g, '""') + '"';
+                    }
+                }
+                line = line + csvValue + ',';
+            }
+            line = line.slice(0, -1);
+            return line;
+        },
         set: function(key, val, options) {
             var attributes;
             if (typeof key === 'object') {

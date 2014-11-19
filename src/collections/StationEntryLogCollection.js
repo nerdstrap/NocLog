@@ -68,6 +68,26 @@ define(function(require) {
 
             // When the loop is done, or if fields was defined empty, we return the last equality
             return result;
+        },
+        toCsv: function() {
+            var currentContext = this;
+            var line = '';
+            if (currentContext.length > 0) {
+                var csvHeaders = currentContext.at(0).csvHeaders();
+                for (var i in csvHeaders) {
+                    var csvHeader = csvHeaders[i];
+                    line = line + csvHeader + ',';
+                }
+                line = line.slice(0, -1);
+                line = line + '\r\n';
+
+                _.each(currentContext.models, function(model, index, list) {
+                    line = line + model.toCsv();
+                    line = line + '\r\n';
+                });
+            }
+
+            return line;
         }
     });
 

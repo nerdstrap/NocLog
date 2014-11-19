@@ -15,36 +15,6 @@ define(function(require) {
             filterTemplate = require('hbs!templates/Filter'),
             alertTemplate = require('hbs!templates/Alert');
 
-
-    function JSON2CSV(objArray) {
-        var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
-
-        var str = '';
-        var line = '';
-
-        var head = array[0];
-        for (var index in array[0]) {
-            var value = index + "";
-            line += '"' + value.replace(/"/g, '""') + '",';
-        }
-
-        line = line.slice(0, -1);
-        str += line + '\r\n';
-
-        for (var i = 0; i < array.length; i++) {
-            var line = '';
-
-            for (var index in array[i]) {
-                var value = array[i][index] + "";
-                line += '"' + value.replace(/"/g, '""') + '",';
-            }
-
-            line = line.slice(0, -1);
-            str += line + '\r\n';
-        }
-        return str;
-    }
-
     var PersonnelStationEntryLogListView = CompositeView.extend({
         resources: function(culture) {
             return {
@@ -190,9 +160,21 @@ define(function(require) {
             if (event) {
                 event.preventDefault();
             }
-            var json = JSON.stringify(this.collection);
-            var csv = JSON2CSV(json);
-            window.open("data:text/csv;charset=utf-8," + escape(csv))
+            var stationId = this.$('#personnel-station-entry-log-list-station-filter').val();
+            var startDate = this.$('#personnel-station-entry-log-list-start-date-filter').val();
+            var startTime = this.$('#personnel-station-entry-log-list-start-time-filter').val();
+            var endDate = this.$('#personnel-station-entry-log-list-end-date-filter').val();
+            var endTime = this.$('#personnel-station-entry-log-list-end-time-filter').val();
+            var options = {
+                userId: this.parent.model.get('userId'),
+                stationId: stationId,
+                startDate: startDate,
+                startTime: startTime,
+                endDate: endDate,
+                endTime: endTime,
+                onlyCheckedOut: true
+            };
+            this.dispatcher.trigger(AppEventNamesEnum.goToExportStationEntryLogList, this.collection, options);
         },
         sortPersonnelStationEntryLogList: function(event) {
             if (event) {

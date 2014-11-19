@@ -40,7 +40,8 @@ define(function(require) {
         addItemSuccess: 'addItemSuccess',
         addItemError: 'addItemError',
         updateItemSuccess: 'updateItemSuccess',
-        updateItemError: 'updateItemError'
+        updateItemError: 'updateItemError',
+        goToExportStationEntryLogList: 'goToExportStationEntryLogList'
     };
 
     if (Object.freeze) {

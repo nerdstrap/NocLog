@@ -61,8 +61,8 @@ define(function(require) {
             if (event) {
                 event.preventDefault();
             }
-            var personnelId = this.model.get('personnelId');
-            this.dispatcher.trigger(AppEventNamesEnum.goToPersonnelWithId, personnelId);
+            var userId = this.model.get('userId');
+            this.dispatcher.trigger(AppEventNamesEnum.goToPersonnelWithId, userId);
         },
         goToStationEntryLogWithId: function(event) {
             if (event) {

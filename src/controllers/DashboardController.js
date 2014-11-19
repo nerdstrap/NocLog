@@ -87,6 +87,7 @@ define(function(require) {
             this.listenTo(appEvents, AppEventNamesEnum.goToAddItem, this.goToAddItem);
             this.listenTo(appEvents, AppEventNamesEnum.goToUpdateItem, this.goToUpdateItem);
             this.listenTo(appEvents, '_loadStationEntryLogs', this._loadStationEntryLogs);
+            this.listenTo(appEvents, AppEventNamesEnum.goToExportStationEntryLogList, this.goToExportStationEntryLogList);
         },
         goToStationEntryLogList: function(options) {
             console.trace('DashboardController.goToStationEntryLogList');
@@ -593,6 +594,11 @@ define(function(require) {
             });
 
             return deferred.promise();
+        },
+        goToExportStationEntryLogList: function(stationEntryLogCollection, options) {
+            var csv = stationEntryLogCollection.toCsv();
+            var blob = new Blob([csv], {type: "text/csv;charset=utf-8"});
+            saveAs(blob, "stationEntryLogs.csv");
         }
     });
 

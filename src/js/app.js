@@ -11,6 +11,7 @@ define(function(require) {
     require('utils');
     require('routers/appRouter');
     require('handlebars.helpers');
+    require('filesaver');
 
     Backbone.history.start();
 

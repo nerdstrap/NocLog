@@ -62,17 +62,17 @@ define(function(require) {
 
             _.each(this.collection.models, this.addOne, this);
 
-            var today = new Date();
-            var yesterday = utils.addDays(Date.now(), -1);
-
-            this.$('#station-entry-log-history-list-start-date-filter').val(utils.getFormattedDate(yesterday));
-            this.$('#station-entry-log-history-list-end-date-filter').val(utils.getFormattedDate(today));
+            currentContext.setDefaultDateFilters(-1);
 
             return this;
         },
         events: {
             'click #station-entry-log-history-list-refresh-list-button': 'refreshStationEntryLogHistoryList',
             'click #station-entry-log-history-list-reset-list-options-button': 'resetStationEntryLogHistoryListFilter',
+            'click #personnel-station-entry-log-list-refresh-seven-days-button': 'setDateFilter',
+            'click #personnel-station-entry-log-list-refresh-fourteen-days-button': 'setDateFilter',
+            'click #personnel-station-entry-log-list-refresh-thirty-days-button': 'setDateFilter',
+            'click #personnel-station-entry-log-list-refresh-ninety-days-button': 'setDateFilter',
             'click #station-entry-log-history-list-out-time-sort-button': 'updateStationEntryLogHistoryListOutTimeSort',
             'click #station-entry-log-history-list-region-sort-button': 'updateStationEntryLogHistoryListRegionSort',
             'click #station-entry-log-history-list-area-sort-button': 'updateStationEntryLogHistoryListAreaSort'
@@ -291,6 +291,31 @@ define(function(require) {
                 }
             }
             return sortDirection;
+        },
+        setDateFilter: function(event) {
+            if (event) {
+                event.preventDefault();
+            }
+            var daysToAdd = -1;
+            if (event.target) {
+                var button = $(event.target);
+                var daysToAddString = button.data('days-to-add');
+                if (daysToAddString) {
+                    daysToAdd = parseInt(daysToAddString, 10);
+                }
+                ;
+            }
+            this.setDefaultDateFilters(daysToAdd);
+            this.refreshStationEntryLogHistoryList();
+        },
+        setDefaultDateFilters: function(daysToAdd) {
+            var today = new Date();
+            var yesterday = utils.addDays(Date.now(), daysToAdd);
+
+            this.$('#station-entry-log-history-list-start-date-filter').val(utils.getFormattedDate(yesterday));
+            this.$('#station-entry-log-history-list-start-time-filter').val('00:00');
+            this.$('#station-entry-log-history-list-end-date-filter').val(utils.getFormattedDate(today));
+            this.$('#station-entry-log-history-list-end-time-filter').val('23:59');
         },
         showLoading: function() {
             this.$('.view-status').removeClass('hidden');

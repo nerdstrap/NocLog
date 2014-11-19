@@ -5,7 +5,11 @@
         </div>
         <div class="small-1 columns">
             <i id="third-party-icon" class="fa fa-globe hidden"></i>
+            {{#if userId}}
             <a class="personnel-name-link" data-userid="{{userId}}">{{withDefault userName "&nbsp;"}}</a>
+            {{else}}
+            {{withDefault userName "&nbsp;"}}
+            {{/if}}
         </div>
         <div class="small-1 columns">
             <span>{{formatPhoneWithDefault contactNumber "%D %I:%M %p" "&nbsp;"}}</span>
@@ -35,7 +39,7 @@
     </div>
     <div class="row collapse elevated-functions-container hidden">
         <div class="small-2 columns large-offset-10">
-            <a class="view-station-entry-log-link button radius tiny secondary">{{{viewCheckInButtonText}}}</a>
+            <a class="view-station-entry-log-link button radius tiny">{{{viewCheckInButtonText}}}</a>
         </div>
     </div>
     <!--

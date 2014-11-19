@@ -38,6 +38,9 @@ require.config({
         /* Modernizr */
         'modernizr': 'libs/modernizr',
         
+        /* FileSaver */
+        'filesaver': 'libs/filesaver',
+        
         /* Foundation */
         'foundation.core': 'libs/foundation',
         'foundation.abide': 'libs/foundation.abide',
