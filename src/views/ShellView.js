@@ -9,13 +9,9 @@ define(function (require) {
         FooterView = require('views/FooterView'),
         AppEventNamesEnum = require('enums/AppEventNamesEnum'),
         appEvents = require('events'),
-        appResources = require('resources'),
         template = require('hbs!templates/Shell');
 
     var ShellView = CompositeView.extend({
-        resources: function (culture) {
-            return {};
-        },
         initialize: function (options) {
             console.trace('ShellView.initialize');
             options || (options = {});
@@ -25,7 +21,7 @@ define(function (require) {
             console.trace('ShellView.render()');
             var currentContext = this;
 
-            var renderModel = _.extend({}, currentContext.resources(), currentContext.model);
+            var renderModel = _.extend({}, currentContext.model);
             currentContext.$el.html(template(renderModel));
 
             var headerViewInstance = new HeaderView({

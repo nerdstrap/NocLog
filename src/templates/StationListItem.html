@@ -1,13 +1,13 @@
 <div class="station-list-item-view">
     <div class="row collapse">
         <div class="small-4 columns">
-            <a class="station-name-link" data-stationid="{{stationId}}">{{stationName}}</a>
+            <a class="station-name-link" data-stationid="{{stationId}}">{{withDefault stationName  "&nbsp;"}}</a>
         </div>
         <div class="small-4 columns">
-            <span>{{region}}</span>
+            <span>{{withDefault regionName "&nbsp;"}}</span>
         </div>
         <div class="small-4 columns">
-            <span>{{area}}</span>
+            <span>{{withDefault areaName "&nbsp;"}}</span>
         </div>
     </div>
 </div>

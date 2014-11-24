@@ -8,18 +8,11 @@ define(function(require) {
             CompositeView = require('views/CompositeView'),
             AppEventNamesEnum = require('enums/AppEventNamesEnum'),
             appEvents = require('events'),
-            appResources = require('resources'),
             template = require('hbs!templates/Personnel'),
             StationEntryLogCollection = require('collections/StationEntryLogCollection'),
             PersonnelStationEntryLogListView = require('views/PersonnelStationEntryLogListView');
 
     var PersonnelView = CompositeView.extend({
-        resources: function(culture) {
-            return {
-                loadingIconSrc: appResources.getResource('loadingIconSrc'),
-                loadingMessage: appResources.getResource('PersonnelView.loadingMessage')
-            };
-        },
         initialize: function(options) {
             console.trace('PersonnelView.initialize');
             options || (options = {});
@@ -30,7 +23,7 @@ define(function(require) {
             console.trace('PersonnelView.render()');
             var currentContext = this;
 
-            var renderModel = _.extend({}, currentContext.resources(), currentContext.model.attributes);
+            var renderModel = _.extend({}, currentContext.model.attributes);
             currentContext.$el.html(template(renderModel));
 
             return this;

@@ -11,54 +11,20 @@ define(function(require) {
             AppEventNamesEnum = require('enums/AppEventNamesEnum'),
             UserRolesEnum = require('enums/UserRolesEnum'),
             appEvents = require('events'),
-            appResources = require('resources'),
             utils = require('utils'),
             StationEntryLogModel = require('models/StationEntryLogModel'),
             template = require('hbs!templates/StationEntryLog'),
             filterTemplate = require('hbs!templates/Filter');
 
     var StationEntryLog = CompositeView.extend({
-        resources: function(culture) {
-            return {
-                actualDurationHeaderText: appResources.getResource('EditStationEntryLogView.actualDurationHeaderText'),
-                actualOutTimeHeaderText: appResources.getResource('EditStationEntryLogView.actualOutTimeHeaderText'),
-                additionalInfoHeaderText: appResources.getResource('EditStationEntryLogView.additionalInfoHeaderText'),
-                cancelButtonText: appResources.getResource('EditStationEntryLogView.cancelButtonText'),
-                checkOutButtonText: appResources.getResource('checkOutButtonText'),
-                companyNameHeaderText: appResources.getResource('EditStationEntryLogView.companyNameHeaderText'),
-                contactNumberHeaderText: appResources.getResource('EditStationEntryLogView.contactNumberHeaderText'),
-                durationDefaultOption: appResources.getResource('EditStationEntryLogView.durationDefaultOption'),
-                durationHeaderText: appResources.getResource('EditStationEntryLogView.durationHeaderText'),
-                durationHeaderTextNew: appResources.getResource('EditStationEntryLogView.durationHeaderTextNew'),
-                emailHeaderText: appResources.getResource('EditStationEntryLogView.emailHeaderText'),
-                checkInTimeHeaderText: appResources.getResource('EditStationEntryLogView.checkInTimeHeaderText'),
-                expectedOutTimeHeaderText: appResources.getResource('EditStationEntryLogView.expectedOutTimeHeaderText'),
-                expectedOutTimeHeaderTextNew: appResources.getResource('EditStationEntryLogView.expectedOutTimeHeaderTextNew'),
-                firstNameHeaderText: appResources.getResource('EditStationEntryLogView.firstNameHeaderText'),
-                hasCrewHeaderText: appResources.getResource('EditStationEntryLogView.hasCrewHeaderText'),
-                hasCrewNoOption: appResources.getResource('EditStationEntryLogView.hasCrewNoOption'),
-                hasCrewYesOption: appResources.getResource('EditStationEntryLogView.hasCrewYesOption'),
-                lastNameHeaderText: appResources.getResource('EditStationEntryLogView.lastNameHeaderText'),
-                loadingIconSrc: appResources.getResource('loadingIconSrc'),
-                loadingMessage: appResources.getResource('EditStationEntryLogView.loadingMessage'),
-                middleInitialHeaderText: appResources.getResource('EditStationEntryLogView.middleInitialHeaderText'),
-                purposeDefaultOption: appResources.getResource('EditStationEntryLogView.purposeDefaultOption'),
-                purposeHeaderText: appResources.getResource('EditStationEntryLogView.purposeHeaderText'),
-                purposeOtherHeaderText: appResources.getResource('EditStationEntryLogView.purposeOtherHeaderText'),
-                saveButtonText: appResources.getResource('EditStationEntryLogView.saveButtonText'),
-                stationIdDefaultOption: appResources.getResource('EditStationEntryLogView.stationIdDefaultOption'),
-                stationIdHeaderText: appResources.getResource('EditStationEntryLogView.stationIdHeaderText'),
-                userIdHeaderText: appResources.getResource('EditStationEntryLogView.userIdHeaderText')
-            };
-        },
         initialize: function(options) {
             console.trace('StationEntryLog.initialize');
             options || (options = {});
             this.dispatcher = options.dispatcher || this;
+
             this.durationCollection = options.durationCollection;
 
             this.listenTo(this.model, 'sync', this.updateViewFromModel);
-            //this.listenTo(this.model, 'sync', this.setUserRole);
             this.listenTo(this.model, 'validated', this.onValidated);
             this.listenTo(this.durationCollection, 'reset', this.addAllDurations);
 
@@ -71,7 +37,7 @@ define(function(require) {
 
             validation.unbind(currentContext);
 
-            var renderModel = _.extend({}, currentContext.resources(), currentContext.model.attributes);
+            var renderModel = _.extend({}, currentContext.model.attributes);
             currentContext.$el.html(template(renderModel));
 
             currentContext.addAllDurations();
@@ -85,7 +51,7 @@ define(function(require) {
         addAllDurations: function() {
             var currentContext = this;
             var filterRenderModel = {
-                defaultOption: currentContext.resources().durationDefaultOption,
+                defaultOption: utils.getResource('durationFilterDefaultOption'),
                 options:  utils.getFilterOptions(currentContext.durationCollection.models, 'itemValue', 'itemText')
             };
             this.$('#edit-station-entry-log-duration').html(filterTemplate(filterRenderModel));

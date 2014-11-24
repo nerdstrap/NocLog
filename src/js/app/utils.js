@@ -1,7 +1,13 @@
 define(function(require) {
     'use strict';
 
+    var resources = require('resources');
+
     var utils = {};
+
+    utils.getResource = function(key) {
+        return resources.getResource(key);
+    };
 
     utils.cleanPhone = function(phone) {
         if (phone) {

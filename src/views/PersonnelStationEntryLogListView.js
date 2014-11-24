@@ -7,7 +7,6 @@ define(function(require) {
             PersonnelStationEntryLogListItemView = require('views/PersonnelStationEntryLogListItemView'),
             AppEventNamesEnum = require('enums/AppEventNamesEnum'),
             appEvents = require('events'),
-            appResources = require('resources'),
             globals = require('globals'),
             env = require('env'),
             utils = require('utils'),
@@ -16,33 +15,11 @@ define(function(require) {
             alertTemplate = require('hbs!templates/Alert');
 
     var PersonnelStationEntryLogListView = CompositeView.extend({
-        resources: function(culture) {
-            return {
-                loadingIconSrc: appResources.getResource('loadingIconSrc'),
-                stationFilterDefaultOption: appResources.getResource('stationFilterDefaultOption'),
-                refreshButtonText: appResources.getResource('refreshButtonText'),
-                resetButtonText: appResources.getResource('resetButtonText'),
-                listViewTitleText: appResources.getResource('PersonnelStationEntryLogListView.listViewTitleText'),
-                loadingMessage: appResources.getResource('PersonnelStationEntryLogListView.loadingMessage'),
-                errorMessage: appResources.getResource('PersonnelStationEntryLogListView.errorMessage'),
-                stationNameHeaderText: appResources.getResource('stationNameHeaderText'),
-                personnelNameHeaderText: appResources.getResource('personnelNameHeaderText'),
-                contactHeaderText: appResources.getResource('contactHeaderText'),
-                inTimeHeaderText: appResources.getResource('inTimeHeaderText'),
-                outTimeHeaderText: appResources.getResource('outTimeHeaderText'),
-                purposeHeaderText: appResources.getResource('purposeHeaderText'),
-                additionalInfoHeaderText: appResources.getResource('additionalInfoHeaderText'),
-                regionHeaderText: appResources.getResource('regionHeaderText'),
-                areaHeaderText: appResources.getResource('areaHeaderText'),
-                startDateTimeHeaderText: appResources.getResource('startDateTimeHeaderText'),
-                endDateTimeHeaderText: appResources.getResource('endDateTimeHeaderText'),
-                exportButtonText: appResources.getResource('exportButtonText')
-            };
-        },
         initialize: function(options) {
             console.trace('PersonnelStationEntryLogList.initialize');
             options || (options = {});
             this.dispatcher = options.dispatcher || this;
+
             this.stationIdentifierCollection = options.stationIdentifierCollection || new Backbone.Collection();
 
             this.listenTo(this.collection, 'reset', this.addAll);
@@ -53,7 +30,7 @@ define(function(require) {
             console.trace('PersonnelStationEntryLogList.render()');
             var currentContext = this;
 
-            var renderModel = _.extend({}, currentContext.resources(), currentContext.model);
+            var renderModel = _.extend({}, currentContext.model);
             currentContext.$el.html(template(renderModel));
 
             currentContext.setDefaultDateFilters(-1);
@@ -88,7 +65,7 @@ define(function(require) {
         addAllStationIdentifiers: function() {
             var currentContext = this;
             var filterRenderModel = {
-                defaultOption: currentContext.resources().stationFilterDefaultOption,
+                defaultOption: utils.getResource('stationNameFilterDefaultOption'),
                 options: utils.getFilterOptions(currentContext.stationIdentifierCollection.models, 'stationId', 'stationName')
             };
             this.$('#personnel-station-entry-log-list-station-filter').html(filterTemplate(filterRenderModel));

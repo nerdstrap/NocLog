@@ -1,23 +1,23 @@
 <div class="station-list-view">
     <div class="row collapse">
         <div class="small-12 columns">
-            <h3>{{listViewTitleText}}</h3>
+            <h3>{{resource "stationList.viewTitleText"}}</h3>
         </div>
     </div>
     <div class="row collapse">
         <div class="small-2 columns">
             <select id="station-list-region-filter">
-                <option disabled="disabled" selected="selected">{{{regionFilterDefaultOption}}}</option>
+                <option disabled="disabled" selected="selected">{{resource "regionNameFilterDefaultOption"}}</option>
             </select>
         </div>
         <div class="small-2 columns">
             <select id="station-list-area-filter">
-                <option disabled="disabled" selected="selected">{{{areaFilterDefaultOption}}}</option>
+                <option disabled="disabled" selected="selected">{{resource "areaNameFilterDefaultOption"}}</option>
             </select>
         </div>
         <div class="small-6 columns">
-            <a id="station-list-refresh-list-button" class="button radius">{{{refreshListButtonText}}}</a>
-            <a id="station-list-reset-list-options-button" class="button radius secondary">{{{resetListOptionsButtonText}}}</a>
+            <a id="station-list-refresh-button" class="button radius">{{resource "refreshButtonText"}}</a>
+            <a id="station-list-reset-button" class="button radius secondary">{{resource "resetButtonText"}}</a>
         </div>
         <div class="small-2 columns">
             <span>&nbsp;</span>
@@ -29,33 +29,24 @@
                 <div class="row collapse list-header-item-view">
                     <div class="small-4 columns">
                         <span>
-                            <a id="station-list-station-name-sort-button" data-sort-direction="1">{{{stationNameHeaderText}}}</a>
-                            <i id="station-list-station-name-sort-ascending-indicator" class="fa fa-sort-amount-asc"></i>
-                            <i id="station-list-station-name-sort-descending-indicator" class="fa fa-sort-amount-desc hidden"></i>
-                            <select id="station-list-station-identifier-select" class="hidden">
-                                <option disabled="disabled" selected="selected">{{{stationIdentifierSelectDefaultOption}}}</option>
-                            </select>
+                            <a id="station-list-station-name-sort-button">{{resource "stationNameHeaderText"}}</a>
                         </span>
                     </div>
                     <div class="small-4 columns">
                         <span>
-                            <a id="station-list-region-sort-button" href="#" data-sort-direction>{{{regionHeaderText}}}</a>
-                            <i id="station-list-region-sort-ascending-indicator" class="fa fa-sort-amount-asc hidden"></i>
-                            <i id="station-list-region-sort-descending-indicator" class="fa fa-sort-amount-desc hidden"></i>
+                            <a id="station-list-region-name-sort-button">{{resource "regionNameHeaderText"}}</a>
                         </span>
                     </div>
                     <div class="small-4 columns">
                         <span>
-                            <a id="station-list-area-sort-button" href="#" data-sort-direction>{{{areaHeaderText}}}</a>
-                            <i id="station-list-area-sort-ascending-indicator" class="fa fa-sort-amount-asc hidden"></i>
-                            <i id="station-list-area-sort-descending-indicator" class="fa fa-sort-amount-desc hidden"></i>
+                            <a id="station-list-area-name-sort-button">{{resource "areaNameHeaderText"}}</a>
                         </span>
                     </div>
                 </div>
                 <div class="row collapse view-status hidden">
                     <div class="small-12 columns">
-                        <span class="view-message">{{{loadingMessage}}}</span>
-                        <img src="{{loadingIconSrc}}" class="view-loading" />
+                        <span class="view-message">{{resource "stationList.loadingMessage"}}</span>
+                        <img src="{{resource 'loadingIconSrc'}}" class="view-loading" />
                     </div>
                 </div>
                 <div class="row collapse view-alerts">

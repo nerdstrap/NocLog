@@ -7,17 +7,9 @@ define(function (require) {
         CompositeView = require('views/CompositeView'),
         AppEventNamesEnum = require('enums/AppEventNamesEnum'),
         appEvents = require('events'),
-        appResources = require('resources'),
         template = require('hbs!templates/Footer');
 
     var FooterView = CompositeView.extend({
-        resources: function (culture) {
-            return {
-                'logoImageSrc': appResources.getResource('logoImageSrc'),
-                'logoImageSvgSrc': appResources.getResource('logoImageSvgSrc'),
-                'logoImageAlt': appResources.getResource('logoImageAlt')
-            };
-        },
         initialize: function (options) {
             console.trace('FooterView.initialize');
             options || (options = {});
@@ -27,8 +19,8 @@ define(function (require) {
             console.trace('FooterView.render()');
             var currentContext = this;
 
-            var renderModel = _.extend({}, this.resources(), this.model);
-            this.$el.html(template(renderModel));
+            var renderModel = _.extend({}, currentContext.model);
+            currentContext.$el.html(template(renderModel));
 
             return this;
         }

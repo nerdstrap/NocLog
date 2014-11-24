@@ -8,22 +8,10 @@ define(function(require) {
             CompositeView = require('views/CompositeView'),
             AppEventNamesEnum = require('enums/AppEventNamesEnum'),
             appEvents = require('events'),
-            appResources = require('resources'),
             template = require('hbs!templates/StationEntryLogHistoryListItem');
 
     var StationEntryLogHistoryListItemView = CompositeView.extend({
         tagName: 'li',
-        resources: function(culture) {
-            return {
-                hazardIconSrc: appResources.getResource('hazardIconSrc'),
-                hazardIconSvgSrc: appResources.getResource('hazardIconSvgSrc'),
-                hazardIconAlt: appResources.getResource('hazardIconAlt'),
-                checkedInIconSvgSrc: appResources.getResource('checkedInIconSvgSrc'),
-                checkedInIconAlt: appResources.getResource('checkedInIconAlt'),
-                checkOutButtonText: appResources.getResource('checkOutButtonText'),
-                viewCheckInButtonText: appResources.getResource('viewCheckInButtonText')
-            };
-        },
         initialize: function(options) {
             console.trace('StationEntryLogHistoryListItemView.initialize');
             options || (options = {});
@@ -33,7 +21,7 @@ define(function(require) {
             console.trace('StationEntryLogHistoryListItemView.render()');
             var currentContext = this;
 
-            var renderModel = _.extend({}, currentContext.resources(), currentContext.model.attributes);
+            var renderModel = _.extend({}, currentContext.model.attributes);
             currentContext.$el.html(template(renderModel));
             this.updateThirdPartyStatus()
             return this;
@@ -43,7 +31,6 @@ define(function(require) {
             'click .personnel-name-link': 'goToPersonnelWithId',
             'click .elevated-functions-toggle': 'toggleElevatedFunctions',
             'click .view-station-entry-log-link': 'goToStationEntryLogWithId'
-                    /*'click .station-entry-log-link': 'goToStationEntryLogWithId'*/
         },
         updateThirdPartyStatus: function() {
             if (this.model.get('thirdParty')) {

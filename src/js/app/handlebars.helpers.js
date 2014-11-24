@@ -10,7 +10,7 @@ define(function(require) {
 
     helpers.withDefault = function(value, defaultValue, options) {
         if (value) {
-            if (options.safeString) {
+            if (options && options.safeString) {
                 return new Handlebars.SafeString(value);
             } else {
                 return value;
@@ -18,6 +18,12 @@ define(function(require) {
         } else {
             return new Handlebars.SafeString(defaultValue);
         }
+    };
+    helpers.resource = function(key) {
+        if (typeof key === 'object') {
+            key = key.toString();
+        }
+        return new Handlebars.SafeString(utils.getResource(key));
     };
     helpers.cleanPhone = function(phone) {
         if (phone) {

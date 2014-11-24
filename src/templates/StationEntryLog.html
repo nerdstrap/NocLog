@@ -1,34 +1,32 @@
 <div class="station-entry-log-view">
     <fieldset class="edit-station-entry-log-view">
-        <legend class="viewTitleText">{{{viewTitleText}}}</legend>
+        <legend class="viewTitleText">{{resource "stationEntryLog.viewTitleText"}}</legend>
 
         <div class="row collapse">
             <div class="row collapse view-status">
-                <!--Loading icon-->
                 <div class="small-12 columns">
-                    <span class="view-message">{{{loadingMessage}}}</span>
-                    <img src="{{loadingIconSrc}}" class="view-loading" />
+                    <span class="view-message">{{resource "stationEntryLog.loadingMessage"}}</span>
+                    <img src="{{resource 'loadingIconSrc'}}" class="view-loading" />
                 </div>
             </div>
-            <div class="error view-error hidden">
-                <!-- ERROR Message -->
-                <span class="text-detail">{{errorMessage}}</span>
+            <div class="error view-alert hidden">
+                <span class="text-detail"></span>
             </div>
 
             <div class="small-1 large-1 columns">
                 <div id="user-label-container">
-                    <label for="edit-station-entry-log-user-id-label">{{{userIdHeaderText}}}</label>
+                    <label for="edit-station-entry-log-user-id">{{resource "userIdHeaderText"}}</label>
                 </div>
                 <div id="third-party-user-label-container" class="hidden">
-                    <label for="edit-station-entry-log-company-name-label">{{{companyNameHeaderText}}}</label>
+                    <label for="edit-station-entry-log-company-name">{{resource "companyNameHeaderText"}}</label>
                 </div>
             </div>
             <div class="small-2 large-4 columns">
                 <div id="user-container">
-                    <input disabled id="edit-station-entry-log-user-id" name="userId" type="text" placeholder="{{{userIdHeaderText}}}" />
+                    <input disabled id="edit-station-entry-log-user-id" name="userId" type="text" placeholder="{{resource 'userIdHeaderText'}}" />
                 </div>
                 <div id="third-party-user-container" class="hidden">
-                    <input disabled id="edit-station-entry-log-company-name" name="companyName" type="text" placeholder="{{{companyNameHeaderText}}}" />
+                    <input disabled id="edit-station-entry-log-company-name" name="companyName" type="text" placeholder="{{resource 'companyNameHeaderText'}}" />
                 </div>
             </div>
 
@@ -36,29 +34,29 @@
                 &nbsp;
             </div>
             <div class="small-2 large-2 columns">
-                <input disabled id="edit-station-entry-log-first-name" name="firstName" type="text" placeholder="{{{firstNameHeaderText}}}" />
+                <input disabled id="edit-station-entry-log-first-name" name="firstName" type="text" placeholder="{{resource 'firstNameHeaderText'}}" />
             </div>
             <div class="small-2 large-2 columns">
-                <input disabled id="edit-station-entry-log-middle-initial" name="middleInitial" type="text" placeholder="{{{middleInitialHeaderText}}}" />
+                <input disabled id="edit-station-entry-log-middle-initial" name="middleInitial" type="text" placeholder="{{resource 'middleInitialHeaderText'}}" />
             </div>
             <div class="small-2 large-2 columns">
-                <input disabled id="edit-station-entry-log-last-name" name="lastName" type="text" placeholder="{{{lastNameHeaderText}}}" />
+                <input disabled id="edit-station-entry-log-last-name" name="lastName" type="text" placeholder="{{resource 'lastNameHeaderText'}}" />
             </div>
         </div>
 
         <div class="row collapse">
             <div class="small-1 large-1 columns">
-                <label for="edit-station-entry-log-contact-number-label">{{{contactNumberHeaderText}}}
+                <label for="edit-station-entry-log-contact-number">{{resource "contactNumberHeaderText"}}
                 </label>
             </div>
             <div class="small-2 large-2 columns">
-                <input disabled id="edit-station-entry-log-contact-number" name="contactNumber" type="text" placeholder="{{{contactNumberHeaderText}}}" />
+                <input disabled id="edit-station-entry-log-contact-number" name="contactNumber" type="text" placeholder="{{resource 'contactNumberHeaderText'}}" />
             </div>
             <div class="small-3 large-3 columns">
                 &nbsp;
             </div>
             <div class="small-3 large-3 columns">
-                <input disabled id="edit-station-entry-log-email" name="email" type="text" placeholder="{{{emailHeaderText}}}" />
+                <input disabled id="edit-station-entry-log-email" name="email" type="text" placeholder="{{resource 'emailHeaderText'}}" />
             </div>
             <div class="small-3 large-3 columns">
                 &nbsp;
@@ -67,7 +65,7 @@
 
         <div class="row collapse">
             <div class="small-1 large-1 columns">
-                <label for="edit-station-entry-log-station-id-label">{{{stationIdHeaderText}}}</label>
+                <label for="edit-station-entry-log-station-id">{{resource "stationIdHeaderText"}}</label>
             </div>
             <div class="small-4 large-4 columns">
                 <span id="edit-station-entry-log-station-id">{{withDefault stationId "&nbsp;"}}</span>
@@ -76,10 +74,10 @@
                 &nbsp;
             </div>
             <div class="small-1 large-1 columns">
-                <label for="edit-station-entry-log-in-time-label">{{{checkInTimeHeaderText}}}</label>
+                <label for="edit-station-entry-log-in-time">{{resource "checkInTimeHeaderText"}}</label>
             </div>
             <div class="small-2 large-2 columns">
-                <span id="edit-station-entry-log-in-time">{{{formatDateWithDefault inTime "%D %I:%M %p" "&nbsp;"}}}</span>
+                <span id="edit-station-entry-log-in-time">{{resource "formatDateWithDefault inTime "%D %I:%M %p" "&nbsp;"}}</span>
             </div>
             <div class="small-3 large-3 columns">
                 &nbsp;
@@ -89,23 +87,23 @@
         <!--Old Duration-->
         <div class="row collapse">
             <div class="small-1 large-1 columns">
-                <label for="edit-station-entry-log-purpose-label">{{{purposeHeaderText}}}
+                <label for="edit-station-entry-log-purpose">{{resource "purposeHeaderText"}}
                 </label>
             </div>
             <div class="small-2 large-2 columns">
                 <span id="edit-station-entry-log-purpose">{{withDefault purpose "&nbsp;"}}</span>
             </div>
             <div class="small-1 large-1 columns">
-                <label for="edit-station-entry-log-duration-label">{{{durationHeaderText}}}</label>
+                <label for="edit-station-entry-log-duration">{{resource "durationHeaderText"}}</label>
             </div>
             <div class="small-2 large-2 columns">
-                <span id="edit-station-entry-log-duration-old">{{{withDefault duration "&nbsp;"}}}</span>
+                <span id="edit-station-entry-log-duration-old">{{resource "withDefault duration "&nbsp;"}}</span>
             </div>
             <div class="small-1 large-1 columns">
-                <label for="edit-station-entry-log-expected-out-time-old-label">{{{expectedOutTimeHeaderText}}}</label>
+                <label for="edit-station-entry-log-expected-out-time-old">{{resource "expectedOutTimeHeaderText"}}</label>
             </div>
             <div class="small-2 large-2 columns">
-                <span id="edit-station-entry-log-expected-out-time-old">{{{expectedOutTimeHeaderText}}}</span>
+                <span id="edit-station-entry-log-expected-out-time-old">{{resource "expectedOutTimeHeaderText"}}</span>
             </div>
             <div class="small-3 large-3 columns">
                 &nbsp;
@@ -120,18 +118,18 @@
                 &nbsp;
             </div>
             <div class="small-1 large-1 columns">
-                <label for="edit-station-entry-log-duration-label">{{{durationHeaderTextNew}}}</label>
+                <label for="edit-station-entry-log-duration">{{resource "durationHeaderTextNew}}</label>
             </div>
             <div class="small-2 large-2 columns">
                 <select id="edit-station-entry-log-duration">
-                    <option disabled="disabled" selected="selected" value="">{{{withDefault duration "&nbsp;"}}}</option>
+                    <option disabled="disabled" selected="selected" value="">{{resource "withDefault duration "&nbsp;"}}</option>
                 </select>
             </div>
             <div class="small-1 large-1 columns">
-                <label for="edit-station-entry-log-expected-out-time-label">{{{expectedOutTimeHeaderTextNew}}}</label>
+                <label for="edit-station-entry-log-expected-out-time">{{resource "expectedOutTimeHeaderTextNew}}</label>
             </div>
             <div class="small-2 large-2 columns">
-                <span id="edit-station-entry-log-expected-out-time">{{{expectedOutTimeHeaderTextNew}}}</span>
+                <span id="edit-station-entry-log-expected-out-time">{{resource "expectedOutTimeHeaderTextNew}}</span>
             </div>
             <div class="small-3 large-3 columns">
                 &nbsp;
@@ -146,16 +144,16 @@
                 &nbsp;
             </div>
             <div class="small-1 large-1 columns">
-                <label for="view-station-entry-log-duration-label">{{{actualDurationHeaderText}}}</label>
+                <label for="view-station-entry-log-actual-duration">{{resource "actualDurationHeaderText"}}</label>
             </div>
             <div class="small-2 large-2 columns">
-                <span id="view-station-entry-log-actual-duration">{{{withDefault actualDuration "&nbsp;"}}}</span>
+                <span id="view-station-entry-log-actual-duration">{{resource "withDefault actualDuration "&nbsp;"}}</span>
             </div>
             <div class="small-1 large-1 columns">
-                <label for="view-station-entry-log-actual-out-time-label">{{{actualOutTimeHeaderText}}}</label>
+                <label for="view-station-entry-log-actual-out-time">{{resource "actualOutTimeHeaderText"}}</label>
             </div>
             <div class="small-2 large-2 columns">
-                <span id="view-station-entry-log-actual-out-time">{{{formatDateWithDefault outTime "%D %I:%M %p" "&nbsp;"}}}</span>
+                <span id="view-station-entry-log-actual-out-time">{{resource "formatDateWithDefault outTime "%D %I:%M %p" "&nbsp;"}}</span>
             </div>
             <div class="small-3 large-3 columns">
                 &nbsp;
@@ -164,13 +162,13 @@
 
         <div class="row collapse">
             <div class="small-1 large-1 columns">
-                <label for="edit-station-entry-log-additional-info-label">{{{additionalInfoHeaderText}}}</label>
+                <label for="edit-station-entry-log-additional-info">{{resource "additionalInfoHeaderText"}}</label>
             </div>
             <div class="small-5 large-5 columns">
-                <textarea disabled id="edit-station-entry-log-additional-info" name="additionalInfo" placeholder="{{{withDefault additionalInfo "&nbsp;"}}}" rows="2" ></textarea>
+                <textarea disabled id="edit-station-entry-log-additional-info" name="additionalInfo" rows="2" >{{resource "withDefault additionalInfo "&nbsp;"}}</textarea>
             </div>
             <div class="small-1 large-1 columns">
-                <label for="edit-station-entry-log-station-has-crew-label">{{{hasCrewHeaderText}}}</label>
+                <label for="edit-station-entry-log-has-crew">{{resource "hasCrewHeaderText"}}</label>
             </div>
             <div class="small-5 large-5 columns">
                 <span id="edit-station-entry-log-has-crew">{{hasCrew}}</span>
@@ -183,8 +181,8 @@
                 &nbsp;
             </div>
             <div class="large-6 columns">
-                <a id="edit-station-entry-log-save-button" class="button radius hidden">{{{saveButtonText}}}</a>
-                <a id="edit-station-entry-log-cancel-button" class="button radius secondary">{{{cancelButtonText}}}</a>
+                <a id="edit-station-entry-log-save-button" class="button radius hidden">{{resource "saveButtonText"}}</a>
+                <a id="edit-station-entry-log-cancel-button" class="button radius secondary">{{resource "cancelButtonText"}}</a>
             </div>
         </div>
 

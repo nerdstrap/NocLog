@@ -8,20 +8,10 @@ define(function(require) {
             CompositeView = require('views/CompositeView'),
             AppEventNamesEnum = require('enums/AppEventNamesEnum'),
             appEvents = require('events'),
-            appResources = require('resources'),
             template = require('hbs!templates/StationListItem');
 
     var StationListItemView = CompositeView.extend({
         tagName: 'li',
-        resources: function(culture) {
-            return {
-                hazardIconSrc: appResources.getResource('hazardIconSrc'),
-                hazardIconSvgSrc: appResources.getResource('hazardIconSvgSrc'),
-                hazardIconAlt: appResources.getResource('hazardIconAlt'),
-                checkedInIconSvgSrc: appResources.getResource('checkedInIconSvgSrc'),
-                checkedInIconAlt: appResources.getResource('checkedInIconAlt')
-            };
-        },
         initialize: function(options) {
             console.trace('StationListItemView.initialize');
             options || (options = {});
@@ -31,7 +21,7 @@ define(function(require) {
             console.trace('StationListItemView.render()');
             var currentContext = this;
 
-            var renderModel = _.extend({}, currentContext.resources(), currentContext.model.attributes);
+            var renderModel = _.extend({}, currentContext.model.attributes);
             currentContext.$el.html(template(renderModel));
 
             return this;

@@ -1,8 +1,8 @@
 {{#if defaultOption}}
-    <option selected="selected" value="">{{{defaultOption}}}</option>
+    <option selected="selected" value="">{{defaultOption}}</option>
 {{/if}}
 {{#if options}}
     {{~#each options}}
-        <option value="{{value}}">{{{text}}}</option>
+        <option value="{{value}}">{{text}}</option>
     {{~/each}}
 {{/if}}

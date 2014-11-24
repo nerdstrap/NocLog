@@ -8,29 +8,22 @@ define(function(require) {
             AppEventNamesEnum = require('enums/AppEventNamesEnum'),
             UserRolesEnum = require('enums/UserRolesEnum'),
             appEvents = require('events'),
-            appResources = require('resources'),
             template = require('hbs!templates/StationEntryLogListItem');
 
     var StationEntryLogListItemView = CompositeView.extend({
         tagName: 'li',
-        resources: function(culture) {
-            return {
-                checkOutButtonText: appResources.getResource('checkOutButtonText'),
-                editCheckInButtonText: appResources.getResource('editCheckInButtonText'),
-                viewCheckInButtonText: appResources.getResource('viewCheckInButtonText')
-            };
-        },
         initialize: function(options) {
             console.trace('StationEntryLogListItemView.initialize');
             options || (options = {});
             this.dispatcher = options.dispatcher || this;
+
             this.userRole = options.userRole;
             this.listenTo(this.model, "destroy", this.onCheckOutSuccess);
         },
         render: function() {
             console.trace('StationEntryLogListItemView.render()');
             var currentContext = this;
-            var renderModel = _.extend({}, currentContext.resources(), currentContext.model.attributes);
+            var renderModel = _.extend({}, currentContext.model.attributes);
             currentContext.$el.html(template(renderModel));
 
             this.updateCheckOutStatus();

@@ -9,44 +9,17 @@ define(function(require) {
             CompositeView = require('views/CompositeView'),
             AppEventNamesEnum = require('enums/AppEventNamesEnum'),
             appEvents = require('events'),
-            appResources = require('resources'),
             utils = require('utils'),
             PersonnelModel = require('models/PersonnelModel'),
             StationEntryLogModel = require('models/StationEntryLogModel'),
             template = require('hbs!templates/NewStationEntryLog'),
             filterTemplate = require('hbs!templates/Filter');
     var NewStationEntryLog = CompositeView.extend({
-        resources: function(culture) {
-            return {
-                viewTitleText: appResources.getResource('NewStationEntryLogView.viewTitleText'),
-                thirdPartyHeaderText: appResources.getResource('NewStationEntryLogView.thirdPartyHeaderText'),
-                stationIdDefaultOption: appResources.getResource('NewStationEntryLogView.stationIdDefaultOption'),
-                purposeDefaultOption: appResources.getResource('NewStationEntryLogView.purposeDefaultOption'),
-                durationDefaultOption: appResources.getResource('NewStationEntryLogView.durationDefaultOption'),
-                hasCrewYesOption: appResources.getResource('NewStationEntryLogView.hasCrewYesOption'),
-                hasCrewNoOption: appResources.getResource('NewStationEntryLogView.hasCrewNoOption'),
-                stationIdHeaderText: appResources.getResource('NewStationEntryLogView.stationIdHeaderText'),
-                userIdHeaderText: appResources.getResource('NewStationEntryLogView.userIdHeaderText'),
-                companyNameHeaderText: appResources.getResource('NewStationEntryLogView.companyNameHeaderText'),
-                firstNameHeaderText: appResources.getResource('NewStationEntryLogView.firstNameHeaderText'),
-                middleInitialHeaderText: appResources.getResource('NewStationEntryLogView.middleInitialHeaderText'),
-                lastNameHeaderText: appResources.getResource('NewStationEntryLogView.lastNameHeaderText'),
-                contactNumberHeaderText: appResources.getResource('NewStationEntryLogView.contactNumberHeaderText'),
-                emailHeaderText: appResources.getResource('NewStationEntryLogView.emailHeaderText'),
-                purposeHeaderText: appResources.getResource('NewStationEntryLogView.purposeHeaderText'),
-                durationHeaderText: appResources.getResource('NewStationEntryLogView.durationHeaderText'),
-                expectedOutTimeHeaderText: appResources.getResource('NewStationEntryLogView.expectedOutTimeHeaderText'),
-                purposeOtherHeaderText: appResources.getResource('NewStationEntryLogView.purposeOtherHeaderText'),
-                additionalInfoHeaderText: appResources.getResource('NewStationEntryLogView.additionalInfoHeaderText'),
-                hasCrewHeaderText: appResources.getResource('NewStationEntryLogView.hasCrewHeaderText'),
-                saveButtonText: appResources.getResource('NewStationEntryLogView.saveButtonText'),
-                cancelButtonText: appResources.getResource('NewStationEntryLogView.cancelButtonText')
-            };
-        },
         initialize: function(options) {
             console.trace('NewStationEntryLog.initialize');
             options || (options = {});
             this.dispatcher = options.dispatcher || this;
+
             this.stationIdentifierCollection = options.stationIdentifierCollection;
             this.purposeCollection = options.purposeCollection;
             this.durationCollection = options.durationCollection;
@@ -69,7 +42,7 @@ define(function(require) {
 
             validation.unbind(currentContext);
 
-            var renderModel = _.extend({}, currentContext.resources(), currentContext.model.attributes);
+            var renderModel = _.extend({}, currentContext.model.attributes);
             currentContext.$el.html(template(renderModel));
 
             currentContext.addAllStationIdentifiers();
@@ -86,7 +59,7 @@ define(function(require) {
         addAllStationIdentifiers: function() {
             var currentContext = this;
             var filterRenderModel = {
-                defaultOption: currentContext.resources().stationIdDefaultOption,
+                defaultOption: utils.getResource('stationNameFilterDefaultOption'),
                 options: utils.getFilterOptions(currentContext.stationIdentifierCollection.models, 'stationId', 'stationName')
             };
             this.$('#new-station-entry-log-station-id').html(filterTemplate(filterRenderModel));
@@ -94,7 +67,7 @@ define(function(require) {
         addAllPurposes: function() {
             var currentContext = this;
             var filterRenderModel = {
-                defaultOption: currentContext.resources().purposeDefaultOption,
+                defaultOption: utils.getResource('purposeFilterDefaultOption'),
                 options: utils.getFilterOptions(currentContext.purposeCollection.models, 'itemAdditionalData', 'itemText')
             };
             this.$('#new-station-entry-log-purpose').html(filterTemplate(filterRenderModel));
@@ -102,7 +75,7 @@ define(function(require) {
         addAllDurations: function() {
             var currentContext = this;
             var filterRenderModel = {
-                defaultOption: currentContext.resources().durationDefaultOption,
+                defaultOption: utils.getResource('durationFilterDefaultOption'),
                 options:  utils.getFilterOptions(currentContext.durationCollection.models, 'itemValue', 'itemText')
             };
             this.$('#new-station-entry-log-duration').html(filterTemplate(filterRenderModel));

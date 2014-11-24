@@ -1,32 +1,32 @@
 <div class="station-entry-log-list-view">
     <div class="row collapse">
         <div class="small-12 columns">
-            <h3>{{listViewTitleText}}</h3>
+            <h3>{{resource "openStationEntryLogList.viewTitleText"}}</h3>
         </div>
     </div>
     <div class="row collapse">
         <div class="small-2 columns">
             <select id="station-entry-log-list-status-filter">
-                <option value="{{{statusFilterOpenOption}}}">{{{statusFilterOpenOption}}}</option>
-                <option value="{{{statusFilterExpiredOption}}}">{{{statusFilterExpiredOption}}}</option>
+                <option value="{{resource 'statusFilterOpenOption'}}">{{resource "statusFilterOpenOption"}}</option>
+                <option value="{{resource 'statusFilterExpiredOption'}}">{{resource "statusFilterExpiredOption"}}</option>
             </select>
         </div>
         <div class="small-2 columns">
             <select id="station-entry-log-list-region-filter">
-                <option disabled="disabled" selected="selected">{{{regionFilterDefaultOption}}}</option>
+                <option disabled="disabled" selected="selected">{{resource "regionNameFilterDefaultOption"}}</option>
             </select>
         </div>
         <div class="small-2 columns">
             <select id="station-entry-log-list-area-filter">
-                <option disabled="disabled" selected="selected">{{{areaFilterDefaultOption}}}</option>
+                <option disabled="disabled" selected="selected">{{resource "areaNameFilterDefaultOption"}}</option>
             </select>
         </div>
         <div class="small-3 columns">
-            <a id="station-entry-log-list-refresh-list-button" class="button radius">{{{refreshListButtonText}}}</a>
-            <a id="station-entry-log-list-reset-list-options-button" class="button radius secondary">{{{resetListOptionsButtonText}}}</a>
+            <a id="station-entry-log-list-refresh-list-button" class="button radius">{{resource "refreshButtonText"}}</a>
+            <a id="station-entry-log-list-reset-list-options-button" class="button radius secondary">{{resource "resetButtonText"}}</a>
         </div>
         <div class="small-3 columns">
-            <a id="new-station-entry-log-button" class="button radius alert hidden">{{{newStationEntryLogButtonText}}}</a>
+            <a id="new-station-entry-log-button" class="button radius alert hidden">{{resource "newCheckInButtonText"}}</a>
         </div>
     </div>
     <div class="row collapse">
@@ -63,39 +63,39 @@
             <ol id="station-entry-log-list-header">
                 <div class="row collapse list-header-item-view">
                     <div class="small-1 columns">
-                        <span>{{{stationNameHeaderText}}}</span>
+                        <span>{{resource "stationNameHeaderText"}}</span>
                     </div>
                     <div class="small-1 columns">
-                        <span>{{{personnelNameHeaderText}}}</span>
+                        <span>{{resource "userNameHeaderText"}}</span>
                     </div>
                     <div class="small-1 columns">
-                        <span>{{{contactHeaderText}}}</span>
+                        <span>{{resource "contactNumberHeaderText"}}</span>
                     </div>
                     <div class="small-2 columns">
-                        <span>{{{inTimeHeaderText}}}</span>
+                        <span>{{resource "inTimeHeaderText"}}</span>
                     </div>
                     <div class="small-2 columns">
                         <span>
-                            <a id="station-entry-log-list-expected-out-time-sort-button" href="#" data-sort-direction="1">{{{expectedOutTimeHeaderText}}}</a>
+                            <a id="station-entry-log-list-expected-out-time-sort-button" href="#" data-sort-direction="1">{{resource "expectedOutTimeHeaderText"}}</a>
                             <i id="station-entry-log-list-out-time-sort-ascending-indicator" class="fa fa-sort-amount-asc"></i>
                         </span>
                     </div>
                     <div class="small-1 columns">
-                        <span>{{{purposeHeaderText}}}</span>
+                        <span>{{resource "purposeHeaderText"}}</span>
                     </div>
                     <div class="small-2 columns">
-                        <span>{{{additionalInfoHeaderText}}}</span>
+                        <span>{{resource "additionalInfoHeaderText"}}</span>
                     </div>
                     <div class="small-1 columns">
                         <span>
-                            <a id="station-entry-log-list-region-sort-button" href="#" data-sort-direction>{{{regionHeaderText}}}</a>
+                            <a id="station-entry-log-list-region-sort-button" href="#" data-sort-direction>{{resource "regionNameHeaderText"}}</a>
                             <i id="station-entry-log-list-region-sort-ascending-indicator" class="fa fa-sort-amount-asc hidden"></i>
                             <i id="station-entry-log-list-region-sort-descending-indicator" class="fa fa-sort-amount-desc hidden"></i>
                         </span>
                     </div>
                     <div class="small-1 columns">
                         <span>
-                            <a id="station-entry-log-list-area-sort-button" href="#" data-sort-direction>{{{areaHeaderText}}}</a>
+                            <a id="station-entry-log-list-area-sort-button" href="#" data-sort-direction>{{resource "areaNameHeaderText"}}</a>
                             <i id="station-entry-log-list-area-sort-ascending-indicator" class="fa fa-sort-amount-asc hidden"></i>
                             <i id="station-entry-log-list-area-sort-descending-indicator" class="fa fa-sort-amount-desc hidden"></i>
                         </span>
@@ -106,8 +106,8 @@
                 </div>
                 <div class="row collapse view-status hidden">
                     <div class="small-12 columns">
-                        <span class="view-message">{{{loadingMessage}}}</span>
-                        <img src="{{loadingIconSrc}}" class="view-loading" />
+                        <span class="view-message">{{resource "stationEntryLogList.loadingMessage"}}</span>
+                        <img src="{{resource 'loadingIconSrc'}}" class="view-loading" />
                     </div>
                 </div>
             </ol>

@@ -1,32 +1,22 @@
-define(function(require) {
+define(function (require) {
     'use strict';
 
     var $ = require('jquery'),
-            _ = require('underscore'),
-            Backbone = require('backbone'),
-            CompositeView = require('views/CompositeView'),
-            AppEventNamesEnum = require('enums/AppEventNamesEnum'),
-            appEvents = require('events'),
-            appResources = require('resources'),
-            template = require('hbs!templates/Header');
+        _ = require('underscore'),
+        Backbone = require('backbone'),
+        CompositeView = require('views/CompositeView'),
+        AppEventNamesEnum = require('enums/AppEventNamesEnum'),
+        UserRolesEnum = require('enums/UserRolesEnum'),
+        appEvents = require('events'),
+        template = require('hbs!templates/Header');
 
     var HeaderView = CompositeView.extend({
-        resources: function(culture) {
-            return {
-                'appTitleText': appResources.getResource('appTitleText'),
-                'goToStationEntryLogListButtonText': appResources.getResource('goToStationEntryLogListButtonText'),
-                'goToStationEntryLogHistoryListButtonText': appResources.getResource('goToStationEntryLogHistoryListButtonText'),
-                'goToStationListButtonText': appResources.getResource('goToStationListButtonText'),
-                'goToPersonnelListButtonText': appResources.getResource('goToPersonnelListButtonText'),
-                'goToReportListButtonText': appResources.getResource('goToReportListButtonText'),
-                'goToMaintainPurposesButtonText': appResources.getResource('goToMaintainPurposesButtonText'),
-            };
-        },
-        initialize: function(options) {
+        initialize: function (options) {
             console.trace('HeaderView.initialize');
             options || (options = {});
             this.dispatcher = options.dispatcher || this;
-            this.listenTo(appEvents, AppEventNamesEnum.showAdminHeaderButtons, this.showAdminHeaderButtons);
+
+            this.listenTo(appEvents, AppEventNamesEnum.userRoleUpdated, this.userRoleUpdated);
         },
         events: {
             'click #app-title-button': 'titleButtonClick',
@@ -36,52 +26,60 @@ define(function(require) {
             'click #go-to-personnel-list-button': 'goToPersonnelList',
             'click #go-to-maintain-purposes-button': 'goToMaintainPurposes'
         },
-        render: function() {
+        render: function () {
             console.trace('HeaderView.render');
             var currentContext = this;
 
-            var renderModel = _.extend({}, currentContext.resources(), currentContext.model);
+            var renderModel = _.extend({}, currentContext.model);
             currentContext.$el.html(template(renderModel));
 
             return this;
         },
-        showAdminHeaderButtons: function() {
-            this.$('#header-title-div').removeClass('small-7');
-            this.$('#header-title-div').addClass('small-6');
-            this.$('#go-to-personnel-link-div').removeClass('small-2');
-            this.$('#go-to-personnel-link-div').addClass('small-1');
-            this.$('#go-to-maintain-purposes-link-div').removeClass('hidden');
+        userRoleUpdated: function (userRole) {
+            if (userRole === UserRolesEnum.NocAdmin) {
+                this.$('#header-title-container').removeClass('large-7');
+                this.$('#header-title-container').addClass('large-6');
+                this.$('#go-to-personnel-link-container').removeClass('large-2');
+                this.$('#go-to-personnel-link-container').addClass('large-1');
+                this.$('#go-to-maintain-purposes-link-container').removeClass('hidden');
+            } else {
+                this.$('#header-title-container').removeClass('large-6');
+                this.$('#header-title-container').addClass('large-7');
+                this.$('#go-to-personnel-link-container').removeClass('large-1');
+                this.$('#go-to-personnel-link-container').addClass('large-2');
+                this.$('#go-to-maintain-purposes-link-container').addClass('hidden');
+            }
         },
-        titleButtonClick: function(event) {
+        titleButtonClick: function (event) {
             if (event) {
                 event.preventDefault();
             }
         },
-        goToStationEntryLogList: function(event) {
+        goToStationEntryLogList: function (event) {
             if (event) {
                 event.preventDefault();
             }
             this.dispatcher.trigger(AppEventNamesEnum.goToStationEntryLogList);
         },
-        goToStationList: function(event) {
+        goToStationList: function (event) {
             if (event) {
                 event.preventDefault();
             }
             this.dispatcher.trigger(AppEventNamesEnum.goToStationList);
         },
-        goToPersonnelList: function(event) {
+        goToPersonnelList: function (event) {
             if (event) {
                 event.preventDefault();
             }
             this.dispatcher.trigger(AppEventNamesEnum.goToPersonnelList);
         },
-        goToStationEntryLogHistoryList: function(event) {
+        goToStationEntryLogHistoryList: function (event) {
             if (event) {
                 event.preventDefault();
             }
             this.dispatcher.trigger(AppEventNamesEnum.goToStationEntryLogHistoryList);
         },
-        goToMaintainPurposes: function(event) {
+        goToMaintainPurposes: function (event) {
             if (event) {
                 event.preventDefault();
             }

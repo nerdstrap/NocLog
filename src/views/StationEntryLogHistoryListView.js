@@ -8,41 +8,16 @@ define(function(require) {
             StationEntryLogHistoryListItemView = require('views/StationEntryLogHistoryListItemView'),
             AppEventNamesEnum = require('enums/AppEventNamesEnum'),
             appEvents = require('events'),
-            appResources = require('resources'),
             utils = require('utils'),
             template = require('hbs!templates/StationEntryLogHistoryList'),
             filterTemplate = require('hbs!templates/Filter');
 
     var StationEntryLogHistoryListView = CompositeView.extend({
-        resources: function(culture) {
-            return {
-                loadingIconSrc: appResources.getResource('loadingIconSrc'),
-                loadingMessage: appResources.getResource('StationEntryLogHistoryListView.loadingMessage'),
-                errorMessage: appResources.getResource('StationEntryLogHistoryListView.errorMessage'),
-                infoMessage: appResources.getResource('StationEntryLogHistoryListView.infoMessage'),
-                listViewTitleText: appResources.getResource('StationEntryLogHistoryListView.listViewTitleText'),
-                stationIdentifierFilterDefaultOption: appResources.getResource('StationEntryLogHistoryListView.stationIdentifierFilterDefaultOption'),
-                regionFilterDefaultOption: appResources.getResource('StationEntryLogHistoryListView.regionFilterDefaultOption'),
-                areaFilterDefaultOption: appResources.getResource('StationEntryLogHistoryListView.areaFilterDefaultOption'),
-                refreshListButtonText: appResources.getResource('StationEntryLogHistoryListView.refreshListButtonText'),
-                resetListOptionsButtonText: appResources.getResource('StationEntryLogHistoryListView.resetListOptionsButtonText'),
-                stationNameHeaderText: appResources.getResource('StationEntryLogHistoryListView.stationNameHeaderText'),
-                personnelNameHeaderText: appResources.getResource('StationEntryLogHistoryListView.personnelNameHeaderText'),
-                contactHeaderText: appResources.getResource('StationEntryLogHistoryListView.contactHeaderText'),
-                inTimeHeaderText: appResources.getResource('StationEntryLogHistoryListView.inTimeHeaderText'),
-                outTimeHeaderText: appResources.getResource('StationEntryLogHistoryListView.outTimeHeaderText'),
-                purposeHeaderText: appResources.getResource('StationEntryLogHistoryListView.purposeHeaderText'),
-                additionalInfoHeaderText: appResources.getResource('StationEntryLogHistoryListView.additionalInfoHeaderText'),
-                regionHeaderText: appResources.getResource('StationEntryLogHistoryListView.regionHeaderText'),
-                areaHeaderText: appResources.getResource('StationEntryLogHistoryListView.areaHeaderText'),
-                startDateTimeHeaderText: appResources.getResource('StationEntryLogHistoryListView.startDateTimeHeaderText'),
-                endDateTimeHeaderText: appResources.getResource('StationEntryLogHistoryListView.endDateTimeHeaderText')
-            };
-        },
         initialize: function(options) {
             console.trace('StationEntryLogHistoryListView.initialize');
             options || (options = {});
             this.dispatcher = options.dispatcher || this;
+
             this.stationIdentifierCollection = options.stationIdentifierCollection || new Backbone.Collection();
             this.regionCollection = options.regionCollection || new Backbone.Collection();
             this.areaCollection = options.areaCollection || new Backbone.Collection();
@@ -57,7 +32,7 @@ define(function(require) {
             console.trace('StationEntryLogHistoryListView.render()');
             var currentContext = this;
 
-            var renderModel = _.extend({}, currentContext.resources(), currentContext.model);
+            var renderModel = _.extend({}, currentContext.model);
             currentContext.$el.html(template(renderModel));
 
             _.each(this.collection.models, this.addOne, this);
@@ -93,7 +68,7 @@ define(function(require) {
         addAllStationIdentifiers: function() {
             var currentContext = this;
             var filterRenderModel = {
-                defaultOption: currentContext.resources().stationIdentifierFilterDefaultOption,
+                defaultOption: utils.getResource('stationNameFilterDefaultOption'),
                 options: utils.getFilterOptions(currentContext.stationIdentifierCollection.models, 'stationId', 'stationName')
             };
             this.$('#station-entry-log-history-list-station-identifier-filter').html(filterTemplate(filterRenderModel));
@@ -101,7 +76,7 @@ define(function(require) {
         addAllRegions: function() {
             var currentContext = this;
             var filterRenderModel = {
-                defaultOption: currentContext.resources().regionFilterDefaultOption,
+                defaultOption: utils.getResource('regionNameFilterDefaultOption'),
                 options: utils.getFilterOptions(currentContext.regionCollection.models, 'regionName', 'regionName')
             };
             this.$('#station-entry-log-history-list-region-filter').html(filterTemplate(filterRenderModel));
@@ -109,7 +84,7 @@ define(function(require) {
         addAllAreas: function() {
             var currentContext = this;
             var filterRenderModel = {
-                defaultOption: currentContext.resources().areaFilterDefaultOption,
+                defaultOption: utils.getResource('areaNameFilterDefaultOption'),
                 options: utils.getFilterOptions(currentContext.areaCollection.models, 'areaName', 'areaName')
             };
             this.$('#station-entry-log-history-list-area-filter').html(filterTemplate(filterRenderModel));

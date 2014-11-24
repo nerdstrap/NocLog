@@ -9,54 +9,31 @@ define(function(require) {
             CompositeView = require('views/CompositeView'),
             PurposeListItemView = require('views/EditPurposeListItemView'),
             env = require('env'),
+        utils = require('utils'),
             AppEventNamesEnum = require('enums/AppEventNamesEnum'),
             appEvents = require('events'),
-            appResources = require('resources'),
             template = require('hbs!templates/EditPurposeList'),
             PurposeModel = require('models/PurposeModel'),
-//            purposeIdentifierListTemplate = require('hbs!templates/PurposeIdentifierList'),
             alertTemplate = require('hbs!templates/Alert');
 
     var EditPurposeListView = CompositeView.extend({
-        resources: function(culture) {
-            return {
-                loadingIconSrc: appResources.getResource('loadingIconSrc'),
-                loadingMessage: appResources.getResource('EditPurposeListView.loadingMessage'),
-                errorMessage: appResources.getResource('StationListView.errorMessage'),
-                infoMessage: appResources.getResource('StationListView.infoMessage'),
-                listViewTitleText: appResources.getResource('StationListView.listViewTitleText'),
-                refreshListButtonText: appResources.getResource('StationListView.refreshListButtonText'),
-                resetListOptionsButtonText: appResources.getResource('StationListView.resetListOptionsButtonText'),
-                regionFilterDefaultOption: appResources.getResource('StationListView.regionFilterDefaultOption'),
-                areaFilterDefaultOption: appResources.getResource('StationListView.areaFilterDefaultOption'),
-                stationIdentifierSelectDefaultOption: appResources.getResource('StationListView.stationIdentifierSelectDefaultOption'),
-                stationNameHeaderText: appResources.getResource('StationListView.stationNameHeaderText'),
-                regionHeaderText: appResources.getResource('StationListView.regionHeaderText'),
-                areaHeaderText: appResources.getResource('StationListView.areaHeaderText')
-            };
-        },
         initialize: function(options) {
             console.trace('EditPurposeListView.initialize');
             options || (options = {});
             this.dispatcher = options.dispatcher || this;
+
             this.purposeCollection = options.collection || new Backbone.Collection();
             this.durationCollection = options.durationCollection || new Backbone.Collection();
 
-//            this.listenTo(this.collection, 'reset', this.addAll);
-//            this.listenTo(this.collection, 'sort', this.addAll);
             this.listenTo(this.purposeCollection, 'reset', this.addAll);
-//            this.listenTo(this.durationCollection, 'reset', this.addAllDurations);
-
             this.listenTo(this, 'leave', this.onLeave);
         },
         render: function() {
             console.trace('EditPurposeListView.render()');
             var currentContext = this;
 
-            var renderModel = _.extend({}, currentContext.resources(), currentContext.model);
+            var renderModel = _.extend({}, currentContext.model);
             currentContext.$el.html(template(renderModel));
-
-//            _.each(this.collection.models, this.addOne, this);
 
             return this;
         },
@@ -72,7 +49,6 @@ define(function(require) {
         },
         checkUserRole: function() {
             var currentContext = this;
-//            currentContext.userRole = 'NOC_Read';
             if (currentContext.userRole === UserRolesEnum.NocAdmin) {
                 _.each(this.collection.models, this.addOne, this);
             } else {
@@ -94,14 +70,6 @@ define(function(require) {
                 durationCollection: currentContext.durationCollection
             });
             this.appendChildTo(purposeListItemView, '#purpose-list');
-        },
-        addAllPurposeIdentifiers: function() {
-            var currentContext = this;
-            var purposeIdentifierListRenderModel = {
-                defaultOption: currentContext.resources().purposeIdentifierSelectDefaultOption,
-                purposeIdentifiers: currentContext.purposeIdentifierCollection.models
-            };
-            this.$('#station-list-station-identifier-select').html(stationIdentifierListTemplate(stationIdentifierListRenderModel));
         },
         refreshPurposeList: function(event) {
             if (event) {

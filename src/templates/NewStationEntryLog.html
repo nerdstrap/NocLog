@@ -1,70 +1,70 @@
 <fieldset class="new-station-entry-log-view">
-    <legend>{{{viewTitleText}}}</legend>
+    <legend>{{resource "newStationEntryLog.viewTitleText"}}</legend>
     <div class="row collapse">
         <div class="small-1 large-1 columns">
-            <label>Type</label>
+            <label>{{resource "checkInTypeHeaderText"}}</label>
         </div>
         <div class="small-3 large-3 columns">
-            <span class="bolder top-align" id="new-station-entry-log-employee-label">Employee</span>
+            <span class="bolder top-align" id="new-station-entry-log-employee-label">{{resource "checkInEmployeeHeaderText"}}</span>
             <div class="switch radius tiny inline-block top-align">
                 <input id="new-station-entry-log-third-party-indicator" type="checkbox" name="thirdParty"/>
                 <label for="new-station-entry-log-third-party-indicator"></label>
             </div>
-            <span class="top-align" id="new-station-entry-log-third-party-label">{{{thirdPartyHeaderText}}}</span>
+            <span class="top-align" id="new-station-entry-log-third-party-label">{{resource "thirdPartyHeaderText"}}</span>
         </div>
         <div class="small-8 large-8 columns">
             &nbsp;
         </div>
     </div>
     <div class="row collapse">
-        <div class="error view-error hidden">
-            <span class="text-detail">{{errorMessage}}</span>
+        <div class="error view-alert hidden">
+            <span class="text-detail"></span>
         </div>
         <div class="small-1 large-1 columns">
             <div id="user-label-container">
-                <label for="new-station-entry-log-user-id">{{{userIdHeaderText}}}
+                <label for="new-station-entry-log-user-id">{{resource "userIdHeaderText"}}
                 </label>
             </div>
             <div id="third-party-user-label-container" class="hidden">
-                <label for="new-station-entry-log-company-name">{{{companyNameHeaderText}}}
+                <label for="new-station-entry-log-company-name">{{resource "companyNameHeaderText"}}
                 </label>
             </div>
         </div>
         <div class="small-2 large-4 columns">
             <div id="user-container">
-                <input id="new-station-entry-log-user-id" name="userId" type="text" placeholder="{{{userIdHeaderText}}}" />
-                <a id="new-station-entry-log-user-id-search-button" class="button radius tiny top-align">lookup</a>
+                <input id="new-station-entry-log-user-id" name="userId" type="text" placeholder="{{resource 'userIdHeaderText'}}" />
+                <a id="new-station-entry-log-user-id-search-button" class="button radius tiny top-align">{{resource "lookupUserIdHeaderText"}}</a>
             </div>
             <div id="third-party-user-container" class="hidden">
-                <input id="new-station-entry-log-company-name" name="companyName" type="text" placeholder="{{{companyNameHeaderText}}}" />
+                <input id="new-station-entry-log-company-name" name="companyName" type="text" placeholder="{{resource 'companyNameHeaderText'}}" />
             </div>
         </div>
         <div class="small-1 large-1 columns">
             &nbsp;
         </div>
         <div class="small-2 large-2 columns">
-            <input disabled id="new-station-entry-log-first-name" name="firstName" type="text" placeholder="{{{firstNameHeaderText}}}" />
+            <input disabled id="new-station-entry-log-first-name" name="firstName" type="text" placeholder="{{resource 'firstNameHeaderText'}}" />
         </div>
         <div class="small-2 large-2 columns">
-            <input disabled id="new-station-entry-log-middle-initial" name="middleInitial" type="text" placeholder="{{{middleInitialHeaderText}}}" />
+            <input disabled id="new-station-entry-log-middle-initial" name="middleInitial" type="text" placeholder="{{resource 'middleInitialHeaderText'}}" />
         </div>
         <div class="small-2 large-2 columns">
-            <input disabled id="new-station-entry-log-last-name" name="lastName" type="text" placeholder="{{{lastNameHeaderText}}}" />
+            <input disabled id="new-station-entry-log-last-name" name="lastName" type="text" placeholder="{{resource 'lastNameHeaderText'}}" />
         </div>
     </div>
     <div class="row collapse">
         <div class="small-1 large-1 columns">
-            <label for="new-station-entry-log-contact-number">{{{contactNumberHeaderText}}}
+            <label for="new-station-entry-log-contact-number">{{resource "contactNumberHeaderText"}}
             </label>
         </div>
         <div class="small-2 large-2 columns">
-            <input id="new-station-entry-log-contact-number" name="contactNumber" type="text" placeholder="{{{contactNumberHeaderText}}}" />
+            <input id="new-station-entry-log-contact-number" name="contactNumber" type="text" placeholder="{{resource 'contactNumberHeaderText'}}" />
         </div>
         <div class="small-3 large-3 columns">
             &nbsp;
         </div>
         <div class="small-3 large-3 columns">
-            <input disabled id="new-station-entry-log-email" name="email" type="text" placeholder="{{{emailHeaderText}}}" />
+            <input disabled id="new-station-entry-log-email" name="email" type="text" placeholder="{{resource 'emailHeaderText'}}" />
         </div>
         <div class="small-3 large-3 columns">
             &nbsp;
@@ -72,40 +72,40 @@
     </div>
     <div class="row collapse">
         <div class="small-1 large-1 columns">
-            <label for="new-station-entry-log-station-id">{{{stationIdHeaderText}}}
+            <label for="new-station-entry-log-station-id">{{resource "stationNameHeaderText"}}
             </label>
         </div>
         <div class="small-11 large-11 columns">
             <select id="new-station-entry-log-station-id" name="stationId">
-                <option disabled="disabled" selected="selected" value="">{{{stationIdDefaultOption}}}</option>
+                <option disabled="disabled" selected="selected" value="">{{resource "stationNameFilterDefaultOption"}}</option>
             </select>
         </div>
     </div>
     <div class="row collapse">
         <div class="small-1 large-1 columns">
-            <label for="new-station-entry-log-purpose">{{{purposeHeaderText}}}
+            <label for="new-station-entry-log-purpose">{{resource "purposeHeaderText"}}
             </label>
         </div>
         <div class="small-2 large-2 columns">
             <select id="new-station-entry-log-purpose" name="purpose" >
-                <option disabled="disabled" selected="selected" value="">{{{purposeDefaultOption}}}</option>
+                <option disabled="disabled" selected="selected" value="">{{resource "purposeFilterDefaultOption"}}</option>
             </select>
         </div>
         <div class="small-1 large-1 columns">
-            <label for="new-station-entry-log-duration">{{{durationHeaderText}}}
+            <label for="new-station-entry-log-duration">{{resource "durationHeaderText"}}
             </label>
         </div>
         <div class="small-2 large-2 columns">
             <select id="new-station-entry-log-duration" name="duration">
-                <option disabled="disabled" selected="selected" value="">{{{durationDefaultOption}}}</option>
+                <option disabled="disabled" selected="selected" value="">{{resource "durationFilterDefaultOption"}}</option>
             </select>
         </div>
         <div class="small-1 large-1 columns">
-            <label for="new-station-entry-log-expected-out-time">{{{expectedOutTimeHeaderText}}}
+            <label for="new-station-entry-log-expected-out-time">{{resource "expectedOutTimeHeaderText"}}
             </label>
         </div>
         <div class="small-2 large-2 columns">
-            <span id="new-station-entry-log-expected-out-time">{{{expectedOutTimeHeaderText}}}</span>
+            <span id="new-station-entry-log-expected-out-time">{{resource "expectedOutTimeHeaderText"}}</span>
         </div>
         <div class="small-3 large-3 columns">
             &nbsp;
@@ -114,33 +114,33 @@
     <div id="new-station-entry-log-purpose-other-container" class="hidden">
         <div class="row collapse">
             <div class="large-1 columns">
-                <label for="new-station-entry-log-purpose-other">{{{purposeOtherHeaderText}}}
+                <label for="new-station-entry-log-purpose-other">{{resource "purposeOtherHeaderText"}}
                 </label>
             </div>
             <div class="large-11 columns">
-                <textarea id="new-station-entry-log-purpose-other" name="purposeOther" placeholder="{{{purposeOtherHeaderText}}}" rows="2"></textarea>
+                <textarea id="new-station-entry-log-purpose-other" name="purposeOther" placeholder="{{resource 'purposeOtherHeaderText'}}" rows="2"></textarea>
             </div>
         </div>
     </div>
     <div class="row collapse">
         <div class="small-1 large-1 columns">
-            <label for="new-station-entry-log-additional-info">{{{additionalInfoHeaderText}}}
+            <label for="new-station-entry-log-additional-info">{{resource "additionalInfoHeaderText"}}
             </label>
         </div>
         <div class="small-5 large-5 columns">
-            <textarea id="new-station-entry-log-additional-info" name="additionalInfo" placeholder="{{{additionalInfoHeaderText}}}" rows="2" ></textarea>
+            <textarea id="new-station-entry-log-additional-info" name="additionalInfo" placeholder="{{resource 'additionalInfoHeaderText'}}" rows="2" ></textarea>
         </div>
         <div class="small-1 large-1 columns">
-            <label for="new-station-entry-log-station-has-crew">{{{hasCrewHeaderText}}}
+            <label for="new-station-entry-log-has-crew">{{resource "hasCrewHeaderText"}}
             </label>
         </div>
         <div class="small-5 large-5 columns">
-            <span class="bolder top-align" id="new-station-entry-log-has-crew-no">No</span>
+            <span class="bolder top-align" id="new-station-entry-log-has-crew-no">{{resource "noOptionText"}}</span>
             <div class="switch radius tiny inline-block top-align">
                 <input id="new-station-entry-log-has-crew" type="checkbox" name="hasCrew"/>
                 <label for="new-station-entry-log-has-crew"></label>
             </div>
-            <span class="top-align" id="new-station-entry-log-has-crew-yes">Yes</span>
+            <span class="top-align" id="new-station-entry-log-has-crew-yes">{{resource "yesOptionText"}}</span>
         </div>
 
     </div>
@@ -149,8 +149,8 @@
             &nbsp;
         </div>
         <div class="large-6 columns">
-            <a id="new-station-entry-log-save-button" class="button radius">{{{saveButtonText}}}</a>
-            <a id="new-station-entry-log-cancel-button" class="button radius secondary">{{{cancelButtonText}}}</a>
+            <a id="new-station-entry-log-save-button" class="button radius">{{resource "saveButtonText"}}</a>
+            <a id="new-station-entry-log-cancel-button" class="button radius secondary">{{resource "cancelButtonText"}}</a>
         </div>
     </div>
 </fieldset>

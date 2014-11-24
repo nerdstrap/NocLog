@@ -13,7 +13,6 @@ define(function(require) {
             env = require('env'),
             utils = require('utils'),
             appEvents = require('events'),
-            appResources = require('resources'),
             template = require('hbs!templates/StationEntryLogList'),
             filterTemplate = require('hbs!templates/Filter'),
             alertTemplate = require('hbs!templates/Alert');
@@ -21,39 +20,11 @@ define(function(require) {
     var autoRefreshInterval;
 
     var StationEntryLogListView = CompositeView.extend({
-        resources: function(culture) {
-            return {
-                additionalInfoHeaderText: appResources.getResource('StationEntryLogListView.additionalInfoHeaderText'),
-                areaFilterDefaultOption: appResources.getResource('StationEntryLogListView.areaFilterDefaultOption'),
-                areaHeaderText: appResources.getResource('StationEntryLogListView.areaHeaderText'),
-                checkInErrorMessage: appResources.getResource('checkInErrorMessage'),
-                checkInSucessMessage: appResources.getResource('checkInSucessMessage'),
-                checkOutErrorMessage: appResources.getResource('checkOutErrorMessage'),
-                checkOutSucessMessage: appResources.getResource('checkOutSucessMessage'),
-                contactHeaderText: appResources.getResource('StationEntryLogListView.contactHeaderText'),
-                errorMessage: appResources.getResource('StationEntryLogListView.errorMessage'),
-                expectedOutTimeHeaderText: appResources.getResource('StationEntryLogListView.expectedOutTimeHeaderText'),
-                inTimeHeaderText: appResources.getResource('StationEntryLogListView.inTimeHeaderText'),
-                infoMessage: appResources.getResource('StationEntryLogListView.infoMessage'),
-                listViewTitleText: appResources.getResource('StationEntryLogListView.listViewTitleText'),
-                loadingIconSrc: appResources.getResource('loadingIconSrc'),
-                loadingMessage: appResources.getResource('StationEntryLogListView.loadingMessage'),
-                newStationEntryLogButtonText: appResources.getResource('StationEntryLogListView.newStationEntryLogButtonText'),
-                personnelNameHeaderText: appResources.getResource('StationEntryLogListView.personnelNameHeaderText'),
-                purposeHeaderText: appResources.getResource('StationEntryLogListView.purposeHeaderText'),
-                refreshListButtonText: appResources.getResource('StationEntryLogListView.refreshListButtonText'),
-                regionFilterDefaultOption: appResources.getResource('StationEntryLogListView.regionFilterDefaultOption'),
-                regionHeaderText: appResources.getResource('StationEntryLogListView.regionHeaderText'),
-                resetListOptionsButtonText: appResources.getResource('StationEntryLogListView.resetListOptionsButtonText'),
-                stationNameHeaderText: appResources.getResource('StationEntryLogListView.stationNameHeaderText'),
-                statusFilterExpiredOption: appResources.getResource('StationEntryLogListView.statusFilterExpiredOption'),
-                statusFilterOpenOption: appResources.getResource('StationEntryLogListView.statusFilterOpenOption')
-            };
-        },
         initialize: function(options) {
             console.trace('StationEntryLogListView.initialize');
             options || (options = {});
             this.dispatcher = options.dispatcher || this;
+
             this.stationIdentifierCollection = options.stationIdentifierCollection;
             this.regionCollection = options.regionCollection;
             this.areaCollection = options.areaCollection;
@@ -77,7 +48,7 @@ define(function(require) {
             console.trace('StationEntryLogListView.render()');
             var currentContext = this;
 
-            var renderModel = _.extend({}, currentContext.resources(), currentContext.model);
+            var renderModel = _.extend({}, currentContext.model);
             currentContext.$el.html(template(renderModel));
 
             currentContext.setAutRefreshInterval();
@@ -119,7 +90,7 @@ define(function(require) {
         addAllStationIdentifiers: function() {
             var currentContext = this;
             var filterRenderModel = {
-                defaultOption: currentContext.resources().stationIdentifierSelectDefaultOption,
+                defaultOption: utils.getResource('stationNameFilterDefaultOption'),
                 options: utils.getFilterOptions(currentContext.stationIdentifierCollection.models, 'stationId', 'stationName')
             };
             this.$('#station-entry-log-list-station-identifier-select').html(filterTemplate(filterRenderModel));
@@ -127,7 +98,7 @@ define(function(require) {
         addAllRegions: function() {
             var currentContext = this;
             var filterRenderModel = {
-                defaultOption: currentContext.resources().regionFilterDefaultOption,
+                defaultOption: utils.getResource('regionNameFilterDefaultOption'),
                 options: utils.getFilterOptions(currentContext.regionCollection.models, 'regionName', 'regionName')
             };
             this.$('#station-entry-log-list-region-filter').html(filterTemplate(filterRenderModel));
@@ -135,7 +106,7 @@ define(function(require) {
         addAllAreas: function() {
             var currentContext = this;
             var filterRenderModel = {
-                defaultOption: currentContext.resources().areaFilterDefaultOption,
+                defaultOption: utils.getResource('areaNameFilterDefaultOption'),
                 options: utils.getFilterOptions(currentContext.areaCollection.models, 'areaName', 'areaName')
             };
             this.$('#station-entry-log-list-area-filter').html(filterTemplate(filterRenderModel));
@@ -382,7 +353,7 @@ define(function(require) {
             }
         },
         onCheckInSuccess: function(stationEntryLog) {
-            var checkInSucessMessage = this.resources().checkInSucessMessage;
+            var checkInSucessMessage = utils.getResource('checkInSucessMessage');
             if (stationEntryLog) {
                 var userName = stationEntryLog.userName;
                 var stationName = stationEntryLog.stationName;
@@ -391,7 +362,7 @@ define(function(require) {
             this.showSuccess(checkInSucessMessage);
         },
         onCheckOutSuccess: function(stationEntryLog) {
-            var checkOutSucessMessage = this.resources().checkOutSucessMessage;
+            var checkOutSucessMessage = utils.getResource('checkOutSucessMessage');
             if (stationEntryLog) {
                 var userName = stationEntryLog.userName;
                 var stationName = stationEntryLog.stationName;

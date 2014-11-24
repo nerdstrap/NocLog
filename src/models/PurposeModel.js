@@ -18,6 +18,9 @@ define(function (require) {
                 required: true,
                 length: 1
             },
+            itemAdditionalData: {
+                required: true
+            },
             itemOrder: {
                 required: true,
                 pattern: 'digits'

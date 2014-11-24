@@ -1,23 +1,23 @@
 <div class="personnel-station-entry-log-list-view">
     <div class="row collapse">
         <div class="large-12 columns">
-            <h5>{{listViewTitleText}}</h5>
+            <h5>{{resource "stationEntryLogList.viewTitleText"}}</h5>
         </div>
     </div>
     <div class="row collapse">
         <div class="large-2 columns">
-            <label>{{{stationNameHeaderText}}}</label>
+            <label>{{resource "stationNameHeaderText"}}</label>
             <select id="personnel-station-entry-log-list-station-filter">
-                <option disabled="disabled" selected="selected">{{{stationFilterDefaultOption}}}</option>
+                <option disabled="disabled" selected="selected">{{resource "stationNameFilterDefaultOption"}}</option>
             </select>
         </div>
         <div class="large-3 columns">
-            <label>{{{startDateTimeHeaderText}}}</label>
+            <label>{{resource "startDateTimeHeaderText"}}</label>
             <input id="personnel-station-entry-log-list-start-date-filter" type="date">
             <input id="personnel-station-entry-log-list-start-time-filter" type="time">
         </div>
         <div class="large-3 columns">
-            <label>{{{endDateTimeHeaderText}}}</label>
+            <label>{{resource "endDateTimeHeaderText"}}</label>
             <input id="personnel-station-entry-log-list-end-date-filter" type="date">
             <input id="personnel-station-entry-log-list-end-time-filter" type="time">
         </div>
@@ -27,14 +27,19 @@
     </div>
     <div class="row collapse">
         <div class="large-4 columns">
-            <a id="personnel-station-entry-log-list-refresh-button" class="button radius">{{{refreshButtonText}}}</a>
-            <a id="personnel-station-entry-log-list-reset-button"  data-days-to-add="-1" class="button radius secondary">{{{resetButtonText}}}</a>
+            <a id="personnel-station-entry-log-list-refresh-button" class="button radius">{{resource "refreshButtonText"}}</a>
+            <a id="personnel-station-entry-log-list-reset-button"  data-days-to-add="-1" class="button radius secondary">{{resource "resetButtonText"}}</a>
         </div>
         <div class="large-7 columns">
-            <a id="personnel-station-entry-log-list-refresh-fourteen-days-button" data-days-to-add="-14">show 2 weeks</a>&nbsp;||&nbsp;<a id="personnel-station-entry-log-list-refresh-thirty-days-button" data-days-to-add="-30">show 30 days</a>
+            <span>{{resource "showPreviousHeaderText"}}</span>
+            <a class="button tiny radius" id="personnel-station-entry-log-list-refresh-seven-days-button" data-days-to-add="-7">7</a>
+            <a class="button tiny radius" id="personnel-station-entry-log-list-refresh-fourteen-days-button" data-days-to-add="-14">14</a>
+            <a class="button tiny radius" id="personnel-station-entry-log-list-refresh-thirty-days-button" data-days-to-add="-30">30</a>
+            <a class="button tiny radius" id="personnel-station-entry-log-list-refresh-ninety-days-button" data-days-to-add="-90">90</a>
+            <span>{{resource "daysHeaderText"}}</span>
         </div>
         <div class="large-1 columns">
-            <a id="personnel-station-entry-log-list-export-button" class="button radius alert">{{{exportButtonText}}}</a>
+            <a id="personnel-station-entry-log-list-export-button" class="button radius alert">{{resource "exportButtonText"}}</a>
         </div>
     </div>
     <div class="row collapse">
@@ -43,49 +48,31 @@
                 <div class="row collapse list-header-item-view">
                     <div class="large-2 columns">
                         <span>
-                            <a id="station-name-sort-button" data-sort-attribute="stationName" data-sort-direction class="sort-button">{{{stationNameHeaderText}}}</a>
-                            <i class="fa"></i>
+                            <a id="station-name-sort-button" data-sort-attribute="stationName" data-sort-direction class="sort-button">{{resource "stationNameHeaderText"}}</a>
                         </span>
                     </div>
-                    <!--
-                    <div class="large-1 columns">
-                        <span>{{{personnelNameHeaderText}}}</span>
-                    </div>
-                    <div class="large-1 columns">
-                        <span>{{{contactNumberHeaderText}}}</span>
-                    </div>
-                    -->
                     <div class="large-2 columns">
-                        <span>{{{inTimeHeaderText}}}</span>
+                        <span>{{resource "inTimeHeaderText"}}</span>
                     </div>
                     <div class="large-2 columns">
                         <span>
-                            <a id="out-time-sort-button" data-sort-attribute="outTime" data-sort-direction="1" class="sort-button">{{{outTimeHeaderText}}}</a>
-                            <i class="fa fa-sort-amount-asc"></i>
+                            <a id="out-time-sort-button" data-sort-attribute="outTime" data-sort-direction="1" class="sort-button">{{resource "outTimeHeaderText"}}</a>
                         </span>
                     </div>
                     <div class="large-3 columns">
-                        <span>{{{purposeHeaderText}}}</span>
+                        <span>{{resource "purposeHeaderText"}}</span>
                     </div>
                     <div class="large-3 columns">
-                        <span>{{{additionalInfoHeaderText}}}</span>
+                        <span>{{resource "additionalInfoHeaderText"}}</span>
                     </div>
-                    <!--
-                    <div class="large-1 columns">
-                        <span>{{{regionNameHeaderText}}}</span>
-                    </div>
-                    <div class="large-1 columns">
-                        <span>{{{areaNameHeaderText}}}</span>
-                    </div>
-                    -->
                 </div>
                 <div class="row collapse view-alerts">
                     <div class="small-12 large-12 columns"></div>
                 </div>
                 <div class="row collapse view-status hidden">
                     <div class="large-12 columns">
-                        <span class="view-message">{{{loadingMessage}}}</span>
-                        <img src="{{loadingIconSrc}}" class="view-loading" />
+                        <span class="view-message">{{resource "stationEntryLogList.loadingMessage"}}</span>
+                        <img src="{{resource 'loadingIconSrc'}}" class="view-loading" />
                     </div>
                 </div>
             </ol>

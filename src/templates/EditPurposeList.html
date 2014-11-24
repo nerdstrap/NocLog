@@ -1,12 +1,12 @@
 <div class="purpose-list-view">
     <div class="row collapse">
         <div class="small-12 columns">
-            <h3>Edit Purposes</h3>
+            <h3>{{resource "purposeList.viewTitleText"}}</h3>
         </div>
     </div>
     <div class="row collapse">
         <div class="small-2 columns">
-            <a id="purpose-list-refresh-list-button" class="button radius">{{{refreshListButtonText}}}</a>
+            <a id="purpose-list-refresh-list-button" class="button radius">{{resource "refreshButtonText"}}</a>
         </div>
         <div class="small-10 columns">
             <span>&nbsp;</span>
@@ -17,16 +17,16 @@
             <ol id="purpose-list-header">
                 <div class="row collapse list-header-item-view">
                     <div class="small-4 columns">
-                        <span>Purpose Description</span>
+                        <span>{{resource "itemTextHeaderText"}}</span>
                     </div>
                     <div class="small-2 columns">
-                        <span>Default Duration (min)</span>
+                        <span>{{resource "itemValueHeaderText"}}</span>
                     </div>
                     <div class="small-2 columns">
-                        <span>Enabled (Y/N)</span>
+                        <span>{{resource "itemEnabledHeaderText"}}</span>
                     </div>
                     <div class="small-2 columns">
-                        <span>Sort Order</span>
+                        <span>{{resource "itemOrderHeaderText"}}</span>
                     </div>
                     <div class="small-2 columns">
                         <span>&nbsp;</span>
@@ -34,8 +34,8 @@
                 </div>
                 <div class="row collapse view-status hidden">
                     <div class="small-12 columns">
-                        <span class="view-message">{{{loadingMessage}}}</span>
-                        <img src="{{loadingIconSrc}}" class="view-loading" />
+                        <span class="view-message">{{resource "purposeList.loadingMessage"}}</span>
+                        <img src="{{resource 'loadingIconSrc'}}" class="view-loading" />
                     </div>
                 </div>
                 <div class="row collapse view-alerts">

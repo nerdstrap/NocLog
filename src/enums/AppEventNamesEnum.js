@@ -41,7 +41,8 @@ define(function(require) {
         addItemError: 'addItemError',
         updateItemSuccess: 'updateItemSuccess',
         updateItemError: 'updateItemError',
-        goToExportStationEntryLogList: 'goToExportStationEntryLogList'
+        goToExportStationEntryLogList: 'goToExportStationEntryLogList',
+        userRoleUpdated: 'userRoleUpdated'
     };
 
     if (Object.freeze) {

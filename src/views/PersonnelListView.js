@@ -8,28 +8,9 @@ define(function(require) {
             PersonnelListItemView = require('views/PersonnelListItemView'),
             AppEventNamesEnum = require('enums/AppEventNamesEnum'),
             appEvents = require('events'),
-            appResources = require('resources'),
             template = require('hbs!templates/PersonnelList');
 
     var PersonnelListView = CompositeView.extend({
-        resources: function(culture) {
-            return {
-                loadingIconSrc: appResources.getResource('loadingIconSrc'),
-                loadingMessage: appResources.getResource('PersonnelListView.loadingMessage'),
-                errorMessage: appResources.getResource('PersonnelListView.errorMessage'),
-                infoMessage: appResources.getResource('PersonnelListView.infoMessage'),
-                listViewTitleText: appResources.getResource('PersonnelListView.listViewTitleText'),
-                listFilterHeaderText: appResources.getResource('PersonnelListView.listFilterHeaderText'),
-                stationNameHeaderText: appResources.getResource('PersonnelListView.stationNameHeaderText'),
-                personnelNameHeaderText: appResources.getResource('PersonnelListView.personnelNameHeaderText'),
-                contactHeaderText: appResources.getResource('PersonnelListView.contactHeaderText'),
-                inTimeHeaderText: appResources.getResource('PersonnelListView.inTimeHeaderText'),
-                outTimeHeaderText: appResources.getResource('PersonnelListView.outTimeHeaderText'),
-                durationHeaderText: appResources.getResource('PersonnelListView.durationHeaderText'),
-                purposeHeaderText: appResources.getResource('PersonnelListView.purposeHeaderText'),
-                additionalInfoHeaderText: appResources.getResource('PersonnelListView.additionalInfoHeaderText')
-            };
-        },
         initialize: function(options) {
             console.trace('PersonnelListView.initialize');
             options || (options = {});
@@ -41,7 +22,7 @@ define(function(require) {
             console.trace('PersonnelListView.render()');
             var currentContext = this;
 
-            var renderModel = _.extend({}, currentContext.resources(), currentContext.model);
+            var renderModel = _.extend({}, currentContext.model);
             currentContext.$el.html(template(renderModel));
 
             _.each(this.collection.models, this.addOne, this);

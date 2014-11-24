@@ -12,19 +12,12 @@ define(function(require) {
             utils = require('utils'),
             AppEventNamesEnum = require('enums/AppEventNamesEnum'),
             appEvents = require('events'),
-            appResources = require('resources'),
             template = require('hbs!templates/EditPurposeListItem'),
             alertTemplate = require('hbs!templates/Alert'),
             filterTemplate = require('hbs!templates/Filter');
 
     var EditPurposeListItemView = CompositeView.extend({
         tagName: 'li',
-        resources: function(culture) {
-            return {
-                placeholderItemDescription: appResources.getResource('EditPurposeListItemView.placeholderItemDescription'),
-                placeholderItemOrder: appResources.getResource('EditPurposeListItemView.placeholderItemOrder')
-            };
-        },
         initialize: function(options) {
             console.trace('EditPurposeListItemView.initialize');
             options || (options = {});
@@ -45,17 +38,16 @@ define(function(require) {
 
             validation.unbind(currentContext);
 
-            var renderModel = _.extend({}, currentContext.resources(), currentContext.model.attributes);
+            var renderModel = _.extend({}, currentContext.model.attributes);
             currentContext.$el.html(template(renderModel));
 
             currentContext.addAllDurations();
 
+            currentContext.updateViewFromModel();
+
             validation.bind(this, {
                 selector: 'name'
             });
-            
-            this.$('.purpose-item-duration').val(currentContext.model.get('itemAdditionalData'));
-            this.$('.purpose-item-enabled').val(currentContext.model.get('itemEnabled'));
             
             return this;
         },
@@ -66,9 +58,10 @@ define(function(require) {
         addAllDurations: function() {
             var currentContext = this;
             var filterRenderModel = {
+                defaultOption: utils.getResource('durationFilterDefaultOption'),
                 options:  utils.getFilterOptions(currentContext.durationCollection.models, 'itemValue', 'itemText')
             };
-            this.$('.purpose-item-duration').html(filterTemplate(filterRenderModel));
+            this.$('.purpose-item-additional-data').html(filterTemplate(filterRenderModel));
         },
         validateAndSubmitItem: function(event) {
             if (event) {
@@ -77,23 +70,33 @@ define(function(require) {
             this.getPurposeModelFromView();
             this.model.validate();
         },
+        updateViewFromModel: function() {
+            var currentContext = this;
+            if (currentContext.model.has('itemAdditionalData')) {
+                currentContext.$('.purpose-item-additional-data').val(currentContext.model.get('itemAdditionalData'));
+            }
+            if (currentContext.model.has('itemEnabled')) {
+                currentContext.$('.purpose-item-enabled').val(currentContext.model.get('itemEnabled').toString());
+            }
+        },
         getPurposeModelFromView: function() {
             var currentContext = this;
-            if (currentContext.$('.purpose-item-description').val() !== currentContext.model.get('itemDescription')) {
+            if (currentContext.$('.purpose-item-text').val() !== currentContext.model.get('itemText')) {
+                var itemText = currentContext.$('.purpose-item-text').val()
                 currentContext.model.set({
-                    itemDescription: currentContext.$('.purpose-item-description').val(),
-                    itemText: currentContext.$('.purpose-item-description').val(),
-                    itemValue: currentContext.$('.purpose-item-description').val()
+                    itemDescription: itemText,
+                    itemText: itemText,
+                    itemValue: itemText
                 });
             }
-            if (currentContext.$('.purpose-item-duration').val() !== currentContext.model.get('itemAdditionalData')) {
-                currentContext.model.set({itemAdditionalData: currentContext.$('.purpose-item-duration').val()});
+            if (currentContext.$('.purpose-item-additional-data').val() !== currentContext.model.get('itemAdditionalData')) {
+                currentContext.model.set({itemAdditionalData: currentContext.$('.purpose-item-additional-data').val()});
             }
             if (currentContext.$('.purpose-item-enabled').val() !== currentContext.model.get('itemEnabled')) {
                 currentContext.model.set({itemEnabled: currentContext.$('.purpose-item-enabled').val()});
             }
-            if (currentContext.$('.purpose-item-order-number').val() !== currentContext.model.get('itemOrder')) {
-                currentContext.model.set({itemOrder: currentContext.$('.purpose-item-order-number').val()});
+            if (currentContext.$('.purpose-item-order').val() !== currentContext.model.get('itemOrder')) {
+                currentContext.model.set({itemOrder: currentContext.$('.purpose-item-order').val()});
             }
         },
         onValidated: function(isValid, model, errors) {

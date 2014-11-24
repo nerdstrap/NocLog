@@ -21,7 +21,7 @@
             <span>{{formatDateWithDefault expectedOutTime "%D %I:%M %p" "&nbsp;"}}</span>
         </div>
         <div class="small-1 columns">
-            <span>{{{withDefault purpose "&nbsp;"}}}</span>
+            <span>{{resource "withDefault purpose "&nbsp;"}}</span>
         </div>
         <div class="small-2 columns">
             <span>{{withDefault additionalInfo "&nbsp;"}}</span>
@@ -39,9 +39,9 @@
     </div>
     <div class="row collapse elevated-functions-container hidden">
         <div class="small-2 columns large-offset-10">
-            <a class="view-station-entry-log-link button radius tiny secondary">{{{viewCheckInButtonText}}}</a>
-            <a class="station-entry-log-link button radius tiny">{{{editCheckInButtonText}}}</a>
-            <a class="check-out-link button radius tiny alert">{{{checkOutButtonText}}}</a>
+            <a class="view-station-entry-log-link button radius tiny secondary">{{resource "viewCheckInButtonText"}}</a>
+            <a class="station-entry-log-link button radius tiny">{{resource "editCheckInButtonText"}}</a>
+            <a class="check-out-link button radius tiny alert">{{resource "checkOutButtonText"}}</a>
         </div>
     </div>
 </div>
