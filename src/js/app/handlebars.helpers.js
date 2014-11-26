@@ -66,10 +66,21 @@ define(function(require) {
         }
         return helpers.withDefault(date, defaultValue);
     };
+    
+    helpers.formatYesNo = function(option) {
+        return option ? 'Yes' : 'No';
+    };
+    
+    helpers.formatYesNoWithDefault = function(option, defaultValue) {
+        if (option) {
+            return helpers.formatYesNo(option);
+        }
+        return helpers.withDefault(option, defaultValue);
+    };
 
     for (var helper in helpers) {
         Handlebars.registerHelper(helper, helpers[helper]);
     }
-    
+
     return helpers;
 });

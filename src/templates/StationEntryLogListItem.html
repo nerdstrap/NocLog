@@ -1,35 +1,35 @@
 <div class="station-entry-log-list-item-view">
     <div class="row collapse">
-        <div class="small-1 columns">
-            <a class="station-name-link" data-stationid="{{stationId}}">{{withDefault stationName "&nbsp;"}}</a>
+        <div class="large-1 columns">
+            <a class="station-name-link" data-station-id="{{stationId}}">{{withDefault stationName "&nbsp;"}}</a>
         </div>
-        <div class="small-1 columns">
-            <i id="third-party-icon" class="fa fa-globe hidden"></i>
+        <div class="large-1 columns">
             {{#if userId}}
-            <a class="personnel-name-link" data-userid="{{userId}}">{{withDefault userName "&nbsp;"}}</a>
+            <a class="personnel-name-link" data-user-id="{{userId}}">{{withDefault userName "&nbsp;"}}</a>
             {{else}}
+            {{#if thirdParty}}<i class="fa fa-globe"></i>{{/if}}
             {{withDefault userName "&nbsp;"}}
             {{/if}}
         </div>
-        <div class="small-1 columns">
+        <div class="large-1 columns">
             <span>{{formatPhoneWithDefault contactNumber "%D %I:%M %p" "&nbsp;"}}</span>
         </div>
-        <div class="small-2 columns">
+        <div class="large-2 columns">
             <span>{{formatDateWithDefault inTime "%D %I:%M %p" "&nbsp;"}}</span>
         </div>
-        <div class="small-2 columns">
+        <div class="large-2 columns">
             <span>{{formatDateWithDefault expectedOutTime "%D %I:%M %p" "&nbsp;"}}</span>
         </div>
-        <div class="small-1 columns">
-            <span>{{resource "withDefault purpose "&nbsp;"}}</span>
+        <div class="large-1 columns">
+            <span>{{withDefault purpose "&nbsp;"}}</span>
         </div>
-        <div class="small-2 columns">
+        <div class="large-2 columns">
             <span>{{withDefault additionalInfo "&nbsp;"}}</span>
         </div>
-        <div class="small-1 columns">
+        <div class="large-1 columns">
             <span>{{withDefault regionName "&nbsp;"}}</span>
         </div>
-        <div class="small-1 columns">
+        <div class="large-1 columns">
             <span>{{withDefault areaName "&nbsp;"}}</span>
             <span class="collapse elevated-functions-toggle hidden">
                 <i class="fa fa-angle-double-up hide-container-icon"></i>
@@ -38,7 +38,7 @@
         </div>
     </div>
     <div class="row collapse elevated-functions-container hidden">
-        <div class="small-2 columns large-offset-10">
+        <div class="large-2 columns large-offset-10">
             <a class="view-station-entry-log-link button radius tiny secondary">{{resource "viewCheckInButtonText"}}</a>
             <a class="station-entry-log-link button radius tiny">{{resource "editCheckInButtonText"}}</a>
             <a class="check-out-link button radius tiny alert">{{resource "checkOutButtonText"}}</a>

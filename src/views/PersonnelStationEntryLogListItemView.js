@@ -8,10 +8,10 @@ define(function(require) {
             CompositeView = require('views/CompositeView'),
             AppEventNamesEnum = require('enums/AppEventNamesEnum'),
             appEvents = require('events'),
+            utils = require('utils'),
             template = require('hbs!templates/PersonnelStationEntryLogListItem');
 
     var PersonnelStationEntryLogListItemView = CompositeView.extend({
-        tagName: 'li',
         initialize: function(options) {
             console.trace('PersonnelStationEntryLogListItemView.initialize');
             options || (options = {});
@@ -28,6 +28,13 @@ define(function(require) {
         },
         events: {
             'click .station-name-link': 'goToStationWithId'
+        },
+        goToStationWithId: function(event) {
+            if (event) {
+                event.preventDefault();
+            }
+            var stationId = this.model.get('stationId');
+            this.dispatcher.trigger(AppEventNamesEnum.goToStationWithId, stationId);
         }
     });
 

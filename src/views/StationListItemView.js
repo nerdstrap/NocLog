@@ -11,7 +11,6 @@ define(function(require) {
             template = require('hbs!templates/StationListItem');
 
     var StationListItemView = CompositeView.extend({
-        tagName: 'li',
         initialize: function(options) {
             console.trace('StationListItemView.initialize');
             options || (options = {});

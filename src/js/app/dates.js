@@ -80,7 +80,11 @@ define(function(require) {
                 case 'H':
                     return Dates.padNumber(date.getHours(), 2);
                 case 'I':
-                    return Dates.padNumber(Dates.twelveHour(date), 2);
+                    if (Dates.padNumber(Dates.twelveHour(date), 2) === '00') {
+                        return '12';
+                    } else {
+                        return Dates.padNumber(Dates.twelveHour(date), 2);
+                    }
                 case 'j':
                     return Dates.padNumber(Dates.dayOfYear(date), 3);
                 case 'k':

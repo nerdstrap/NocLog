@@ -9,6 +9,7 @@ define(function(require) {
         /* app */
         'appTitleText': 'Network Operations Center | Telecom Station Entry Log',
         'loadingIconSrc': 'images/loading.gif',
+        'loadingIconAlt': 'loading...',
         'logoImageAlt': 'AEP',
         'logoImageSrc': 'images/aep_logo_180x180.png',
         'logoImageSvgSrc': 'images/aep_logo_180x180.svg',
@@ -29,6 +30,10 @@ define(function(require) {
         'resetButtonText': 'Reset',
         'saveButtonText': 'Save',
         'viewCheckInButtonText': 'View Check-in',
+        'sevenButtonText': '7',
+        'fourteenButtonText': '14',
+        'thirtyButtonText': '30',
+        'ninetyButtonText': '90',
 
         'goToMapButtonText': 'View Station in Google Maps',
 
@@ -41,27 +46,28 @@ define(function(require) {
         /* list item headers */
         'actualDurationHeaderText': 'Actual Duration',
         'actualOutTimeHeaderText': 'Actual Out Time',
+        'additionalDurationHeaderText': 'Additional Duration',
         'additionalInfoHeaderText': 'Additional Info',
         'areaNameHeaderText': 'Area',
+        'hasCrewHeaderText': 'Checked-in With Crew?',
         'companyNameHeaderText': 'Company Name',
         'contactNumberHeaderText': 'Mobile #',
         'daysHeaderText': 'Days',
         'durationHeaderText': 'Duration',
         'emailHeaderText': 'E-mail',
-        'endDateTimeHeaderText': 'End Date/Time',
+        'endDateHeaderText': 'End Date',
         'expectedOutTimeHeaderText': 'Est. Check-out',
-        'firstNameHeaderText': 'First',
-        'hasCrewHeaderText': 'Check-in With Crew?',
+        'firstNameHeaderText': 'First',        
         'inTimeHeaderText': 'Checked-In',
         'lastNameHeaderText': 'Last',
         'middleInitialHeaderText': 'MI',
-        'newDurationHeaderText': 'New Duration',
+        'newExpectedOutTimeHeaderText': 'New Est. Check-out',
         'outTimeHeaderText': 'Checked-out',
         'purposeHeaderText': 'Purpose',
         'purposeOtherHeaderText': 'Other',
         'regionNameHeaderText': 'Region',
         'showPreviousHeaderText': 'Show Previous',
-        'startDateTimeHeaderText': 'Start Date/Time',
+        'startDateHeaderText': 'Start Date',
         'stationNameHeaderText': 'Station',
         'stationIdHeaderText': 'Station',
         'thirdPartyHeaderText': 'Third Party',
@@ -74,6 +80,8 @@ define(function(require) {
         'itemValueHeaderText': 'Default Duration',
         'itemEnabledHeaderText': 'Status',
         'itemOrderHeaderText': 'Sort Order',
+        'statusHeaderText': 'Check-In Status',
+        'withCrewHeaderText': 'Check-in With Crew?',
 
         'itemTextPlaceholderText': 'add purpose text',
         'itemOrderPlaceholderText': 'enter a number',
@@ -84,6 +92,7 @@ define(function(require) {
         'stationNameFilterDefaultOption': '- station -',
         'purposeFilterDefaultOption': '- purpose -',
         'itemEnabledFilterDefaultOption': '- set status -',
+        'filterDefaultOption': '- select -',
         'yesOptionText': 'Yes',
         'noOptionText': 'No',
         'trueOptionValue': true,
@@ -100,6 +109,8 @@ define(function(require) {
         'historicalStationEntryLogList.viewTitleText': 'Historical Station Entry Log',
         'stationList.viewTitleText': 'Stations',
         'newStationEntryLog.viewTitleText': 'Manual Check-in',
+        'stationEntryLog.viewTitleText': 'Check-in Details',
+        'editStationEntryLog.viewTitleText': 'Edit Check-in Details',
         'purposeList.viewTitleText': 'Maintain Purposes',
 
         'personnelList.loadingMessage': 'loading users',
@@ -113,6 +124,8 @@ define(function(require) {
         
         'newPurposeItemTextHeaderText': 'New Purpose',
         'newPurposeItemOrderHeaderText': '0-999',
+        
+        'validationErrorMessage': 'One or more of the fields are invalid. Please update them and try again.',
 
         /* filter headers */
 

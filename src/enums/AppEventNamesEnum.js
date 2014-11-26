@@ -4,45 +4,48 @@ define(function(require) {
     var AppEventNamesEnum = {
         login: 'login',
         logout: 'logout',
+        
+        userRoleUpdated: 'userRoleUpdated',
+        
         goToStationEntryLogList: 'goToStationEntryLogList',
         goToStationEntryLogHistoryList: 'goToStationEntryLogHistoryList',
         goToStationList: 'goToStationList',
         goToPersonnelList: 'goToPersonnelList',
+        goToMaintainPurposes: 'goToMaintainPurposes',
+        
         goToStationEntryLogWithId: 'goToStationEntryLogWithId',
         goToStationWithId: 'goToStationWithId',
         goToPersonnelWithId: 'goToPersonnelWithId',
-        showStationEntryLogs: 'showStationEntryLogs',
-        showOpenStationEntryLogs: 'showOpenStationEntryLogs',
-        showExpiredStationEntryLogs: 'showExpiredStationEntryLogs',
-        showStations: 'showStations',
-        goToDirectionsWithLatLng: 'goToDirectionsWithLatLng',
+        
+        refreshStationEntryLogList: 'refreshStationEntryLogList',
+        refreshStationList: 'refreshStationList',
+        refreshPersonnelList: 'refreshPersonnelList',
+        refreshMaintainPurposes: 'refreshMaintainPurposes',
+        
         goToNewStationEntryLog: 'goToNewStationEntryLog',
-        goToCheckIn: 'goToCheckIn',
-        goToUpdateCheckIn: 'goToUpdateCheckIn',
+        checkIn: 'checkIn',
         cancelCheckIn: 'cancelCheckIn',
-        cancelEditCheckIn: 'cancelEditCheckIn',
         checkInSuccess: 'checkInSuccess',
         checkInError: 'checkInError',
-        closeNewCheckIn: 'closeNewCheckIn',
-        updateCheckInSuccess: 'updateCheckInSuccess',
-        updateCheckInError: 'updateCheckInError',
+        
+        checkOut: 'checkOut',
         checkOutSuccess: 'checkOutSuccess',
         checkOutError: 'checkOutError',
-        goToLookupUserId: 'goToLookupUserId',
-        userIdFound: 'userIdFound',
-        userIdLookupError: 'userIdLookupError',
-        leaveNewStationEntryLogView: 'leaveNewStationEntryLogView',
-        countExpiredEntriesUpdated: 'countExpiredEntriesUpdated',
-        showAdminHeaderButtons: 'showAdminHeaderButtons',
-        goToMaintainPurposes: 'goToMaintainPurposes',
-        goToAddItem: 'goToAddItem',
-        goToUpdateItem: 'goToUpdateItem',
+        
+        updateCheckIn: 'updateCheckIn',
+        cancelUpdateCheckIn: 'cancelUpdateCheckIn',
+        updateCheckInSuccess: 'updateCheckInSuccess',
+        updateCheckInError: 'updateCheckInError',
+        
+        addItem: 'addItem',
+        updateItem: 'updateItem',
         addItemSuccess: 'addItemSuccess',
         addItemError: 'addItemError',
         updateItemSuccess: 'updateItemSuccess',
         updateItemError: 'updateItemError',
-        goToExportStationEntryLogList: 'goToExportStationEntryLogList',
-        userRoleUpdated: 'userRoleUpdated'
+        
+        goToDirectionsWithLatLng: 'goToDirectionsWithLatLng',
+        goToExportStationEntryLogList: 'goToExportStationEntryLogList'
     };
 
     if (Object.freeze) {

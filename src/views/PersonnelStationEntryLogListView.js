@@ -1,22 +1,19 @@
 define(function(require) {
     'use strict';
+
     var $ = require('jquery'),
             _ = require('underscore'),
             Backbone = require('backbone'),
-            CompositeView = require('views/CompositeView'),
+            BaseListView = require('views/BaseListView'),
             PersonnelStationEntryLogListItemView = require('views/PersonnelStationEntryLogListItemView'),
             AppEventNamesEnum = require('enums/AppEventNamesEnum'),
             appEvents = require('events'),
-            globals = require('globals'),
-            env = require('env'),
             utils = require('utils'),
-            template = require('hbs!templates/PersonnelStationEntryLogList'),
-            filterTemplate = require('hbs!templates/Filter'),
-            alertTemplate = require('hbs!templates/Alert');
+            template = require('hbs!templates/PersonnelStationEntryLogList');
 
-    var PersonnelStationEntryLogListView = CompositeView.extend({
+    var PersonnelStationEntryLogListView = BaseListView.extend({
         initialize: function(options) {
-            console.trace('PersonnelStationEntryLogList.initialize');
+            console.trace('PersonnelStationEntryLogListView.initialize');
             options || (options = {});
             this.dispatcher = options.dispatcher || this;
 
@@ -24,10 +21,13 @@ define(function(require) {
 
             this.listenTo(this.collection, 'reset', this.addAll);
             this.listenTo(this.collection, 'sort', this.addAll);
-            this.listenTo(this.stationIdentifierCollection, 'reset', this.addAllStationIdentifiers);
+            this.listenTo(this.stationIdentifierCollection, 'reset', this.addStationNameFilter);
+            this.listenTo(this, 'leave', this.onLeave);
+
+            this.listenTo(appEvents, AppEventNamesEnum.userRoleUpdated, this.userRoleUpdated);
         },
         render: function() {
-            console.trace('PersonnelStationEntryLogList.render()');
+            console.trace('PersonnelStationEntryLogListView.render()');
             var currentContext = this;
 
             var renderModel = _.extend({}, currentContext.model);
@@ -35,69 +35,68 @@ define(function(require) {
 
             currentContext.setDefaultDateFilters(-1);
 
-            currentContext.addAllStationIdentifiers();
-
             return this;
         },
         events: {
-            'click #personnel-station-entry-log-list-refresh-button': 'refreshPersonnelStationEntryLogList',
-            'click #personnel-station-entry-log-list-reset-button': 'resetPersonnelStationEntryLogList',
-            'click #personnel-station-entry-log-list-refresh-fourteen-days-button': 'setDateFilter',
-            'click #personnel-station-entry-log-list-refresh-thirty-days-button': 'setDateFilter',
-            'click #personnel-station-entry-log-list-export-button': 'exportPersonnelStationEntryLogList',
-            'click #station-name-sort-button': 'sortPersonnelStationEntryLogList',
-            'click #out-time-sort-button': 'sortPersonnelStationEntryLogList',
-            'click .close-alert-box-button': 'closeAlertBox'
+            'click #refresh-station-entry-log-list-button': 'dispatchRefreshStationEntryLogList',
+            'click #reset-station-entry-log-list-button': 'resetStationEntryLogList',
+            'click .sort-button': 'sortListView',
+            'click .close-alert-box-button': 'closeAlertBox',
+            'click #export-station-entry-log-list-button': 'exportStationEntryLogList',
+            'click .refresh-button': 'setDateFilter'
         },
         addAll: function() {
             this._leaveChildren();
+            this.clearSortIndicators();
             _.each(this.collection.models, this.addOne, this);
+            this.addSortIndicators();
             this.hideLoading();
         },
         addOne: function(stationEntryLog) {
             var currentContext = this;
-            var personnelStationEntryLogListItemView = new PersonnelStationEntryLogListItemView({
+            var stationEntryLogListItemView = new PersonnelStationEntryLogListItemView({
                 model: stationEntryLog,
                 dispatcher: currentContext.dispatcher
             });
-            this.appendChildTo(personnelStationEntryLogListItemView, '#personnel-station-entry-log-list');
+            this.appendChildTo(stationEntryLogListItemView, '#station-entry-log-list-item-container');
         },
-        addAllStationIdentifiers: function() {
-            var currentContext = this;
-            var filterRenderModel = {
-                defaultOption: utils.getResource('stationNameFilterDefaultOption'),
-                options: utils.getFilterOptions(currentContext.stationIdentifierCollection.models, 'stationId', 'stationName')
-            };
-            this.$('#personnel-station-entry-log-list-station-filter').html(filterTemplate(filterRenderModel));
+        addStationNameFilter: function() {
+            this.addFilter(this.$('#station-name-filter'), this.stationIdentifierCollection.models, 'stationId', 'stationName');
         },
-        setDefaultDateFilters: function(daysToAdd) {
-            var today = new Date();
-            var yesterday = utils.addDays(Date.now(), daysToAdd);
+        dispatchRefreshStationEntryLogList: function(event) {
+            if (event) {
+                event.preventDefault();
+            }
+            this.refreshStationEntryLogList();
+        },
+        resetStationEntryLogList: function(event) {
+            if (event) {
+                event.preventDefault();
+            }
 
-            this.$('#personnel-station-entry-log-list-start-date-filter').val(utils.getFormattedDate(yesterday));
-            this.$('#personnel-station-entry-log-list-start-time-filter').val('00:00');
-            this.$('#personnel-station-entry-log-list-end-date-filter').val(utils.getFormattedDate(today));
-            this.$('#personnel-station-entry-log-list-end-time-filter').val('23:59');
-        },
-        refreshPersonnelStationEntryLogList: function(event) {
-            if (event) {
-                event.preventDefault();
-            }
-            this.dispatchRefreshPersonnelStationEntryLogList();
-        },
-        resetPersonnelStationEntryLogList: function(event) {
-            if (event) {
-                event.preventDefault();
-            }
-            this.$('#personnel-station-entry-log-list-station-filter').val('');
+            this.$('#station-name-filter').val('');
             this.setDefaultDateFilters(-1);
-            this.resetSortDirections();
-            this.$('#out-time-sort-button').attr('data-sort-direction', '1').next().addClass('fa-sort-amount-asc');
-            this.collection.sortAttributes = [{
-                    sortAttribute: 'outTime',
-                    sortDirection: 1
-                }];
-            this.dispatchRefreshPersonnelStationEntryLogList();
+            this.collection.setSortAttribute('outTime');
+
+            this.refreshStationEntryLogList();
+        },
+        refreshStationEntryLogList: function() {
+            this.showLoading();
+
+            var userId = this.parent.model.get('userId');
+            var stationId = this.$('#station-name-filter').val();
+            var startDate = this.$('#start-date-filter').val();
+            var endDate = this.$('#end-date-filter').val();
+
+            var options = {
+                userId: userId,
+                stationId: stationId,
+                startDate: startDate,
+                endDate: endDate,
+                onlyCheckedOut: true
+            };
+
+            this.dispatcher.trigger(AppEventNamesEnum.refreshPersonnelList, this.collection, options);
         },
         setDateFilter: function(event) {
             if (event) {
@@ -113,134 +112,34 @@ define(function(require) {
                 ;
             }
             this.setDefaultDateFilters(daysToAdd);
-            this.dispatchRefreshPersonnelStationEntryLogList();
+            this.refreshStationEntryLogList();
         },
-        dispatchRefreshPersonnelStationEntryLogList: function() {
-            this.showLoading();
-            var stationId = this.$('#personnel-station-entry-log-list-station-filter').val();
-            var startDate = this.$('#personnel-station-entry-log-list-start-date-filter').val();
-            var startTime = this.$('#personnel-station-entry-log-list-start-time-filter').val();
-            var endDate = this.$('#personnel-station-entry-log-list-end-date-filter').val();
-            var endTime = this.$('#personnel-station-entry-log-list-end-time-filter').val();
-            var options = {
-                userId: this.parent.model.get('userId'),
-                stationId: stationId,
-                startDate: startDate,
-                startTime: startTime,
-                endDate: endDate,
-                endTime: endTime,
-                onlyCheckedOut: true
-            };
-            this.dispatcher.trigger('_loadStationEntryLogs', this.collection, options);
+        setDefaultDateFilters: function(daysToAdd) {
+            var today = new Date();
+            var yesterday = utils.addDays(Date.now(), daysToAdd);
+
+            this.$('#start-date-filter').val(utils.getFormattedDate(yesterday));
+            this.$('#end-date-filter').val(utils.getFormattedDate(today));
         },
-        exportPersonnelStationEntryLogList: function(event) {
+        exportStationEntryLogList: function(event) {
             if (event) {
                 event.preventDefault();
             }
-            var stationId = this.$('#personnel-station-entry-log-list-station-filter').val();
-            var startDate = this.$('#personnel-station-entry-log-list-start-date-filter').val();
-            var startTime = this.$('#personnel-station-entry-log-list-start-time-filter').val();
-            var endDate = this.$('#personnel-station-entry-log-list-end-date-filter').val();
-            var endTime = this.$('#personnel-station-entry-log-list-end-time-filter').val();
+            
+            var userId = this.parent.model.get('userId');
+            var stationId = this.$('#station-name-filter').val();
+            var startDate = this.$('#start-date-filter').val();
+            var endDate = this.$('#end-date-filter').val();
             var options = {
-                userId: this.parent.model.get('userId'),
+                userId: userId,
                 stationId: stationId,
                 startDate: startDate,
-                startTime: startTime,
                 endDate: endDate,
-                endTime: endTime,
-                onlyCheckedOut: true
+                reportType: 'PersonnelStationEntryLogs'
             };
             this.dispatcher.trigger(AppEventNamesEnum.goToExportStationEntryLogList, this.collection, options);
-        },
-        sortPersonnelStationEntryLogList: function(event) {
-            if (event) {
-                event.preventDefault();
-            }
-            if (event.target) {
-                var sortButton = $(event.target);
-                var sortAttribute = sortButton.attr('data-sort-attribute');
-                var sortDirection = sortButton.attr('data-sort-direction');
-                if (sortDirection === '1') {
-                    sortDirection = '-1';
-                } else {
-                    sortDirection = '1';
-                }
-                this.resetSortDirections();
-                sortButton.attr('data-sort-direction', sortDirection);
-                var indicatorClass = sortDirection === '1' ? 'fa-sort-amount-asc' : 'fa-sort-amount-desc';
-                sortButton.next().addClass(indicatorClass);
-                this.collection.sortAttributes = [{
-                        sortAttribute: sortAttribute,
-                        sortDirection: parseInt(sortDirection, 10)
-                    }];
-                this.collection.sort();
-            }
-        },
-        resetSortDirections: function() {
-            var sortButtons = this.$('.sort-button');
-            _.each(sortButtons, function(sortButton) {
-                $(sortButton).attr('data-sort-direction', '');
-                $(sortButton).next().removeClass('fa-sort-amount-desc').removeClass('fa-sort-amount-asc');
-            });
-        },
-        showLoading: function() {
-            this.$('.view-status').removeClass('hidden');
-        },
-        hideLoading: function() {
-            this.$('.view-status').addClass('hidden');
-        },
-        showInfo: function(message) {
-            var level;
-            this.addAutoCloseAlertBox(level, message);
-        },
-        showSuccess: function(message) {
-            this.addAutoCloseAlertBox('success', message);
-        },
-        showError: function(message) {
-            this.addAutoCloseAlertBox('alert', message);
-        },
-        addAlertBox: function(guid, level, message) {
-            var renderModel = {
-                guid: guid,
-                level: level,
-                message: message
-            };
-            this.$('.view-alerts .columns').prepend(alertTemplate(renderModel));
-        },
-        addAutoCloseAlertBox: function(level, message) {
-            var currentContext = this;
-            var guid = env.getNewGuid();
-            this.addAlertBox(guid, level, message);
-            globals.window.setTimeout(function() {
-                currentContext.autoCloseAlertBox(guid);
-            }, env.getNotificationTimeout());
-        },
-        closeAlertBox: function(event) {
-            if (event) {
-                event.preventDefault();
-            }
-            if (event.target) {
-                var closeAlertButton = $(event.target);
-                if (closeAlertButton) {
-                    var alert = closeAlertButton.closest('[data-alert]');
-                    if (alert) {
-                        alert.trigger('close').trigger('close.fndtn.alert').remove();
-                    }
-                }
-            }
-        },
-        autoCloseAlertBox: function(guid) {
-            if (guid) {
-                var closeAlertButton = $('#' + guid);
-                if (closeAlertButton) {
-                    var alert = closeAlertButton.closest('[data-alert]');
-                    if (alert) {
-                        alert.trigger('close').trigger('close.fndtn.alert').remove();
-                    }
-                }
-            }
         }
     });
+
     return PersonnelStationEntryLogListView;
 });

@@ -1,24 +1,24 @@
 <div class="purpose-list-item-view">
     <div class="row collapse">
-        <div class="small-4 columns">
+        <div class="large-4 columns">
             <input class="purpose-item-text" name="itemText" data-itemid="{{itemId}}" type="text" placeholder="{{resource 'itemTextPlaceholderText'}}" value="{{itemText}}" />
         </div>
-        <div class="small-2 columns">
+        <div class="large-2 columns">
             <select class="purpose-item-additional-data" name="itemAdditionalData">
                 <option disabled="disabled" selected="selected" value="">{{resource "durationFilterDefaultOption"}}</option>
             </select>
         </div>
-        <div class="small-2 columns">
+        <div class="large-2 columns">
             <select class="purpose-item-enabled" name="itemEnabled">
                 <option disabled="disabled" selected="selected" value="">{{resource "itemEnabledFilterDefaultOption"}}</option>
                 <option value="{{resource 'trueOptionValue'}}">{{resource "enabledOptionText"}}</option>
                 <option value="{{resource 'falseOptionValue'}}">{{resource "disabledOptionText"}}</option>
             </select>
         </div>
-        <div class="small-2 columns">
+        <div class="large-2 columns">
             <input class="purpose-item-order-number" name="itemOrder" type="text" placeholder="{{resource 'itemOrderPlaceholderText'}}" value="{{itemOrder}}" />
         </div>
-        <div class="small-2 columns">
+        <div class="large-2 columns">
             <a class="purpose-item-save-link button radius tiny">{{resource "saveButtonText"}}</a>
             <a class="purpose-item-save-link button secondary radius tiny">{{resource "cancelButtonText"}}</a>
         </div>

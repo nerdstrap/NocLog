@@ -70,6 +70,59 @@ define(function(require) {
             };
         });
     };
+    
+    utils.getCSVFileName = function(options) {
+
+        var csvFileName = "";
+        var reportType = "";
+        var csvFileFilter = "";
+        var reportDate = new Date();
+        var timeStamp = "" + reportDate.getFullYear() + (reportDate.getMonth() + 1) + reportDate.getDate();
+
+        if (options.reportType) {
+            reportType = options.reportType + "_" + timeStamp;
+        }
+
+        if (typeof options.onlyCheckedOut !== 'undefined') {
+            if (options.onlyCheckedOut) {
+                csvFileFilter = csvFileFilter + "_expired";
+            } else {
+                csvFileFilter = csvFileFilter + "_open";
+            }
+        }
+
+        if (options.userId) {
+            csvFileFilter = csvFileFilter + "_usr_" + options.userId;
+        }
+
+        if (options.stationId) {
+            csvFileFilter = csvFileFilter + "_stn_" + options.stationId;
+        } else if (options.area) {
+            csvFileFilter = csvFileFilter + "_are_" + options.area;
+        } else if (options.region) {
+            csvFileFilter = csvFileFilter + "_rgn_" + options.region;
+        }
+
+
+        if (options.startDate) {
+            csvFileFilter = csvFileFilter + "_sd_" + options.startDate;
+        }
+
+        if (options.startTime) {
+            csvFileFilter = csvFileFilter + "_st_" + options.startTime;
+        }
+
+        if (options.endDate) {
+            csvFileFilter = csvFileFilter + "_ed_" + options.endDate;
+        }
+
+        if (options.endTime) {
+            csvFileFilter = csvFileFilter + "_et_" + options.endTime;
+        }
+
+        csvFileName = reportType + csvFileFilter + ".csv";
+        return csvFileName;
+    };
 
     return utils;
 });

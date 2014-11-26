@@ -5,14 +5,12 @@ define(function(require) {
     var $ = require('jquery'),
             _ = require('underscore'),
             Backbone = require('backbone'),
-            CompositeView = require('views/CompositeView'),
+            BaseSingletonView = require('views/BaseSingletonView'),
             AppEventNamesEnum = require('enums/AppEventNamesEnum'),
             appEvents = require('events'),
-            template = require('hbs!templates/Personnel'),
-            StationEntryLogCollection = require('collections/StationEntryLogCollection'),
-            PersonnelStationEntryLogListView = require('views/PersonnelStationEntryLogListView');
+            template = require('hbs!templates/Personnel');
 
-    var PersonnelView = CompositeView.extend({
+    var PersonnelView = BaseSingletonView.extend({
         initialize: function(options) {
             console.trace('PersonnelView.initialize');
             options || (options = {});
@@ -29,30 +27,9 @@ define(function(require) {
             return this;
         },
         updateViewFromModel: function(personnelModel) {
-            this.$('#personnel-name').html(personnelModel.firstName + '&nbsp;' + personnelModel.lastName);
+            this.$('#personnel-user-name').html(personnelModel.firstName + '&nbsp;' + personnelModel.lastName);
             this.$('#personnel-contact-number').html(personnelModel.contactNumber);
             this.$('#personnel-email').html(personnelModel.email);
-        },
-        _addStationEntryLogs: function() {
-            var currentContext = this;
-            currentContext.stationEntryLogCollection = new StationEntryLogCollection();
-            this.personnelStationEntryLogListViewInstance = new PersonnelStationEntryLogListView({
-                collection: currentContext.stationEntryLogCollection,
-                dispatcher: currentContext.dispatcher,
-                stationIdentifierCollection: currentContext.stationIdentifierCollection
-            });
-            this.appendChildTo(this.personnelStationEntryLogListViewInstance, '#personnel-station-entry-log-list-view');
-        },
-        _loadStationEntryLogs: function(options) {
-            var currentContext = this;
-            this.personnelStationEntryLogListViewInstance.showLoading();
-            this.dispatcher.trigger('_loadStationEntryLogs', currentContext.stationEntryLogCollection, options);
-        },
-        showLoading: function() {
-            this.$('.view-status').removeClass('hidden');
-        },
-        hideLoading: function() {
-            this.$('.view-status').addClass('hidden');
         }
     });
 

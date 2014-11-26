@@ -1,10 +1,8 @@
 require.config({
     config: {
         'env': {
-            /*'apiUrl: '/NocLog-services/webresources',
-            siteRoot: '/NocLog-web'*/
-            apiUrl: '',
-            siteRoot: '/NocLog/src'
+            apiUrl: '/NocLog-services/webresources',
+            siteRoot: '/NocLog-web'
         },
         'models/AppLocationModel': {
             'timeout': 5000,
@@ -67,6 +65,7 @@ require.config({
         'globals': 'app/globals',
         'resources': 'app/resources',
         'utils': 'app/utils',
+        'utils.views': 'app/utils.views',
         
         /* Convenience */
         'collections': '../collections',
@@ -74,7 +73,7 @@ require.config({
         'enums': '../enums',
         'models': '../models',
         'routers': '../routers',
-        'services': '../services/memory',
+        'services': '../services',
         'templates': '../templates',
         'views': '../views'
     },

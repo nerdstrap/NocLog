@@ -11,7 +11,6 @@ define(function(require) {
             template = require('hbs!templates/StationEntryLogHistoryListItem');
 
     var StationEntryLogHistoryListItemView = CompositeView.extend({
-        tagName: 'li',
         initialize: function(options) {
             console.trace('StationEntryLogHistoryListItemView.initialize');
             options || (options = {});
@@ -23,7 +22,7 @@ define(function(require) {
 
             var renderModel = _.extend({}, currentContext.model.attributes);
             currentContext.$el.html(template(renderModel));
-            this.updateThirdPartyStatus()
+            
             return this;
         },
         events: {
@@ -31,11 +30,6 @@ define(function(require) {
             'click .personnel-name-link': 'goToPersonnelWithId',
             'click .elevated-functions-toggle': 'toggleElevatedFunctions',
             'click .view-station-entry-log-link': 'goToStationEntryLogWithId'
-        },
-        updateThirdPartyStatus: function() {
-            if (this.model.get('thirdParty')) {
-                this.$('#third-party-icon').removeClass('hidden');
-            }
         },
         goToStationWithId: function(event) {
             if (event) {

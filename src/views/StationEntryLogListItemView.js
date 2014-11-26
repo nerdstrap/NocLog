@@ -11,7 +11,6 @@ define(function(require) {
             template = require('hbs!templates/StationEntryLogListItem');
 
     var StationEntryLogListItemView = CompositeView.extend({
-        tagName: 'li',
         initialize: function(options) {
             console.trace('StationEntryLogListItemView.initialize');
             options || (options = {});
@@ -23,13 +22,12 @@ define(function(require) {
         render: function() {
             console.trace('StationEntryLogListItemView.render()');
             var currentContext = this;
+            
             var renderModel = _.extend({}, currentContext.model.attributes);
             currentContext.$el.html(template(renderModel));
 
             this.updateCheckOutStatus();
-            this.updateThirdPartyStatus();
             this.checkUserRole();
-//            this.setUserRole();
 
             return this;
         },
@@ -48,16 +46,6 @@ define(function(require) {
                 this.$('.station-entry-log-list-item-view').addClass('checkOutExpired');
             }
         },
-        updateThirdPartyStatus: function() {
-            if (this.model.get('thirdParty')) {
-                this.$('#third-party-icon').removeClass('hidden');
-            }
-        },
-//        setUserRole: function(userRole) {
-//            var currentContext = this;
-//            currentContext.userRole = userRole;
-//            currentContext.checkUserRole();
-//        },
         checkUserRole: function() {
             var currentContext = this;
 //            currentContext.userRole = 'NOC_Read';

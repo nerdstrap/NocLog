@@ -20,22 +20,16 @@ define(function(require) {
             options || (options = {});
             this.sortAttribute = options.sortAttribute || 'expectedOutTime';
             this.sortDirection = options.sortDirection || 1;
+            this.listenTo(this, 'reset', this.setCounts);
         },
         setSortAttribute: function(sortAttribute, sortDirection) {
             this.sortAttribute = sortAttribute;
             this.sortDirection = sortDirection || 1;
         },
-        setSecondarySortAttribute: function(sortAttribute, sortDirection) {
-            this.secondarySortAttribute = sortAttribute;
-            this.secondarySortDirection = sortDirection || 1;
-        },
         comparator: function(a, b) {
             var currentContext = this;
-            var result = simpleComparator(a.get(currentContext.sortAttribute), b.get(currentContext.sortAttribute), currentContext.sortDirection);
-            if (result === 0 && currentContext.secondarySortAttribute) {
-                result = simpleComparator(a.get(currentContext.secondarySortAttribute), b.get(currentContext.secondarySortAttribute), currentContext.secondarySortDirection);
-            }
-            return result;
+            return simpleComparator(a.get(currentContext.sortAttribute), b.get(currentContext.sortAttribute), currentContext.sortDirection);
+
         },
         toCsv: function() {
             var currentContext = this;
@@ -56,6 +50,11 @@ define(function(require) {
             }
 
             return line;
+        },
+        setCounts: function(collection, response, options) {
+            this.overdueCount = collection.where({checkOutOverdue: true}).length;
+            this.expiredCount = collection.where({checkOutExpired: true}).length;
+            this.openCount = collection.length - this.expiredCount - this.overdueCount;
         }
     });
 

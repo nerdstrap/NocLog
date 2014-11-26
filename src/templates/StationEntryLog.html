@@ -1,190 +1,181 @@
 <div class="station-entry-log-view">
-    <fieldset class="edit-station-entry-log-view">
-        <legend class="viewTitleText">{{resource "stationEntryLog.viewTitleText"}}</legend>
-
-        <div class="row collapse">
-            <div class="row collapse view-status">
-                <div class="small-12 columns">
-                    <span class="view-message">{{resource "stationEntryLog.loadingMessage"}}</span>
-                    <img src="{{resource 'loadingIconSrc'}}" class="view-loading" />
+    <fieldset>
+        <legend class="view-legend">{{resource "stationEntryLog.viewTitleText"}}</legend>
+        <div class="row collapse view-status hidden">
+            <div class="large-12 columns">
+                <span class="view-message">{{resource "stationEntryLog.loadingMessage"}}</span>
+                <img src="{{resource 'loadingIconSrc'}}" class="view-loading" />
+            </div>
+        </div>
+        <div class="row collapse view-alerts">
+            <div class="large-12 columns"></div>
+        </div>
+        <div class="row collapse view-details hidden">
+            <div class="large-12 columns">
+                <div class="row collapse">
+                    <div class="large-1 columns">
+                        <div class="first-party">
+                            <label for="user-id-input">{{resource "userIdHeaderText"}}</label>
+                        </div>
+                        <div class="third-party hidden">
+                            <label for="company-name-input">{{resource "companyNameHeaderText"}}</label>
+                        </div>
+                    </div>
+                    <div class="large-2 columns">
+                        <div class="first-party">
+                            <input disabled id="user-id-input" name="userId" type="text" placeholder="{{resource 'userIdHeaderText'}}" />
+                        </div>
+                        <div class="third-party hidden">
+                            <input disabled id="company-name-input" name="companyName" type="text" placeholder="{{resource 'companyNameHeaderText'}}" />
+                        </div>
+                    </div>
+                    <div class="large-1 columns">
+                        &nbsp;
+                    </div>
+                    <div class="large-2 columns">
+                        <input disabled id="first-name-input" name="firstName" type="text" placeholder="{{resource 'firstNameHeaderText'}}" />
+                    </div>
+                    <div class="large-2 columns">
+                        <input disabled id="middle-initial-input" name="middleInitial" type="text" placeholder="{{resource 'middleInitialHeaderText'}}" />
+                    </div>
+                    <div class="large-2 columns">
+                        <input disabled id="last-name-input" name="lastName" type="text" placeholder="{{resource 'lastNameHeaderText'}}" />
+                    </div>
+                </div>
+                <div class="row collapse">
+                    <div class="large-1 columns">
+                        <label for="contact-number-input">{{resource "contactNumberHeaderText"}}
+                        </label>
+                    </div>
+                    <div class="large-2 columns">
+                        <input disabled id="contact-number-input" name="contactNumber" type="text" placeholder="{{resource 'contactNumberHeaderText'}}" />
+                    </div>
+                    <div class="large-3 columns">
+                        &nbsp;
+                    </div>
+                    <div class="large-3 columns">
+                        <input disabled id="email-input" name="email" type="text" placeholder="{{resource 'emailHeaderText'}}" />
+                    </div>
+                    <div class="large-3 columns">
+                        &nbsp;
+                    </div>
+                </div>
+                <div class="row collapse">
+                    <div class="large-1 columns">
+                        <label for="station-id-input">{{resource "stationIdHeaderText"}}</label>
+                    </div>
+                    <div class="large-4 columns">
+                        <span id="station-id-input">{{withDefault stationId "&nbsp;"}}</span>
+                    </div>
+                    <div class="large-1 columns">
+                        &nbsp;
+                    </div>
+                    <div class="large-1 columns">
+                        <label for="in-time-input">{{resource "inTimeHeaderText"}}</label>
+                    </div>
+                    <div class="large-2 columns">
+                        <span id="in-time-input">{{formatDateWithDefault inTime "%D %I:%M %p" "&nbsp;"}}</span>
+                    </div>
+                    <div class="large-3 columns">
+                        &nbsp;
+                    </div>
+                </div>
+                <div class="row collapse">
+                    <div class="large-1 columns">
+                        <label for="purpose-input">{{resource "purposeHeaderText"}}
+                        </label>
+                    </div>
+                    <div class="large-2 columns">
+                        <span id="purpose-input">{{withDefault purpose "&nbsp;"}}</span>
+                    </div>
+                    <div class="large-1 columns">
+                        <label for="old-duration-input">{{resource "durationHeaderText"}}</label>
+                    </div>
+                    <div class="large-2 columns">
+                        <span id="old-duration-input">{{withDefault duration "&nbsp;"}}</span>
+                    </div>
+                    <div class="large-1 columns">
+                        <label for="old-expected-out-time-input">{{resource "expectedOutTimeHeaderText"}}</label>
+                    </div>
+                    <div class="large-2 columns">
+                        <span id="old-expected-out-time-input">{{formatDateWithDefault expectedOutTime "%D %I:%M %p" "&nbsp;"}}</span>
+                    </div>
+                    <div class="large-3 columns">
+                        &nbsp;
+                    </div>
+                </div>
+                <div id="additional-duration-container" class="row collapse hidden">
+                    <div class="large-1 columns">
+                        &nbsp;
+                    </div>
+                    <div class="large-2 columns">
+                        &nbsp;
+                    </div>
+                    <div class="large-1 columns">
+                        <label for="duration-filter">{{resource "additionalDurationHeaderText"}}</label>
+                    </div>
+                    <div class="large-2 columns">
+                        <select id="duration-filter">
+                            <option disabled="disabled" selected="selected" value="">{{withDefault duration "&nbsp;"}}</option>
+                        </select>
+                    </div>
+                    <div class="large-1 columns">
+                        <label for="expected-out-time-input">{{resource "newExpectedOutTimeHeaderText"}}</label>
+                    </div>
+                    <div class="large-2 columns">
+                        <span id="expected-out-time-input">{{formatDateWithDefault newExpectedOutTime "%D %I:%M %p" "&nbsp;"}}</span>
+                    </div>
+                    <div class="large-3 columns">
+                        &nbsp;
+                    </div>
+                </div>
+                <div id="actual-duration-container" class="row collapse hidden">
+                    <div class="large-1 columns">
+                        &nbsp;
+                    </div>
+                    <div class="large-2 columns">
+                        &nbsp;
+                    </div>
+                    <div class="large-1 columns">
+                        <label for="actual-duration-input">{{resource "actualDurationHeaderText"}}</label>
+                    </div>
+                    <div class="large-2 columns">
+                        <span id="actual-duration-input">{{withDefault actualDuration "&nbsp;"}}</span>
+                    </div>
+                    <div class="large-1 columns">
+                        <label for="actual-out-time-input">{{resource "actualOutTimeHeaderText"}}</label>
+                    </div>
+                    <div class="large-2 columns">
+                        <span id="actual-out-time-input">{{formatDateWithDefault outTime "%D %I:%M %p" "&nbsp;"}}</span>
+                    </div>
+                    <div class="large-3 columns">
+                        &nbsp;
+                    </div>
+                </div>
+                <div class="row collapse">
+                    <div class="large-1 columns">
+                        <label for="additional-info-input">{{resource "additionalInfoHeaderText"}}</label>
+                    </div>
+                    <div class="large-5 columns">
+                        <textarea disabled id="additional-info-input" name="additionalInfo" rows="2" >{{withDefault additionalInfo "&nbsp;"}}</textarea>
+                    </div>
+                    <div class="large-1 columns">
+                        <label for="has-crew-input">{{resource "hasCrewHeaderText"}}</label>
+                    </div>
+                    <div class="large-5 columns">
+                        <span id="has-crew-input">{{formatYesNoWithDefault hasCrew "&nbsp;"}}</span>
+                    </div>
+                </div>
+                <div class="row collapse">
+                    <div class="large-6 columns">
+                        &nbsp;
+                    </div>
+                    <div class="large-6 columns">
+                        <a id="save-station-entry-log-button" class="button radius hidden">{{resource "saveButtonText"}}</a>
+                        <a id="cancel-save-station-entry-log-button" class="button radius secondary hidden">{{resource "cancelButtonText"}}</a>
+                    </div>
                 </div>
             </div>
-            <div class="error view-alert hidden">
-                <span class="text-detail"></span>
-            </div>
-
-            <div class="small-1 large-1 columns">
-                <div id="user-label-container">
-                    <label for="edit-station-entry-log-user-id">{{resource "userIdHeaderText"}}</label>
-                </div>
-                <div id="third-party-user-label-container" class="hidden">
-                    <label for="edit-station-entry-log-company-name">{{resource "companyNameHeaderText"}}</label>
-                </div>
-            </div>
-            <div class="small-2 large-4 columns">
-                <div id="user-container">
-                    <input disabled id="edit-station-entry-log-user-id" name="userId" type="text" placeholder="{{resource 'userIdHeaderText'}}" />
-                </div>
-                <div id="third-party-user-container" class="hidden">
-                    <input disabled id="edit-station-entry-log-company-name" name="companyName" type="text" placeholder="{{resource 'companyNameHeaderText'}}" />
-                </div>
-            </div>
-
-            <div class="small-1 large-1 columns">
-                &nbsp;
-            </div>
-            <div class="small-2 large-2 columns">
-                <input disabled id="edit-station-entry-log-first-name" name="firstName" type="text" placeholder="{{resource 'firstNameHeaderText'}}" />
-            </div>
-            <div class="small-2 large-2 columns">
-                <input disabled id="edit-station-entry-log-middle-initial" name="middleInitial" type="text" placeholder="{{resource 'middleInitialHeaderText'}}" />
-            </div>
-            <div class="small-2 large-2 columns">
-                <input disabled id="edit-station-entry-log-last-name" name="lastName" type="text" placeholder="{{resource 'lastNameHeaderText'}}" />
-            </div>
         </div>
-
-        <div class="row collapse">
-            <div class="small-1 large-1 columns">
-                <label for="edit-station-entry-log-contact-number">{{resource "contactNumberHeaderText"}}
-                </label>
-            </div>
-            <div class="small-2 large-2 columns">
-                <input disabled id="edit-station-entry-log-contact-number" name="contactNumber" type="text" placeholder="{{resource 'contactNumberHeaderText'}}" />
-            </div>
-            <div class="small-3 large-3 columns">
-                &nbsp;
-            </div>
-            <div class="small-3 large-3 columns">
-                <input disabled id="edit-station-entry-log-email" name="email" type="text" placeholder="{{resource 'emailHeaderText'}}" />
-            </div>
-            <div class="small-3 large-3 columns">
-                &nbsp;
-            </div>
-        </div>
-
-        <div class="row collapse">
-            <div class="small-1 large-1 columns">
-                <label for="edit-station-entry-log-station-id">{{resource "stationIdHeaderText"}}</label>
-            </div>
-            <div class="small-4 large-4 columns">
-                <span id="edit-station-entry-log-station-id">{{withDefault stationId "&nbsp;"}}</span>
-            </div>
-            <div class="small-1 large-1 columns">
-                &nbsp;
-            </div>
-            <div class="small-1 large-1 columns">
-                <label for="edit-station-entry-log-in-time">{{resource "checkInTimeHeaderText"}}</label>
-            </div>
-            <div class="small-2 large-2 columns">
-                <span id="edit-station-entry-log-in-time">{{resource "formatDateWithDefault inTime "%D %I:%M %p" "&nbsp;"}}</span>
-            </div>
-            <div class="small-3 large-3 columns">
-                &nbsp;
-            </div>
-        </div>
-
-        <!--Old Duration-->
-        <div class="row collapse">
-            <div class="small-1 large-1 columns">
-                <label for="edit-station-entry-log-purpose">{{resource "purposeHeaderText"}}
-                </label>
-            </div>
-            <div class="small-2 large-2 columns">
-                <span id="edit-station-entry-log-purpose">{{withDefault purpose "&nbsp;"}}</span>
-            </div>
-            <div class="small-1 large-1 columns">
-                <label for="edit-station-entry-log-duration">{{resource "durationHeaderText"}}</label>
-            </div>
-            <div class="small-2 large-2 columns">
-                <span id="edit-station-entry-log-duration-old">{{resource "withDefault duration "&nbsp;"}}</span>
-            </div>
-            <div class="small-1 large-1 columns">
-                <label for="edit-station-entry-log-expected-out-time-old">{{resource "expectedOutTimeHeaderText"}}</label>
-            </div>
-            <div class="small-2 large-2 columns">
-                <span id="edit-station-entry-log-expected-out-time-old">{{resource "expectedOutTimeHeaderText"}}</span>
-            </div>
-            <div class="small-3 large-3 columns">
-                &nbsp;
-            </div>
-        </div>
-        <!--New Duration-->
-        <div class="row collapse hidden" id="view-station-entry-log-new-duration-sec">
-            <div class="small-1 large-1 columns">
-                &nbsp;
-            </div>
-            <div class="small-2 large-2 columns">
-                &nbsp;
-            </div>
-            <div class="small-1 large-1 columns">
-                <label for="edit-station-entry-log-duration">{{resource "durationHeaderTextNew}}</label>
-            </div>
-            <div class="small-2 large-2 columns">
-                <select id="edit-station-entry-log-duration">
-                    <option disabled="disabled" selected="selected" value="">{{resource "withDefault duration "&nbsp;"}}</option>
-                </select>
-            </div>
-            <div class="small-1 large-1 columns">
-                <label for="edit-station-entry-log-expected-out-time">{{resource "expectedOutTimeHeaderTextNew}}</label>
-            </div>
-            <div class="small-2 large-2 columns">
-                <span id="edit-station-entry-log-expected-out-time">{{resource "expectedOutTimeHeaderTextNew}}</span>
-            </div>
-            <div class="small-3 large-3 columns">
-                &nbsp;
-            </div>
-        </div>
-        <!--Actual Duration-->
-        <div class="row collapse hidden" id="view-station-entry-log-actual-duration-sec">
-            <div class="small-1 large-1 columns">
-                &nbsp;
-            </div>
-            <div class="small-2 large-2 columns">
-                &nbsp;
-            </div>
-            <div class="small-1 large-1 columns">
-                <label for="view-station-entry-log-actual-duration">{{resource "actualDurationHeaderText"}}</label>
-            </div>
-            <div class="small-2 large-2 columns">
-                <span id="view-station-entry-log-actual-duration">{{resource "withDefault actualDuration "&nbsp;"}}</span>
-            </div>
-            <div class="small-1 large-1 columns">
-                <label for="view-station-entry-log-actual-out-time">{{resource "actualOutTimeHeaderText"}}</label>
-            </div>
-            <div class="small-2 large-2 columns">
-                <span id="view-station-entry-log-actual-out-time">{{resource "formatDateWithDefault outTime "%D %I:%M %p" "&nbsp;"}}</span>
-            </div>
-            <div class="small-3 large-3 columns">
-                &nbsp;
-            </div>
-        </div>
-
-        <div class="row collapse">
-            <div class="small-1 large-1 columns">
-                <label for="edit-station-entry-log-additional-info">{{resource "additionalInfoHeaderText"}}</label>
-            </div>
-            <div class="small-5 large-5 columns">
-                <textarea disabled id="edit-station-entry-log-additional-info" name="additionalInfo" rows="2" >{{resource "withDefault additionalInfo "&nbsp;"}}</textarea>
-            </div>
-            <div class="small-1 large-1 columns">
-                <label for="edit-station-entry-log-has-crew">{{resource "hasCrewHeaderText"}}</label>
-            </div>
-            <div class="small-5 large-5 columns">
-                <span id="edit-station-entry-log-has-crew">{{hasCrew}}</span>
-            </div>
-        </div>
-
-        <!--Row 8-->
-        <div class="row collapse">
-            <div class="large-6 columns">
-                &nbsp;
-            </div>
-            <div class="large-6 columns">
-                <a id="edit-station-entry-log-save-button" class="button radius hidden">{{resource "saveButtonText"}}</a>
-                <a id="edit-station-entry-log-cancel-button" class="button radius secondary">{{resource "cancelButtonText"}}</a>
-            </div>
-        </div>
-
     </fieldset>
 </div>

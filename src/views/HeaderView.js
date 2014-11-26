@@ -37,16 +37,8 @@ define(function (require) {
         },
         userRoleUpdated: function (userRole) {
             if (userRole === UserRolesEnum.NocAdmin) {
-                this.$('#header-title-container').removeClass('large-7');
-                this.$('#header-title-container').addClass('large-6');
-                this.$('#go-to-personnel-link-container').removeClass('large-2');
-                this.$('#go-to-personnel-link-container').addClass('large-1');
                 this.$('#go-to-maintain-purposes-link-container').removeClass('hidden');
             } else {
-                this.$('#header-title-container').removeClass('large-6');
-                this.$('#header-title-container').addClass('large-7');
-                this.$('#go-to-personnel-link-container').removeClass('large-1');
-                this.$('#go-to-personnel-link-container').addClass('large-2');
                 this.$('#go-to-maintain-purposes-link-container').addClass('hidden');
             }
         },
