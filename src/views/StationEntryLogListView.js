@@ -63,7 +63,7 @@ define(function(require) {
             'click #export-station-entry-log-list-button': 'exportStationEntryLogList'
         },
         addAll: function() {
-            this.removeAll();
+            this._leaveChildren();
             this.clearSortIndicators();
             _.each(this.collection.models, this.addOne, this);
             this.updateViewFromCollection();
@@ -98,15 +98,6 @@ define(function(require) {
                 userRole: currentContext.userRole
             });
             this.appendChildTo(stationEntryLogListItemView, '#station-entry-log-list-item-container');
-        },
-        removeAll: function() {
-            this.children.chain().clone().each(function(view) {
-                if (view.$('.new-station-entry-log-view').length === 0) {
-                    if (view.leave) {
-                        view.leave();
-                    }
-                }
-            });
         },
         addStationNameFilter: function() {
             this.addFilter(this.$('#station-name-filter'), this.stationIdentifierCollection.models, 'stationId', 'stationName');
@@ -206,38 +197,28 @@ define(function(require) {
             if (event) {
                 event.preventDefault();
             }
-            
-            var currentContext = this;
-            currentContext.newStationEntryLogModelInstance = new NewStationEntryLogModel();
-            currentContext.newStationEntryLogViewInstance = new NewStationEntryLogView({
-                model: currentContext.newStationEntryLogModelInstance,
-                dispatcher: currentContext.dispatcher,
-                stationIdentifierCollection: currentContext.stationIdentifierCollection,
-                purposeCollection: currentContext.purposeCollection,
-                durationCollection: currentContext.durationCollection
-            });
-            currentContext.renderChildInto(currentContext.newStationEntryLogViewInstance, currentContext.$('#new-station-entry-log-view-container'));
-            currentContext.newStationEntryLogViewInstance.hideLoading();
+
             this.hideNewStationEntryLogButton();
-            this.dispatcher.trigger(AppEventNamesEnum.goToNewStationEntryLog);
+            this.dispatcher.trigger(AppEventNamesEnum.goToNewStationEntryLog, this.$('#new-station-entry-log-view-container'));
         },
         onCheckInSuccess: function(stationEntryLog) {
-            var checkInSucessMessage = utils.getResource('checkInSucessMessage');
+            var checkInSuccessMessage = utils.getResource('checkInSuccessMessage');
             if (stationEntryLog) {
                 var userName = stationEntryLog.userName;
                 var stationName = stationEntryLog.stationName;
-                checkInSucessMessage = 'Successful check-in for ' + userName + ' at ' + stationName;
+                checkInSuccessMessage = 'Successful check-in for ' + userName + ' at ' + stationName;
+                this.collection.add(stationEntryLog);
             }
-            this.showSuccess(checkInSucessMessage);
+            this.showSuccess(checkInSuccessMessage);
         },
         onCheckOutSuccess: function(stationEntryLog) {
-            var checkOutSucessMessage = utils.getResource('checkOutSucessMessage');
+            var checkOutSuccessMessage = utils.getResource('checkOutSuccessMessage');
             if (stationEntryLog) {
                 var userName = stationEntryLog.userName;
                 var stationName = stationEntryLog.stationName;
-                checkOutSucessMessage = 'Successful check-out for ' + userName + ' at ' + stationName;
+                checkOutSuccessMessage = 'Successful check-out for ' + userName + ' at ' + stationName;
             }
-            this.showSuccess(checkOutSucessMessage);
+            this.showSuccess(checkOutSuccessMessage);
         },
         onCheckOutError: function(errorMessage, stationEntryLog) {
             this.showError(errorMessage);

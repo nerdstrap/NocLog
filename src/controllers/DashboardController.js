@@ -10,10 +10,12 @@ define(function(require) {
             StationEntryLogHistoryListView = require('views/StationEntryLogHistoryListView'),
             StationListView = require('views/StationListView'),
             PersonnelListView = require('views/PersonnelListView'),
+            NewStationEntryLogView = require('views/NewStationEntryLogView'),
             StationEntryLogView = require('views/StationEntryLogView'),
             StationView = require('views/StationView'),
             PersonnelView = require('views/PersonnelView'),
             StationEntryLogModel = require('models/StationEntryLogModel'),
+            NewStationEntryLogModel = require('models/NewStationEntryLogModel'),
             StationModel = require('models/StationModel'),
             PersonnelModel = require('models/PersonnelModel'),
             StationEntryLogCollection = require('collections/StationEntryLogCollection'),
@@ -432,15 +434,32 @@ define(function(require) {
 
             return deferred.promise();
         },
-        goToNewStationEntryLog: function() {
+        goToNewStationEntryLog: function(container) {
             console.trace('DashboardController.goToNewStationEntryLog');
             var currentContext = this,
                     deferred = $.Deferred();
 
+            var newStationEntryLogModelInstance = new NewStationEntryLogModel();
+            var stationIdentifierCollection = new Backbone.Collection();
+            var purposeCollection = new LookupDataItemCollection();
+            var durationCollection = new LookupDataItemCollection();
+            var newStationEntryLogViewInstance = new NewStationEntryLogView({
+                model: newStationEntryLogModelInstance,
+                dispatcher: currentContext.dispatcher,
+                stationIdentifierCollection: stationIdentifierCollection,
+                purposeCollection: purposeCollection,
+                durationCollection: durationCollection
+            }).render();
+
+            newStationEntryLogViewInstance.showLoading();
+            container.html(newStationEntryLogViewInstance.el);
+
             $.when(currentContext.dashboardService.getOptions()).done(function(getOptionsResponse) {
-                currentContext.purposeResults.reset(_.where(getOptionsResponse.purposes, {itemEnabled: 'Y'}));
-                currentContext.durationResults.reset(_.where(getOptionsResponse.durations, {itemEnabled: 'Y'}));
-                deferred.resolve(getOptionsResponse);
+                stationIdentifierCollection.reset(getOptionsResponse.stationIdentifiers);
+                purposeCollection.reset(_.where(getOptionsResponse.purposes, {itemEnabled: true}));
+                durationCollection.reset(_.where(getOptionsResponse.durations, {itemEnabled: true}));
+                newStationEntryLogViewInstance.hideLoading();
+                deferred.resolve(newStationEntryLogViewInstance);
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 deferred.reject(textStatus);
             });
@@ -453,7 +472,6 @@ define(function(require) {
                     deferred = $.Deferred();
 
             $.when(currentContext.dashboardService.postCheckIn(stationEntryLogModel.attributes)).done(function(checkInResponse) {
-                currentContext.stationEntryLogSearchResults.add(checkInResponse.stationEntryLog);
                 appEvents.trigger(AppEventNamesEnum.checkInSuccess, checkInResponse.stationEntryLog);
                 deferred.resolve(checkInResponse);
             }).fail(function(jqXHR, textStatus, errorThrown) {

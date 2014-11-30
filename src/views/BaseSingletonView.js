@@ -24,8 +24,19 @@ define(function(require) {
             };
             this.$(filterSelector).html(filterTemplate(filterRenderModel));
         },
-        showLoading: function() {
-            this.$('.view-details').addClass('hidden');
+        updateIndicatorLabel: function (indicator) {
+            if (indicator.is(':checked')) {
+                indicator.parent().next().addClass('bolder');
+                indicator.parent().prev().removeClass('bolder');
+            } else {
+                indicator.parent().next().removeClass('bolder');
+                indicator.parent().prev().addClass('bolder');
+            }
+        },
+        showLoading: function(hideDetails) {
+            if (hideDetails) {
+                this.$('.view-details').addClass('hidden');
+            }
             this.$('.view-status').removeClass('hidden');
         },
         hideLoading: function() {

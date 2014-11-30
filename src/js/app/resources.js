@@ -115,6 +115,7 @@ define(function(require) {
 
         'personnelList.loadingMessage': 'loading users',
         'purposeList.loadingMessage': 'loading purposes',
+        'newStationEntryLog.loadingMessage': 'loading',
         'stationEntryLogList.loadingMessage': 'loading check-ins',
         'stationList.loadingMessage': 'loading stations',
 

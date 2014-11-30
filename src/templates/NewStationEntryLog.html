@@ -3,7 +3,7 @@
         <legend>{{resource "newStationEntryLog.viewTitleText"}}</legend>
         <div class="row collapse view-status hidden">
             <div class="large-12 columns">
-                <span class="view-message">{{resource "stationEntryLog.loadingMessage"}}</span>
+                <span class="view-message"></span>
                 <img src="{{resource 'loadingIconSrc'}}" class="view-loading" alt="{{resource 'loadingIconAlt'}}" />
             </div>
         </div>
@@ -81,12 +81,12 @@
                 </div>
                 <div class="row collapse">
                     <div class="large-1 columns">
-                        <label for="station-name-filter">{{resource "stationNameHeaderText"}}
+                        <label for="station-filter">{{resource "stationNameHeaderText"}}
                         </label>
                     </div>
                     <div class="large-11 columns">
-                        <select id="station-name-filter" name="stationId">
-                            <option disabled="disabled" selected="selected" value="">{{resource "stationNameFilterDefaultOption"}}</option>
+                        <select id="station-filter" name="stationId">
+                            <option disabled="disabled" selected="selected" value="">{{resource "filterDefaultOption"}}</option>
                         </select>
                     </div>
                 </div>
@@ -97,7 +97,7 @@
                     </div>
                     <div class="large-2 columns">
                         <select id="purpose-filter" name="purpose" >
-                            <option disabled="disabled" selected="selected" value="">{{resource "purposeFilterDefaultOption"}}</option>
+                            <option disabled="disabled" selected="selected" value="">{{resource "filterDefaultOption"}}</option>
                         </select>
                     </div>
                     <div class="large-1 columns">
@@ -106,7 +106,7 @@
                     </div>
                     <div class="large-2 columns">
                         <select id="duration-filter" name="duration">
-                            <option disabled="disabled" selected="selected" value="">{{resource "durationFilterDefaultOption"}}</option>
+                            <option disabled="disabled" selected="selected" value="">{{resource "filterDefaultOption"}}</option>
                         </select>
                     </div>
                     <div class="large-1 columns">
@@ -140,8 +140,7 @@
                         <textarea id="additional-info-input" name="additionalInfo" placeholder="{{resource 'additionalInfoHeaderText'}}" rows="2" ></textarea>
                     </div>
                     <div class="large-1 columns">
-                        <label for="has-crew">{{resource "hasCrewHeaderText"}}
-                        </label>
+                        <span>{{resource "hasCrewHeaderText"}}</span>
                     </div>
                     <div class="large-5 columns">
                         <span class="bolder inline-block top-align">{{resource "noOptionText"}}</span>
