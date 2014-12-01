@@ -17,14 +17,14 @@ define(function(require) {
             options || (options = {});
             this.dispatcher = options.dispatcher || this;
 
+            this.userId = options.userId;
+            this.userName = options.userName;
             this.stationIdentifierCollection = options.stationIdentifierCollection || new Backbone.Collection();
 
             this.listenTo(this.collection, 'reset', this.addAll);
             this.listenTo(this.collection, 'sort', this.addAll);
-            this.listenTo(this.stationIdentifierCollection, 'reset', this.addStationNameFilter);
+            this.listenTo(this.stationIdentifierCollection, 'reset', this.addStationFilter);
             this.listenTo(this, 'leave', this.onLeave);
-
-            this.listenTo(appEvents, AppEventNamesEnum.userRoleUpdated, this.userRoleUpdated);
         },
         render: function() {
             console.trace('PersonnelStationEntryLogListView.render()');
@@ -36,6 +36,9 @@ define(function(require) {
             currentContext.setDefaultDateFilters(-1);
 
             return this;
+        },
+        setUserRole: function(userRole) {
+            this.userRole = userRole;
         },
         events: {
             'click #refresh-station-entry-log-list-button': 'dispatchRefreshStationEntryLogList',
@@ -56,12 +59,13 @@ define(function(require) {
             var currentContext = this;
             var stationEntryLogListItemView = new PersonnelStationEntryLogListItemView({
                 model: stationEntryLog,
-                dispatcher: currentContext.dispatcher
+                dispatcher: currentContext.dispatcher,
+                userRole: currentContext.userRole
             });
             this.appendChildTo(stationEntryLogListItemView, '#station-entry-log-list-item-container');
         },
-        addStationNameFilter: function() {
-            this.addFilter(this.$('#station-name-filter'), this.stationIdentifierCollection.models, 'stationId', 'stationName');
+        addStationFilter: function() {
+            this.addFilter(this.$('#station-filter'), this.stationIdentifierCollection.models, 'stationId', 'stationName');
         },
         dispatchRefreshStationEntryLogList: function(event) {
             if (event) {
@@ -74,7 +78,7 @@ define(function(require) {
                 event.preventDefault();
             }
 
-            this.$('#station-name-filter').val('');
+            this.$('#station-filter').val('');
             this.setDefaultDateFilters(-1);
             this.collection.setSortAttribute('outTime');
 
@@ -83,20 +87,24 @@ define(function(require) {
         refreshStationEntryLogList: function() {
             this.showLoading();
 
-            var userId = this.parent.model.get('userId');
-            var stationId = this.$('#station-name-filter').val();
+            var stationId = this.$('#station-filter').val();
             var startDate = this.$('#start-date-filter').val();
             var endDate = this.$('#end-date-filter').val();
 
             var options = {
-                userId: userId,
                 stationId: stationId,
                 startDate: startDate,
                 endDate: endDate,
                 onlyCheckedOut: true
             };
+            if (this.parent.model.has('userId')) {
+                options.userId = this.parent.model.get('userId');
+            }
+            if (this.parent.model.has('userName')) {
+                options.userName = this.parent.model.get('userName');
+            }
 
-            this.dispatcher.trigger(AppEventNamesEnum.refreshPersonnelList, this.collection, options);
+            this.dispatcher.trigger(AppEventNamesEnum.refreshStationEntryLogList, this.collection, options);
         },
         setDateFilter: function(event) {
             if (event) {
@@ -125,18 +133,23 @@ define(function(require) {
             if (event) {
                 event.preventDefault();
             }
-            
-            var userId = this.parent.model.get('userId');
-            var stationId = this.$('#station-name-filter').val();
+
+            var stationId = this.$('#station-filter').val();
             var startDate = this.$('#start-date-filter').val();
             var endDate = this.$('#end-date-filter').val();
             var options = {
-                userId: userId,
                 stationId: stationId,
                 startDate: startDate,
                 endDate: endDate,
                 reportType: 'PersonnelStationEntryLogs'
             };
+            if (this.parent.model.has('userId')) {
+                options.userId = this.parent.model.get('userId');
+            }
+            if (this.parent.model.has('userName')) {
+                options.userName = this.parent.model.get('userName');
+            }
+
             this.dispatcher.trigger(AppEventNamesEnum.goToExportStationEntryLogList, this.collection, options);
         }
     });

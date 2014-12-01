@@ -15,7 +15,7 @@ define(function(require) {
         
         goToStationEntryLogWithId: 'goToStationEntryLogWithId',
         goToStationWithId: 'goToStationWithId',
-        goToPersonnelWithId: 'goToPersonnelWithId',
+        goToPersonnel: 'goToPersonnel',
         
         refreshStationEntryLogList: 'refreshStationEntryLogList',
         refreshStationList: 'refreshStationList',
@@ -36,6 +36,9 @@ define(function(require) {
         cancelUpdateCheckIn: 'cancelUpdateCheckIn',
         updateCheckInSuccess: 'updateCheckInSuccess',
         updateCheckInError: 'updateCheckInError',
+        
+        refreshOptions: 'refreshOptions',
+        refreshFilters: 'refreshFilters',
         
         addItem: 'addItem',
         updateItem: 'updateItem',

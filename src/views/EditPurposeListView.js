@@ -37,15 +37,15 @@ define(function(require) {
 
             return this;
         },
-        events: {
-            'click #purpose-list-refresh-list-button': 'refreshPurposeList',
-            'click .new-purpose-item-save-link': 'getNewPurposeModelFromView',
-            'click .close-alert-box-button': 'closeAlertBox'
-        },
         setUserRole: function(userRole) {
             var currentContext = this;
             currentContext.userRole = userRole;
             currentContext.checkUserRole();
+        },
+        events: {
+            'click #purpose-list-refresh-list-button': 'refreshPurposeList',
+            'click .new-purpose-item-save-link': 'getNewPurposeModelFromView',
+            'click .close-alert-box-button': 'closeAlertBox'
         },
         checkUserRole: function() {
             var currentContext = this;

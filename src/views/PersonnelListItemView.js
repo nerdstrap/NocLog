@@ -11,11 +11,11 @@ define(function(require) {
             template = require('hbs!templates/PersonnelListItem');
 
     var PersonnelListItemView = CompositeView.extend({
-        tagName: 'li',
         initialize: function(options) {
             console.trace('PersonnelListItemView.initialize');
             options || (options = {});
             this.dispatcher = options.dispatcher || this;
+            this.userRole = options.userRole;
         },
         render: function() {
             console.trace('PersonnelListItemView.render()');
@@ -27,14 +27,26 @@ define(function(require) {
             return this;
         },
         events: {
-            'click .personnel-name-link': 'goToPersonnelWithId'
+            'click .personnel-link': 'goToPersonnel'
         },
-        goToPersonnelWithId: function(event) {
+        goToPersonnel: function(event) {
             if (event) {
                 event.preventDefault();
             }
-            var userId = this.model.get('userId');
-            this.dispatcher.trigger(AppEventNamesEnum.goToPersonnelWithId, userId);
+            if (event.target) {
+                var linkButton = $(event.target);
+                if (linkButton) {
+                    var userId = linkButton.data('user-id');
+                    if (userId) {
+                        this.dispatcher.trigger(AppEventNamesEnum.goToPersonnel, {userId: userId});
+                    } else {
+                        var userName = linkButton.data('user-name');
+                        if (userName) {
+                            this.dispatcher.trigger(AppEventNamesEnum.goToPersonnel, {userName: userName});
+                        }
+                    }
+                }
+            }
         }
     });
 

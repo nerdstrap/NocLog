@@ -30,7 +30,11 @@ define(function(require) {
 
             return this;
         },
+        setUserRole: function(userRole) {
+            this.userRole = userRole;
+        },
         events: {
+            'keypress #user-name-input': 'invokeRefreshPersonnelList',
             'click #refresh-personnel-list-button': 'dispatchRefreshPersonnelList',
             'click #reset-personnel-list-button': 'resetPersonnelList',
             'click .sort-button': 'sortListView',
@@ -47,12 +51,28 @@ define(function(require) {
             var currentContext = this;
             var personnelListItemView = new PersonnelListItemView({
                 model: personnel,
-                dispatcher: currentContext.dispatcher
+                dispatcher: currentContext.dispatcher,
+                userRole: currentContext.userRole
             });
-            this.appendChildTo(personnelListItemView, '.personnel-list-item-container');
+            this.appendChildTo(personnelListItemView, '#personnel-list-item-container');
         },
-        focusUserNameFilter: function() {
-            this.$('#user-name-filter').focus();
+        focusUserNameInput: function() {
+            this.$('#user-name-input').focus();
+        },
+        invokeRefreshPersonnelList: function (event) {
+            var validPattern = /^[A-Za-z0-9\s]*$/;
+            if (event) {
+                if (event.keyCode === 13) {
+                    /* enter key pressed */
+                    this.refreshPersonnelList();
+                }
+                var charCode = event.charCode || event.keyCode || event.which;
+                var inputChar = String.fromCharCode(charCode);
+                if (!validPattern.test(inputChar) && event.charCode !== 0) {
+                    event.preventDefault();
+                    return false;
+                }
+            }
         },
         dispatchRefreshPersonnelList: function(event) {
             if (event) {
@@ -60,22 +80,23 @@ define(function(require) {
             }
             this.refreshPersonnelList();
         },
-        resetSearchQueryInput: function(event) {
+        resetPersonnelList: function(event) {
             if (event) {
                 event.preventDefault();
-                this.focusUserNameFilter();
+                this.focusUserNameInput();
             }
-            this.$('#user-name-filter').val('');
+            this.$('#user-name-input').val('');
             this.collection.sortAttribute = 'userName';
             this.collection.reset();
         },
         refreshPersonnelList: function() {
-            var userName = this.$('#user-name-filter').val();
+            this.showLoading();
+            var userName = this.$('#user-name-input').val();
             if (userName && userName.length > 2) {
                 var options = {
                     userName: userName
                 };
-                this.dispatcher.trigger(AppEventNamesEnum.updatePersonnelList, this.collection, options);
+                this.dispatcher.trigger(AppEventNamesEnum.refreshPersonnelList, this.collection, options);
             } else {
                 this.showInfo('user name must be greater than 2 characters');
             }

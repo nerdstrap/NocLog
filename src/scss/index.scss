@@ -2,7 +2,7 @@
 @import "foundation";
 
 /* -------- NocLog -------- */
-
+ 
 root {
     display: block;
     font-size: 1em;
@@ -33,7 +33,7 @@ body {
     padding-bottom: 40px; }
 
 /* must be same height as the footer */
-#footer {
+#footer-view {
     position: relative;
     margin-top: -40px;
     /* negative value of footer height */
@@ -74,6 +74,7 @@ body:before {
     display: none;
 }
 
+.personnel-list-view, 
 .purpose-list-view,
 .station-entry-log-list-view,
 .station-entry-log-history-list-view,
@@ -102,7 +103,7 @@ body:before {
 }
 
 .list-header-item-view .columns span {
-    position: absolute;
+    /*position: absolute;*/
     bottom: 0;
     left: 0;
 }
@@ -111,6 +112,7 @@ body:before {
 .station-entry-log-history-list-item-view,
 .station-list-item-view,
 .station-list-item-view,
+.personnel-list-item-view,
 .personnel-station-entry-log-list-item-view {
     background-color: #DEDEDE;
     border: solid 1px #C2C2C2;
@@ -175,8 +177,7 @@ textarea {
 .new-station-entry-log-view input[type="search"], 
 .new-station-entry-log-view input[type="tel"], 
 .new-station-entry-log-view input[type="time"], 
-.new-station-entry-log-view input[type="url"], 
-.new-station-entry-log-view textarea {
+.new-station-entry-log-view input[type="url"]{
     min-width: 170px;
     max-width: 170px;
 }
@@ -194,8 +195,7 @@ textarea {
 .station-entry-log-view input[type="search"], 
 .station-entry-log-view input[type="tel"], 
 .station-entry-log-view input[type="time"], 
-.station-entry-log-view input[type="url"], 
-.station-entry-log-view textarea,
+.station-entry-log-view input[type="url"],
 .station-entry-log-list-view select, 
 .station-entry-log-list-view input[type="text"], 
 .station-entry-log-list-view input[type="password"], 
@@ -209,8 +209,7 @@ textarea {
 .station-entry-log-list-view input[type="search"], 
 .station-entry-log-list-view input[type="tel"], 
 .station-entry-log-list-view input[type="time"], 
-.station-entry-log-list-view input[type="url"], 
-.station-entry-log-list-view textarea,
+.station-entry-log-list-view input[type="url"],
 .station-entry-log-history-list-view select, 
 .station-entry-log-history-list-view input[type="text"], 
 .station-entry-log-history-list-view input[type="password"], 
@@ -224,8 +223,7 @@ textarea {
 .station-entry-log-history-list-view input[type="search"], 
 .station-entry-log-history-list-view input[type="tel"], 
 .station-entry-log-history-list-view input[type="time"], 
-.station-entry-log-history-list-view input[type="url"], 
-.station-entry-log-history-list-view textarea,
+.station-entry-log-history-list-view input[type="url"],
 .station-list-view select, 
 .station-list-view input[type="text"], 
 .station-list-view input[type="password"], 
@@ -239,8 +237,7 @@ textarea {
 .station-list-view input[type="search"], 
 .station-list-view input[type="tel"], 
 .station-list-view input[type="time"], 
-.station-list-view input[type="url"], 
-.station-list-view textarea,
+.station-list-view input[type="url"],
 .personnel-list-view select, 
 .personnel-list-view input[type="text"], 
 .personnel-list-view input[type="password"], 
@@ -254,8 +251,7 @@ textarea {
 .personnel-list-view input[type="search"], 
 .personnel-list-view input[type="tel"], 
 .personnel-list-view input[type="time"], 
-.personnel-list-view input[type="url"], 
-.personnel-list-view textarea,
+.personnel-list-view input[type="url"],
 .personnel-station-entry-log-list-view select, 
 .personnel-station-entry-log-list-view input[type="text"], 
 .personnel-station-entry-log-list-view input[type="password"], 
@@ -269,8 +265,7 @@ textarea {
 .personnel-station-entry-log-list-view input[type="search"], 
 .personnel-station-entry-log-list-view input[type="tel"], 
 .personnel-station-entry-log-list-view input[type="time"], 
-.personnel-station-entry-log-list-view input[type="url"], 
-.personnel-station-entry-log-list-view textarea
+.personnel-station-entry-log-list-view input[type="url"]
 {
     min-width: 170px;
     max-width: 170px;
@@ -314,16 +309,14 @@ span.detail {
     font-size: 1.2em;
     line-height: 1.2em;
     border-bottom: 1px;
-    float:right;
+    float:left;
 }
 
 #new-station-entry-log-station-identifier,
 #new-station-entry-log-purpose,
 #new-station-entry-log-duration,
 #new-station-entry-log-purpose-other,
-#new-station-entry-log-additional-info,
-#edit-station-entry-log-duration,
-#edit-station-entry-log-additional-info
+#edit-station-entry-log-duration
 {
     width: 199px;
     min-width: 199px;
@@ -380,4 +373,34 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
 
 .inline-block {
     display: inline-block;
+}
+
+.large-link {
+    font-size: 1.125rem;
+}
+
+label {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+#new-station-entry-log-purpose-other,
+#new-station-entry-log-additional-info,
+#edit-station-entry-log-additional-info {
+    width: 99%;
+    resize: none;
+}
+
+.view-station-entry-log-link,
+.station-entry-log-link,
+.check-out-link,
+.view-station-entry-log-link {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.purpose-list-item-view input,
+.purpose-list-item-view select,
+.purpose-list-item-view textarea {
+    width: 99%;
 }

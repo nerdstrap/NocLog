@@ -7,12 +7,12 @@
     </div>
     <div class="row collapse">
         <div class="large-12 columns">
-            <h3 data-stationid="{{stationId}}">{{resource "stationName}}</h3>
+            <h3 data-station-id="{{stationId}}">{{stationName}}</h3>
         </div>
     </div>
     <div class="row collapse">
         <div class="large-12 columns">
-            <a class="directions-link" data-latitude="{{latitude}}" data-longitude="{{longitude}}">{{resource "goToMapButtonText"}}</a>
+            <a class="directions-link" data-latitude="{{latitude}}" data-longitude="{{longitude}}" href="#">{{resource "goToMapButtonText"}}</a>
         </div>
     </div>
     <div id="station-view-section-container" class="row">
@@ -355,10 +355,10 @@
                         </div>
                         <div class="row collapse">
                             <div class="large-4 columns">
-                                <span>{{resource "benefittingOrganizationHeaderText"}}</span>
+                                <span>{{resource "benefitingOrganizationHeaderText"}}</span>
                             </div>
                             <div class="large-8 columns">
-                                <span class="detail">{{withDefault benefittingOrganization "&nbsp;"}}</span>
+                                <span class="detail">{{withDefault benefitingOrganization "&nbsp;"}}</span>
                             </div>
                         </div>
                         <div class="row collapse">

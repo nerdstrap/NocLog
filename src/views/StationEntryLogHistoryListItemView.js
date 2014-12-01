@@ -15,6 +15,7 @@ define(function(require) {
             console.trace('StationEntryLogHistoryListItemView.initialize');
             options || (options = {});
             this.dispatcher = options.dispatcher || this;
+            this.userRole = options.userRole;
         },
         render: function() {
             console.trace('StationEntryLogHistoryListItemView.render()');
@@ -26,10 +27,10 @@ define(function(require) {
             return this;
         },
         events: {
-            'click .station-name-link': 'goToStationWithId',
-            'click .personnel-name-link': 'goToPersonnelWithId',
+            'click .station-link': 'goToStationWithId',
+            'click .personnel-link': 'goToPersonnel',
             'click .elevated-functions-toggle': 'toggleElevatedFunctions',
-            'click .view-station-entry-log-link': 'goToStationEntryLogWithId'
+            'click .view-station-entry-log-button': 'goToStationEntryLogWithId'
         },
         goToStationWithId: function(event) {
             if (event) {
@@ -38,19 +39,31 @@ define(function(require) {
             var stationId = this.model.get('stationId');
             this.dispatcher.trigger(AppEventNamesEnum.goToStationWithId, stationId);
         },
-        goToPersonnelWithId: function(event) {
+        goToPersonnel: function(event) {
             if (event) {
                 event.preventDefault();
             }
-            var userId = this.model.get('userId');
-            this.dispatcher.trigger(AppEventNamesEnum.goToPersonnelWithId, userId);
+            if (event.target) {
+                var linkButton = $(event.target);
+                if (linkButton) {
+                    var userId = linkButton.data('user-id');
+                    if (userId) {
+                        this.dispatcher.trigger(AppEventNamesEnum.goToPersonnel, {userId: userId});
+                    } else {
+                        var userName = linkButton.data('user-name');
+                        if (userName) {
+                            this.dispatcher.trigger(AppEventNamesEnum.goToPersonnel, {userName: userName});
+                        }
+                    }
+                }
+            }
         },
         goToStationEntryLogWithId: function(event) {
             if (event) {
                 event.preventDefault();
             }
             var stationEntryLogId = this.model.get('stationEntryLogId');
-            this.dispatcher.trigger(AppEventNamesEnum.goToStationEntryLogWithId, stationEntryLogId);
+            this.dispatcher.trigger(AppEventNamesEnum.goToStationEntryLogWithId, stationEntryLogId, AppEventNamesEnum.goToStationEntryLogHistoryList);
         },
         toggleElevatedFunctions: function(event) {
             if (event) {

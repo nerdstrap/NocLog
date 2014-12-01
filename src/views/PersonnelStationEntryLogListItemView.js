@@ -16,6 +16,7 @@ define(function(require) {
             console.trace('PersonnelStationEntryLogListItemView.initialize');
             options || (options = {});
             this.dispatcher = options.dispatcher || this;
+            this.userRole = options.userRole;
         },
         render: function() {
             console.trace('PersonnelStationEntryLogListItemView.render()');
@@ -27,7 +28,7 @@ define(function(require) {
             return this;
         },
         events: {
-            'click .station-name-link': 'goToStationWithId'
+            'click .station-link': 'goToStationWithId'
         },
         goToStationWithId: function(event) {
             if (event) {

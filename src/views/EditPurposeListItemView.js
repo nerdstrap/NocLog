@@ -23,6 +23,7 @@ define(function(require) {
             options || (options = {});
             this.dispatcher = options.dispatcher || this;
             this.durationCollection = options.durationCollection;
+            this.userRole = options.userRole;
 
             this.listenTo(this.model, 'validated', this.onValidated);
             this.listenTo(this, 'leave', this.onLeave);

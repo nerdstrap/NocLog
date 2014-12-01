@@ -16,7 +16,7 @@ define(function(require) {
             console.trace('appRouter.initialize');
             options || (options = {});
             var currentContext = this;
-            
+
             var shellViewInstance = new ShellView({
                 model: new Backbone.Model({id: 1}),
                 el: $('body'),
@@ -37,7 +37,8 @@ define(function(require) {
             'stationEntryLogHistory': 'goToStationEntryLogHistoryList',
             'stationEntryLog/:id': 'goToStationEntryLogWithId',
             'station/:id': 'goToStationWithId',
-            'personnel/:id': 'goToPersonnelWithId',
+            'personnel/userId/:id': 'goToPersonnelWithUserId',
+            'personnel/userName/:userName': 'goToPersonnelWithUserName',
             'maintenance': 'goToMaintainPurposes'
         },
         goToStationEntryLogList: function() {
@@ -64,9 +65,13 @@ define(function(require) {
             console.trace('appRouter.goToStationWithId');
             this.dashboardControllerInstance.goToStationWithId(stationId);
         },
-        goToPersonnelWithId: function(personnelId) {
-            console.trace('appRouter.goToPersonnelWithId');
-            this.dashboardControllerInstance.goToPersonnelWithId(personnelId);
+        goToPersonnelWithUserId: function(userId) {
+            console.trace('appRouter.goToPersonnelWithUserId');
+            this.dashboardControllerInstance.goToPersonnel({userId: userId});
+        },
+        goToPersonnelWithUserName: function(userName) {
+            console.trace('appRouter.goToPersonnelWithUserName');
+            this.dashboardControllerInstance.goToPersonnel({userName: userName});
         },
         navigate: function(fragment, options) {
             SwappingRouter.prototype.navigate.call(this, fragment, options);

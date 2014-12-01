@@ -28,8 +28,6 @@ define(function(require) {
             this.listenTo(this.areaCollection, 'reset', this.addAreaNameFilter);
 
             this.listenTo(this, 'leave', this.onLeave);
-
-            this.listenTo(appEvents, AppEventNamesEnum.userRoleUpdated, this.userRoleUpdated);
         },
         render: function() {
             console.trace('StationEntryLogHistoryListView.render()');
@@ -41,6 +39,9 @@ define(function(require) {
             currentContext.setDefaultDateFilters(-1);
 
             return this;
+        },
+        setUserRole: function(userRole) {
+            this.userRole = userRole;
         },
         events: {
             'click #refresh-station-entry-log-list-button': 'dispatchRefreshStationEntryLogList',
@@ -61,18 +62,19 @@ define(function(require) {
             var currentContext = this;
             var stationEntryLogListItemView = new StationEntryLogHistoryListItemView({
                 model: stationEntryLog,
-                dispatcher: currentContext.dispatcher
+                dispatcher: currentContext.dispatcher,
+                userRole: currentContext.userRole
             });
             this.appendChildTo(stationEntryLogListItemView, '#station-entry-log-list-item-container');
         },
         addStationNameFilter: function() {
-            this.addFilter(this.$('#station-name-filter'), this.stationIdentifierCollection.models, 'stationId', 'stationName');
+            this.addFilter(this.$('#station-filter'), this.stationIdentifierCollection.models, 'stationId', 'stationName');
         },
         addRegionNameFilter: function() {
-            this.addFilter(this.$('#region-name-filter'), this.regionCollection.models, 'regionName', 'regionName');
+            this.addFilter(this.$('#region-filter'), this.regionCollection.models, 'regionName', 'regionName');
         },
         addAreaNameFilter: function() {
-            this.addFilter(this.$('#area-name-filter'), this.areaCollection.models, 'areaName', 'areaName');
+            this.addFilter(this.$('#area-filter'), this.areaCollection.models, 'areaName', 'areaName');
         },
         dispatchRefreshStationEntryLogList: function(event) {
             if (event) {
@@ -85,9 +87,9 @@ define(function(require) {
                 event.preventDefault();
             }
 
-            this.$('#station-name-filter').val('');
-            this.$('#region-name-filter').val('');
-            this.$('#area-name-filter').val('');
+            this.$('#station-filter').val('');
+            this.$('#region-filter').val('');
+            this.$('#area-filter').val('');
             this.setDefaultDateFilters(-1);
             this.collection.setSortAttribute('outTime');
 
@@ -96,9 +98,9 @@ define(function(require) {
         refreshStationEntryLogList: function() {
             this.showLoading();
 
-            var stationId = this.$('#station-name-filter').val();
-            var regionName = this.$('#region-name-filter').val();
-            var areaName = this.$('#area-name-filter').val();
+            var stationId = this.$('#station-filter').val();
+            var regionName = this.$('#region-filter').val();
+            var areaName = this.$('#area-filter').val();
             var startDate = this.$('#start-date-filter').val();
             //var startTime = this.$('#start-time-filter').val();
             var endDate = this.$('#end-date-filter').val();
@@ -146,9 +148,9 @@ define(function(require) {
                 event.preventDefault();
             }
 
-            var stationId = this.$('#station-name-filter').val();
-            var regionName = this.$('#region-name-filter').val();
-            var areaName = this.$('#area-name-filter').val();
+            var stationId = this.$('#station-filter').val();
+            var regionName = this.$('#region-filter').val();
+            var areaName = this.$('#area-filter').val();
             var startDate = this.$('#start-date-filter').val();
             //var startTime = this.$('#start-time-filter').val();
             var endDate = this.$('#end-date-filter').val();

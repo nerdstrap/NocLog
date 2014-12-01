@@ -1,21 +1,21 @@
-define(function (require) {
+define(function(require) {
 
     'use strict';
     var $ = require('jquery'),
-        _ = require('underscore'),
-        Backbone = require('backbone'),
-        validation = require('backbone.validation'),
-        helpers = require('handlebars.helpers'),
-        BaseSingletonView = require('views/BaseSingletonView'),
-        PersonnelCollection = require('collections/PersonnelCollection'),
-        StationEntryLogModel = require('models/StationEntryLogModel'),
-        AppEventNamesEnum = require('enums/AppEventNamesEnum'),
-        appEvents = require('events'),
-        utils = require('utils'),
-        template = require('hbs!templates/NewStationEntryLog');
+            _ = require('underscore'),
+            Backbone = require('backbone'),
+            validation = require('backbone.validation'),
+            helpers = require('handlebars.helpers'),
+            BaseSingletonView = require('views/BaseSingletonView'),
+            PersonnelCollection = require('collections/PersonnelCollection'),
+            StationEntryLogModel = require('models/StationEntryLogModel'),
+            AppEventNamesEnum = require('enums/AppEventNamesEnum'),
+            appEvents = require('events'),
+            utils = require('utils'),
+            template = require('hbs!templates/NewStationEntryLog');
 
     var NewStationEntryLog = BaseSingletonView.extend({
-        initialize: function (options) {
+        initialize: function(options) {
             console.trace('NewStationEntryLog.initialize');
             options || (options = {});
             this.dispatcher = options.dispatcher || this;
@@ -36,7 +36,7 @@ define(function (require) {
             this.listenTo(appEvents, AppEventNamesEnum.checkInSuccess, this.onCheckInSuccess);
             this.listenTo(appEvents, AppEventNamesEnum.checkInError, this.onCheckInError);
         },
-        render: function () {
+        render: function() {
             console.trace('NewStationEntryLog.render()');
             var currentContext = this;
 
@@ -53,29 +53,47 @@ define(function (require) {
 
             return this;
         },
-        addStationFilter: function () {
+        setUserRole: function(userRole) {
+            this.userRole = userRole;
+        },
+        addStationFilter: function() {
             this.addFilter(this.$('#station-filter'), this.stationIdentifierCollection.models, 'stationId', 'stationName');
         },
-        addPurposeFilter: function () {
+        addPurposeFilter: function() {
             this.addFilter(this.$('#purpose-filter'), this.purposeCollection.models, 'itemAdditionalData', 'itemText');
         },
-        addDurationFilter: function () {
+        addDurationFilter: function() {
             this.addFilter(this.$('#duration-filter'), this.durationCollection.models, 'itemValue', 'itemText');
         },
         events: {
-            'change #third-party-indicator': 'updateViewType',
+            'keypress #third-party-indicator-container': 'invokeUpdateViewType',
+            'change #third-party-indicator': 'dispatchUpdateViewType',
             'keypress #user-id-input': 'invokeRefreshPersonnelList',
             'click #lookup-user-id-button': 'dispatchRefreshPersonnelList',
             'change #purpose-filter': 'purposeChanged',
             'change #duration-filter': 'durationChanged',
-            'change #has-crew-indicator': 'updateHasCrew',
+            'keypress #has-crew-indicator-container': 'invokeUpdateHasCrew',
+            'change #has-crew-indicator': 'dispatchUpdateHasCrew',
             'click #save-new-station-entry-log-button': 'validateAndSubmitCheckIn',
             'click #cancel-save-new-station-entry-log-button': 'cancelCheckIn'
         },
-        updateViewType: function (event) {
+        dispatchUpdateViewType: function(event) {
             if (event) {
                 event.preventDefault();
             }
+            this.updateViewType();
+        },
+        invokeUpdateViewType: function(event) {
+            if (event) {
+                if (event.keyCode === 32) {
+                    /* spacebar key pressed */
+                    this.$('#third-party-indicator').prop('checked', true);
+                    this.updateViewType();
+                }
+                event.preventDefault();
+            }
+        },
+        updateViewType: function() {
             this.updateIndicatorLabel(this.$('#third-party-indicator'));
             var thirdParty = this.$('#third-party-indicator').is(':checked');
             if (thirdParty) {
@@ -90,7 +108,7 @@ define(function (require) {
                 this.$('.first-party-input').prop('disabled', false);
             }
         },
-        invokeRefreshPersonnelList: function (event) {
+        invokeRefreshPersonnelList: function(event) {
             var validPattern = /^[A-Za-z0-9\s]*$/;
             if (event) {
                 if (event.keyCode === 13) {
@@ -105,20 +123,20 @@ define(function (require) {
                 }
             }
         },
-        dispatchRefreshPersonnelList: function (event) {
+        dispatchRefreshPersonnelList: function(event) {
             if (event) {
                 event.preventDefault();
             }
             this.refreshPersonnelList();
         },
-        refreshPersonnelList: function () {
+        refreshPersonnelList: function() {
             var userId = this.$('#user-id-input').val();
             this.listenToOnce(this.personnelCollection, 'reset', this.userLookupComplete);
             this.listenToOnce(this.personnelCollection, 'error', this.userLookupComplete);
             this.showLoading(false);
             this.dispatcher.trigger(AppEventNamesEnum.refreshPersonnelList, this.personnelCollection, {userId: userId});
         },
-        userLookupComplete: function () {
+        userLookupComplete: function() {
             this.hideLoading();
             if (this.personnelCollection.length > 0) {
                 this.updateUserFromModel(this.personnelCollection.pop({silent: true}));
@@ -127,7 +145,7 @@ define(function (require) {
                 this.showError('user id not found!');
             }
         },
-        updateUserFromModel: function (personnelModel) {
+        updateUserFromModel: function(personnelModel) {
             if (personnelModel) {
                 this.$('#first-name-input').val(personnelModel.get('firstName'));
                 this.$('#middle-initial-input').val(personnelModel.get('middleInitial'));
@@ -138,7 +156,7 @@ define(function (require) {
                 this.$('.third-party-input').val('');
             }
         },
-        purposeChanged: function (event) {
+        purposeChanged: function(event) {
             if (event) {
                 event.preventDefault();
             }
@@ -150,7 +168,7 @@ define(function (require) {
                 this.updateExpectedOutTime(defaultDuration);
             }
         },
-        durationChanged: function (event) {
+        durationChanged: function(event) {
             if (event) {
                 event.preventDefault();
             }
@@ -159,34 +177,47 @@ define(function (require) {
             this.updateExpectedOutTime(duration);
             this.manualDurationEntry = true;
         },
-        updateExpectedOutTime: function (duration) {
+        updateExpectedOutTime: function(duration) {
             if (duration && !isNaN(duration)) {
                 duration = Number(duration);
                 var expectedOutTime = utils.addMinutes(new Date(), duration);
                 this.$('#expected-out-time-input').html(helpers.formatDateWithDefault(expectedOutTime, "%r", "&nbsp;"));
             }
         },
-        togglePurposeOther: function (show) {
+        togglePurposeOther: function(show) {
             if (show) {
                 this.$('#purpose-other-container').removeClass('hidden');
             } else {
                 this.$('#purpose-other-container').addClass('hidden');
             }
         },
-        updateHasCrew: function (event) {
+        dispatchUpdateHasCrew: function(event) {
             if (event) {
                 event.preventDefault();
             }
+            this.updateHasCrew();
+        },
+        invokeUpdateHasCrew: function(event) {
+            if (event) {
+                if (event.keyCode === 32) {
+                    /* spacebar key pressed */
+                    this.$('#has-crew-indicator').prop('checked', true);
+                    this.updateHasCrew();
+                }
+                event.preventDefault();
+            }
+        },
+        updateHasCrew: function() {
             this.updateIndicatorLabel(this.$('#has-crew-indicator'));
         },
-        validateAndSubmitCheckIn: function (event) {
+        validateAndSubmitCheckIn: function(event) {
             if (event) {
                 event.preventDefault();
             }
             this.updateModelFromView();
             this.model.validate();
         },
-        updateModelFromView: function () {
+        updateModelFromView: function() {
             var thirdParty = this.$('#third-party-indicator').is(':checked');
 
             var userId;
@@ -234,7 +265,7 @@ define(function (require) {
                 additionalInfo: additionalInfo
             });
         },
-        onValidated: function (isValid, model, errors) {
+        onValidated: function(isValid, model, errors) {
             if (isValid) {
                 this.checkIn();
             } else {
@@ -242,26 +273,26 @@ define(function (require) {
                 this.showError(message);
             }
         },
-        checkIn: function () {
+        checkIn: function() {
             this.showLoading(false);
             this.dispatcher.trigger(AppEventNamesEnum.checkIn, this.model);
         },
-        cancelCheckIn: function (event) {
+        cancelCheckIn: function(event) {
             if (event) {
                 event.preventDefault();
             }
             this.dispatcher.trigger(AppEventNamesEnum.cancelCheckIn);
             this.leave();
         },
-        onCheckInSuccess: function () {
+        onCheckInSuccess: function() {
             this.hideLoading();
             this.leave();
         },
-        onCheckInError: function (message) {
+        onCheckInError: function(message) {
             this.hideLoading();
             this.showError(message);
         },
-        onLeave: function () {
+        onLeave: function() {
         }
     });
     return NewStationEntryLog;

@@ -1,25 +1,23 @@
 <div class="personnel-station-entry-log-list-view">
     <div class="row collapse">
         <div class="large-12 columns">
-            <h3>{{resource "stationEntryLogList.viewTitleText"}}</h3>
+            <h3>{{resource "historicalStationEntryLogList.viewTitleText"}}</h3>
         </div>
     </div>
     <div class="row collapse">
         <div class="large-2 columns">
             <label>{{resource "stationNameHeaderText"}}</label>
-            <select id="station-name-filter">
+            <select id="station-filter">
                 <option disabled="disabled" selected="selected">{{resource "filterDefaultOption"}}</option>
             </select>
         </div>
         <div class="large-2 columns">
             <label>{{resource "startDateHeaderText"}}</label>
             <input id="start-date-filter" type="date">
-            <!--<input id="start-time-filter" type="time">-->
         </div>
         <div class="large-2 columns">
             <label>{{resource "endDateHeaderText"}}</label>
             <input id="end-date-filter" type="date">
-            <!--<input id="end-time-filter" type="time">-->
         </div>
         <div class="large-6 columns">
             &nbsp;
@@ -27,8 +25,8 @@
     </div>
     <div class="row collapse">
         <div class="large-2 columns">
-            <a id="refresh-station-entry-log-list-button" class="button radius">{{resource "refreshButtonText"}}</a>
-            <a id="reset-station-entry-log-list-button" class="button radius secondary">{{resource "resetButtonText"}}</a>
+            <a id="refresh-station-entry-log-list-button" class="button radius" href="#">{{resource "refreshButtonText"}}</a>
+            <a id="reset-station-entry-log-list-button" class="button radius secondary" href="#">{{resource "resetButtonText"}}</a>
         </div>
         <div class="large-6 columns">
             <span>{{resource "showPreviousHeaderText"}}</span>
@@ -39,7 +37,7 @@
             <span>{{resource "daysHeaderText"}}</span>
         </div>
         <div class="large-4 columns">
-            <a id="export-station-entry-log-list-button" class="button radius success">{{resource "exportButtonText"}}</a>
+            <a id="export-station-entry-log-list-button" class="button radius success" href="#">{{resource "exportButtonText"}}</a>
         </div>
     </div>
 

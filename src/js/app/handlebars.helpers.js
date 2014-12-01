@@ -66,11 +66,19 @@ define(function(require) {
         }
         return helpers.withDefault(date, defaultValue);
     };
-    
-    helpers.formatYesNo = function(option) {
-        return option ? 'Yes' : 'No';
+    helpers.formatTimespan = function(timespan) {
+        var hoursAndSeconds = utils.convertMillisecondsToHoursAndMinutes(timespan);
+        return hoursAndSeconds.hours + ' hrs ' + hoursAndSeconds.minutes + ' mins';
     };
-    
+    helpers.formatTimespanWithDefault = function(timespan, defaultValue) {
+        if (timespan) {
+            return helpers.formatTimespan(timespan);
+        }
+        return helpers.withDefault(timespan, defaultValue);
+    };
+    helpers.formatYesNo = function(option) {
+        return option === 'false' ? 'No' : 'Yes';
+    };
     helpers.formatYesNoWithDefault = function(option, defaultValue) {
         if (option) {
             return helpers.formatYesNo(option);

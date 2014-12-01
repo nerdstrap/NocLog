@@ -44,22 +44,20 @@ define(function(require) {
         return yyyy + '-' + mm + '-' + dd;
     };
 
-    utils.milliSecondsToTime = function(milliSecs) {
+    utils.convertMillisecondsToHoursAndMinutes = function(milliseconds) {
 
         var ms = (1000),
                 mm = (ms * 60),
                 mh = (mm * 60),
-                hours = Math.floor(milliSecs / mh),
-                minutes = Math.floor((milliSecs - (hours * mh)) / mm),
-                seconds = Math.floor((milliSecs - (hours * mh) - (minutes * mm)) / ms);
+                hours = Math.floor(milliseconds / mh),
+                minutes = Math.floor((milliseconds - (hours * mh)) / mm),
+                seconds = Math.floor((milliseconds - (hours * mh) - (minutes * mm)) / ms);
 
         if (seconds > 0) {
             minutes = Number(minutes) + 1;
         }
 
-        var resultString = hours + ' hrs ' + minutes + ' mins';
-
-        return resultString;
+        return {hours: hours, minutes: minutes};
     };
 
     utils.getFilterOptions = function(collection, valuePropertyName, textPropertyName) {
@@ -70,7 +68,7 @@ define(function(require) {
             };
         });
     };
-    
+
     utils.getCSVFileName = function(options) {
 
         var csvFileName = "";

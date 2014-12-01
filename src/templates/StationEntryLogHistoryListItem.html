@@ -1,15 +1,18 @@
 <div class="station-entry-log-history-list-item-view">
     <div class="row collapse">
         <div class="large-1 columns">
-            <a class="station-name-link" data-station-id="{{stationId}}">{{withDefault stationName "&nbsp;"}}</a>
+            <span class="collapse elevated-functions-toggle">
+                <i class="fa fa-plus hide-container-icon"></i>
+                <i class="fa fa-minus show-container-icon hidden"></i>
+            </span>
+            &nbsp;
+            <a class="station-link" data-station-id="{{stationId}}" href="#">{{withDefault stationName "&nbsp;"}}</a>
         </div>
         <div class="large-1 columns">
-            {{#if userId}}
-            <a class="personnel-name-link" data-user-id="{{userId}}">{{withDefault userName "&nbsp;"}}</a>
-            {{else}}
-            {{#if thirdParty}}<i class="fa fa-globe"></i>{{/if}}
-            {{withDefault userName "&nbsp;"}}
+            {{#if thirdParty}}
+            <i id="third-party-icon" class="fa fa-globe"></i>
             {{/if}}
+            <a class="personnel-link" data-user-id="{{userId}}" data-user-name="{{userName}}" href="#">{{withDefault userName "&nbsp;"}}</a>
         </div>
         <div class="large-1 columns">
             <span>{{formatPhoneWithDefault contactNumber "%D %I:%M %p" "&nbsp;"}}</span>
@@ -31,15 +34,11 @@
         </div>
         <div class="large-1 columns">
             <span>{{withDefault areaName "&nbsp;"}}</span>
-            <span class="collapse elevated-functions-toggle">
-                <i class="fa fa-angle-double-up hide-container-icon"></i>
-                <i class="fa fa-angle-double-down show-container-icon hidden"></i>
-            </span>
         </div>
     </div>
     <div class="row collapse elevated-functions-container hidden">
-        <div class="large-2 columns large-offset-10">
-            <a class="view-station-entry-log-link button radius tiny">{{resource "viewCheckInButtonText"}}</a>
+        <div class="large-2 columns">
+            <a class="view-station-entry-log-button button radius tiny" href="#">{{resource "viewCheckInButtonText"}}</a>
         </div>
     </div>
 </div>

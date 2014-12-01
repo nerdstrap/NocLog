@@ -17,7 +17,6 @@ define(function(require) {
             this.dispatcher = options.dispatcher || this;
 
             this.listenTo(this.model, 'change', this.render);
-            this.listenTo(this.model, 'sync', this.render);
         },
         render: function() {
             console.trace('StationView.render()');
@@ -25,8 +24,13 @@ define(function(require) {
 
             var renderModel = _.extend({}, currentContext.model.attributes);
             currentContext.$el.html(template(renderModel));
+            
+            this.hideLoading();
 
             return this;
+        },
+        setUserRole: function(userRole) {
+            this.userRole = userRole;
         },
         events: {
             'click .directions-link': 'goToDirectionsWithLatLng',

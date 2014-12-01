@@ -5,28 +5,27 @@ define(function(require) {
             _ = require('underscore'),
             Backbone = require('backbone'),
             DashboardService = require('services/DashboardService'),
-            EditPurposeListView = require('views/EditPurposeListView'),
             StationEntryLogListView = require('views/StationEntryLogListView'),
             StationEntryLogHistoryListView = require('views/StationEntryLogHistoryListView'),
             StationListView = require('views/StationListView'),
             PersonnelListView = require('views/PersonnelListView'),
+            EditPurposeListView = require('views/EditPurposeListView'),
             NewStationEntryLogView = require('views/NewStationEntryLogView'),
             StationEntryLogView = require('views/StationEntryLogView'),
             StationView = require('views/StationView'),
             PersonnelView = require('views/PersonnelView'),
-            StationEntryLogModel = require('models/StationEntryLogModel'),
-            NewStationEntryLogModel = require('models/NewStationEntryLogModel'),
-            StationModel = require('models/StationModel'),
-            PersonnelModel = require('models/PersonnelModel'),
             StationEntryLogCollection = require('collections/StationEntryLogCollection'),
             StationCollection = require('collections/StationCollection'),
             PersonnelCollection = require('collections/PersonnelCollection'),
             LookupDataItemCollection = require('collections/LookupDataItemCollection'),
             PurposeCollection = require('collections/PurposeCollection'),
+            StationEntryLogModel = require('models/StationEntryLogModel'),
+            NewStationEntryLogModel = require('models/NewStationEntryLogModel'),
+            StationModel = require('models/StationModel'),
+            PersonnelModel = require('models/PersonnelModel'),
             AppEventNamesEnum = require('enums/AppEventNamesEnum'),
             appEvents = require('events'),
             globals = require('globals'),
-            env = require('env'),
             utils = require('utils');
 
     /**
@@ -52,12 +51,6 @@ define(function(require) {
             this.dispatcher = options.dispatcher || appEvents;
             this.dashboardService = options.dashboardService || new DashboardService();
 
-            this.stationIdentifierResults = options.stationIdentifierCollection || new Backbone.Collection();
-            this.regionResults = options.regionCollection || new Backbone.Collection();
-            this.areaResults = options.areaCollection || new Backbone.Collection();
-            this.purposeResults = options.purposeCollection || new LookupDataItemCollection();
-            this.durationResults = options.durationCollection || new LookupDataItemCollection();
-
             this.listenTo(appEvents, AppEventNamesEnum.goToStationEntryLogList, this.goToStationEntryLogList);
             this.listenTo(appEvents, AppEventNamesEnum.goToStationEntryLogHistoryList, this.goToStationEntryLogHistoryList);
             this.listenTo(appEvents, AppEventNamesEnum.goToStationList, this.goToStationList);
@@ -66,7 +59,7 @@ define(function(require) {
 
             this.listenTo(appEvents, AppEventNamesEnum.goToStationEntryLogWithId, this.goToStationEntryLogWithId);
             this.listenTo(appEvents, AppEventNamesEnum.goToStationWithId, this.goToStationWithId);
-            this.listenTo(appEvents, AppEventNamesEnum.goToPersonnelWithId, this.goToPersonnelWithId);
+            this.listenTo(appEvents, AppEventNamesEnum.goToPersonnel, this.goToPersonnel);
 
             this.listenTo(appEvents, AppEventNamesEnum.refreshStationEntryLogList, this.refreshStationEntryLogList);
             this.listenTo(appEvents, AppEventNamesEnum.refreshStationList, this.refreshStationList);
@@ -77,6 +70,9 @@ define(function(require) {
             this.listenTo(appEvents, AppEventNamesEnum.checkIn, this.checkIn);
             this.listenTo(appEvents, AppEventNamesEnum.checkOut, this.checkOut);
             this.listenTo(appEvents, AppEventNamesEnum.updateCheckIn, this.updateCheckIn);
+
+            this.listenTo(appEvents, AppEventNamesEnum.refreshOptions, this.refreshOptions);
+            this.listenTo(appEvents, AppEventNamesEnum.refreshFilters, this.refreshFilters);
 
             this.listenTo(appEvents, AppEventNamesEnum.addItem, this.addItem);
             this.listenTo(appEvents, AppEventNamesEnum.updateItem, this.updateItem);
@@ -89,17 +85,18 @@ define(function(require) {
             var currentContext = this,
                     deferred = $.Deferred();
 
-            var stationEntryLogSearchResults = new StationEntryLogCollection();
-            stationEntryLogSearchResults.setSortAttribute('expectedOutTime');
+            var stationEntryLogCollection = new StationEntryLogCollection();
+            stationEntryLogCollection.setSortAttribute('expectedOutTime');
+            var stationIdentifierCollection = new Backbone.Collection();
+            var regionCollection = new Backbone.Collection();
+            var areaCollection = new Backbone.Collection();
             var stationEntryLogListViewInstance = new StationEntryLogListView({
                 controller: currentContext,
                 dispatcher: currentContext.dispatcher,
-                collection: stationEntryLogSearchResults,
-                stationIdentifierCollection: currentContext.stationIdentifierResults,
-                regionCollection: currentContext.regionResults,
-                areaCollection: currentContext.areaResults,
-                purposeCollection: currentContext.purposeResults,
-                durationCollection: currentContext.durationResults
+                collection: stationEntryLogCollection,
+                stationIdentifierCollection: stationIdentifierCollection,
+                regionCollection: regionCollection,
+                areaCollection: areaCollection
             });
 
             currentContext.router.swapContent(stationEntryLogListViewInstance);
@@ -109,10 +106,11 @@ define(function(require) {
             stationEntryLogListViewInstance.showLoading();
             $.when(currentContext.dashboardService.getStationEntryLogs({onlyOpen: true})).done(function(getStationEntryLogsResponse) {
                 currentContext.dispatcher.trigger(AppEventNamesEnum.userRoleUpdated, getStationEntryLogsResponse.userRole);
-                stationEntryLogSearchResults.reset(getStationEntryLogsResponse.stationEntryLogs);
-                currentContext.stationIdentifierResults.reset(getStationEntryLogsResponse.stationIdentifiers);
-                currentContext.regionResults.reset(getStationEntryLogsResponse.regions);
-                currentContext.areaResults.reset(getStationEntryLogsResponse.areas);
+                stationEntryLogListViewInstance.setUserRole(getStationEntryLogsResponse.userRole);
+                stationEntryLogCollection.reset(getStationEntryLogsResponse.stationEntryLogs);
+                stationIdentifierCollection.reset(getStationEntryLogsResponse.stationIdentifiers);
+                regionCollection.reset(getStationEntryLogsResponse.regions);
+                areaCollection.reset(getStationEntryLogsResponse.areas);
                 if (options && options.stationEntryLog) {
                     var userName = options.stationEntryLog.userName;
                     var stationName = options.stationEntryLog.stationName;
@@ -121,7 +119,7 @@ define(function(require) {
                 }
                 deferred.resolve(stationEntryLogListViewInstance);
             }).fail(function(jqXHR, textStatus, errorThrown) {
-                stationEntryLogSearchResults.reset();
+                stationEntryLogCollection.reset();
                 stationEntryLogListViewInstance.showError(textStatus);
                 deferred.reject(textStatus);
             });
@@ -133,16 +131,18 @@ define(function(require) {
             var currentContext = this,
                     deferred = $.Deferred();
 
-            var stationEntryLogSearchResults = new StationEntryLogCollection();
-            stationEntryLogSearchResults.setSortAttribute('outTime');
-
+            var stationEntryLogCollection = new StationEntryLogCollection();
+            stationEntryLogCollection.setSortAttribute('outTime');
+            var stationIdentifierCollection = new Backbone.Collection();
+            var regionCollection = new Backbone.Collection();
+            var areaCollection = new Backbone.Collection();
             var stationEntryLogHistoryListViewInstance = new StationEntryLogHistoryListView({
                 controller: currentContext,
                 dispatcher: currentContext.dispatcher,
-                collection: stationEntryLogSearchResults,
-                stationIdentifierCollection: currentContext.stationIdentifierResults,
-                regionCollection: currentContext.regionResults,
-                areaCollection: currentContext.areaResults
+                collection: stationEntryLogCollection,
+                stationIdentifierCollection: stationIdentifierCollection,
+                regionCollection: regionCollection,
+                areaCollection: areaCollection
             });
 
             currentContext.router.swapContent(stationEntryLogHistoryListViewInstance);
@@ -151,13 +151,14 @@ define(function(require) {
             stationEntryLogHistoryListViewInstance.showLoading();
             $.when(currentContext.dashboardService.getStationEntryLogs({onlyCheckedOut: true})).done(function(getStationEntryLogsResponse) {
                 currentContext.dispatcher.trigger(AppEventNamesEnum.userRoleUpdated, getStationEntryLogsResponse.userRole);
-                stationEntryLogSearchResults.reset(getStationEntryLogsResponse.stationEntryLogs);
-                currentContext.stationIdentifierResults.reset(getStationEntryLogsResponse.stationIdentifiers);
-                currentContext.regionResults.reset(getStationEntryLogsResponse.regions);
-                currentContext.areaResults.reset(getStationEntryLogsResponse.areas);
+                stationEntryLogHistoryListViewInstance.setUserRole(getStationEntryLogsResponse.userRole);
+                stationEntryLogCollection.reset(getStationEntryLogsResponse.stationEntryLogs);
+                stationIdentifierCollection.reset(getStationEntryLogsResponse.stationIdentifiers);
+                regionCollection.reset(getStationEntryLogsResponse.regions);
+                areaCollection.reset(getStationEntryLogsResponse.areas);
                 deferred.resolve(stationEntryLogHistoryListViewInstance);
             }).fail(function(jqXHR, textStatus, errorThrown) {
-                stationEntryLogSearchResults.reset();
+                stationEntryLogCollection.reset();
                 stationEntryLogHistoryListViewInstance.showError(textStatus);
                 deferred.reject(textStatus);
             });
@@ -169,15 +170,18 @@ define(function(require) {
             var currentContext = this,
                     deferred = $.Deferred();
 
-            var stationSearchResults = new StationCollection();
-            stationSearchResults.setSortAttribute('stationName');
+            var stationCollection = new StationCollection();
+            stationCollection.setSortAttribute('stationName');
+            var stationIdentifierCollection = new Backbone.Collection();
+            var regionCollection = new Backbone.Collection();
+            var areaCollection = new Backbone.Collection();
             var stationListViewInstance = new StationListView({
                 controller: currentContext,
                 dispatcher: currentContext.dispatcher,
-                collection: stationSearchResults,
-                stationIdentifierCollection: currentContext.stationIdentifierResults,
-                regionCollection: currentContext.regionResults,
-                areaCollection: currentContext.areaResults
+                collection: stationCollection,
+                stationIdentifierCollection: stationIdentifierCollection,
+                regionCollection: regionCollection,
+                areaCollection: areaCollection
             });
 
             currentContext.router.swapContent(stationListViewInstance);
@@ -186,13 +190,14 @@ define(function(require) {
             stationListViewInstance.showLoading();
             $.when(currentContext.dashboardService.getStations()).done(function(getStationsResponse) {
                 currentContext.dispatcher.trigger(AppEventNamesEnum.userRoleUpdated, getStationsResponse.userRole);
-                stationSearchResults.reset(getStationsResponse.stations);
-                currentContext.stationIdentifierResults.reset(getStationsResponse.stationIdentifiers);
-                currentContext.regionResults.reset(getStationsResponse.regions);
-                currentContext.areaResults.reset(getStationsResponse.areas);
+                stationListViewInstance.setUserRole(getStationsResponse.userRole);
+                stationCollection.reset(getStationsResponse.stations);
+                stationIdentifierCollection.reset(getStationsResponse.stationIdentifiers);
+                regionCollection.reset(getStationsResponse.regions);
+                areaCollection.reset(getStationsResponse.areas);
                 deferred.resolve(stationListViewInstance);
             }).fail(function(jqXHR, textStatus, errorThrown) {
-                stationSearchResults.reset();
+                stationCollection.reset();
                 stationListViewInstance.showError(textStatus);
                 deferred.reject(textStatus);
             });
@@ -204,24 +209,26 @@ define(function(require) {
             var currentContext = this,
                     deferred = $.Deferred();
 
-            var personnelSearchResults = new PersonnelCollection();
-            personnelSearchResults.setSortAttribute('userName');
+            var personnelCollection = new PersonnelCollection();
+            personnelCollection.setSortAttribute('userName');
             var personnelListViewInstance = new PersonnelListView({
                 controller: currentContext,
                 dispatcher: currentContext.dispatcher,
-                collection: personnelSearchResults
+                collection: personnelCollection
             });
 
             currentContext.router.swapContent(personnelListViewInstance);
             currentContext.router.navigate('personnel');
-
+            
             personnelListViewInstance.showLoading();
-            $.when(currentContext.dashboardService.getPersonnels()).done(function(getPersonnelsResponse) {
-                currentContext.dispatcher.trigger(AppEventNamesEnum.userRoleUpdated, getPersonnelsResponse.userRole);
-                personnelSearchResults.reset(getPersonnelsResponse.personnels);
-                deferred.resolve(getPersonnelsResponse);
+            $.when(currentContext.dashboardService.getOptions()).done(function(getOptionsResponse) {
+                currentContext.dispatcher.trigger(AppEventNamesEnum.userRoleUpdated, getOptionsResponse.userRole);
+                personnelListViewInstance.setUserRole(getOptionsResponse.userRole);
+                personnelListViewInstance.focusUserNameInput();
+                personnelCollection.reset();
+                deferred.resolve(personnelListViewInstance);
             }).fail(function(jqXHR, textStatus, errorThrown) {
-                personnelSearchResults.reset();
+                personnelCollection.reset();
                 personnelListViewInstance.showError(textStatus);
                 deferred.reject(textStatus);
             });
@@ -234,13 +241,14 @@ define(function(require) {
                     deferred = $.Deferred();
 
 
-            var purposeSearchResults = new PurposeCollection();
-            purposeSearchResults.setSortAttribute('sortOrder');
+            var purposeCollection = new PurposeCollection();
+            var durationCollection = new LookupDataItemCollection();
+//            purposeCollection.setSortAttribute('sortOrder');
             var purposeMaintenanceViewInstance = new EditPurposeListView({
                 controller: currentContext,
                 dispatcher: currentContext.dispatcher,
-                collection: purposeSearchResults,
-                durationCollection: currentContext.durationResults
+                collection: purposeCollection,
+                durationCollection: durationCollection
             });
 
             currentContext.router.swapContent(purposeMaintenanceViewInstance);
@@ -249,28 +257,31 @@ define(function(require) {
             purposeMaintenanceViewInstance.showLoading();
             $.when(currentContext.dashboardService.getOptions()).done(function(getOptionsResponse) {
                 currentContext.dispatcher.trigger(AppEventNamesEnum.userRoleUpdated, getOptionsResponse.userRole);
-                purposeSearchResults.reset(getOptionsResponse.purposes);
-                currentContext.durationResults.reset(getOptionsResponse.durations);
+                purposeMaintenanceViewInstance.setUserRole(getOptionsResponse.userRole);
+                durationCollection.reset(getOptionsResponse.durations);
+                purposeCollection.reset(getOptionsResponse.purposes);
                 deferred.resolve(getOptionsResponse);
             }).fail(function(jqXHR, textStatus, errorThrown) {
-                purposeSearchResults.reset();
+                purposeCollection.reset();
                 purposeMaintenanceViewInstance.showError(textStatus);
                 deferred.reject(textStatus);
             });
 
             return deferred.promise();
         },
-        goToStationEntryLogWithId: function(stationEntryLogId) {
+        goToStationEntryLogWithId: function(stationEntryLogId, referringAppEvent) {
             console.trace('DashboardController.goToStationEntryLogWithId');
             var currentContext = this,
                     deferred = $.Deferred();
 
             var stationEntryLogModelInstance = new StationEntryLogModel({stationEntryLogId: stationEntryLogId});
+            var durationCollection = new LookupDataItemCollection();
             var stationEntryLogViewInstance = new StationEntryLogView({
                 controller: currentContext,
                 dispatcher: currentContext.dispatcher,
                 model: stationEntryLogModelInstance,
-                durationCollection: currentContext.durationResults
+                durationCollection: durationCollection,
+                referringAppEvent: referringAppEvent
             });
 
             currentContext.router.swapContent(stationEntryLogViewInstance);
@@ -280,8 +291,9 @@ define(function(require) {
             $.when(currentContext.dashboardService.getStationEntryLogs(stationEntryLogModelInstance.attributes), currentContext.dashboardService.getOptions()).done(function(getStationEntryLogResults, getOptionsResults) {
                 currentContext.dispatcher.trigger(AppEventNamesEnum.userRoleUpdated, getStationEntryLogResults[0].userRole);
                 if (getStationEntryLogResults[0].stationEntryLogs && getStationEntryLogResults[0].stationEntryLogs.length > 0) {
+                    stationEntryLogViewInstance.setUserRole(getStationEntryLogResults[0].userRole);
                     stationEntryLogModelInstance.set(getStationEntryLogResults[0].stationEntryLogs[0]);
-                    currentContext.durationResults.reset(getOptionsResults[0].durations);
+                    durationCollection.reset(getOptionsResults[0].durations);
                     deferred.resolve(stationEntryLogViewInstance);
                 } else {
                     stationEntryLogModelInstance.clear();
@@ -315,6 +327,7 @@ define(function(require) {
             $.when(currentContext.dashboardService.getStations({stationId: stationId})).done(function(getStationByIdResponse) {
                 currentContext.dispatcher.trigger(AppEventNamesEnum.userRoleUpdated, getStationByIdResponse.userRole);
                 if (getStationByIdResponse.stations && getStationByIdResponse.stations.length > 0) {
+                stationViewInstance.setUserRole(getStationByIdResponse.userRole);
                     stationModelInstance.set(getStationByIdResponse.stations[0]);
                     deferred.resolve(stationViewInstance);
                 } else {
@@ -330,36 +343,32 @@ define(function(require) {
 
             return deferred.promise();
         },
-        goToPersonnelWithId: function(userId) {
+        goToPersonnel: function(options) {
+            options || (options = {});
             console.trace('DashboardController.goToPersonnelWithId');
             var currentContext = this,
                     deferred = $.Deferred();
 
-            var personnelModelInstance = new PersonnelModel({userId: userId});
+            var personnelModelInstance = new PersonnelModel(options);
             var personnelViewInstance = new PersonnelView({
                 controller: currentContext,
                 dispatcher: currentContext.dispatcher,
-                model: personnelModelInstance,
-                stationIdentifierCollection: currentContext.stationIdentifierResults
+                model: personnelModelInstance
             });
 
             currentContext.router.swapContent(personnelViewInstance);
-            currentContext.router.navigate('personnel/' + userId);
+            if (options.userId) {
+                currentContext.router.navigate('personnel/userId/' + options.userId);
+            } else {
+                currentContext.router.navigate('personnel/userName/' + options.userName);
+            }
 
             personnelViewInstance.showLoading();
             $.when(currentContext.dashboardService.getPersonnels(personnelModelInstance.attributes)).done(function(getPersonnelsResponse) {
                 currentContext.dispatcher.trigger(AppEventNamesEnum.userRoleUpdated, getPersonnelsResponse.userRole);
                 if (getPersonnelsResponse && getPersonnelsResponse.personnels && getPersonnelsResponse.personnels.length > 0) {
+                personnelViewInstance.setUserRole(getPersonnelsResponse.userRole);
                     personnelModelInstance.set(getPersonnelsResponse.personnels[0]);
-//                    personnelViewInstance.updateViewFromModel(getPersonnelsResponse.personnels[0]);
-//                    currentContext.stationIdentifierResults.reset(getPersonnelsResponse.stationIdentifiers);
-//                    personnelViewInstance.hideLoading();
-//                    personnelViewInstance._addStationEntryLogs();
-//                    var options = {
-//                        userId: userId,
-//                        onlyCheckedOut: true
-//                    };
-//                    personnelViewInstance._loadStationEntryLogs(options);
                     deferred.resolve(personnelViewInstance);
                 } else {
                     personnelModelInstance.clear();
@@ -367,7 +376,7 @@ define(function(require) {
                     deferred.reject('not found!');
                 }
             }).fail(function(jqXHR, textStatus, errorThrown) {
-                personnelViewInstance.hideLoading();
+                personnelModelInstance.clear();
                 personnelViewInstance.showError(textStatus);
                 deferred.reject(textStatus);
             });
@@ -434,6 +443,32 @@ define(function(require) {
 
             return deferred.promise();
         },
+        refreshOptions: function(options) {
+            options || (options = {});
+            console.trace('DashboardController.refreshStationEntryLogList');
+            var currentContext = this,
+                    deferred = $.Deferred();
+
+            $.when(currentContext.dashboardService.getOptions()).done(function(getOptionsResponse) {
+                if (options.userRole) {
+                    options.userRole = getOptionsResponse.userRole;
+                }
+                if (options.stationIdentifierCollection) {
+                    options.stationIdentifierCollection.reset(getOptionsResponse.stationIdentifiers);
+                }
+                if (options.purposeCollection) {
+                    options.purposeCollection.reset(getOptionsResponse.purposes);
+                }
+                if (options.durationCollection) {
+                    options.durationCollection.reset(getOptionsResponse.durations);
+                }
+                deferred.resolve(getOptionsResponse);
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                deferred.reject(textStatus);
+            });
+
+            return deferred.promise();
+        },
         goToNewStationEntryLog: function(container) {
             console.trace('DashboardController.goToNewStationEntryLog');
             var currentContext = this,
@@ -445,6 +480,7 @@ define(function(require) {
             var durationCollection = new LookupDataItemCollection();
             var newStationEntryLogViewInstance = new NewStationEntryLogView({
                 model: newStationEntryLogModelInstance,
+                controller: currentContext,
                 dispatcher: currentContext.dispatcher,
                 stationIdentifierCollection: stationIdentifierCollection,
                 purposeCollection: purposeCollection,
@@ -494,7 +530,7 @@ define(function(require) {
                     deferred = $.Deferred();
 
             $.when(currentContext.dashboardService.postCheckOut(stationEntryLogModel.attributes)).done(function(checkOutResponse) {
-                stationEntryLogModel.trigger('destroy', stationEntryLogModel, stationEntryLogModel.collection, options);
+                stationEntryLogModel.trigger('destroy', stationEntryLogModel, stationEntryLogModel.collection);
                 appEvents.trigger(AppEventNamesEnum.checkOutSuccess, checkOutResponse.stationEntryLog);
                 deferred.resolve(checkOutResponse);
             }).fail(function(jqXHR, textStatus, errorThrown) {
@@ -518,9 +554,7 @@ define(function(require) {
 
             $.when(currentContext.dashboardService.postUpdateCheckIn(stationEntryLogModel.attributes)).done(function(updateCheckInResults) {
                 currentContext.dispatcher.trigger(AppEventNamesEnum.userRoleUpdated, updateCheckInResults.userRole);
-                var model = currentContext.stationEntryLogSearchResults.findWhere({stationEntryLogId: updateCheckInResults.stationEntryLogId});
                 appEvents.trigger(AppEventNamesEnum.updateCheckInSuccess, updateCheckInResults.stationEntryLog);
-                currentContext.countExpiredStationEntryLogs(currentContext.stationEntryLogSearchResults);
                 deferred.resolve(updateCheckInResults);
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 var msg = 'Error updating entry.';

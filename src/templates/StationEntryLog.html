@@ -13,30 +13,32 @@
         <div class="view-details hidden">
             <div class="row collapse">
                 <div class="large-1 columns">
-                    <label for="user-id-input" class="first-party">{{resource "userIdHeaderText"}}</label>
-                    <label for="company-name-input" class="third-party hidden">{{resource
-                        "companyNameHeaderText"}}</label>
+                    <div class="first-party-container">
+                        <label for="user-id-input">{{resource "userIdHeaderText"}}</label>
+                    </div>
+                    <div class="third-party-container hidden">
+                        <label for="company-name-input">{{resource "companyNameHeaderText"}}</label>
+                    </div>
                 </div>
-                <div class="large-2 columns">
-                    <input disabled id="user-id-input" name="userId" type="text"
-                           placeholder="{{resource 'userIdHeaderText'}}" class="first-party"/>
-                    <input disabled id="company-name-input" name="companyName" type="text"
-                           placeholder="{{resource 'companyNameHeaderText'}}" class="third-party hidden"/>
+                <div class="large-4 columns">
+                    <div class="first-party-container">
+                        <span id="user-id-input">{{withDefault userId "&nbsp;"}}</span>
+                    </div>
+                    <div class="third-party-container hidden">
+                        <input disabled id="company-name-input" name="companyName" class="third-party-input hidden" type="text" placeholder="{{resource 'companyNameHeaderText'}}"/>
+                    </div>
                 </div>
                 <div class="large-1 columns">
                     &nbsp;
                 </div>
                 <div class="large-2 columns">
-                    <input disabled id="first-name-input" name="firstName" type="text"
-                           placeholder="{{resource 'firstNameHeaderText'}}"/>
+                    <input disabled id="first-name-input" name="firstName" class="third-party-input" type="text" placeholder="{{resource 'firstNameHeaderText'}}"/>
                 </div>
                 <div class="large-2 columns">
-                    <input disabled id="middle-initial-input" name="middleInitial" type="text"
-                           placeholder="{{resource 'middleInitialHeaderText'}}"/>
+                    <input disabled id="middle-initial-input" name="middleInitial" class="third-party-input" type="text" placeholder="{{resource 'middleInitialHeaderText'}}"/>
                 </div>
                 <div class="large-2 columns">
-                    <input disabled id="last-name-input" name="lastName" type="text"
-                           placeholder="{{resource 'lastNameHeaderText'}}"/>
+                    <input disabled id="last-name-input" name="lastName" class="third-party-input" type="text" placeholder="{{resource 'lastNameHeaderText'}}"/>
                 </div>
             </div>
             <div class="row collapse">
@@ -45,15 +47,13 @@
                     </label>
                 </div>
                 <div class="large-2 columns">
-                    <input disabled id="contact-number-input" name="contactNumber" type="text"
-                           placeholder="{{resource 'contactNumberHeaderText'}}"/>
+                    <input disabled id="contact-number-input" name="contactNumber" class="third-party-input" type="text" placeholder="{{resource 'contactNumberHeaderText'}}"/>
                 </div>
                 <div class="large-3 columns">
                     &nbsp;
                 </div>
                 <div class="large-3 columns">
-                    <input disabled id="email-input" name="email" type="text"
-                           placeholder="{{resource 'emailHeaderText'}}"/>
+                    <input disabled id="email-input" name="email" class="third-party-input" type="text" placeholder="{{resource 'emailHeaderText'}}"/>
                 </div>
                 <div class="large-3 columns">
                     &nbsp;
@@ -81,8 +81,7 @@
             </div>
             <div class="row collapse">
                 <div class="large-1 columns">
-                    <label for="purpose-input">{{resource "purposeHeaderText"}}
-                    </label>
+                    <label for="purpose-input">{{resource "purposeHeaderText"}}</label>
                 </div>
                 <div class="large-2 columns">
                     <span id="purpose-input">{{withDefault purpose "&nbsp;"}}</span>
@@ -115,8 +114,7 @@
                 </div>
                 <div class="large-2 columns">
                     <select id="duration-filter">
-                        <option disabled="disabled" selected="selected" value="">{{withDefault duration "&nbsp;"}}
-                        </option>
+                        <option disabled="disabled" selected="selected" value="">{{withDefault duration "&nbsp;"}}</option>
                     </select>
                 </div>
                 <div class="large-1 columns">
@@ -157,8 +155,7 @@
                     <label for="additional-info-input">{{resource "additionalInfoHeaderText"}}</label>
                 </div>
                 <div class="large-5 columns">
-                    <textarea disabled id="additional-info-input" name="additionalInfo" rows="2">{{withDefault
-                        additionalInfo "&nbsp;"}}</textarea>
+                    <textarea disabled id="additional-info-input" name="additionalInfo" rows="2">{{withDefault additionalInfo "&nbsp;"}}</textarea>
                 </div>
                 <div class="large-1 columns">
                     <label for="has-crew-input">{{resource "hasCrewHeaderText"}}</label>
@@ -172,9 +169,8 @@
                     &nbsp;
                 </div>
                 <div class="large-6 columns">
-                    <a id="save-station-entry-log-button" class="button radius hidden">{{resource "saveButtonText"}}</a>
-                    <a id="cancel-save-station-entry-log-button" class="button radius secondary hidden">{{resource
-                        "cancelButtonText"}}</a>
+                    <a id="save-station-entry-log-button" class="button radius hidden" href="#">{{resource "saveButtonText"}}</a>
+                    <a id="cancel-save-station-entry-log-button" class="button radius secondary" href="#">{{resource "cancelButtonText"}}</a>
                 </div>
             </div>
         </div>

@@ -37,7 +37,6 @@ define(function(require) {
 
             this.listenTo(this, 'leave', this.onLeave);
 
-            this.listenTo(appEvents, AppEventNamesEnum.userRoleUpdated, this.userRoleUpdated);
             this.listenTo(appEvents, AppEventNamesEnum.cancelCheckIn, this.checkUserRole);
             this.listenTo(appEvents, AppEventNamesEnum.checkInSuccess, this.onCheckInSuccess);
             this.listenTo(appEvents, AppEventNamesEnum.checkOutSuccess, this.onCheckOutSuccess);
@@ -53,6 +52,10 @@ define(function(require) {
             currentContext.setAutRefreshInterval();
 
             return this;
+        },
+        setUserRole: function(userRole) {
+            this.userRole = userRole;
+            this.checkUserRole();
         },
         events: {
             'click #refresh-station-entry-log-list-button': 'dispatchRefreshStationEntryLogList',
@@ -73,19 +76,19 @@ define(function(require) {
         updateViewFromCollection: function() {
             if (this.collection.overdueCount > 0) {
                 this.$('#svg-station-entry-log-overdue-count').removeClass('invisible');
-                this.$('#overdue-count').text(this.collection.overdueCount);
+                this.$('#overdue-count').html(this.collection.overdueCount);
             } else {
                 this.$('#svg-station-entry-log-overdue-count').addClass('invisible');
             }
             if (this.collection.expiredCount > 0) {
                 this.$('#svg-station-entry-log-expired-count').removeClass('invisible');
-                this.$('#station-entry-log-expired-count').text(this.collection.expiredCount);
+                this.$('#expired-count').html(this.collection.expiredCount);
             } else {
                 this.$('#svg-station-entry-log-expired-count').addClass('invisible');
             }
             if (this.collection.openCount > 0) {
                 this.$('#svg-station-entry-log-open-count').removeClass('invisible');
-                this.$('#station-entry-log-open-count').text(this.collection.openCount);
+                this.$('#open-count').html(this.collection.openCount);
             } else {
                 this.$('#svg-station-entry-log-open-count').addClass('invisible');
             }
@@ -100,13 +103,13 @@ define(function(require) {
             this.appendChildTo(stationEntryLogListItemView, '#station-entry-log-list-item-container');
         },
         addStationNameFilter: function() {
-            this.addFilter(this.$('#station-name-filter'), this.stationIdentifierCollection.models, 'stationId', 'stationName');
+            this.addFilter(this.$('#station-filter'), this.stationIdentifierCollection.models, 'stationId', 'stationName');
         },
         addRegionNameFilter: function() {
-            this.addFilter(this.$('#region-name-filter'), this.regionCollection.models, 'regionName', 'regionName');
+            this.addFilter(this.$('#region-filter'), this.regionCollection.models, 'regionName', 'regionName');
         },
         addAreaNameFilter: function() {
-            this.addFilter(this.$('#area-name-filter'), this.areaCollection.models, 'areaName', 'areaName');
+            this.addFilter(this.$('#area-filter'), this.areaCollection.models, 'areaName', 'areaName');
         },
         setAutRefreshInterval: function() {
             var currentContext = this;
@@ -126,9 +129,9 @@ define(function(require) {
             }
 
             this.$('#status-filter').val('open');
-            this.$('#station-name-filter').val('');
-            this.$('#region-name-filter').val('');
-            this.$('#area-name-filter').val('');
+            this.$('#station-filter').val('');
+            this.$('#region-filter').val('');
+            this.$('#area-filter').val('');
             this.collection.setSortAttribute('expectedOutTime');
 
             this.refreshStationEntryLogList();
@@ -136,9 +139,9 @@ define(function(require) {
         refreshStationEntryLogList: function() {
             this.showLoading();
             var status = this.$('#status-filter').val();
-            var stationId = this.$('#station-name-filter').val();
-            var regionName = this.$('#region-name-filter').val();
-            var areaName = this.$('#area-name-filter').val();
+            var stationId = this.$('#station-filter').val();
+            var regionName = this.$('#region-filter').val();
+            var areaName = this.$('#area-filter').val();
             var options = {
                 stationId: stationId,
                 regionName: regionName,
@@ -156,9 +159,9 @@ define(function(require) {
                 event.preventDefault();
             }
             var status = this.$('#status-filter').val();
-            var stationId = this.$('#station-name-filter').val();
-            var regionName = this.$('#region-name-filter').val();
-            var areaName = this.$('#area-name-filter').val();
+            var stationId = this.$('#station-filter').val();
+            var regionName = this.$('#region-filter').val();
+            var areaName = this.$('#area-filter').val();
             var onlyCheckedOut = false;
             if (status === 'open') {
                 onlyCheckedOut = false;
@@ -174,10 +177,6 @@ define(function(require) {
                 reportType: 'OpenStationEntryLogs'
             };
             this.dispatcher.trigger(AppEventNamesEnum.goToExportStationEntryLogList, this.collection, options);
-        },
-        userRoleUpdated: function(userRole) {
-            this.userRole = userRole;
-            this.checkUserRole();
         },
         checkUserRole: function() {
             var currentContext = this;
@@ -199,7 +198,7 @@ define(function(require) {
             }
 
             this.hideNewStationEntryLogButton();
-            this.dispatcher.trigger(AppEventNamesEnum.goToNewStationEntryLog, this.$('#new-station-entry-log-view-container'));
+            this.dispatcher.trigger(AppEventNamesEnum.goToNewStationEntryLog, this.$('#new-station-entry-log-view'));
         },
         onCheckInSuccess: function(stationEntryLog) {
             var checkInSuccessMessage = utils.getResource('checkInSuccessMessage');

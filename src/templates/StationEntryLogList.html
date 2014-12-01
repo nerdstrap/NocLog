@@ -14,19 +14,19 @@
         </div>
         <div class="large-2 columns">
             <label>{{resource "stationNameHeaderText"}}</label>
-            <select id="station-name-filter">
+            <select id="station-filter">
                 <option disabled="disabled" selected="selected">{{resource "filterDefaultOption"}}</option>
             </select>
         </div>
         <div class="large-2 columns">
             <label>{{resource "regionNameHeaderText"}}</label>
-            <select id="region-name-filter">
+            <select id="region-filter">
                 <option disabled="disabled" selected="selected">{{resource "filterDefaultOption"}}</option>
             </select>
         </div>
         <div class="large-2 columns">
             <label>{{resource "areaNameHeaderText"}}</label>
-            <select id="area-name-filter">
+            <select id="area-filter">
                 <option disabled="disabled" selected="selected">{{resource "filterDefaultOption"}}</option>
             </select>
         </div>
@@ -40,23 +40,23 @@
             <a id="reset-station-entry-log-list-button" class="button radius secondary" href="#">{{resource "resetButtonText"}}</a>
         </div>
         <div id="svg-station-entry-log-open-count" class="large-1 columns invisible">
-                <svg  width="100" height="50">
-                <circle cx="20" cy="20" r="15" stroke="#c2c2c2" stroke-width="1" fill="#DEDEDE" />
-                <text id="open-count" x="40" y="30" font-family="sans-serif" font-size="20px" fill="black"></text>
-                </svg>
-            </div>
-            <div id="svg-station-entry-log-expired-count" class="large-1 columns invisible">
-                <svg width="100" height="50">
-                <circle cx="20" cy="20" r="15" stroke="#c2c2c2" stroke-width="1" fill="#ffffcc" />
-                <text id="expired-count" x="40" y="30" font-family="sans-serif" font-size="20px" fill="black"></text>
-                </svg>
-            </div>
-            <div id="svg-station-entry-log-overdue-count" class="large-4 columns invisible">
-                <svg width="100" height="50">
-                <circle cx="20" cy="20" r="15" stroke="#c2c2c2" stroke-width="1" fill="#ffcccc" />
-                <text id="overdue-count" x="40" y="30" font-family="sans-serif" font-size="20px" fill="black"></text>
-                </svg>
-            </div>
+            <svg  width="100" height="50">
+            <circle cx="20" cy="20" r="15" stroke="#c2c2c2" stroke-width="1" fill="#DEDEDE" />
+            <text id="open-count" x="40" y="30" font-family="sans-serif" font-size="20px" fill="black"></text>
+            </svg>
+        </div>
+        <div id="svg-station-entry-log-expired-count" class="large-1 columns invisible">
+            <svg width="100" height="50">
+            <circle cx="20" cy="20" r="15" stroke="#c2c2c2" stroke-width="1" fill="#ffffcc" />
+            <text id="expired-count" x="40" y="30" font-family="sans-serif" font-size="20px" fill="black"></text>
+            </svg>
+        </div>
+        <div id="svg-station-entry-log-overdue-count" class="large-4 columns invisible">
+            <svg width="100" height="50">
+            <circle cx="20" cy="20" r="15" stroke="#c2c2c2" stroke-width="1" fill="#ffcccc" />
+            <text id="overdue-count" x="40" y="30" font-family="sans-serif" font-size="20px" fill="black"></text>
+            </svg>
+        </div>
         <div class="large-2 columns">
             <a id="new-station-entry-log-button" class="button radius success hidden" href="#">{{resource "newCheckInButtonText"}}</a>
         </div>
@@ -66,7 +66,7 @@
     </div>
     <div class="row collapse">
         <div class="large-10 columns">
-            <div id="new-station-entry-log-view-container"></div>
+            <div id="new-station-entry-log-view"></div>
         </div>
     </div>
     <div class="row collapse list-header-item-view">

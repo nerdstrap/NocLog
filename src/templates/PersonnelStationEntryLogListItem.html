@@ -1,7 +1,7 @@
 <div class="personnel-station-entry-log-list-item-view">
     <div class="row collapse">
         <div class="large-2 columns">
-            <a class="station-name-link" data-station-id="{{stationId}}">{{withDefault stationName "&nbsp;"}}</a>
+            <a class="station-link" data-station-id="{{stationId}}" href="#">{{withDefault stationName "&nbsp;"}}</a>
         </div>
         <div class="large-2 columns">
             <span>{{formatDateWithDefault inTime "%D %I:%M %p" "&nbsp;"}}</span>
@@ -10,7 +10,7 @@
             <span>{{formatDateWithDefault outTime "%D %I:%M %p" "&nbsp;"}}</span>
         </div>
         <div class="small-2 columns">
-            <span>{{withDefault actualDuration "&nbsp;"}}</span>
+            <span>{{formatTimespanWithDefault actualDuration "&nbsp;"}}</span>
         </div>
         <div class="small-2 columns">
             <span>{{withDefault purpose "&nbsp;"}}</span>
