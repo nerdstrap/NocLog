@@ -20,7 +20,9 @@ define(function(require) {
             options || (options = {});
             this.sortAttribute = options.sortAttribute || 'expectedOutTime';
             this.sortDirection = options.sortDirection || 1;
-            this.listenTo(this, 'reset', this.setCounts);
+            this.listenTo(this, 'add', this.onAdd);
+            this.listenTo(this, 'remove', this.onRemove);
+            this.listenTo(this, 'reset', this.onReset);
         },
         setSortAttribute: function(sortAttribute, sortDirection) {
             this.sortAttribute = sortAttribute;
@@ -51,7 +53,16 @@ define(function(require) {
 
             return line;
         },
-        setCounts: function(collection, response, options) {
+        onAdd: function(model, collection, options) {
+            this.setCounts(collection);
+        },
+        onRemove: function(model, collection, options) {
+            this.setCounts(collection);
+        },
+        onReset: function(collection, response, options) {
+            this.setCounts(collection);
+        },
+        setCounts: function(collection) {
             this.overdueCount = collection.where({checkOutOverdue: true}).length;
             this.expiredCount = collection.where({checkOutExpired: true}).length;
             this.openCount = collection.length - this.expiredCount - this.overdueCount;

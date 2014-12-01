@@ -32,6 +32,8 @@ define(function(require) {
             this.listenTo(this.stationIdentifierCollection, 'reset', this.addStationNameFilter);
             this.listenTo(this.regionCollection, 'reset', this.addRegionNameFilter);
             this.listenTo(this.areaCollection, 'reset', this.addAreaNameFilter);
+            this.listenTo(this.collection, 'add', this.updateViewFromCollection);
+            this.listenTo(this.collection, 'remove', this.updateViewFromCollection);
             this.listenTo(this.collection, 'reset', this.addAll);
             this.listenTo(this.collection, 'sort', this.addAll);
 

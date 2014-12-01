@@ -1,6 +1,9 @@
 <div class="personnel-list-item-view">
     <div class="row collapse">
         <div class="large-3 columns">
+            {{#if thirdParty}}
+            <i id="third-party-icon" class="fa fa-globe"></i>
+            {{/if}}
             <a class="personnel-link" data-user-id="{{userId}}" data-user-name="{{userName}}" href="#">{{withDefault userName "&nbsp;"}}</a>
         </div>
         <div class="large-3 columns">
