@@ -87,7 +87,7 @@ define(function(require) {
             if (event) {
                 if (event.keyCode === 32) {
                     /* spacebar key pressed */
-                    this.$('#third-party-indicator').prop('checked', true);
+                    this.$('#third-party-indicator').click();
                     this.updateViewType();
                 }
                 event.preventDefault();
@@ -201,7 +201,7 @@ define(function(require) {
             if (event) {
                 if (event.keyCode === 32) {
                     /* spacebar key pressed */
-                    this.$('#has-crew-indicator').prop('checked', true);
+                    this.$('#has-crew-indicator').click();
                     this.updateHasCrew();
                 }
                 event.preventDefault();

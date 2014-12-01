@@ -17,7 +17,6 @@ define(function(require) {
             filterTemplate = require('hbs!templates/Filter');
 
     var EditPurposeListItemView = CompositeView.extend({
-        tagName: 'li',
         initialize: function(options) {
             console.trace('EditPurposeListItemView.initialize');
             options || (options = {});
@@ -42,27 +41,30 @@ define(function(require) {
             var renderModel = _.extend({}, currentContext.model.attributes);
             currentContext.$el.html(template(renderModel));
 
-            currentContext.addAllDurations();
+            currentContext.addDurationFilter();
 
             currentContext.updateViewFromModel();
 
             validation.bind(this, {
                 selector: 'name'
             });
-            
+
             return this;
         },
         events: {
-            'click .purpose-item-save-link': 'validateAndSubmitItem',
+            'click .save-lookup-data-item-button': 'validateAndSubmitItem',
+            'click .cancel-save-lookup-data-item-button': 'revertChanges',
             'click .close-alert-box-button': 'closeAlertBox'
         },
-        addAllDurations: function() {
-            var currentContext = this;
+        addDurationFilter: function() {
+            this.addFilter(this.$('.item-additional-data-filter'), this.durationCollection.models, 'itemValue', 'itemText');
+        },
+        addFilter: function(filterSelector, options, valuePropertyName, textPropertyName) {
             var filterRenderModel = {
-                defaultOption: utils.getResource('durationFilterDefaultOption'),
-                options:  utils.getFilterOptions(currentContext.durationCollection.models, 'itemValue', 'itemText')
+                defaultOption: utils.getResource('filterDefaultOption'),
+                options: utils.getFilterOptions(options, valuePropertyName, textPropertyName)
             };
-            this.$('.purpose-item-additional-data').html(filterTemplate(filterRenderModel));
+            this.$(filterSelector).html(filterTemplate(filterRenderModel));
         },
         validateAndSubmitItem: function(event) {
             if (event) {
@@ -74,62 +76,85 @@ define(function(require) {
         updateViewFromModel: function() {
             var currentContext = this;
             if (currentContext.model.has('itemAdditionalData')) {
-                currentContext.$('.purpose-item-additional-data').val(currentContext.model.get('itemAdditionalData'));
+                currentContext.$('.item-additional-data-filter').val(currentContext.model.get('itemAdditionalData'));
             }
             if (currentContext.model.has('itemEnabled')) {
-                currentContext.$('.purpose-item-enabled').val(currentContext.model.get('itemEnabled').toString());
+                currentContext.$('.item-enabled-filter').val(currentContext.model.get('itemEnabled').toString());
             }
+            this.hideLoading();
         },
         getPurposeModelFromView: function() {
             var currentContext = this;
-            if (currentContext.$('.purpose-item-text').val() !== currentContext.model.get('itemText')) {
-                var itemText = currentContext.$('.purpose-item-text').val()
+            if (currentContext.$('.item-text-input').val() !== currentContext.model.get('itemText')) {
+                var itemText = currentContext.$('.item-text-input').val();
                 currentContext.model.set({
                     itemDescription: itemText,
                     itemText: itemText,
                     itemValue: itemText
                 });
             }
-            if (currentContext.$('.purpose-item-additional-data').val() !== currentContext.model.get('itemAdditionalData')) {
-                currentContext.model.set({itemAdditionalData: currentContext.$('.purpose-item-additional-data').val()});
+            if (currentContext.$('.item-additional-data-filter').val() !== currentContext.model.get('itemAdditionalData')) {
+                currentContext.model.set({itemAdditionalData: currentContext.$('.item-additional-data-input').val()});
             }
-            if (currentContext.$('.purpose-item-enabled').val() !== currentContext.model.get('itemEnabled')) {
-                currentContext.model.set({itemEnabled: currentContext.$('.purpose-item-enabled').val()});
+            if (currentContext.$('.item-enabled-filter').val() !== currentContext.model.get('itemEnabled')) {
+                currentContext.model.set({itemEnabled: currentContext.$('.item-enabled-filter').val()});
             }
-            if (currentContext.$('.purpose-item-order').val() !== currentContext.model.get('itemOrder')) {
-                currentContext.model.set({itemOrder: currentContext.$('.purpose-item-order').val()});
+            if (currentContext.$('.item-order-input').val() !== currentContext.model.get('itemOrder')) {
+                currentContext.model.set({itemOrder: currentContext.$('.item-order-input').val()});
             }
         },
         onValidated: function(isValid, model, errors) {
             if (isValid) {
                 if (this.model.has('lookupDataItemId') && this.model.get('lookupDataItemId')) {
-                    this.goToUpdateItem();
+                    this.updateItem();
                 } else {
-                    this.goToAddItem();
+                    this.addItem();
                 }
             } else {
-                var message = "One or more fields are invalid, please try again.";
+                var message = utils.getResource('validationErrorMessage');
                 this.showError(message);
             }
         },
-        goToAddItem: function() {
-            this.dispatcher.trigger(AppEventNamesEnum.goToAddItem, this.model);
+        revertChanges: function(event) {
+            if (event) {
+                event.preventDefault();
+            }
+            this.updateViewFromModel();
+        },
+        addItem: function() {
+            this.showLoading();
+            this.dispatcher.trigger(AppEventNamesEnum.addItem, this.model);
         },
         onAddItemSuccess: function(lookupDataItem) {
+            this.hideLoading();
             this.model.set({lookupDataItemId: lookupDataItem.lookupDataItemId});
             this.showSuccess('save success');
         },
         onAddItemError: function(message) {
+            this.hideLoading();
             this.showError(message);
         },
-        goToUpdateItem: function() {
-            this.dispatcher.trigger(AppEventNamesEnum.goToUpdateItem, this.model);
+        updateItem: function() {
+            this.showLoading();
+            this.dispatcher.trigger(AppEventNamesEnum.updateItem, this.model);
         },
         onUpdateItemSuccess: function() {
+            this.hideLoading();
             this.showSuccess('save success');
         },
         onUpdateItemError: function(message) {
+            this.hideLoading();
             this.showError(message);
+        },
+        showLoading: function() {
+            this.$('.view-status').removeClass('hidden');
+        },
+        hideLoading: function() {
+            this.$('.view-status').addClass('hidden');
+        },
+        showInfo: function(message) {
+            var level;
+            this.addAutoCloseAlertBox(level, message);
         },
         showSuccess: function(message) {
             this.addAutoCloseAlertBox('success', message);
@@ -143,7 +168,7 @@ define(function(require) {
                 level: level,
                 message: message
             };
-            this.$('.view-alert .columns').prepend(alertTemplate(renderModel));
+            this.$('.view-alerts .columns').prepend(alertTemplate(renderModel));
         },
         addAutoCloseAlertBox: function(level, message) {
             var currentContext = this;

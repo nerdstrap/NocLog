@@ -608,10 +608,12 @@ define(function(require) {
             globals.window.open(directionsUri);
         },
         goToExportStationEntryLogList: function(stationEntryLogCollection, options) {
-            var csv = stationEntryLogCollection.toCsv();
-            var blob = new Blob([csv], {type: "text/csv;charset=utf-8"});
-            var fileName = utils.getCSVFileName(options);
-            saveAs(blob, fileName);
+            require(['hbs!templates/CSVExport'], function(template) {
+                var csv = template({logArray: stationEntryLogCollection.models});
+                var blob = new Blob([csv], {type: "text/csv;charset=utf-8"});
+                var fileName = utils.getCSVFileName(options);
+                saveAs(blob, fileName);
+            });
         }
     });
 

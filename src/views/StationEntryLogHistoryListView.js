@@ -147,7 +147,7 @@ define(function(require) {
             if (event) {
                 event.preventDefault();
             }
-
+            var currentContext = this;
             var stationId = this.$('#station-filter').val();
             var regionName = this.$('#region-filter').val();
             var areaName = this.$('#area-filter').val();
@@ -165,7 +165,13 @@ define(function(require) {
                 //endTime: endTime,
                 reportType: 'HistoryStationEntryLogs'
             };
-            this.dispatcher.trigger(AppEventNamesEnum.goToExportStationEntryLogList, this.collection, options);
+            
+            var triggerExport = function() {
+                this.dispatcher.trigger(AppEventNamesEnum.goToExportStationEntryLogList, currentContext.collection, options);
+
+            };
+            this.listenToOnce(this.collection, 'reset', triggerExport);
+            this.refreshStationEntryLogHistoryList();
         }
     });
 

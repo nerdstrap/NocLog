@@ -6,13 +6,16 @@
             {{/if}}
             <a class="personnel-link" data-user-id="{{userId}}" data-user-name="{{userName}}" href="#">{{withDefault userName "&nbsp;"}}</a>
         </div>
-        <div class="large-3 columns">
+        <div class="large-2 columns">
             <span>{{withDefault userId "&nbsp;"}}</span>
+        </div>
+        <div class="large-2 columns">
+            <span>{{withDefault companyName "&nbsp;"}}</span>
         </div>
         <div class="large-3 columns">
             <span>{{formatPhoneWithDefault contactNumber "" "&nbsp;"}}</span>
         </div>
-        <div class="large-3 columns">
+        <div class="large-2 columns">
             <span>{{withDefault email "&nbsp;"}}</span>
         </div>
     </div>

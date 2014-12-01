@@ -138,7 +138,7 @@ define(function(require) {
 
             this.refreshStationEntryLogList();
         },
-        refreshStationEntryLogList: function() {
+        refreshStationEntryLogList: function() {            
             this.showLoading();
             var status = this.$('#status-filter').val();
             var stationId = this.$('#station-filter').val();
@@ -160,6 +160,7 @@ define(function(require) {
             if (event) {
                 event.preventDefault();
             }
+            var currentContext = this;
             var status = this.$('#status-filter').val();
             var stationId = this.$('#station-filter').val();
             var regionName = this.$('#region-filter').val();
@@ -178,7 +179,11 @@ define(function(require) {
                 onlyCheckedOut: onlyCheckedOut,
                 reportType: 'OpenStationEntryLogs'
             };
-            this.dispatcher.trigger(AppEventNamesEnum.goToExportStationEntryLogList, this.collection, options);
+            var triggerExport = function() {
+                this.dispatcher.trigger(AppEventNamesEnum.goToExportStationEntryLogList, currentContext.collection, options);
+            };
+            this.listenToOnce(this.collection, 'reset', triggerExport);
+            this.refreshStationEntryLogList();
         },
         checkUserRole: function() {
             var currentContext = this;

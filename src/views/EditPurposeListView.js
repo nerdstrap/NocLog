@@ -69,7 +69,7 @@ define(function(require) {
                 dispatcher: currentContext.dispatcher,
                 durationCollection: currentContext.durationCollection
             });
-            this.appendChildTo(purposeListItemView, '#purpose-list');
+            this.appendChildTo(purposeListItemView, '#purpose-list-item-container');
         },
         refreshPurposeList: function(event) {
             if (event) {

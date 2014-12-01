@@ -59,7 +59,7 @@ define(function(require) {
         focusUserNameInput: function() {
             this.$('#user-name-input').focus();
         },
-        invokeRefreshPersonnelList: function (event) {
+        invokeRefreshPersonnelList: function(event) {
             var validPattern = /^[A-Za-z0-9\s]*$/;
             if (event) {
                 if (event.keyCode === 13) {
@@ -92,13 +92,14 @@ define(function(require) {
         refreshPersonnelList: function() {
             this.showLoading();
             var userName = this.$('#user-name-input').val();
-            if (userName && userName.length > 2) {
+            if (userName && userName.length >= 2) {
                 var options = {
                     userName: userName
                 };
                 this.dispatcher.trigger(AppEventNamesEnum.refreshPersonnelList, this.collection, options);
             } else {
-                this.showInfo('user name must be greater than 2 characters');
+                this.showError('User name must be greater than 2 characters.');
+                this.collection.reset();
             }
         }
     });

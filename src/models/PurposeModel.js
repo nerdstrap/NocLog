@@ -8,6 +8,9 @@ define(function (require) {
     var PurposeModel = Backbone.Model.extend({
         idAttribute: 'lookupDataItemId',
         validation: {
+            itemText: {
+                required: true
+            },
             itemDescription: {
                 required: true
             },
@@ -15,8 +18,7 @@ define(function (require) {
                 required: true
             },
             itemEnabled: {
-                required: true,
-                length: 1
+                required: true
             },
             itemAdditionalData: {
                 required: true

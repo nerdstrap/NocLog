@@ -121,6 +121,32 @@ define(function(require) {
         csvFileName = reportType + csvFileFilter + ".csv";
         return csvFileName;
     };
+    
+    utils.simpleComparator = function(a, b, sortDirection) {
+        if (sortDirection !== 1) {
+            if (a === b) {
+                return 0;
+            }
+            if (!a) {
+                return 1;
+            }
+            if (!b) {
+                return -1;
+            }
+            return (a < b) ? 1 : -1;
+        } else {
+            if (a === b) {
+                return 0;
+            }
+            if (!a) {
+                return -1;
+            }
+            if (!b) {
+                return 1;
+            }
+            return (a < b) ? -1 : 1;
+        }
+    };
 
     return utils;
 });

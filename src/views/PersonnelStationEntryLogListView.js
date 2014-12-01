@@ -133,7 +133,7 @@ define(function(require) {
             if (event) {
                 event.preventDefault();
             }
-
+            var currentContext = this;
             var stationId = this.$('#station-filter').val();
             var startDate = this.$('#start-date-filter').val();
             var endDate = this.$('#end-date-filter').val();
@@ -149,8 +149,12 @@ define(function(require) {
             if (this.parent.model.has('userName')) {
                 options.userName = this.parent.model.get('userName');
             }
-
-            this.dispatcher.trigger(AppEventNamesEnum.goToExportStationEntryLogList, this.collection, options);
+          
+            var triggerExport = function() {
+                this.dispatcher.trigger(AppEventNamesEnum.goToExportStationEntryLogList, currentContext.collection, options);
+            };
+            this.listenToOnce(this.collection, 'reset', triggerExport);
+            this.refreshStationEntryLogList();
         }
     });
 

@@ -4,15 +4,8 @@ define(function(require) {
     var $ = require('jquery'),
             _ = require('underscore'),
             Backbone = require('backbone'),
-            PersonnelModel = require('models/PersonnelModel');
-
-    var simpleComparator = function(a, b, sortDirection) {
-        if (sortDirection !== 1) {
-            return (a === b) ? 0 : (a < b) ? 1 : -1;
-        } else {
-            return (a === b) ? 0 : (a > b) ? 1 : -1;
-        }
-    };
+            PersonnelModel = require('models/PersonnelModel'),
+            utils = require('utils');
 
     var PersonnelCollection = Backbone.Collection.extend({
         model: PersonnelModel,
@@ -27,7 +20,7 @@ define(function(require) {
         },
         comparator: function(a, b) {
             var currentContext = this;
-            return simpleComparator(a.get(currentContext.sortAttribute), b.get(currentContext.sortAttribute), currentContext.sortDirection);
+            return utils.simpleComparator(a.get(currentContext.sortAttribute), b.get(currentContext.sortAttribute), currentContext.sortDirection);
 
         }
     });
