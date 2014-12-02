@@ -76,6 +76,11 @@ define(function(require) {
         }
         return helpers.withDefault(timespan, defaultValue);
     };
+    helpers.formatMinutesWithDefault = function(minutes, defaultValue) {
+        if (minutes) {
+            return helpers.formatTimespan(minutes * 60000);
+        }
+    };
     helpers.formatYesNo = function(option) {
         return option === 'false' ? 'No' : 'Yes';
     };

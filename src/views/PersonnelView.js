@@ -32,38 +32,46 @@ define(function(require) {
             var renderModel = _.extend({}, currentContext.model.attributes);
             currentContext.$el.html(template(renderModel));
 
-            currentContext.personnelStationEntryLogListViewInstance = new PersonnelStationEntryLogListView({
-                controller: currentContext.controller,
-                dispatcher: currentContext.dispatcher,
-                collection: currentContext.stationEntryLogCollection,
-                stationIdentifierCollection: currentContext.stationIdentifierCollection
-            });
-            this.appendChildTo(currentContext.personnelStationEntryLogListViewInstance, '#personnel-station-entry-log-list-view');
-
             return this;
+        },
+        events: {
+            'click .close-alert-box-button': 'closeAlertBox'
         },
         setUserRole: function(userRole) {
             this.userRole = userRole;
         },
         updateViewFromModel: function() {
             var currentContext = this;
-            currentContext.$('#user-name-input').html(currentContext.model.get('userName'));
-            currentContext.$('#contact-number-input').html(helpers.formatPhoneWithDefault(currentContext.model.get('contactNumber'), '', ''));
-            currentContext.$('#email-input').html(currentContext.model.get('email'));
+            if (currentContext.model.has('userName')) {
+                currentContext.$('#user-name-input').html(currentContext.model.get('userName'));
+                currentContext.$('#contact-number-input').html(helpers.formatPhoneWithDefault(currentContext.model.get('contactNumber'), '', ''));
+                currentContext.$('#email-input').html(currentContext.model.get('email'));
+
+            }
             currentContext.hideLoading();
 
-            var options = {
-                onlyCheckedOut: true
-            };
-            if (currentContext.model.has('userId')) {
-                options.userId = currentContext.model.get('userId');
+            if (currentContext.model.has('userId') || currentContext.model.has('userName')) {
+                currentContext.personnelStationEntryLogListViewInstance = new PersonnelStationEntryLogListView({
+                    controller: currentContext.controller,
+                    dispatcher: currentContext.dispatcher,
+                    collection: currentContext.stationEntryLogCollection,
+                    stationIdentifierCollection: currentContext.stationIdentifierCollection
+                });
+                this.appendChildTo(currentContext.personnelStationEntryLogListViewInstance, '#personnel-station-entry-log-list-view');
+
+                var options = {
+                    onlyCheckedOut: true
+                };
+                if (currentContext.model.has('userId')) {
+                    options.userId = currentContext.model.get('userId');
+                }
+                if (currentContext.model.has('userName')) {
+                    options.userName = currentContext.model.get('userName');
+                }
+                currentContext.personnelStationEntryLogListViewInstance.showLoading();
+                currentContext.dispatcher.trigger(AppEventNamesEnum.refreshStationEntryLogList, currentContext.stationEntryLogCollection, options);
+                currentContext.dispatcher.trigger(AppEventNamesEnum.refreshOptions, {stationIdentifierCollection: currentContext.stationIdentifierCollection});
             }
-            if (currentContext.model.has('userName')) {
-                options.userName = currentContext.model.get('userName');
-            }
-            currentContext.personnelStationEntryLogListViewInstance.showLoading();
-            currentContext.dispatcher.trigger(AppEventNamesEnum.refreshStationEntryLogList, currentContext.stationEntryLogCollection, options);
-            currentContext.dispatcher.trigger(AppEventNamesEnum.refreshOptions, {stationIdentifierCollection: currentContext.stationIdentifierCollection});
         }
 
     });

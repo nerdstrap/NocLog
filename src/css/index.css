@@ -6032,7 +6032,8 @@ root {
   font-size: 1em;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
 
-ol, ul {
+ol,
+ul {
   list-style: none;
   margin: 0;
   padding: 0; }
@@ -6048,7 +6049,7 @@ body {
 .shell-view {
   min-height: 100%;
   background-color: #DEDEDE;
-  min-width: 1254px; }
+  min-width: 1280px; }
 
 .shell-view {
   overflow: auto;
@@ -6085,21 +6086,34 @@ body:before {
   margin-right: 0;
   max-width: none; }
 
-.row.highlighted {
-  background: red; }
-
 .hidden {
   display: none; }
 
-.personnel-list-view,
-.purpose-list-view,
-.station-entry-log-list-view,
-.station-entry-log-history-list-view,
-.station-list-view,
-.station-entry-log-view,
-.station-view,
-.personnel-view,
-.personnel-station-entry-log-list-view {
+.invisible {
+  visibility: hidden; }
+
+.bolder {
+  font-weight: bolder; }
+
+.large-link {
+  font-size: 1.125rem; }
+
+.top-align {
+  vertical-align: top; }
+
+.inline-block {
+  display: inline-block; }
+
+.dashboard-list-view,
+.dashboard-details-view {
+  min-width: 1280; }
+
+.dashboard-popover-view {
+  min-width: 1066; }
+
+.dashboard-list-view,
+.dashboard-details-view,
+.dashboard-popover-view {
   background-color: #FFFFFF;
   margin: 5px;
   padding: 5px; }
@@ -6117,16 +6131,11 @@ body:before {
   height: 50px; }
 
 .list-header-item-view .columns span {
-  /*position: absolute;*/
+  position: absolute;
   bottom: 0;
   left: 0; }
 
-.station-entry-log-list-item-view,
-.station-entry-log-history-list-item-view,
-.station-list-item-view,
-.station-list-item-view,
-.personnel-list-item-view,
-.personnel-station-entry-log-list-item-view {
+.dashboard-list-item-view {
   background-color: #DEDEDE;
   border: solid 1px #C2C2C2;
   padding: 3px;
@@ -6138,7 +6147,7 @@ body:before {
 .h3 {
   font-size: 1.5em; }
 
-.divWithScroll {
+.scroll {
   height: 550px;
   overflow: scroll;
   overflow-x: hidden; }
@@ -6151,19 +6160,7 @@ body:before {
 
 /* overriding font size for the various input types */
 select,
-input[type="text"],
-input[type="password"],
-input[type="date"],
-input[type="datetime"],
-input[type="datetime-local"],
-input[type="month"],
-input[type="week"],
-input[type="email"],
-input[type="number"],
-input[type="search"],
-input[type="tel"],
-input[type="time"],
-input[type="url"],
+input,
 textarea {
   display: inline;
   font-size: 1em;
@@ -6171,110 +6168,55 @@ textarea {
   font-weight: normal;
   color: #000000; }
 
-.new-station-entry-log-view select,
-.new-station-entry-log-view input[type="text"],
-.new-station-entry-log-view input[type="password"],
-.new-station-entry-log-view input[type="date"],
-.new-station-entry-log-view input[type="datetime"],
-.new-station-entry-log-view input[type="datetime-local"],
-.new-station-entry-log-view input[type="month"],
-.new-station-entry-log-view input[type="week"],
-.new-station-entry-log-view input[type="email"],
-.new-station-entry-log-view input[type="number"],
-.new-station-entry-log-view input[type="search"],
-.new-station-entry-log-view input[type="tel"],
-.new-station-entry-log-view input[type="time"],
-.new-station-entry-log-view input[type="url"] {
+textarea {
+  resize: none; }
+
+.view-filter select
+.view-filter input {
   min-width: 170px;
   max-width: 170px; }
 
-.station-entry-log-view select,
-.station-entry-log-view input[type="text"],
-.station-entry-log-view input[type="password"],
-.station-entry-log-view input[type="date"],
-.station-entry-log-view input[type="datetime"],
-.station-entry-log-view input[type="datetime-local"],
-.station-entry-log-view input[type="month"],
-.station-entry-log-view input[type="week"],
-.station-entry-log-view input[type="email"],
-.station-entry-log-view input[type="number"],
-.station-entry-log-view input[type="search"],
-.station-entry-log-view input[type="tel"],
-.station-entry-log-view input[type="time"],
-.station-entry-log-view input[type="url"],
-.station-entry-log-list-view select,
-.station-entry-log-list-view input[type="text"],
-.station-entry-log-list-view input[type="password"],
-.station-entry-log-list-view input[type="date"],
-.station-entry-log-list-view input[type="datetime"],
-.station-entry-log-list-view input[type="datetime-local"],
-.station-entry-log-list-view input[type="month"],
-.station-entry-log-list-view input[type="week"],
-.station-entry-log-list-view input[type="email"],
-.station-entry-log-list-view input[type="number"],
-.station-entry-log-list-view input[type="search"],
-.station-entry-log-list-view input[type="tel"],
-.station-entry-log-list-view input[type="time"],
-.station-entry-log-list-view input[type="url"],
-.station-entry-log-history-list-view select,
-.station-entry-log-history-list-view input[type="text"],
-.station-entry-log-history-list-view input[type="password"],
-.station-entry-log-history-list-view input[type="date"],
-.station-entry-log-history-list-view input[type="datetime"],
-.station-entry-log-history-list-view input[type="datetime-local"],
-.station-entry-log-history-list-view input[type="month"],
-.station-entry-log-history-list-view input[type="week"],
-.station-entry-log-history-list-view input[type="email"],
-.station-entry-log-history-list-view input[type="number"],
-.station-entry-log-history-list-view input[type="search"],
-.station-entry-log-history-list-view input[type="tel"],
-.station-entry-log-history-list-view input[type="time"],
-.station-entry-log-history-list-view input[type="url"],
-.station-list-view select,
-.station-list-view input[type="text"],
-.station-list-view input[type="password"],
-.station-list-view input[type="date"],
-.station-list-view input[type="datetime"],
-.station-list-view input[type="datetime-local"],
-.station-list-view input[type="month"],
-.station-list-view input[type="week"],
-.station-list-view input[type="email"],
-.station-list-view input[type="number"],
-.station-list-view input[type="search"],
-.station-list-view input[type="tel"],
-.station-list-view input[type="time"],
-.station-list-view input[type="url"],
-.personnel-list-view select,
-.personnel-list-view input[type="text"],
-.personnel-list-view input[type="password"],
-.personnel-list-view input[type="date"],
-.personnel-list-view input[type="datetime"],
-.personnel-list-view input[type="datetime-local"],
-.personnel-list-view input[type="month"],
-.personnel-list-view input[type="week"],
-.personnel-list-view input[type="email"],
-.personnel-list-view input[type="number"],
-.personnel-list-view input[type="search"],
-.personnel-list-view input[type="tel"],
-.personnel-list-view input[type="time"],
-.personnel-list-view input[type="url"],
-.personnel-station-entry-log-list-view select,
-.personnel-station-entry-log-list-view input[type="text"],
-.personnel-station-entry-log-list-view input[type="password"],
-.personnel-station-entry-log-list-view input[type="date"],
-.personnel-station-entry-log-list-view input[type="datetime"],
-.personnel-station-entry-log-list-view input[type="datetime-local"],
-.personnel-station-entry-log-list-view input[type="month"],
-.personnel-station-entry-log-list-view input[type="week"],
-.personnel-station-entry-log-list-view input[type="email"],
-.personnel-station-entry-log-list-view input[type="number"],
-.personnel-station-entry-log-list-view input[type="search"],
-.personnel-station-entry-log-list-view input[type="tel"],
-.personnel-station-entry-log-list-view input[type="time"],
-.personnel-station-entry-log-list-view input[type="url"] {
+.dashboard-popover-view select,
+.dashboard-popover-view input {
   min-width: 170px;
   max-width: 170px; }
 
+.dashboard-details-view select,
+.dashboard-details-view input {
+  min-width: 170px;
+  max-width: 170px; }
+
+.invalid {
+  color: #c22222;
+  border: 1px solid #c22222; }
+
+.check-out-expired {
+  background-color: #ffffcc; }
+
+.check-out-overdue {
+  background-color: #ffcccc; }
+
+input::-webkit-input-placeholder,
+textarea::-webkit-input-placeholder,
+input:-moz-placeholder,
+textarea:-moz-placeholder,
+input::-moz-placeholder,
+textarea::-moz-placeholder,
+input:-ms-input-placeholder,
+textarea:-ms-input-placeholder {
+  color: #B6B6B4;
+  opacity: 1; }
+
+.view-alerts,
+.view-alerts .alert-box {
+  margin: 0;
+  padding: 0; }
+
+.view-alerts .alert-box {
+  display: inline-block;
+  margin: 3px 3px 3px 0; }
+
+/* station details */
 span.detail {
   font-size: 1em;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -6299,10 +6241,6 @@ span.detail {
 .section-header i {
   float: right; }
 
-.station-entry-log-view .row,
-.new-station-entry-log-view .row {
-  padding: 5px 0px; }
-
 #station-entry-log-collapse-button,
 .elevated-functions-toggle {
   color: #008cba;
@@ -6310,80 +6248,3 @@ span.detail {
   line-height: 1.2em;
   border-bottom: 1px;
   float: left; }
-
-#new-station-entry-log-station-identifier,
-#new-station-entry-log-purpose,
-#new-station-entry-log-duration,
-#new-station-entry-log-purpose-other,
-#edit-station-entry-log-duration {
-  width: 199px;
-  min-width: 199px;
-  max-width: 199px;
-  resize: none; }
-
-.purpose-list-item-view .invalid,
-.new-station-entry-log-view .invalid,
-.edit-station-entry-log-view .invalid {
-  color: #c22222;
-  border: 1px solid #c22222; }
-
-.checkOutExpired {
-  background-color: #ffffcc; }
-
-.checkOutOverdue {
-  background-color: #ffcccc; }
-
-input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
-  color: #B6B6B4; }
-
-input:-moz-placeholder, textarea:-moz-placeholder {
-  color: #B6B6B4;
-  opacity: 1; }
-
-input::-moz-placeholder, textarea::-moz-placeholder {
-  color: #B6B6B4;
-  opacity: 1; }
-
-input:-ms-input-placeholder, textarea:-ms-input-placeholder {
-  color: #B6B6B4; }
-
-.view-alerts .alert-box {
-  display: inline-block;
-  margin: 3px 3px 3px 0; }
-
-.invisible {
-  visibility: hidden; }
-
-.bolder {
-  font-weight: bolder; }
-
-.top-align {
-  vertical-align: top; }
-
-.inline-block {
-  display: inline-block; }
-
-.large-link {
-  font-size: 1.125rem; }
-
-label {
-  margin-left: 5px;
-  margin-right: 5px; }
-
-#new-station-entry-log-purpose-other,
-#new-station-entry-log-additional-info,
-#edit-station-entry-log-additional-info {
-  width: 99%;
-  resize: none; }
-
-.view-station-entry-log-link,
-.station-entry-log-link,
-.check-out-link,
-.view-station-entry-log-link {
-  margin-top: 10px;
-  margin-bottom: 10px; }
-
-.purpose-list-item-view input,
-.purpose-list-item-view select,
-.purpose-list-item-view textarea {
-  width: 99%; }

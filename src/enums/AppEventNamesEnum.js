@@ -22,7 +22,6 @@ define(function(require) {
         refreshPersonnelList: 'refreshPersonnelList',
         refreshMaintainPurposes: 'refreshMaintainPurposes',
         
-        goToNewStationEntryLog: 'goToNewStationEntryLog',
         checkIn: 'checkIn',
         cancelCheckIn: 'cancelCheckIn',
         checkInSuccess: 'checkInSuccess',

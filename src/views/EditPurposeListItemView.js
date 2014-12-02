@@ -75,11 +75,17 @@ define(function(require) {
         },
         updateViewFromModel: function() {
             var currentContext = this;
+            if (currentContext.model.has('itemText')) {
+                currentContext.$('.item-text-input').val(currentContext.model.get('itemText').toString());
+            }
             if (currentContext.model.has('itemAdditionalData')) {
                 currentContext.$('.item-additional-data-filter').val(currentContext.model.get('itemAdditionalData'));
             }
             if (currentContext.model.has('itemEnabled')) {
                 currentContext.$('.item-enabled-filter').val(currentContext.model.get('itemEnabled').toString());
+            }
+            if (currentContext.model.has('itemOrder')) {
+                currentContext.$('.item-order-input').val(currentContext.model.get('itemOrder').toString());
             }
             this.hideLoading();
         },
@@ -94,7 +100,7 @@ define(function(require) {
                 });
             }
             if (currentContext.$('.item-additional-data-filter').val() !== currentContext.model.get('itemAdditionalData')) {
-                currentContext.model.set({itemAdditionalData: currentContext.$('.item-additional-data-input').val()});
+                currentContext.model.set({itemAdditionalData: currentContext.$('.item-additional-data-filter').val()});
             }
             if (currentContext.$('.item-enabled-filter').val() !== currentContext.model.get('itemEnabled')) {
                 currentContext.model.set({itemEnabled: currentContext.$('.item-enabled-filter').val()});

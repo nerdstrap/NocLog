@@ -171,7 +171,7 @@ define(function(require) {
 
             };
             this.listenToOnce(this.collection, 'reset', triggerExport);
-            this.refreshStationEntryLogHistoryList();
+            this.dispatchRefreshStationEntryLogList();
         }
     });
 

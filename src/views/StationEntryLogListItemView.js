@@ -52,9 +52,9 @@ define(function(require) {
         },
         updateCheckOutStatus: function() {
             if (this.model.get("checkOutOverdue")) {
-                this.$('.station-entry-log-list-item-view').addClass('checkOutOverdue');
+                this.$el.addClass('check-out-overdue');
             } else if (this.model.get("checkOutExpired")) {
-                this.$('.station-entry-log-list-item-view').addClass('checkOutExpired');
+                this.$el.addClass('check-out-expired');
             }
         },
         toggleElevatedFunctions: function(event) {

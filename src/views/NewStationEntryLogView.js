@@ -51,6 +51,8 @@ define(function(require) {
 
             this.updateViewType();
 
+            this.updateLoading();
+
             return this;
         },
         setUserRole: function(userRole) {
@@ -58,12 +60,18 @@ define(function(require) {
         },
         addStationFilter: function() {
             this.addFilter(this.$('#station-filter'), this.stationIdentifierCollection.models, 'stationId', 'stationName');
+            this.stationFilterLoaded = true;
+            this.updateLoading();
         },
         addPurposeFilter: function() {
             this.addFilter(this.$('#purpose-filter'), this.purposeCollection.models, 'itemAdditionalData', 'itemText');
+            this.purposeFilterLoaded = true;
+            this.updateLoading();
         },
         addDurationFilter: function() {
             this.addFilter(this.$('#duration-filter'), this.durationCollection.models, 'itemValue', 'itemText');
+            this.durationFilterLoaded = true;
+            this.updateLoading();
         },
         events: {
             'keypress #third-party-indicator-container': 'invokeUpdateViewType',
@@ -244,7 +252,7 @@ define(function(require) {
 
             var duration = $('#duration-filter').val();
             var additionalInfo = $('#additional-info-input').val();
-            var hasCrew = this.$('#has-crew-input').is(':checked');
+            var hasCrew = this.$('#has-crew-indicator').is(':checked');
             var dispatchCenterId = '777';
             var stationType = 'TC';
             this.model.set({
@@ -291,6 +299,11 @@ define(function(require) {
         onCheckInError: function(message) {
             this.hideLoading();
             this.showError(message);
+        },
+        updateLoading: function() {
+            if (this.stationFilterLoaded && this.purposeFilterLoaded && this.durationFilterLoaded) {
+                this.hideLoading();
+            }
         },
         onLeave: function() {
         }

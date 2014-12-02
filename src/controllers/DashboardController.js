@@ -10,7 +10,6 @@ define(function(require) {
             StationListView = require('views/StationListView'),
             PersonnelListView = require('views/PersonnelListView'),
             EditPurposeListView = require('views/EditPurposeListView'),
-            NewStationEntryLogView = require('views/NewStationEntryLogView'),
             StationEntryLogView = require('views/StationEntryLogView'),
             StationView = require('views/StationView'),
             PersonnelView = require('views/PersonnelView'),
@@ -20,9 +19,9 @@ define(function(require) {
             LookupDataItemCollection = require('collections/LookupDataItemCollection'),
             PurposeCollection = require('collections/PurposeCollection'),
             StationEntryLogModel = require('models/StationEntryLogModel'),
-            NewStationEntryLogModel = require('models/NewStationEntryLogModel'),
             StationModel = require('models/StationModel'),
             PersonnelModel = require('models/PersonnelModel'),
+            CSVExportTemplate = require('hbs!templates/CSVExport'),
             AppEventNamesEnum = require('enums/AppEventNamesEnum'),
             appEvents = require('events'),
             globals = require('globals'),
@@ -66,7 +65,6 @@ define(function(require) {
             this.listenTo(appEvents, AppEventNamesEnum.refreshPersonnelList, this.refreshPersonnelList);
             this.listenTo(appEvents, AppEventNamesEnum.refreshMaintainPurposes, this.refreshMaintainPurposes);
 
-            this.listenTo(appEvents, AppEventNamesEnum.goToNewStationEntryLog, this.goToNewStationEntryLog);
             this.listenTo(appEvents, AppEventNamesEnum.checkIn, this.checkIn);
             this.listenTo(appEvents, AppEventNamesEnum.checkOut, this.checkOut);
             this.listenTo(appEvents, AppEventNamesEnum.updateCheckIn, this.updateCheckIn);
@@ -219,7 +217,7 @@ define(function(require) {
 
             currentContext.router.swapContent(personnelListViewInstance);
             currentContext.router.navigate('personnel');
-            
+
             personnelListViewInstance.showLoading();
             $.when(currentContext.dashboardService.getOptions()).done(function(getOptionsResponse) {
                 currentContext.dispatcher.trigger(AppEventNamesEnum.userRoleUpdated, getOptionsResponse.userRole);
@@ -243,7 +241,6 @@ define(function(require) {
 
             var purposeCollection = new PurposeCollection();
             var durationCollection = new LookupDataItemCollection();
-//            purposeCollection.setSortAttribute('sortOrder');
             var purposeMaintenanceViewInstance = new EditPurposeListView({
                 controller: currentContext,
                 dispatcher: currentContext.dispatcher,
@@ -327,7 +324,7 @@ define(function(require) {
             $.when(currentContext.dashboardService.getStations({stationId: stationId})).done(function(getStationByIdResponse) {
                 currentContext.dispatcher.trigger(AppEventNamesEnum.userRoleUpdated, getStationByIdResponse.userRole);
                 if (getStationByIdResponse.stations && getStationByIdResponse.stations.length > 0) {
-                stationViewInstance.setUserRole(getStationByIdResponse.userRole);
+                    stationViewInstance.setUserRole(getStationByIdResponse.userRole);
                     stationModelInstance.set(getStationByIdResponse.stations[0]);
                     deferred.resolve(stationViewInstance);
                 } else {
@@ -367,13 +364,13 @@ define(function(require) {
             $.when(currentContext.dashboardService.getPersonnels(personnelModelInstance.attributes)).done(function(getPersonnelsResponse) {
                 currentContext.dispatcher.trigger(AppEventNamesEnum.userRoleUpdated, getPersonnelsResponse.userRole);
                 if (getPersonnelsResponse && getPersonnelsResponse.personnels && getPersonnelsResponse.personnels.length > 0) {
-                personnelViewInstance.setUserRole(getPersonnelsResponse.userRole);
+                    personnelViewInstance.setUserRole(getPersonnelsResponse.userRole);
                     personnelModelInstance.set(getPersonnelsResponse.personnels[0]);
                     deferred.resolve(personnelViewInstance);
                 } else {
                     personnelModelInstance.clear();
-                    personnelViewInstance.showError('not found!');
-                    deferred.reject('not found!');
+                    personnelViewInstance.showError('invalid user!');
+                    deferred.reject('invalid user!');
                 }
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 personnelModelInstance.clear();
@@ -445,7 +442,7 @@ define(function(require) {
         },
         refreshOptions: function(options) {
             options || (options = {});
-            console.trace('DashboardController.refreshStationEntryLogList');
+            console.trace('DashboardController.refreshOptions');
             var currentContext = this,
                     deferred = $.Deferred();
 
@@ -469,33 +466,26 @@ define(function(require) {
 
             return deferred.promise();
         },
-        goToNewStationEntryLog: function(container) {
-            console.trace('DashboardController.goToNewStationEntryLog');
+        refreshFilters: function(options) {
+            options || (options = {});
+            console.trace('DashboardController.refreshFilters');
             var currentContext = this,
                     deferred = $.Deferred();
 
-            var newStationEntryLogModelInstance = new NewStationEntryLogModel();
-            var stationIdentifierCollection = new Backbone.Collection();
-            var purposeCollection = new LookupDataItemCollection();
-            var durationCollection = new LookupDataItemCollection();
-            var newStationEntryLogViewInstance = new NewStationEntryLogView({
-                model: newStationEntryLogModelInstance,
-                controller: currentContext,
-                dispatcher: currentContext.dispatcher,
-                stationIdentifierCollection: stationIdentifierCollection,
-                purposeCollection: purposeCollection,
-                durationCollection: durationCollection
-            }).render();
-
-            newStationEntryLogViewInstance.showLoading();
-            container.html(newStationEntryLogViewInstance.el);
-
             $.when(currentContext.dashboardService.getOptions()).done(function(getOptionsResponse) {
-                stationIdentifierCollection.reset(getOptionsResponse.stationIdentifiers);
-                purposeCollection.reset(_.where(getOptionsResponse.purposes, {itemEnabled: true}));
-                durationCollection.reset(_.where(getOptionsResponse.durations, {itemEnabled: true}));
-                newStationEntryLogViewInstance.hideLoading();
-                deferred.resolve(newStationEntryLogViewInstance);
+                if (options.userRole) {
+                    options.userRole = getOptionsResponse.userRole;
+                }
+                if (options.stationIdentifierCollection) {
+                    options.stationIdentifierCollection.reset(getOptionsResponse.stationIdentifiers);
+                }
+                if (options.purposeCollection) {
+                    options.purposeCollection.reset(_.where(getOptionsResponse.purposes, {itemEnabled: true}));
+                }
+                if (options.durationCollection) {
+                    options.durationCollection.reset(_.where(getOptionsResponse.durations, {itemEnabled: true}));
+                }
+                deferred.resolve(getOptionsResponse);
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 deferred.reject(textStatus);
             });
@@ -608,12 +598,10 @@ define(function(require) {
             globals.window.open(directionsUri);
         },
         goToExportStationEntryLogList: function(stationEntryLogCollection, options) {
-            require(['hbs!templates/CSVExport'], function(template) {
-                var csv = template({logArray: stationEntryLogCollection.models});
-                var blob = new Blob([csv], {type: "text/csv;charset=utf-8"});
-                var fileName = utils.getCSVFileName(options);
-                saveAs(blob, fileName);
-            });
+            var csv = CSVExportTemplate({logArray: stationEntryLogCollection.models});
+            var blob = new Blob([csv], {type: "text/csv;charset=utf-8"});
+            var fileName = utils.getCSVFileName(options);
+            saveAs(blob, fileName);
         }
     });
 

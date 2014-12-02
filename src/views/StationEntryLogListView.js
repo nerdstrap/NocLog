@@ -6,6 +6,7 @@ define(function(require) {
             BaseListView = require('views/BaseListView'),
             StationEntryLogListItemView = require('views/StationEntryLogListItemView'),
             NewStationEntryLogModel = require('models/NewStationEntryLogModel'),
+            LookupDataItemCollection = require('collections/LookupDataItemCollection'),
             NewStationEntryLogView = require('views/NewStationEntryLogView'),
             AppEventNamesEnum = require('enums/AppEventNamesEnum'),
             UserRolesEnum = require('enums/UserRolesEnum'),
@@ -68,12 +69,21 @@ define(function(require) {
             'click #export-station-entry-log-list-button': 'exportStationEntryLogList'
         },
         addAll: function() {
-            this._leaveChildren();
+            this.removeAll();
             this.clearSortIndicators();
             _.each(this.collection.models, this.addOne, this);
             this.updateViewFromCollection();
             this.addSortIndicators();
             this.hideLoading();
+        },
+        removeAll: function() {
+            this.children.chain().clone().each(function(view) {
+                if (view.$('.new-station-entry-log-view').length === 0) {
+                    if (view.leave) {
+                        view.leave();
+                    }
+                }
+            });
         },
         updateViewFromCollection: function() {
             if (this.collection.overdueCount > 0) {
@@ -203,9 +213,30 @@ define(function(require) {
             if (event) {
                 event.preventDefault();
             }
-
+            var currentContext = this;
             this.hideNewStationEntryLogButton();
-            this.dispatcher.trigger(AppEventNamesEnum.goToNewStationEntryLog, this.$('#new-station-entry-log-view'));
+
+            var newStationEntryLogModelInstance = new NewStationEntryLogModel();
+            var stationIdentifierCollection = new Backbone.Collection();
+            var purposeCollection = new LookupDataItemCollection();
+            var durationCollection = new LookupDataItemCollection();
+            currentContext.newStationEntryLogViewInstance = new NewStationEntryLogView({
+                model: newStationEntryLogModelInstance,
+                controller: currentContext,
+                dispatcher: currentContext.dispatcher,
+                stationIdentifierCollection: stationIdentifierCollection,
+                purposeCollection: purposeCollection,
+                durationCollection: durationCollection
+            });
+            currentContext.renderChildInto(currentContext.newStationEntryLogViewInstance, currentContext.$('#new-station-entry-log-view'));
+
+            currentContext.newStationEntryLogViewInstance.showLoading();
+            var options = {
+                stationIdentifierCollection: stationIdentifierCollection,
+                purposeCollection: purposeCollection,
+                durationCollection: durationCollection
+            };
+            this.dispatcher.trigger(AppEventNamesEnum.refreshOptions, options);
         },
         onCheckInSuccess: function(stationEntryLog) {
             var checkInSuccessMessage = utils.getResource('checkInSuccessMessage');
