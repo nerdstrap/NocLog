@@ -1,109 +1,111 @@
-<div class="dashboard-details-view">
+<div class="station-view">
     <div class="row collapse view-status">
-        <div class="small-12 columns">
+        <div class="large-12 columns">
             <span class="view-message">{{resource "station.loadingMessage"}}</span>
             <img src="{{resource 'loadingIconSrc'}}" class="view-loading" />
         </div>
     </div>
     <div class="row collapse">
-        <div class="small-12 columns">
+        <div class="large-12 columns">
             <h3 data-station-id="{{stationId}}">{{stationName}}</h3>
         </div>
     </div>
     <div class="row collapse">
-        <div class="small-12 columns">
+        <div class="large-12 columns">
             <a class="directions-link" data-latitude="{{latitude}}" data-longitude="{{longitude}}" href="#">{{resource "goToMapButtonText"}}</a>
         </div>
     </div>
     <div id="station-view-section-container" class="row">
-        <div class="small-6 columns">
+        <div class="large-6 columns">
             <div class="panel callout">
                 <div id="station-show-location-details-button" class="row collapse section-header">
-                    <div class="small-12 columns">
+                    <div class="large-12 columns">
                         <span>{{resource "locationSectionTitleText"}}</span>
-                        <i id="station-hide-location-details-icon" class="fa fa-angle-double-up hidden"></i>
-                        <i id="station-show-location-details-icon" class="fa fa-angle-double-down"></i>
+                        <span class="expand-collapse-icons">
+                            <i id="station-hide-location-details-icon" class="fa fa-plus hidden"></i>
+                            <i id="station-show-location-details-icon" class="fa fa-minus"></i>
+                        </span>
                     </div>
                 </div>
                 <div id="station-location-details-view" class="row collapse">
-                    <div class="small-12 columns">
+                    <div class="large-12 columns">
                         <div class="row collapse">
-                            <div class="small-4 columns">
+                            <div class="large-4 columns">
                                 <span>{{resource "audinetHeaderText"}}</span>
                             </div>
-                            <div class="small-8 columns">
+                            <div class="large-8 columns">
                                 <span class="detail">{{formatPhoneWithDefault contactAudinet "(d3) %r)" "&nbsp;"}}</span>
                             </div>
                         </div>
                         <div class="row collapse">
-                            <div class="small-4 columns">
+                            <div class="large-4 columns">
                                 <span>{{resource "telephoneHeaderText"}}</span>
                             </div>
-                            <div class="small-8 columns">
+                            <div class="large-8 columns">
                                 <span class="detail">{{formatPhoneWithDefault telephone "%D %I:%M %p" "&nbsp;"}}</span>
                             </div>
                         </div>
                         <div class="row collapse">
-                            <div class="small-4 columns">
+                            <div class="large-4 columns">
                                 <span>{{resource "address1HeaderText"}}</span>
                             </div>
-                            <div class="small-8 columns">
+                            <div class="large-8 columns">
                                 <span class="detail">{{withDefault address1 "&nbsp;"}}</span>
                             </div>
                         </div>
                         <div class="row collapse">
-                            <div class="small-4 columns">
+                            <div class="large-4 columns">
                                 <span>{{resource "cityHeaderText"}}</span>
                             </div>
-                            <div class="small-8 columns">
+                            <div class="large-8 columns">
                                 <span class="detail">{{withDefault city "&nbsp;"}}</span>
                             </div>
                         </div>
                         <div class="row collapse">
-                            <div class="small-4 columns">
+                            <div class="large-4 columns">
                                 <span>{{resource "stateHeaderText"}}</span>
                             </div>
-                            <div class="small-8 columns">
+                            <div class="large-8 columns">
                                 <span class="detail">{{withDefault state "&nbsp;"}}</span>
                             </div>
                         </div>
                         <div class="row collapse">
-                            <div class="small-4 columns">
+                            <div class="large-4 columns">
                                 <span>{{resource "postalCodeHeaderText"}}</span>
                             </div>
-                            <div class="small-8 columns">
+                            <div class="large-8 columns">
                                 <span class="detail">{{withDefault postalCode "&nbsp;"}}</span>
                             </div>
                         </div>
                         <div class="row collapse">
-                            <div class="small-4 columns">
+                            <div class="large-4 columns">
                                 <span>{{resource "countyHeaderText"}}</span>
                             </div>
-                            <div class="small-8 columns">
+                            <div class="large-8 columns">
                                 <span class="detail">{{withDefault county "&nbsp;"}}</span>
                             </div>
                         </div>
                         <div class="row collapse">
-                            <div class="small-4 columns">
+                            <div class="large-4 columns">
                                 <span>{{resource "latitudeHeaderText"}}</span>
                             </div>
-                            <div class="small-8 columns">
+                            <div class="large-8 columns">
                                 <span class="detail">{{withDefault latitude "&nbsp;"}}</span>
                             </div>
                         </div>
                         <div class="row collapse">
-                            <div class="small-4 columns">
+                            <div class="large-4 columns">
                                 <span>{{resource "longitudeHeaderText"}}</span>
                             </div>
-                            <div class="small-8 columns">
+                            <div class="large-8 columns">
                                 <span class="detail">{{withDefault longitude "&nbsp;"}}</span>
                             </div>
                         </div>
                         <div class="row collapse">
-                            <div class="small-4 columns">
+                            <div class="large-4 columns">
                                 <span>{{resource "directionsHeaderText"}}</span>
                             </div>
-                            <div class="small-8 columns">
+                            <div class="large-8 columns">
                                 <span class="detail">{{withDefault directions "&nbsp;"}}</span>
                             </div>
                         </div>
@@ -113,67 +115,69 @@
                     </div>
                 </div>
                 <div id="station-show-contact-details-button" class="row collapse section-header">
-                    <div class="small-12 columns">
+                    <div class="large-12 columns">
                         <span>{{resource "contactSectionTitleText"}}</span>
-                        <i id="station-hide-contact-details-icon" class="fa fa-angle-double-up hidden"></i>
-                        <i id="station-show-contact-details-icon" class="fa fa-angle-double-down"></i>
+                        <span class="expand-collapse-icons">
+                            <i id="station-hide-contact-details-icon" class="fa fa-plus hidden"></i>
+                            <i id="station-show-contact-details-icon" class="fa fa-minus"></i>
+                        </span>
                     </div>
                 </div>
                 <div id="station-contact-details-view" class="row collapse">
-                    <div class="small-12 columns">
+                    <div class="large-12 columns">
                         <div class="row collapse">
-                            <div class="small-4 columns">
+                            <div class="large-4 columns">
                                 <span>{{resource "contactIdHeaderText"}}</span>
                             </div>
-                            <div class="small-8 columns">
+                            <div class="large-8 columns">
                                 <span class="detail">{{withDefault contactId "&nbsp;"}}</span>
                             </div>
                         </div>
                         <div class="row collapse">
-                            <div class="small-4 columns">
+                            <div class="large-4 columns">
                                 <span>{{resource "contactPhoneHeaderText"}}</span>
                             </div>
-                            <div class="small-8 columns">
+                            <div class="large-8 columns">
                                 <span class="detail">{{formatPhoneWithDefault contactPhone "%D %I:%M %p" "&nbsp;"}}</span>
                             </div>
                         </div>
                         <div class="row collapse">
-                            <div class="small-4 columns">
+                            <div class="large-4 columns">
                                 <span>{{resource "contactSecurityPhoneHeaderText"}}</span>
                             </div>
-                            <div class="small-8 columns">
+                            <div class="large-8 columns">
                                 <span class="detail">{{formatPhoneWithDefault contactSecurityPhone "%D %I:%M %p" "&nbsp;"}}</span>
                             </div>
                         </div>
                         <div class="row collapse">
-                            <div class="small-4 columns">
+                            <div class="large-4 columns">
                                 <span>{{resource "contactAddress1HeaderText"}}</span>
                             </div>
-                            <div class="small-8 columns">
+                            <div class="large-8 columns">
                                 <span class="detail">{{withDefault contactAddress1 "&nbsp;"}}</span>
                             </div>
                         </div>
                         <div class="row collapse">
-                            <div class="small-4 columns">
+                            <div class="large-4 columns">
                                 <span>{{resource "contactCityHeaderText"}}</span>
                             </div>
-                            <div class="small-8 columns">
+                            <div class="large-8 columns">
                                 <span class="detail">{{withDefault contactCity "&nbsp;"}}</span>
                             </div>
                         </div>
                         <div class="row collapse">
-                            <div class="small-4 columns">
+                            <div class="large-4 columns">
                                 <span>{{resource "contactStateHeaderText"}}</span>
                             </div>
-                            <div class="small-8 columns">
+                            <div class="large-8 columns">
                                 <span class="detail">{{withDefault contactState "&nbsp;"}}</span>
                             </div>
                         </div>
                         <div class="row collapse">
-                            <div class="small-4 columns">
+                            <div class="large-4 columns">
                                 <span>{{resource "contactPostalCodeHeaderText"}}</span>
                             </div>
-                            <div class="small-8 columns">
+                            <div class="large-8 columns">
                                 <span class="detail">{{withDefault contactPostalCode "&nbsp;"}}</span>
                             </div>
                         </div>
@@ -182,59 +186,61 @@
             </div>
             <div class="panel">
                 <div id="station-show-emergency-details-button" class="row collapse section-header">
-                    <div class="small-12 columns">
+                    <div class="large-12 columns">
                         <span>{{resource "emergencySectionTitleText"}}</span>
-                        <i id="station-hide-emergency-details-icon" class="fa fa-angle-double-up hidden"></i>
-                        <i id="station-show-emergency-details-icon" class="fa fa-angle-double-down"></i>
+                        <span class="expand-collapse-icons">
+                            <i id="station-hide-emergency-details-icon" class="fa fa-plus hidden"></i>
+                            <i id="station-show-emergency-details-icon" class="fa fa-minus"></i>
+                        </span>
                     </div>
                 </div>
                 <div id="station-emergency-details-view" class="row collapse">
-                    <div class="small-12 columns">
+                    <div class="large-12 columns">
                         <div class="row collapse">
-                            <div class="small-4 columns">
+                            <div class="large-4 columns">
                                 <span>{{resource "medicalEmergencyDepartmentHeaderText"}}</span>
                             </div>
-                            <div class="small-8 columns">
+                            <div class="large-8 columns">
                                 <span class="detail">{{withDefault medicalEmergencyDepartment "&nbsp;"}}</span>
                             </div>
                         </div>
                         <div class="row collapse">
-                            <div class="small-4 columns">
+                            <div class="large-4 columns">
                                 <span>{{resource "medicalEmergencyDepartmentPhoneHeaderText"}}</span>
                             </div>
-                            <div class="small-8 columns">
+                            <div class="large-8 columns">
                                 <span class="detail">{{formatPhoneWithDefault medicalEmergencyDepartmentPhone "%D %I:%M %p" "&nbsp;"}}</span>
                             </div>
                         </div>
                         <div class="row collapse">
-                            <div class="small-4 columns">
+                            <div class="large-4 columns">
                                 <span>{{resource "fireDepartmentHeaderText"}}</span>
                             </div>
-                            <div class="small-8 columns">
+                            <div class="large-8 columns">
                                 <span class="detail">{{withDefault fireDepartment "&nbsp;"}}</span>
                             </div>
                         </div>
                         <div class="row collapse">
-                            <div class="small-4 columns">
+                            <div class="large-4 columns">
                                 <span>{{resource "fireDepartmentPhoneHeaderText"}}</span>
                             </div>
-                            <div class="small-8 columns">
+                            <div class="large-8 columns">
                                 <span class="detail">{{formatPhoneWithDefault fireDepartmentPhone "%D %I:%M %p" "&nbsp;"}}</span>
                             </div>
                         </div>
                         <div class="row collapse">
-                            <div class="small-4 columns">
+                            <div class="large-4 columns">
                                 <span>{{resource "policeDepartmentHeaderText"}}</span>
                             </div>
-                            <div class="small-8 columns">
+                            <div class="large-8 columns">
                                 <span class="detail">{{withDefault policeDepartment "&nbsp;"}}</span>
                             </div>
                         </div>
                         <div class="row collapse">
-                            <div class="small-4 columns">
+                            <div class="large-4 columns">
                                 <span>{{resource "policeDepartmentPhoneHeaderText"}}</span>
                             </div>
-                            <div class="small-8 columns">
+                            <div class="large-8 columns">
                                 <span class="detail">{{formatPhoneWithDefault policeDepartmentPhone "%D %I:%M %p" "&nbsp;"}}</span>
                             </div>
                         </div>
@@ -242,38 +248,40 @@
                 </div>
             </div>
         </div>
-        <div class="small-6 columns">
+        <div class="large-6 columns">
             <div class="panel">
                 <div id="station-show-other-details-button" class="row collapse section-header">
-                    <div class="small-12 columns">
+                    <div class="large-12 columns">
                         <span>{{resource "otherSectionTitleText"}}</span>
-                        <i id="station-hide-other-details-icon" class="fa fa-angle-double-up hidden"></i>
-                        <i id="station-show-other-details-icon" class="fa fa-angle-double-down"></i>
+                        <span class="expand-collapse-icons">
+                            <i id="station-hide-other-details-icon" class="fa fa-plus hidden"></i>
+                            <i id="station-show-other-details-icon" class="fa fa-minus"></i>
+                        </span>
                     </div>
                 </div>
                 <div id="station-other-details-view" class="row collapse">
-                    <div class="small-12 columns">
+                    <div class="large-12 columns">
                         <div class="row collapse">
-                            <div class="small-4 columns">
+                            <div class="large-4 columns">
                                 <span>{{resource "complexNameHeaderText"}}</span>
                             </div>
-                            <div class="small-8 columns">
+                            <div class="large-8 columns">
                                 <span class="detail">{{withDefault complexName "&nbsp;"}}</span>
                             </div>
                         </div>
                         <div class="row collapse">
-                            <div class="small-4 columns">
+                            <div class="large-4 columns">
                                 <span>{{resource "owningOrganizationHeaderText"}}</span>
                             </div>
-                            <div class="small-8 columns">
+                            <div class="large-8 columns">
                                 <span class="detail">{{withDefault owningOrganization "&nbsp;"}}</span>
                             </div>
                         </div>
                         <div class="row collapse">
-                            <div class="small-4 columns">
+                            <div class="large-4 columns">
                                 <span>{{resource "leasedCircuitsHeaderText"}}</span>
                             </div>
-                            <div class="small-8 columns">
+                            <div class="large-8 columns">
                                 <span class="detail">{{withDefault leasedCircuits "&nbsp;"}}</span>
                             </div>
                         </div>
@@ -283,43 +291,45 @@
                     </div>
                 </div>
                 <div id="station-show-faa-details-button" class="row collapse section-header">
-                    <div class="small-12 columns">
+                    <div class="large-12 columns">
                         <span>{{resource "faaSectionTitleText"}}</span>
-                        <i id="station-hide-faa-details-icon" class="fa fa-angle-double-up hidden"></i>
-                        <i id="station-show-faa-details-icon" class="fa fa-angle-double-down"></i>
+                        <span class="expand-collapse-icons">
+                            <i id="station-hide-faa-details-icon" class="fa fa-plus hidden"></i>
+                            <i id="station-show-faa-details-icon" class="fa fa-minus"></i>
+                        </span>
                     </div>
                 </div>
                 <div id="station-faa-details-view" class="row collapse">
-                    <div class="small-12 columns">
+                    <div class="large-12 columns">
                         <div class="row collapse">
-                            <div class="small-4 columns">
+                            <div class="large-4 columns">
                                 <span>{{resource "faaReportableHeaderText"}}</span>
                             </div>
-                            <div class="small-8 columns">
+                            <div class="large-8 columns">
                                 <span class="detail">{{withDefault faaReportable "&nbsp;"}}</span>
                             </div>
                         </div>
                         <div class="row collapse">
-                            <div class="small-4 columns">
+                            <div class="large-4 columns">
                                 <span>{{resource "faaRegionHeaderText"}}</span>
                             </div>
-                            <div class="small-8 columns">
+                            <div class="large-8 columns">
                                 <span class="detail">{{withDefault faaRegion "&nbsp;"}}</span>
                             </div>
                         </div>
                         <div class="row collapse">
-                            <div class="small-4 columns">
+                            <div class="large-4 columns">
                                 <span>{{resource "towerNumberHeaderText"}}</span>
                             </div>
-                            <div class="small-8 columns">
+                            <div class="large-8 columns">
                                 <span class="detail">{{withDefault towerNumber "&nbsp;"}}</span>
                             </div>
                         </div>
                         <div class="row collapse">
-                            <div class="small-4 columns">
+                            <div class="large-4 columns">
                                 <span>{{resource "nearestAirportHeaderText"}}</span>
                             </div>
-                            <div class="small-8 columns">
+                            <div class="large-8 columns">
                                 <span class="detail">{{withDefault nearestAirport "&nbsp;"}}</span>
                             </div>
                         </div>
@@ -329,35 +339,37 @@
                     </div>
                 </div>
                 <div id="station-show-it-fo-details-button" class="row collapse section-header">
-                    <div class="small-12 columns">
+                    <div class="large-12 columns">
                         <span>{{resource "itfoSectionTitleText"}}</span>
-                        <i id="station-hide-it-fo-details-icon" class="fa fa-angle-double-up hidden"></i>
-                        <i id="station-show-it-fo-details-icon" class="fa fa-angle-double-down"></i>
+                        <span class="expand-collapse-icons">
+                            <i id="station-hide-it-fo-details-icon" class="fa fa-plus hidden"></i>
+                            <i id="station-show-it-fo-details-icon" class="fa fa-minus"></i>
+                        </span>
                     </div>
                 </div>
                 <div id="station-it-fo-details-view" class="row collapse">
-                    <div class="small-12 columns">
+                    <div class="large-12 columns">
                         <div class="row collapse">
-                            <div class="small-4 columns">
+                            <div class="large-4 columns">
                                 <span>{{resource "areaHeaderText"}}</span>
                             </div>
-                            <div class="small-8 columns">
+                            <div class="large-8 columns">
                                 <span class="detail">{{withDefault area "&nbsp;"}}</span>
                             </div>
                         </div>
                         <div class="row collapse">
-                            <div class="small-4 columns">
+                            <div class="large-4 columns">
                                 <span>{{resource "regionHeaderText"}}</span>
                             </div>
-                            <div class="small-8 columns">
+                            <div class="large-8 columns">
                                 <span class="detail">{{withDefault region "&nbsp;"}}</span>
                             </div>
                         </div>
                         <div class="row collapse">
-                            <div class="small-4 columns">
+                            <div class="large-4 columns">
                                 <span>{{resource "benefitingOrganizationHeaderText"}}</span>
                             </div>
-                            <div class="small-8 columns">
+                            <div class="large-8 columns">
                                 <span class="detail">{{withDefault benefitingOrganization "&nbsp;"}}</span>
                             </div>
                         </div>
@@ -365,34 +377,34 @@
                             &nbsp;
                         </div>
                         <div class="row collapse">
-                            <div class="small-4 columns">
+                            <div class="large-4 columns">
                                 <span>{{resource "servingElectricUtilityHeaderText"}}</span>
                             </div>
-                            <div class="small-8 columns">
+                            <div class="large-8 columns">
                                 <span class="detail">{{withDefault servingElectricUtility "&nbsp;"}}</span>
                             </div>
                         </div>
                         <div class="row collapse">
-                            <div class="small-4 columns">
+                            <div class="large-4 columns">
                                 <span>{{resource "servingUtilityTelephoneHeaderText"}}</span>
                             </div>
-                            <div class="small-8 columns">
+                            <div class="large-8 columns">
                                 <span class="detail">{{formatPhoneWithDefault servingUtilityTelephone "%D %I:%M %p" "&nbsp;"}}</span>
                             </div>
                         </div>
                         <div class="row collapse">
-                            <div class="small-4 columns">
+                            <div class="large-4 columns">
                                 <span>{{resource "acCircuitFeederHeaderText"}}</span>
                             </div>
-                            <div class="small-8 columns">
+                            <div class="large-8 columns">
                                 <span class="detail">{{withDefault acCircuitFeeder "&nbsp;"}}</span>
                             </div>
                         </div>
                         <div class="row collapse">
-                            <div class="small-4 columns">
+                            <div class="large-4 columns">
                                 <span>{{resource "transformerPoleHeaderText"}}</span>
                             </div>
-                            <div class="small-8 columns">
+                            <div class="large-8 columns">
                                 <span class="detail">{{withDefault transformerPole "&nbsp;"}}</span>
                             </div>
                         </div>
@@ -400,34 +412,34 @@
                             &nbsp;
                         </div>
                         <div class="row collapse">
-                            <div class="small-4 columns">
+                            <div class="large-4 columns">
                                 <span>{{resource "servingTelephoneCompanyHeaderText"}}</span>
                             </div>
-                            <div class="small-8 columns">
+                            <div class="large-8 columns">
                                 <span class="detail">{{withDefault servingTelephoneCompany "&nbsp;"}}</span>
                             </div>
                         </div>
                         <div class="row collapse">
-                            <div class="small-4 columns">
+                            <div class="large-4 columns">
                                 <span>{{resource "demarcationLocationHeaderText"}}</span>
                             </div>
-                            <div class="small-8 columns">
+                            <div class="large-8 columns">
                                 <span class="detail">{{withDefault demarcationLocation "&nbsp;"}}</span>
                             </div>
                         </div>
                         <div class="row collapse">
-                            <div class="small-4 columns">
+                            <div class="large-4 columns">
                                 <span>{{resource "telecomNpaHeaderText"}}</span>
                             </div>
-                            <div class="small-8 columns">
+                            <div class="large-8 columns">
                                 <span class="detail">{{withDefault telecomNpa "&nbsp;"}}</span>
                             </div>
                         </div>
                         <div class="row collapse">
-                            <div class="small-4 columns">
+                            <div class="large-4 columns">
                                 <span>{{resource "telecomNxxHeaderText"}}</span>
                             </div>
-                            <div class="small-8 columns">
+                            <div class="large-8 columns">
                                 <span class="detail">{{withDefault telecomNxx "&nbsp;"}}</span>
                             </div>
                         </div>
@@ -435,10 +447,10 @@
                             &nbsp;
                         </div>
                         <div class="row collapse">
-                            <div class="small-4 columns">
+                            <div class="large-4 columns">
                                 <span>{{resource "fuelProviderHeaderText"}}</span>
                             </div>
-                            <div class="small-8 columns">
+                            <div class="large-8 columns">
                                 <span class="detail">{{withDefault fuelProvider "&nbsp;"}}</span>
                             </div>
                         </div>
@@ -446,42 +458,42 @@
                             &nbsp;
                         </div>
                         <div class="row collapse">
-                            <div class="small-4 columns">
+                            <div class="large-4 columns">
                                 <span>{{resource "siteTypeHeaderText"}}</span>
                             </div>
-                            <div class="small-8 columns">
+                            <div class="large-8 columns">
                                 <span class="detail">{{withDefault siteType "&nbsp;"}}</span>
                             </div>
                         </div>
                         <div class="row collapse">
-                            <div class="small-4 columns">
+                            <div class="large-4 columns">
                                 <span>{{resource "siteAccessMethodHeaderText"}}</span>
                             </div>
-                            <div class="small-8 columns">
+                            <div class="large-8 columns">
                                 <span class="detail">{{withDefault siteAccessMethod "&nbsp;"}}</span>
                             </div>
                         </div>
                         <div class="row collapse">
-                            <div class="small-4 columns">
+                            <div class="large-4 columns">
                                 <span>{{resource "equipmentHeaderText"}}</span>
                             </div>
-                            <div class="small-8 columns">
+                            <div class="large-8 columns">
                                 <span class="detail">{{withDefault equipment "&nbsp;"}}</span>
                             </div>
                         </div>
                         <div class="row collapse">
-                            <div class="small-4 columns">
+                            <div class="large-4 columns">
                                 <span>{{resource "landOwnerHeaderText"}}</span>
                             </div>
-                            <div class="small-8 columns">
+                            <div class="large-8 columns">
                                 <span class="detail">{{withDefault landOwner "&nbsp;"}}</span>
                             </div>
                         </div>
                         <div class="row collapse">
-                            <div class="small-4 columns">
+                            <div class="large-4 columns">
                                 <span>{{resource "notesHeaderText"}}</span>
                             </div>
-                            <div class="small-8 columns">
+                            <div class="large-8 columns">
                                 <span class="detail">{{withDefault notes "&nbsp;"}}</span>
                             </div>
                         </div>

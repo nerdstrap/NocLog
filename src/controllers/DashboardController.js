@@ -222,7 +222,7 @@ define(function(require) {
             $.when(currentContext.dashboardService.getOptions()).done(function(getOptionsResponse) {
                 currentContext.dispatcher.trigger(AppEventNamesEnum.userRoleUpdated, getOptionsResponse.userRole);
                 personnelListViewInstance.setUserRole(getOptionsResponse.userRole);
-                personnelListViewInstance.focusUserNameInput();
+                personnelListViewInstance.setInitialFieldFocus();
                 personnelCollection.reset();
                 deferred.resolve(personnelListViewInstance);
             }).fail(function(jqXHR, textStatus, errorThrown) {
@@ -266,7 +266,7 @@ define(function(require) {
 
             return deferred.promise();
         },
-        goToStationEntryLogWithId: function(stationEntryLogId, referringAppEvent) {
+        goToStationEntryLogWithId: function(stationEntryLogId, referringAppEvent, personnelViewOptions) {
             console.trace('DashboardController.goToStationEntryLogWithId');
             var currentContext = this,
                     deferred = $.Deferred();
@@ -278,7 +278,8 @@ define(function(require) {
                 dispatcher: currentContext.dispatcher,
                 model: stationEntryLogModelInstance,
                 durationCollection: durationCollection,
-                referringAppEvent: referringAppEvent
+                referringAppEvent: referringAppEvent,
+                personnelViewOptions: personnelViewOptions
             });
 
             currentContext.router.swapContent(stationEntryLogViewInstance);
@@ -525,10 +526,10 @@ define(function(require) {
                 deferred.resolve(checkOutResponse);
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 var msg = 'Error checking out. Please call the dispatch center.';
-                if (jqXHR.status === 409 && jqXHR.responseText) {
-                    msg = 'You are already checked-out.';
+                if (jqXHR.status === 409) {
+                    msg = 'The user is already checked-out.';
                 }
-                if (jqXHR.status === 409 || jqXHR.status === 403) {
+                if (jqXHR.status === 403) {
                     msg = 'You do not have permission to check-out this user.';
                 }
                 appEvents.trigger(AppEventNamesEnum.checkOutError, msg);
@@ -548,11 +549,11 @@ define(function(require) {
                 deferred.resolve(updateCheckInResults);
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 var msg = 'Error updating entry.';
-                if (jqXHR.status === 409 && jqXHR.responseText) {
-                    msg = jqXHR.responseText;
+                if (jqXHR.status === 409) {
+                    msg = 'The user is already checked-out.';
                 }
-                if (jqXHR.status === 409 || jqXHR.status === 403) {
-                    msg = jqXHR.responseText;
+                if (jqXHR.status === 403) {
+                    msg = 'You do not have permission to check-out this user.';
                 }
 
                 appEvents.trigger(AppEventNamesEnum.updateCheckInError, msg);

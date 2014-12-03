@@ -247,6 +247,7 @@ define(function(require) {
                 this.collection.add(stationEntryLog);
             }
             this.showSuccess(checkInSuccessMessage);
+            this.checkUserRole();
         },
         onCheckOutSuccess: function(stationEntryLog) {
             var checkOutSuccessMessage = utils.getResource('checkOutSuccessMessage');

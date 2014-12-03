@@ -28,7 +28,9 @@ define(function(require) {
             return this;
         },
         events: {
-            'click .station-link': 'goToStationWithId'
+            'click .station-link': 'goToStationWithId',
+            'click .elevated-functions-toggle': 'toggleElevatedFunctions',
+            'click .view-station-entry-log-button': 'goToStationEntryLogWithId'
         },
         goToStationWithId: function(event) {
             if (event) {
@@ -36,6 +38,29 @@ define(function(require) {
             }
             var stationId = this.model.get('stationId');
             this.dispatcher.trigger(AppEventNamesEnum.goToStationWithId, stationId);
+        },
+        goToStationEntryLogWithId: function(event) {
+            if (event) {
+                event.preventDefault();
+            }
+            var stationEntryLogId = this.model.get('stationEntryLogId');
+            var userId = this.model.get('userId');
+            if (userId) {
+                this.dispatcher.trigger(AppEventNamesEnum.goToStationEntryLogWithId, stationEntryLogId, AppEventNamesEnum.goToPersonnel, {userId: userId});
+            } else {
+                var userName = this.model.get('userName');
+                if (userName) {
+                    this.dispatcher.trigger(AppEventNamesEnum.goToStationEntryLogWithId, stationEntryLogId, AppEventNamesEnum.goToPersonnel, {userName: userName});
+                }
+            }
+        },
+        toggleElevatedFunctions: function(event) {
+            if (event) {
+                event.preventDefault();
+            }
+            this.$('.hide-container-icon').toggle('hidden');
+            this.$('.show-container-icon').toggle('hidden');
+            this.$('.elevated-functions-container').toggle('hidden');
         }
     });
 

@@ -7,6 +7,8 @@ define(function(require) {
             Backbone = require('backbone'),
             BaseSingletonView = require('views/BaseSingletonView'),
             StationEntryLogCollection = require('collections/StationEntryLogCollection'),
+            StationEntryLogModel = require('models/StationEntryLogModel'),
+            PersonnelOpenStationEntryLogView = require('views/PersonnelOpenStationEntryLogView'),
             PersonnelStationEntryLogListView = require('views/PersonnelStationEntryLogListView'),
             AppEventNamesEnum = require('enums/AppEventNamesEnum'),
             appEvents = require('events'),
@@ -18,6 +20,10 @@ define(function(require) {
             console.trace('PersonnelView.initialize');
             options || (options = {});
             this.dispatcher = options.dispatcher || this;
+
+            this.openStationEntryLogCollection = new StationEntryLogCollection();
+            this.openStationEntryLogCollection.setSortAttribute('expectedOutTime');
+            this.openStationEntryLogModel = new StationEntryLogModel();
 
             this.stationEntryLogCollection = new StationEntryLogCollection();
             this.stationEntryLogCollection.setSortAttribute('outTime');
@@ -51,6 +57,7 @@ define(function(require) {
             currentContext.hideLoading();
 
             if (currentContext.model.has('userId') || currentContext.model.has('userName')) {
+                currentContext.showOpenStationEntryLogList();
                 currentContext.personnelStationEntryLogListViewInstance = new PersonnelStationEntryLogListView({
                     controller: currentContext.controller,
                     dispatcher: currentContext.dispatcher,
@@ -72,8 +79,39 @@ define(function(require) {
                 currentContext.dispatcher.trigger(AppEventNamesEnum.refreshStationEntryLogList, currentContext.stationEntryLogCollection, options);
                 currentContext.dispatcher.trigger(AppEventNamesEnum.refreshOptions, {stationIdentifierCollection: currentContext.stationIdentifierCollection});
             }
-        }
+        },
+        showOpenStationEntryLogList: function() {
+            var currentContext = this;
 
+            currentContext.personnelOpenStationEntryLogViewInstance = new PersonnelOpenStationEntryLogView({
+                model: currentContext.openStationEntryLogModel,
+                dispatcher: currentContext.dispatcher,
+                userRole: currentContext.userRole
+            });
+            currentContext.appendChildTo(currentContext.personnelOpenStationEntryLogViewInstance, '#personnel-open-station-entry-log-view');
+
+            var options = {
+                onlyOpen: true
+            };
+            if (currentContext.model.has('userId')) {
+                options.userId = currentContext.model.get('userId');
+            }
+            if (currentContext.model.has('userName')) {
+                options.userName = currentContext.model.get('userName');
+            }
+            currentContext.personnelOpenStationEntryLogViewInstance.showLoading();
+            this.listenToOnce(currentContext.openStationEntryLogCollection, 'reset', currentContext.addOpenStationEntryLog);
+            currentContext.dispatcher.trigger(AppEventNamesEnum.refreshStationEntryLogList, currentContext.openStationEntryLogCollection, options);
+        },
+        addOpenStationEntryLog: function() {
+            var currentContext = this;
+            if (currentContext.openStationEntryLogCollection.length > 0) {
+                var openStationEntryLogModel = currentContext.openStationEntryLogCollection.pop({silent: true});
+                currentContext.openStationEntryLogModel.set(openStationEntryLogModel.attributes);
+            } else {
+                currentContext.personnelOpenStationEntryLogViewInstance.leave();
+            }
+        }
     });
 
     return PersonnelView;

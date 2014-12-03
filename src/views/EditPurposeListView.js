@@ -43,7 +43,7 @@ define(function(require) {
             currentContext.checkUserRole();
         },
         events: {
-            'click #purpose-list-refresh-list-button': 'refreshPurposeList',
+            'click #refresh-purpose-list-button': 'refreshPurposeList',
             'click .new-purpose-item-save-link': 'getNewPurposeModelFromView',
             'click .close-alert-box-button': 'closeAlertBox'
         },

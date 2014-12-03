@@ -101,6 +101,7 @@ define(function(require) {
         'personnelList.viewTitleText': 'Personnel',
         'stationEntryLogList.viewTitleText': 'Station Entry Logs',
         'openStationEntryLogList.viewTitleText': 'Open Station Entries',
+        'personnelOpenStationEntryLog.viewTitleText': 'Open Check-in',
         'historicalStationEntryLogList.viewTitleText': 'Historical Station Entry Log',
         'stationList.viewTitleText': 'Stations',
         'newStationEntryLog.viewTitleText': 'Manual Check-in',

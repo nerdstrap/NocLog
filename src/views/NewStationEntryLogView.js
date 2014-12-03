@@ -85,6 +85,9 @@ define(function(require) {
             'click #save-new-station-entry-log-button': 'validateAndSubmitCheckIn',
             'click #cancel-save-new-station-entry-log-button': 'cancelCheckIn'
         },
+        setInitialFieldFocus: function() {
+            this.$('#user-id-input').focus();
+        },
         dispatchUpdateViewType: function(event) {
             if (event) {
                 event.preventDefault();
@@ -109,11 +112,14 @@ define(function(require) {
                 this.$('.third-party-container').removeClass('hidden');
                 this.$('.first-party-input').prop('disabled', true);
                 this.$('.third-party-input').prop('disabled', false);
+                this.$('.first-party-input').val('');
+                this.$('.third-party-input').val('');
             } else {
                 this.$('.third-party-container').addClass('hidden');
                 this.$('.first-party-container').removeClass('hidden');
                 this.$('.third-party-input').prop('disabled', true);
                 this.$('.first-party-input').prop('disabled', false);
+                this.$('.third-party-input').val('');
             }
         },
         invokeRefreshPersonnelList: function(event) {
@@ -138,6 +144,7 @@ define(function(require) {
             this.refreshPersonnelList();
         },
         refreshPersonnelList: function() {
+            this.$('#third-party-indicator').prop('disabled', true);
             var userId = this.$('#user-id-input').val();
             this.listenToOnce(this.personnelCollection, 'reset', this.userLookupComplete);
             this.listenToOnce(this.personnelCollection, 'error', this.userLookupComplete);
@@ -152,6 +159,7 @@ define(function(require) {
                 this.updateUserFromModel();
                 this.showError('user id not found!');
             }
+            this.$('#third-party-indicator').prop('disabled', false);
         },
         updateUserFromModel: function(personnelModel) {
             if (personnelModel) {
@@ -303,6 +311,7 @@ define(function(require) {
         updateLoading: function() {
             if (this.stationFilterLoaded && this.purposeFilterLoaded && this.durationFilterLoaded) {
                 this.hideLoading();
+                this.setInitialFieldFocus();
             }
         },
         onLeave: function() {

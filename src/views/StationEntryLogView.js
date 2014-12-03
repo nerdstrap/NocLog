@@ -21,6 +21,7 @@ define(function(require) {
             this.dispatcher = options.dispatcher || this;
             this.durationCollection = options.durationCollection;
             this.referringAppEvent = options.referringAppEvent || AppEventNamesEnum.goToStationEntryLogList;
+            this.personnelViewOptions = options.personnelViewOptions;
             this.readOnly = true;
 
             this.listenTo(this.model, 'change', this.updateViewFromModel);
@@ -191,7 +192,11 @@ define(function(require) {
             if (event) {
                 event.preventDefault();
             }
-            this.dispatcher.trigger(this.referringAppEvent);
+            if (this.personnelViewOptions) {
+                this.dispatcher.trigger(this.referringAppEvent, this.personnelViewOptions);
+            } else {
+                this.dispatcher.trigger(this.referringAppEvent);
+            }
             this.leave();
         }
     });

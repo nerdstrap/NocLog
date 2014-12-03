@@ -1,21 +1,22 @@
-<div class="dashboard-list-item-view">
+<div class="personnel-list-item-view">
     <div class="row collapse">
-        <div class="small-3 columns">
+        <div class="large-3 columns">
             {{#if thirdParty}}
-            <i id="third-party-icon" class="fa fa-globe"></i>
+            <img id="third-party-icon" class="text-icon" title="third party" alt="third party" src="images/third_party_180x180.png"/>
+            <!--<i id="third-party-icon" class="fa fa-globe"></i>-->
             {{/if}}
             <a class="personnel-link" data-user-id="{{userId}}" data-user-name="{{userName}}" href="#">{{withDefault userName "&nbsp;"}}</a>
         </div>
-        <div class="small-2 columns">
+        <div class="large-2 columns">
             <span>{{withDefault userId "&nbsp;"}}</span>
         </div>
-        <div class="small-2 columns">
+        <div class="large-2 columns">
             <span>{{withDefault companyName "&nbsp;"}}</span>
         </div>
-        <div class="small-3 columns">
+        <div class="large-3 columns">
             <span>{{formatPhoneWithDefault contactNumber "" "&nbsp;"}}</span>
         </div>
-        <div class="small-2 columns">
+        <div class="large-2 columns">
             <span>{{withDefault email "&nbsp;"}}</span>
         </div>
     </div>

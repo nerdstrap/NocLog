@@ -77,7 +77,7 @@ define(function(require) {
                 level: level,
                 message: message
             };
-            this.$('.view-alerts .columns').prepend(alertTemplate(renderModel));
+            this.$('.view-alerts:first .columns').prepend(alertTemplate(renderModel));
         },
         addAutoCloseAlertBox: function(level, message) {
             var currentContext = this;

@@ -1,22 +1,22 @@
-<div class="dashboard-popover-view">
+<div class="new-station-entry-log-view">
     <fieldset>
         <legend>{{resource "newStationEntryLog.viewTitleText"}}</legend>
         <div class="row collapse view-status hidden">
-            <div class="small-12 columns">
+            <div class="large-12 columns">
                 <span class="view-message"></span>
                 <img src="{{resource 'loadingIconSrc'}}" class="view-loading" alt="{{resource 'loadingIconAlt'}}" />
             </div>
         </div>
         <div class="row collapse view-alerts">
-            <div class="small-12 columns"></div>
+            <div class="large-12 columns"></div>
         </div>
         <div class="row collapse view-details hidden">
-            <div class="small-12 columns">
+            <div class="large-12 columns">
                 <div class="row collapse">
-                    <div class="small-1 columns">
+                    <div class="large-1 columns">
                         <label>{{resource "checkInTypeHeaderText"}}</label>
                     </div>
-                    <div class="small-3 columns">
+                    <div class="large-3 columns">
                         <span class="bolder inline-block top-align">{{resource "checkInEmployeeHeaderText"}}</span>
                         <div id="third-party-indicator-container" class="switch radius tiny inline-block top-align" tabindex="0">
                             <input id="third-party-indicator" type="checkbox" name="thirdParty"/>
@@ -24,12 +24,12 @@
                         </div>
                         <span class="inline-block top-align">{{resource "thirdPartyHeaderText"}}</span>
                     </div>
-                    <div class="small-8 columns">
+                    <div class="large-8 columns">
                         &nbsp;
                     </div>
                 </div>
                 <div class="row collapse">
-                    <div class="small-1 columns">
+                    <div class="large-1 columns">
                         <div class="first-party-container">
                             <label for="user-id-input">{{resource "userIdHeaderText"}}</label>
                         </div>
@@ -37,7 +37,7 @@
                             <label for="company-name-input">{{resource "companyNameHeaderText"}}</label>
                         </div>
                     </div>
-                    <div class="small-4 columns">
+                    <div class="large-4 columns">
                         <div class="first-party-container">
                             <input id="user-id-input" class="first-party-input" name="userId" type="text" placeholder="{{resource 'userIdHeaderText'}}" />
                             <a id="lookup-user-id-button" class="button radius tiny top-align first-party-input" href="#">{{resource "lookupUserIdHeaderText"}}</a>
@@ -46,95 +46,97 @@
                             <input id="company-name-input" class="third-party-input" name="companyName" type="text" placeholder="{{resource 'companyNameHeaderText'}}" />
                         </div>
                     </div>
-                    <div class="small-1 columns">
+                    <div class="large-1 columns">
                         &nbsp;
                     </div>
-                    <div class="small-2 columns">
+                    <div class="large-6 columns">
                         <input id="first-name-input" class="third-party-input" name="firstName" type="text" placeholder="{{resource 'firstNameHeaderText'}}" />
-                    </div>
-                    <div class="small-2 columns">
-                        <input id="middle-initial-input" class="third-party-input" name="middleInitial" type="text" placeholder="{{resource 'middleInitialHeaderText'}}" />
-                    </div>
-                    <div class="small-2 columns">
-                        <input id="last-name-input" class="third-party-input" name="lastName" type="text" placeholder="{{resource 'lastNameHeaderText'}}" />
+                        &nbsp;<input id="middle-initial-input" class="third-party-input" name="middleInitial" type="text" placeholder="{{resource 'middleInitialHeaderText'}}" />
+                        &nbsp;<input id="last-name-input" class="third-party-input" name="lastName" type="text" placeholder="{{resource 'lastNameHeaderText'}}" />
                     </div>
                 </div>
                 <div class="row collapse">
-                    <div class="small-1 columns">
+                    <div class="large-1 columns">
                         <label for="contact-number-input">{{resource "contactNumberHeaderText"}}</label>
                     </div>
-                    <div class="small-2 columns">
+                    <div class="large-2 columns">
                         <input id="contact-number-input" class="third-party-input" name="contactNumber" type="text" placeholder="{{resource 'contactNumberHeaderText'}}" />
                     </div>
-                    <div class="small-3 columns">
+                    <div class="large-3 columns">
                         &nbsp;
                     </div>
-                    <div class="small-3 columns">
+                    <div class="large-3 columns">
                         <input id="email-input" class="third-party-input" name="email" type="text" placeholder="{{resource 'emailHeaderText'}}" />
                     </div>
-                    <div class="small-3 columns">
+                    <div class="large-3 columns">
                         &nbsp;
                     </div>
                 </div>
                 <div class="row collapse">
-                    <div class="small-1 columns">
+                    <div class="large-1 columns">
                         <label for="station-filter">{{resource "stationNameHeaderText"}}</label>
                     </div>
-                    <div class="small-11 columns">
+                    <div class="large-11 columns">
                         <select id="station-filter" name="stationId">
                             <option disabled="disabled" selected="selected" value="">{{resource "filterDefaultOption"}}</option>
                         </select>
                     </div>
                 </div>
                 <div class="row collapse">
-                    <div class="small-1 columns">
+                    <div class="large-1 columns">
                         <label for="purpose-filter">{{resource "purposeHeaderText"}}</label>
                     </div>
-                    <div class="small-2 columns">
+                    <div class="large-2 columns">
                         <select id="purpose-filter" name="purpose" >
                             <option disabled="disabled" selected="selected" value="">{{resource "filterDefaultOption"}}</option>
                         </select>
                     </div>
-                    <div class="small-1 columns">
+                    <div class="large-1 columns">
                         <label for="duration-filter">{{resource "durationHeaderText"}}</label>
                     </div>
-                    <div class="small-2 columns">
+                    <div class="large-2 columns">
                         <select id="duration-filter" name="duration">
                             <option disabled="disabled" selected="selected" value="">{{resource "filterDefaultOption"}}</option>
                         </select>
                     </div>
-                    <div class="small-1 columns">
+                    <div class="large-1 columns">
                         <label for="expected-out-time-input">{{resource "expectedOutTimeHeaderText"}}
                         </label>
                     </div>
-                    <div class="small-2 columns">
+                    <div class="large-2 columns">
                         <span id="expected-out-time-input"></span>
                     </div>
-                    <div class="small-3 columns">
+                    <div class="large-3 columns">
                         &nbsp;
                     </div>
                 </div>
                 <div id="purpose-other-container" class="hidden">
                     <div class="row collapse">
-                        <div class="small-1 columns">
+                        <div class="large-1 columns">
                             <label for="purpose-other-input">{{resource "purposeOtherHeaderText"}}</label>
                         </div>
-                        <div class="small-11 columns">
+                        <div class="large-3 columns">
                             <textarea id="purpose-other-input" name="purposeOther" placeholder="{{resource 'purposeOtherHeaderText'}}" rows="2"></textarea>
+                        </div>
+                        <div class="large-8 columns">
+                            &nbsp;
                         </div>
                     </div>
                 </div>
                 <div class="row collapse">
-                    <div class="small-1 columns">
+                    <div class="large-1 columns">
                         <label for="additional-info-input">{{resource "additionalInfoHeaderText"}}</label>
                     </div>
-                    <div class="small-5 columns">
+                    <div class="large-3 columns">
                         <textarea id="additional-info-input" name="additionalInfo" placeholder="{{resource 'additionalInfoHeaderText'}}" rows="2" ></textarea>
                     </div>
-                    <div class="small-1 columns">
+                    <div class="large-2 columns">
+                        &nbsp;
+                    </div>
+                    <div class="large-1 columns">
                         <span>{{resource "hasCrewHeaderText"}}</span>
                     </div>
-                    <div class="small-5 columns">
+                    <div class="large-5 columns">
                         <span class="bolder inline-block top-align">{{resource "noOptionText"}}</span>
                         <div id="has-crew-indicator-container" class="switch radius tiny inline-block top-align" tabindex="0">
                             <input id="has-crew-indicator" type="checkbox" name="hasCrew"/>
@@ -145,10 +147,10 @@
 
                 </div>
                 <div class="row collapse">
-                    <div class="small-6 columns">
+                    <div class="large-6 columns">
                         &nbsp;
                     </div>
-                    <div class="small-6 columns">
+                    <div class="large-6 columns">
                         <a id="save-new-station-entry-log-button" class="button radius success" href="#">{{resource "saveButtonText"}}</a>
                         <a id="cancel-save-new-station-entry-log-button" class="button radius secondary" href="#">{{resource "cancelButtonText"}}</a>
                     </div>

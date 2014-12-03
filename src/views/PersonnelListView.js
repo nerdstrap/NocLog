@@ -56,7 +56,7 @@ define(function(require) {
             });
             this.appendChildTo(personnelListItemView, '#personnel-list-item-container');
         },
-        focusUserNameInput: function() {
+        setInitialFieldFocus: function() {
             this.$('#user-name-input').focus();
         },
         invokeRefreshPersonnelList: function(event) {
