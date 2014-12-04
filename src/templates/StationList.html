@@ -1,69 +1,69 @@
 <div class="station-list-view">
     <div class="row collapse">
-        <div class="large-12 columns">
+        <div class="small-12 columns">
             <h3>{{resource "stationList.viewTitleText"}}</h3>
         </div>
     </div>
     <div class="row collapse">
-        <div class="large-2 columns">
+        <div class="small-2 columns">
             <label>{{resource "stationNameHeaderText"}}</label>
             <select id="station-filter">
                 <option disabled="disabled" selected="selected">{{resource "filterDefaultOption"}}</option>
             </select>
         </div>
-        <div class="large-2 columns">
+        <div class="small-2 columns">
             <label>{{resource "regionNameHeaderText"}}</label>
             <select id="region-filter">
                 <option disabled="disabled" selected="selected">{{resource "filterDefaultOption"}}</option>
             </select>
         </div>
-        <div class="large-2 columns">
+        <div class="small-2 columns">
             <label>{{resource "areaNameHeaderText"}}</label>
             <select id="area-filter">
                 <option disabled="disabled" selected="selected">{{resource "filterDefaultOption"}}</option>
             </select>
         </div>
-        <div class="large-6 columns">
+        <div class="small-6 columns">
             <span>&nbsp;</span>
         </div>
     </div>
     <div class="row collapse">
-        <div class="large-6 columns">
+        <div class="small-6 columns">
             <a id="refresh-station-list-button" class="button radius" href="#">{{resource "refreshButtonText"}}</a>
             <a id="reset-station-list-button" class="button radius secondary" href="#">{{resource "resetButtonText"}}</a>
         </div>
-        <div class="large-6 columns">
+        <div class="small-6 columns">
             <span>&nbsp;</span>
         </div>
     </div>
     <div class="row collapse list-header-item-view">
-        <div class="large-4 columns">
+        <div class="small-4 columns">
             <span>
                 <a class="sort-button" data-sort-attribute="stationName" href="#">{{resource "stationNameHeaderText"}}</a>
             </span>
         </div>
-        <div class="large-4 columns">
+        <div class="small-4 columns">
             <span>
                 <a class="sort-button" data-sort-attribute="regionName" href="#">{{resource "regionNameHeaderText"}}</a>
             </span>
         </div>
-        <div class="large-4 columns">
+        <div class="small-4 columns">
             <span>
                 <a class="sort-button" data-sort-attribute="areaName" href="#">{{resource "areaNameHeaderText"}}</a>
             </span>
         </div>
     </div>
     <div class="row collapse view-status hidden">
-        <div class="large-12 columns">
+        <div class="small-12 columns">
             <span class="view-message">{{resource "stationList.loadingMessage"}}</span>
             <img src="{{resource 'loadingIconSrc'}}" class="view-loading" />
         </div>
     </div>
     <div class="row collapse view-alerts">
-        <div class="large-12 columns"></div>
+        <div class="small-12 columns"></div>
     </div>
     <div class="row collapse scroll">
-        <div id="station-list-item-container" class="large-12 columns">
+        <div id="station-list-item-container" class="small-12 columns">
         </div>
     </div>
 </div>

@@ -2,7 +2,7 @@
 @import "foundation";
 
 /* -------- NocLog -------- */
- 
+
 root {
     display: block;
     font-size: 1em;
@@ -13,6 +13,10 @@ ol, ul {
     list-style: none;
     margin: 0;
     padding: 0; }
+
+fieldset {
+    margin: 0;
+}
 
 /* stickey footer http://www.cssstickyfooter.com/using-sticky-footer-code.html*/
 html, body {

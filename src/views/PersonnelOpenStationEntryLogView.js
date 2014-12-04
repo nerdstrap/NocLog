@@ -48,7 +48,7 @@ define(function(require) {
             this.$('.additional-info-input').text(helpers.withDefault(this.model.get('additionalInfo'), ''));
             
             this.updateUserPrivileges();
-            this.updateCheckOutStatus();
+            //this.updateCheckOutStatus();
             this.hideLoading();
         },
         updateUserPrivileges: function() {

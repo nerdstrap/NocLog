@@ -2,62 +2,62 @@
     <fieldset>
         <legend>{{resource "personnelOpenStationEntryLog.viewTitleText"}}</legend>
         <div class="row collapse view-status">
-            <div class="large-12 columns">
+            <div class="small-12 columns">
                 <span class="view-message">{{resource "stationEntryLog.loadingMessage"}}</span>
                 <img src="{{resource 'loadingIconSrc'}}" class="view-loading" />
             </div>
         </div>
         <div class="row collapse view-alerts">
-            <div class="large-12 columns"></div>
+            <div class="small-12 columns"></div>
         </div>
         <div class="row collapse view-details hidden">
             <div class="row collapse">
-                <div class="large-2 columns">
+                <div class="small-2 columns">
                     <span class="bolder">{{resource "stationNameHeaderText"}}</span>
                 </div>
-                <div class="large-2 columns">
+                <div class="small-2 columns">
                     <span class="bolder">{{resource "inTimeHeaderText"}}</span>
                 </div>
-                <div class="large-2 columns">
+                <div class="small-2 columns">
                     <span class="bolder">{{resource "expectedOutTimeHeaderText"}}</span>
                 </div>
-                <div class="large-2 columns">
+                <div class="small-2 columns">
                     <span class="bolder">{{resource "purposeHeaderText"}}</span>
                 </div>
-                <div class="large-2 columns">
+                <div class="small-2 columns">
                     <span class="bolder">{{resource "additionalInfoHeaderText"}}</span>
                 </div>
-                <div class="large-2 columns">
+                <div class="small-2 columns">
                     &nbsp;
                 </div>
             </div>
             <div class="row collapse">
-                <div class="large-2 columns">
+                <div class="small-2 columns">
                     <a class="station-link" data-station-id="{{stationId}}">{{withDefault stationName "&nbsp;"}}</a>
                 </div>
-                <div class="large-2 columns">
+                <div class="small-2 columns">
                     <span class="in-time-input">{{formatDateWithDefault inTime "%D %I:%M %p" "&nbsp;"}}</span>
                 </div>
-                <div class="large-2 columns">
+                <div class="small-2 columns">
                     <span class="expected-out-time-input">{{formatDateWithDefault expectedOutTime "%D %I:%M %p" "&nbsp;"}}</span>
                 </div>
-                <div class="large-2 columns">
+                <div class="small-2 columns">
                     <span class="purpose-input">{{{withDefault purpose "&nbsp;"}}}</span>
                 </div>
-                <div class="large-2 columns">
+                <div class="small-2 columns">
                     <span class="additional-info-input">{{withDefault additionalInfo "&nbsp;"}}</span>
                 </div>
-                <div class="large-2 columns">
+                <div class="small-2 columns">
                     &nbsp;
                 </div>
             </div>
             <div class="row collapse">
-                <div class="large-4 columns">
+                <div class="small-4 columns">
                     <a href="#" class="view-station-entry-log-button button radius tiny secondary hidden">{{resource "viewCheckInButtonText"}}</a>
                     <a href="#" class="edit-station-entry-log-button button radius tiny hidden">{{resource "editCheckInButtonText"}}</a>
                     <a href="#" class="check-out-button button radius tiny alert hidden">{{resource "checkOutButtonText"}}</a>
                 </div>
-                <div class="large-8 columns">
+                <div class="small-8 columns">
                     &nbsp;
                 </div>
             </div>
