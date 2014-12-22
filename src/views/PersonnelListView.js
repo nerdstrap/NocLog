@@ -83,7 +83,7 @@ define(function(require) {
         resetPersonnelList: function(event) {
             if (event) {
                 event.preventDefault();
-                this.focusUserNameInput();
+                this.setInitialFieldFocus();
             }
             this.$('#user-name-input').val('');
             this.collection.sortAttribute = 'userName';

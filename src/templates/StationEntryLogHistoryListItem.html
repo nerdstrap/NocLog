@@ -1,45 +1,49 @@
 <div class="station-entry-log-history-list-item-view">
     <div class="row collapse elevated-functions-toggle">
-        <div class="small-1 columns">
-            <span class="collapse">
-                <i class="fa fa-plus hide-container-icon"></i>
-                <i class="fa fa-minus show-container-icon hidden"></i>
-            </span>
-            &nbsp;
-            <a class="station-link" data-station-id="{{stationId}}" href="#">{{withDefault stationName "&nbsp;"}}</a>
+        <div class="small-12 columns">
+            <div class="small-1 columns">
+                <span class="collapse">
+                    <i class="fa fa-plus hide-container-icon"></i>
+                    <i class="fa fa-minus show-container-icon hidden"></i>
+                </span>
+                &nbsp;
+                <a class="station-link" data-station-id="{{stationId}}" href="#">{{withDefault stationName "&nbsp;"}}</a>
+            </div>
+            <div class="small-1 columns">
+                {{#if thirdParty}}
+                <img id="third-party-icon" class="text-icon" title="third party" alt="third party" src="images/third_party_180x180.png"/>
+                <!--<i id="third-party-icon" class="fa fa-globe"></i>-->
+                {{/if}}
+                <a class="personnel-link" data-user-id="{{userId}}" data-user-name="{{userName}}" href="#">{{withDefault userName "&nbsp;"}}</a>
+            </div>
+            <div class="small-1 columns">
+                <span>{{formatPhoneWithDefault contactNumber "%D %I:%M %p" "&nbsp;"}}</span>
+            </div>
+            <div class="small-2 columns">
+                <span>{{formatDateWithDefault inTime "%D %I:%M %p" "&nbsp;"}}</span>
+            </div>
+            <div class="small-2 columns">
+                <span>{{formatDateWithDefault outTime "%D %I:%M %p" "&nbsp;"}}</span>
+            </div>
+            <div class="small-1 columns">
+                <span>{{{withDefault purpose "&nbsp;"}}}</span>
+            </div>
+            <div class="small-2 columns overflow-column">
+                <span>{{withDefault additionalInfo "&nbsp;"}}</span>
+            </div>
+            <div class="small-1 columns">
+                <span>{{withDefault regionName "&nbsp;"}}</span>
+            </div>
+            <div class="small-1 columns">
+                <span>{{withDefault areaName "&nbsp;"}}</span>
+            </div>
         </div>
-        <div class="small-1 columns">
-            {{#if thirdParty}}
-            <img id="third-party-icon" class="text-icon" title="third party" alt="third party" src="images/third_party_180x180.png"/>
-            <!--<i id="third-party-icon" class="fa fa-globe"></i>-->
-            {{/if}}
-            <a class="personnel-link" data-user-id="{{userId}}" data-user-name="{{userName}}" href="#">{{withDefault userName "&nbsp;"}}</a>
-        </div>
-        <div class="small-1 columns">
-            <span>{{formatPhoneWithDefault contactNumber "%D %I:%M %p" "&nbsp;"}}</span>
-        </div>
-        <div class="small-2 columns">
-            <span>{{formatDateWithDefault inTime "%D %I:%M %p" "&nbsp;"}}</span>
-        </div>
-        <div class="small-2 columns">
-            <span>{{formatDateWithDefault outTime "%D %I:%M %p" "&nbsp;"}}</span>
-        </div>
-        <div class="small-1 columns">
-            <span>{{{withDefault purpose "&nbsp;"}}}</span>
-        </div>
-        <div class="small-2 columns overflow-column">
-            <span>{{withDefault additionalInfo "&nbsp;"}}</span>
-        </div>
-        <div class="small-1 columns">
-            <span>{{withDefault regionName "&nbsp;"}}</span>
-        </div>
-        <div class="small-1 columns">
-            <span>{{withDefault areaName "&nbsp;"}}</span>
-        </div>
-    </div>
-    <div class="row collapse elevated-functions-container hidden">
-        <div class="small-2 columns">
-            <a class="view-station-entry-log-button button radius tiny" href="#">{{resource "viewCheckInButtonText"}}</a>
+        <div class="small-12 columns">
+            <div class="row collapse elevated-functions-container hidden">
+                <div class="small-2 columns">
+                    <a class="view-station-entry-log-button button radius tiny" href="#">{{resource "viewCheckInButtonText"}}</a>
+                </div>
+            </div>
         </div>
     </div>
 </div>

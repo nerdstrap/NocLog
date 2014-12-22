@@ -291,6 +291,7 @@ define(function(require) {
                 if (getStationEntryLogResults[0].stationEntryLogs && getStationEntryLogResults[0].stationEntryLogs.length > 0) {
                     stationEntryLogViewInstance.setUserRole(getStationEntryLogResults[0].userRole);
                     stationEntryLogModelInstance.set(getStationEntryLogResults[0].stationEntryLogs[0]);
+                    stationEntryLogViewInstance.setInitialFieldFocus();
                     durationCollection.reset(getOptionsResults[0].durations);
                     deferred.resolve(stationEntryLogViewInstance);
                 } else {
@@ -603,6 +604,13 @@ define(function(require) {
             var blob = new Blob([csv], {type: "text/csv;charset=utf-8"});
             var fileName = utils.getCSVFileName(options);
             saveAs(blob, fileName);
+        },
+        _nop: function() {
+            var deferred = $.Deferred();
+            setTimeout(function() {
+                deferred.resolve("_nop");
+            }, 50);
+            return deferred.promise();
         }
     });
 

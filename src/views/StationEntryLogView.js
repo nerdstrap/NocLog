@@ -115,7 +115,7 @@ define(function(require) {
                     this.$('.view-legend').html(utils.getResource('editStationEntryLog.viewTitleText'));
 
                     var enableThirdPartyInputs = this.model.get('thirdParty');
-                    this.$('.third-party-input').prop('disabled', enableThirdPartyInputs);
+                    this.$('.third-party-input').prop('disabled', !enableThirdPartyInputs);
                 }
             }
         },
@@ -198,6 +198,13 @@ define(function(require) {
                 this.dispatcher.trigger(this.referringAppEvent);
             }
             this.leave();
+        },
+        setInitialFieldFocus: function() {
+            if (this.readOnly === true || this.model.get('checkedOut')) {
+                this.$('#cancel-save-station-entry-log-button').focus();
+            } else {
+                this.$('#duration-filter').focus();
+            }
         }
     });
 

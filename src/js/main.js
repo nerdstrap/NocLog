@@ -41,21 +41,7 @@ require.config({
         
         /* Foundation */
         'foundation.core': 'libs/foundation',
-        'foundation.abide': 'libs/foundation.abide',
-        'foundation.accordion': 'libs/foundation.accordion',
         'foundation.alert': 'libs/foundation.alert',
-        'foundation.clearing': 'libs/foundation.clearing',
-        'foundation.dropdown': 'libs/foundation.dropdown',
-        'foundation.equalizer': 'libs/foundation.equalizer',
-        'foundation.interchange': 'libs/foundation.interchange',
-        'foundation.joyride': 'libs/foundation.joyride',
-        'foundation.magellan': 'libs/foundation.magellan',
-        'foundation.offcanvas': 'libs/foundation.offcanvas',
-        'foundation.orbit': 'libs/foundation.orbit',
-        'foundation.reveal': 'libs/foundation.reveal',
-        'foundation.tab': 'libs/foundation.tab',
-        'foundation.tooltip': 'libs/foundation.tooltip',
-        'foundation.topbar': 'libs/foundation.topbar',
         
         /* App */
         'console': 'app/console',

@@ -33,7 +33,7 @@ define(function(require) {
             this.listenTo(this, 'leave', this.onLeave);
 
             this.listenTo(appEvents, AppEventNamesEnum.userRoleUpdated, this.userRoleUpdated);
-            this.listenTo(appEvents, AppEventNamesEnum.checkInSuccess, this.onCheckInSuccess);
+            //this.listenTo(appEvents, AppEventNamesEnum.checkInSuccess, this.onCheckInSuccess);
             this.listenTo(appEvents, AppEventNamesEnum.checkInError, this.onCheckInError);
         },
         render: function() {
@@ -114,12 +114,14 @@ define(function(require) {
                 this.$('.third-party-input').prop('disabled', false);
                 this.$('.first-party-input').val('');
                 this.$('.third-party-input').val('');
+                this.$('#contact-number-input').val('');
             } else {
                 this.$('.third-party-container').addClass('hidden');
                 this.$('.first-party-container').removeClass('hidden');
                 this.$('.third-party-input').prop('disabled', true);
                 this.$('.first-party-input').prop('disabled', false);
                 this.$('.third-party-input').val('');
+                this.$('#contact-number-input').val('');
             }
         },
         invokeRefreshPersonnelList: function(event) {

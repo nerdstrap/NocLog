@@ -95,10 +95,10 @@ define(function(require) {
 
         if (options.stationId) {
             csvFileFilter = csvFileFilter + "_stn_" + options.stationId;
-        } else if (options.area) {
-            csvFileFilter = csvFileFilter + "_are_" + options.area;
-        } else if (options.region) {
-            csvFileFilter = csvFileFilter + "_rgn_" + options.region;
+        } else if (options.areaName) {
+            csvFileFilter = csvFileFilter + "_are_" + options.areaName;
+        } else if (options.regionName) {
+            csvFileFilter = csvFileFilter + "_rgn_" + options.regionName;
         }
 
 

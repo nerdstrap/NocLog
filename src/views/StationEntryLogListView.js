@@ -148,7 +148,7 @@ define(function(require) {
 
             this.refreshStationEntryLogList();
         },
-        refreshStationEntryLogList: function() {            
+        refreshStationEntryLogList: function() {
             this.showLoading();
             var status = this.$('#status-filter').val();
             var stationId = this.$('#station-filter').val();
@@ -239,6 +239,10 @@ define(function(require) {
             this.dispatcher.trigger(AppEventNamesEnum.refreshOptions, options);
         },
         onCheckInSuccess: function(stationEntryLog) {
+            if (this.newStationEntryLogViewInstance) {
+                this.newStationEntryLogViewInstance.hideLoading();
+                this.newStationEntryLogViewInstance.leave();
+            }
             var checkInSuccessMessage = utils.getResource('checkInSuccessMessage');
             if (stationEntryLog) {
                 var userName = stationEntryLog.userName;
