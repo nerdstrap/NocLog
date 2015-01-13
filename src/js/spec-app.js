@@ -6,8 +6,8 @@ define(function (require) {
         Backbone = require('backbone');
 
     var specs = [];
-    specs.push('specs/stationCollectionSpec');
-    specs.push('specs/personnelCollectionSpec');
+    specs.push('specs/AppRouterSpec');
+    specs.push('specs/GetStationEntryLogsSpec');
 
     $(document).ready(function () {
         require(specs, function (spec) {

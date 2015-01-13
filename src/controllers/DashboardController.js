@@ -85,15 +85,21 @@ define(function(require) {
 
             var stationEntryLogCollection = new StationEntryLogCollection();
             stationEntryLogCollection.setSortAttribute('expectedOutTime');
+            var stationIdentifierCompleteCollection = new Backbone.Collection();
             var stationIdentifierCollection = new Backbone.Collection();
+            var regionCompleteCollection = new Backbone.Collection();
             var regionCollection = new Backbone.Collection();
+            var areaCompleteCollection = new Backbone.Collection();
             var areaCollection = new Backbone.Collection();
             var stationEntryLogListViewInstance = new StationEntryLogListView({
                 controller: currentContext,
                 dispatcher: currentContext.dispatcher,
                 collection: stationEntryLogCollection,
+                stationIdentifierCompleteCollection: stationIdentifierCompleteCollection,
                 stationIdentifierCollection: stationIdentifierCollection,
+                regionCompleteCollection: regionCompleteCollection,
                 regionCollection: regionCollection,
+                areaCompleteCollection: areaCompleteCollection,
                 areaCollection: areaCollection
             });
 
@@ -106,8 +112,11 @@ define(function(require) {
                 currentContext.dispatcher.trigger(AppEventNamesEnum.userRoleUpdated, getStationEntryLogsResponse.userRole);
                 stationEntryLogListViewInstance.setUserRole(getStationEntryLogsResponse.userRole);
                 stationEntryLogCollection.reset(getStationEntryLogsResponse.stationEntryLogs);
+                stationIdentifierCompleteCollection.reset(getStationEntryLogsResponse.stationIdentifiers);
                 stationIdentifierCollection.reset(getStationEntryLogsResponse.stationIdentifiers);
+                regionCompleteCollection.reset(getStationEntryLogsResponse.regions);
                 regionCollection.reset(getStationEntryLogsResponse.regions);
+                areaCompleteCollection.reset(getStationEntryLogsResponse.areas);
                 areaCollection.reset(getStationEntryLogsResponse.areas);
                 if (options && options.stationEntryLog) {
                     var userName = options.stationEntryLog.userName;
@@ -119,7 +128,10 @@ define(function(require) {
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 stationEntryLogCollection.reset();
                 stationEntryLogListViewInstance.showError(textStatus);
-                deferred.reject(textStatus);
+                deferred.reject({
+                    stationEntryLogListView: stationEntryLogListViewInstance,
+                    error: textStatus
+                });
             });
 
             return deferred.promise();
@@ -131,15 +143,21 @@ define(function(require) {
 
             var stationEntryLogCollection = new StationEntryLogCollection();
             stationEntryLogCollection.setSortAttribute('outTime');
+            var stationIdentifierCompleteCollection = new Backbone.Collection();
             var stationIdentifierCollection = new Backbone.Collection();
+            var regionCompleteCollection = new Backbone.Collection();
             var regionCollection = new Backbone.Collection();
+            var areaCompleteCollection = new Backbone.Collection();
             var areaCollection = new Backbone.Collection();
             var stationEntryLogHistoryListViewInstance = new StationEntryLogHistoryListView({
                 controller: currentContext,
                 dispatcher: currentContext.dispatcher,
                 collection: stationEntryLogCollection,
+                stationIdentifierCompleteCollection: stationIdentifierCompleteCollection,
                 stationIdentifierCollection: stationIdentifierCollection,
+                regionCompleteCollection: regionCompleteCollection,
                 regionCollection: regionCollection,
+                areaCompleteCollection: areaCompleteCollection,
                 areaCollection: areaCollection
             });
 
@@ -151,8 +169,11 @@ define(function(require) {
                 currentContext.dispatcher.trigger(AppEventNamesEnum.userRoleUpdated, getStationEntryLogsResponse.userRole);
                 stationEntryLogHistoryListViewInstance.setUserRole(getStationEntryLogsResponse.userRole);
                 stationEntryLogCollection.reset(getStationEntryLogsResponse.stationEntryLogs);
+                stationIdentifierCompleteCollection.reset(getStationEntryLogsResponse.stationIdentifiers);
                 stationIdentifierCollection.reset(getStationEntryLogsResponse.stationIdentifiers);
+                regionCompleteCollection.reset(getStationEntryLogsResponse.regions);
                 regionCollection.reset(getStationEntryLogsResponse.regions);
+                areaCompleteCollection.reset(getStationEntryLogsResponse.areas);
                 areaCollection.reset(getStationEntryLogsResponse.areas);
                 deferred.resolve(stationEntryLogHistoryListViewInstance);
             }).fail(function(jqXHR, textStatus, errorThrown) {
@@ -170,15 +191,21 @@ define(function(require) {
 
             var stationCollection = new StationCollection();
             stationCollection.setSortAttribute('stationName');
+            var stationIdentifierCompleteCollection = new Backbone.Collection();
             var stationIdentifierCollection = new Backbone.Collection();
+            var regionCompleteCollection = new Backbone.Collection();
             var regionCollection = new Backbone.Collection();
+            var areaCompleteCollection = new Backbone.Collection();
             var areaCollection = new Backbone.Collection();
             var stationListViewInstance = new StationListView({
                 controller: currentContext,
                 dispatcher: currentContext.dispatcher,
                 collection: stationCollection,
+                stationIdentifierCompleteCollection: stationIdentifierCompleteCollection,
                 stationIdentifierCollection: stationIdentifierCollection,
+                regionCompleteCollection: regionCompleteCollection,
                 regionCollection: regionCollection,
+                areaCompleteCollection: areaCompleteCollection,
                 areaCollection: areaCollection
             });
 
@@ -190,8 +217,11 @@ define(function(require) {
                 currentContext.dispatcher.trigger(AppEventNamesEnum.userRoleUpdated, getStationsResponse.userRole);
                 stationListViewInstance.setUserRole(getStationsResponse.userRole);
                 stationCollection.reset(getStationsResponse.stations);
+                stationIdentifierCompleteCollection.reset(getStationsResponse.stationIdentifiers);
                 stationIdentifierCollection.reset(getStationsResponse.stationIdentifiers);
+                regionCompleteCollection.reset(getStationsResponse.regions);
                 regionCollection.reset(getStationsResponse.regions);
+                areaCompleteCollection.reset(getStationsResponse.areas);
                 areaCollection.reset(getStationsResponse.areas);
                 deferred.resolve(stationListViewInstance);
             }).fail(function(jqXHR, textStatus, errorThrown) {
@@ -604,13 +634,6 @@ define(function(require) {
             var blob = new Blob([csv], {type: "text/csv;charset=utf-8"});
             var fileName = utils.getCSVFileName(options);
             saveAs(blob, fileName);
-        },
-        _nop: function() {
-            var deferred = $.Deferred();
-            setTimeout(function() {
-                deferred.resolve("_nop");
-            }, 50);
-            return deferred.promise();
         }
     });
 

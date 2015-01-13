@@ -9,7 +9,7 @@ define(function(require) {
     require('foundation.core');
     require('foundation.alert');
     require('utils');
-    require('routers/appRouter');
+    require('routers/appRouterSingleton');
     require('handlebars.helpers');
     require('filesaver');
 

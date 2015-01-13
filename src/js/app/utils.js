@@ -60,11 +60,13 @@ define(function(require) {
         return {hours: hours, minutes: minutes};
     };
 
-    utils.getFilterOptions = function(collection, valuePropertyName, textPropertyName) {
+    utils.getFilterOptions = function(collection, valuePropertyName, textPropertyName, optionalProperty1, optionalProperty2) {
         return _.map(collection, function(value, key, list) {
             return {
                 'value': value.get(valuePropertyName),
-                'text': value.get(textPropertyName)
+                'text': value.get(textPropertyName),
+				'data-option1': value.get(optionalProperty1),
+				'data-option2': value.get(optionalProperty2)
             };
         });
     };

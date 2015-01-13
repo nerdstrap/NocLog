@@ -7,9 +7,7 @@ define(function(require) {
             SwappingRouter = require('routers/SwappingRouter'),
             ShellView = require('views/ShellView'),
             DashboardController = require('controllers/DashboardController'),
-            AppEventNamesEnum = require('enums/AppEventNamesEnum'),
-            appEvents = require('events'),
-            appResources = require('resources');
+            appEvents = require('events');
 
     var AppRouter = SwappingRouter.extend({
         initialize: function(options) {
@@ -83,6 +81,5 @@ define(function(require) {
         }
     });
 
-    var appRouter = new AppRouter();
-    return appRouter;
+    return AppRouter;
 });

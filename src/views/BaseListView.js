@@ -17,10 +17,10 @@ define(function(require) {
     };
 
     _.extend(BaseListView.prototype, CompositeView.prototype, {
-        addFilter: function(filterSelector, options, valuePropertyName, textPropertyName) {
+        addFilter: function(filterSelector, options, valuePropertyName, textPropertyName, optionalProperty1, optionalProperty2) {
             var filterRenderModel = {
                 defaultOption: utils.getResource('filterDefaultOption'),
-                options: utils.getFilterOptions(options, valuePropertyName, textPropertyName)
+                options: utils.getFilterOptions(options, valuePropertyName, textPropertyName, optionalProperty1, optionalProperty2)
             };
             this.$(filterSelector).html(filterTemplate(filterRenderModel));
         },
@@ -111,7 +111,70 @@ define(function(require) {
                     }
                 }
             }
-        }
+        },
+        addStationNameFilter: function() {
+            this.addFilter(this.$('#station-filter'), this.stationIdentifierCollection.models, 'stationId', 'stationName', 'regionName', 'areaName');
+        },
+        addRegionNameFilter: function() {
+            this.addFilter(this.$('#region-filter'), this.regionCollection.models, 'regionName', 'regionName');
+        },
+        addAreaNameFilter: function() {
+            this.addFilter(this.$('#area-filter'), this.areaCollection.models, 'areaName', 'areaName', 'regionName');
+        },
+		onChangeStationFilter: function() {
+			var itemSelected = this.$('#station-filter').find('option:selected');
+			var regionAttribute = itemSelected.attr('data-region');
+			var areaAttribute = itemSelected.attr('data-area');
+			var stationSelected = this.$('#station-filter').val();
+			if (stationSelected) {
+				var filteredAreaCollection = this.areaCompleteCollection.where({regionName: regionAttribute});
+				var filteredStationCollection = this.stationIdentifierCompleteCollection.where({areaName: areaAttribute});
+				this.areaCollection.reset(filteredAreaCollection);
+				this.stationIdentifierCollection.reset(filteredStationCollection);
+				this.$('#region-filter').val(regionAttribute);
+				this.$('#area-filter').val(areaAttribute);
+				this.$('#station-filter').val(stationSelected);
+			} else {
+				var areaSelected = this.$('#area-filter').val();
+				var filteredStationCollection = this.stationIdentifierCompleteCollection.where({areaName: areaSelected});
+				this.stationIdentifierCollection.reset(filteredStationCollection);
+			}
+		},
+		onChangeAreaFilter: function() {
+			var itemSelected = this.$('#area-filter').find('option:selected');
+			var regionAttribute = itemSelected.attr('data-region');
+			var areaSelected = this.$('#area-filter').val();
+			if (areaSelected) {
+				var filteredAreaCollection = this.areaCompleteCollection.where({regionName: regionAttribute});
+				this.areaCollection.reset(filteredAreaCollection);
+				var filteredStationCollection = this.stationIdentifierCompleteCollection.where({areaName: areaSelected});
+				this.stationIdentifierCollection.reset(filteredStationCollection);
+				this.$('#region-filter').val(regionAttribute);
+				this.$('#area-filter').val(areaSelected);
+				this.$('#station-filter').val('');
+			} else {
+				var regionSelected = this.$('#region-filter').val()
+				var filteredStationCollection = this.stationIdentifierCompleteCollection.where({regionName: regionSelected});
+				this.stationIdentifierCollection.reset(filteredStationCollection);
+				this.$('#station-filter').val('');
+			}
+		},
+		onChangeRegionFilter: function() {
+			var regionSelected = this.$('#region-filter').val();
+			if (regionSelected) {
+				var filteredStationCollection = this.stationIdentifierCompleteCollection.where({regionName: regionSelected});
+				var filteredAreaCollection = this.areaCompleteCollection.where({regionName: regionSelected});
+				this.areaCollection.reset(filteredAreaCollection);
+				this.stationIdentifierCollection.reset(filteredStationCollection);
+				this.$('#area-filter').val('');
+				this.$('#station-filter').val('');
+			} else {
+				this.areaCollection.reset(this.areaCompleteCollection.models);
+				this.stationIdentifierCollection.reset(this.stationIdentifierCompleteCollection.models);
+				this.$('#area-filter').val('');
+				this.$('#station-filter').val('');
+			}
+		}
     });
 
     BaseListView.extend = CompositeView.extend;

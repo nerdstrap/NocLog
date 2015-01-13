@@ -17,6 +17,10 @@ define(function(require) {
             options || (options = {});
             this.dispatcher = options.dispatcher || this;
 
+            this.stationIdentifierCompleteCollection = options.stationIdentifierCompleteCollection;
+            this.regionCompleteCollection = options.regionCompleteCollection;
+            this.areaCompleteCollection = options.areaCompleteCollection;
+
             this.stationIdentifierCollection = options.stationIdentifierCollection || new Backbone.Collection();
             this.regionCollection = options.regionCollection || new Backbone.Collection();
             this.areaCollection = options.areaCollection || new Backbone.Collection();
@@ -49,7 +53,10 @@ define(function(require) {
             'click .sort-button': 'sortListView',
             'click .close-alert-box-button': 'closeAlertBox',
             'click #export-station-entry-log-list-button': 'exportStationEntryLogList',
-            'click .refresh-button': 'setDateFilter'
+            'click .refresh-button': 'setDateFilter',
+			'change #station-filter': 'onChangeStationFilter',
+			'change #area-filter': 'onChangeAreaFilter',
+			'change #region-filter': 'onChangeRegionFilter'
         },
         addAll: function() {
             this._leaveChildren();
@@ -67,15 +74,6 @@ define(function(require) {
             });
             this.appendChildTo(stationEntryLogListItemView, '#station-entry-log-list-item-container');
         },
-        addStationNameFilter: function() {
-            this.addFilter(this.$('#station-filter'), this.stationIdentifierCollection.models, 'stationId', 'stationName');
-        },
-        addRegionNameFilter: function() {
-            this.addFilter(this.$('#region-filter'), this.regionCollection.models, 'regionName', 'regionName');
-        },
-        addAreaNameFilter: function() {
-            this.addFilter(this.$('#area-filter'), this.areaCollection.models, 'areaName', 'areaName');
-        },
         dispatchRefreshStationEntryLogList: function(event) {
             if (event) {
                 event.preventDefault();
@@ -87,8 +85,10 @@ define(function(require) {
                 event.preventDefault();
             }
 
-            this.$('#station-filter').val('');
+            this.stationIdentifierCollection.reset(this.stationIdentifierCompleteCollection.models);
+			this.$('#station-filter').val('');
             this.$('#region-filter').val('');
+			this.areaCollection.reset(this.areaCompleteCollection.models);
             this.$('#area-filter').val('');
             this.setDefaultDateFilters(-1);
             this.collection.setSortAttribute('outTime');

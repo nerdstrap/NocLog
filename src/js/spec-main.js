@@ -46,6 +46,9 @@ require.config({
         /* Jasmine */
         /*'jasmine': 'libs/jasmine/jasmine',
         'jasmine-html': 'libs/jasmine/jasmine-html',*/
+        
+        /* Squire */
+        'squire': 'libs/squire',
 
         /* App */
         'console': 'app/console',
@@ -66,7 +69,8 @@ require.config({
         'services': '../services/memory',
         'templates': '../templates',
         'views': '../views',
-        'specs': '../specs'
+        'specs': '../specs',
+        'mocks': '../specs/mocks'
     },
     shim: {
         'backbone': {

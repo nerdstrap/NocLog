@@ -3,6 +3,14 @@
 {{/if}}
 {{#if options}}
     {{~#each options}}
-        <option value="{{value}}">{{text}}</option>
+        {{#if data-option2}}
+		<option value="{{value}}" data-region="{{data-option1}}" data-area="{{data-option2}}">{{text}}</option>
+		{{else}}
+			{{#if data-option1}}
+			<option value="{{value}}" data-region="{{data-option1}}">{{text}}</option>
+			{{else}}
+			<option value="{{value}}">{{text}}</option>
+			{{/if}}
+		{{/if}}
     {{~/each}}
 {{/if}}

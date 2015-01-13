@@ -24,6 +24,10 @@ define(function(require) {
             options || (options = {});
             this.dispatcher = options.dispatcher || this;
 
+            this.stationIdentifierCompleteCollection = options.stationIdentifierCompleteCollection;
+            this.regionCompleteCollection = options.regionCompleteCollection;
+            this.areaCompleteCollection = options.areaCompleteCollection;
+			
             this.stationIdentifierCollection = options.stationIdentifierCollection;
             this.regionCollection = options.regionCollection;
             this.areaCollection = options.areaCollection;
@@ -66,7 +70,10 @@ define(function(require) {
             'click .sort-button': 'sortListView',
             'click #new-station-entry-log-button': 'goToNewStationEntryLog',
             'click .close-alert-box-button': 'closeAlertBox',
-            'click #export-station-entry-log-list-button': 'exportStationEntryLogList'
+            'click #export-station-entry-log-list-button': 'exportStationEntryLogList',
+			'change #station-filter': 'onChangeStationFilter',
+			'change #area-filter': 'onChangeAreaFilter',
+			'change #region-filter': 'onChangeRegionFilter'
         },
         addAll: function() {
             this.removeAll();
@@ -114,15 +121,6 @@ define(function(require) {
             });
             this.appendChildTo(stationEntryLogListItemView, '#station-entry-log-list-item-container');
         },
-        addStationNameFilter: function() {
-            this.addFilter(this.$('#station-filter'), this.stationIdentifierCollection.models, 'stationId', 'stationName');
-        },
-        addRegionNameFilter: function() {
-            this.addFilter(this.$('#region-filter'), this.regionCollection.models, 'regionName', 'regionName');
-        },
-        addAreaNameFilter: function() {
-            this.addFilter(this.$('#area-filter'), this.areaCollection.models, 'areaName', 'areaName');
-        },
         setAutRefreshInterval: function() {
             var currentContext = this;
             autoRefreshInterval = globals.window.setInterval(function() {
@@ -141,8 +139,10 @@ define(function(require) {
             }
 
             this.$('#status-filter').val('open');
+            this.stationIdentifierCollection.reset(this.stationIdentifierCompleteCollection.models);
             this.$('#station-filter').val('');
-            this.$('#region-filter').val('');
+			this.$('#region-filter').val('');
+			this.areaCollection.reset(this.areaCompleteCollection.models);
             this.$('#area-filter').val('');
             this.collection.setSortAttribute('expectedOutTime');
 

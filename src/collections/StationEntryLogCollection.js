@@ -4,15 +4,8 @@ define(function(require) {
     var $ = require('jquery'),
             _ = require('underscore'),
             Backbone = require('backbone'),
-            StationEntryLogModel = require('models/StationEntryLogModel');
-
-    var simpleComparator = function(a, b, sortDirection) {
-        if (sortDirection !== 1) {
-            return (a === b) ? 0 : (a < b) ? 1 : -1;
-        } else {
-            return (a === b) ? 0 : (a > b) ? 1 : -1;
-        }
-    };
+            StationEntryLogModel = require('models/StationEntryLogModel'),
+            utils = require('utils');
 
     var StationEntryLogCollection = Backbone.Collection.extend({
         model: StationEntryLogModel,
@@ -30,28 +23,8 @@ define(function(require) {
         },
         comparator: function(a, b) {
             var currentContext = this;
-            return simpleComparator(a.get(currentContext.sortAttribute), b.get(currentContext.sortAttribute), currentContext.sortDirection);
+            return utils.simpleComparator(a.get(currentContext.sortAttribute), b.get(currentContext.sortAttribute), currentContext.sortDirection);
 
-        },
-        toCsv: function() {
-            var currentContext = this;
-            var line = '';
-            if (currentContext.length > 0) {
-                var csvHeaders = currentContext.at(0).csvHeaders();
-                for (var i in csvHeaders) {
-                    var csvHeader = csvHeaders[i];
-                    line = line + csvHeader + ',';
-                }
-                line = line.slice(0, -1);
-                line = line + '\r\n';
-
-                _.each(currentContext.models, function(model, index, list) {
-                    line = line + model.toCsv();
-                    line = line + '\r\n';
-                });
-            }
-
-            return line;
         },
         onAdd: function(model, collection, options) {
             this.setCounts(collection);
