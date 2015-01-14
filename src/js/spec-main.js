@@ -70,7 +70,8 @@ require.config({
         'templates': '../templates',
         'views': '../views',
         'specs': '../specs',
-        'mocks': '../specs/mocks'
+        'fakes': '../fakes',
+        'mocks': '../mocks'
     },
     shim: {
         'backbone': {

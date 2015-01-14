@@ -179,7 +179,10 @@ define(function(require) {
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 stationEntryLogCollection.reset();
                 stationEntryLogHistoryListViewInstance.showError(textStatus);
-                deferred.reject(textStatus);
+                deferred.reject({
+                    stationEntryLogHistoryListView: stationEntryLogHistoryListViewInstance,
+                    error: textStatus
+                });
             });
 
             return deferred.promise();
@@ -287,7 +290,7 @@ define(function(require) {
                 purposeMaintenanceViewInstance.setUserRole(getOptionsResponse.userRole);
                 durationCollection.reset(getOptionsResponse.durations);
                 purposeCollection.reset(getOptionsResponse.purposes);
-                deferred.resolve(getOptionsResponse);
+                deferred.resolve(purposeMaintenanceViewInstance);
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 purposeCollection.reset();
                 purposeMaintenanceViewInstance.showError(textStatus);
