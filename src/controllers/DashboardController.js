@@ -17,6 +17,7 @@ define(function(require) {
             StationCollection = require('collections/StationCollection'),
             PersonnelCollection = require('collections/PersonnelCollection'),
             LookupDataItemCollection = require('collections/LookupDataItemCollection'),
+        ListItemCollection = require('collections/ListItemCollection'),
             PurposeCollection = require('collections/PurposeCollection'),
             StationEntryLogModel = require('models/StationEntryLogModel'),
             StationModel = require('models/StationModel'),
@@ -85,12 +86,12 @@ define(function(require) {
 
             var stationEntryLogCollection = new StationEntryLogCollection();
             stationEntryLogCollection.setSortAttribute('expectedOutTime');
-            var stationIdentifierCompleteCollection = new Backbone.Collection();
-            var stationIdentifierCollection = new Backbone.Collection();
-            var regionCompleteCollection = new Backbone.Collection();
-            var regionCollection = new Backbone.Collection();
-            var areaCompleteCollection = new Backbone.Collection();
-            var areaCollection = new Backbone.Collection();
+            var stationIdentifierCompleteCollection = new ListItemCollection();
+            var stationIdentifierCollection = new ListItemCollection();
+            var regionCompleteCollection = new ListItemCollection();
+            var regionCollection = new ListItemCollection();
+            var areaCompleteCollection = new ListItemCollection();
+            var areaCollection = new ListItemCollection();
             var stationEntryLogListViewInstance = new StationEntryLogListView({
                 controller: currentContext,
                 dispatcher: currentContext.dispatcher,
@@ -143,12 +144,12 @@ define(function(require) {
 
             var stationEntryLogCollection = new StationEntryLogCollection();
             stationEntryLogCollection.setSortAttribute('outTime');
-            var stationIdentifierCompleteCollection = new Backbone.Collection();
-            var stationIdentifierCollection = new Backbone.Collection();
-            var regionCompleteCollection = new Backbone.Collection();
-            var regionCollection = new Backbone.Collection();
-            var areaCompleteCollection = new Backbone.Collection();
-            var areaCollection = new Backbone.Collection();
+            var stationIdentifierCompleteCollection = new ListItemCollection();
+            var stationIdentifierCollection = new ListItemCollection();
+            var regionCompleteCollection = new ListItemCollection();
+            var regionCollection = new ListItemCollection();
+            var areaCompleteCollection = new ListItemCollection();
+            var areaCollection = new ListItemCollection();
             var stationEntryLogHistoryListViewInstance = new StationEntryLogHistoryListView({
                 controller: currentContext,
                 dispatcher: currentContext.dispatcher,
@@ -194,12 +195,12 @@ define(function(require) {
 
             var stationCollection = new StationCollection();
             stationCollection.setSortAttribute('stationName');
-            var stationIdentifierCompleteCollection = new Backbone.Collection();
-            var stationIdentifierCollection = new Backbone.Collection();
-            var regionCompleteCollection = new Backbone.Collection();
-            var regionCollection = new Backbone.Collection();
-            var areaCompleteCollection = new Backbone.Collection();
-            var areaCollection = new Backbone.Collection();
+            var stationIdentifierCompleteCollection = new ListItemCollection();
+            var stationIdentifierCollection = new ListItemCollection();
+            var regionCompleteCollection = new ListItemCollection();
+            var regionCollection = new ListItemCollection();
+            var areaCompleteCollection = new ListItemCollection();
+            var areaCollection = new ListItemCollection();
             var stationListViewInstance = new StationListView({
                 controller: currentContext,
                 dispatcher: currentContext.dispatcher,

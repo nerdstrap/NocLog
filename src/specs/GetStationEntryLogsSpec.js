@@ -28,14 +28,18 @@ define(function(require) {
                 var mockAppRouterInstance = new MockAppRouter();
 
                 var fakeDashboardServiceInstance = {};
+                var fakeStationEntryLogs = [];
+                var fakeStationIdentifiers = [];
+                var fakeRegions = [];
+                var fakeAreas = [];
                 var fakeUserRole = UserRolesEnum.NocAdmin;
                 fakeDashboardServiceInstance.getStationEntryLogs = function() {
                     var deferred = $.Deferred();
                     var results = {
-                        stationEntryLogs: [],
-                        stationIdentifiers: [],
-                        regions: [],
-                        areas: [],
+                        stationEntryLogs: fakeStationEntryLogs,
+                        stationIdentifiers: fakeStationIdentifiers,
+                        regions: fakeRegions,
+                        areas: fakeAreas,
                         userRole: fakeUserRole
                     };
                     setTimeout(function() {
@@ -63,7 +67,10 @@ define(function(require) {
                     expect(dashboardControllerInstance.dashboardService.getStationEntryLogs).toHaveBeenCalledWith({onlyOpen: true});
                     expect(dashboardControllerInstance.dispatcher.trigger).toHaveBeenCalledWith(AppEventNamesEnum.userRoleUpdated, fakeUserRole);
                     expect(stationEntryLogListViewInstance.setUserRole).toHaveBeenCalledWith(fakeUserRole);
-                    expect(stationEntryLogListViewInstance.collection.reset).toHaveBeenCalledWith([]);
+                    expect(stationEntryLogListViewInstance.collection.reset).toHaveBeenCalledWith(fakeStationEntryLogs);
+                    expect(stationEntryLogListViewInstance.stationIdentifierCollection.reset).toHaveBeenCalledWith(fakeStationIdentifiers);
+                    expect(stationEntryLogListViewInstance.regionCollection.reset).toHaveBeenCalledWith(fakeRegions);
+                    expect(stationEntryLogListViewInstance.areaCollection.reset).toHaveBeenCalledWith(fakeAreas);
                     done();
                 }, function() {
                     this.fail(new Error('dashboardControllerInstance.goToStationEntryLogList call failed'));
