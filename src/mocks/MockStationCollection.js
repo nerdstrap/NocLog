@@ -5,10 +5,10 @@ define(function(require) {
             _ = require('underscore'),
             Backbone = require('backbone');
 
-    var MockStationEntryLogCollection = Backbone.Collection.extend({
+    var MockStationCollection = Backbone.Collection.extend({
         initialize: function(options) {
             options || (options = {});
-            this.sortAttribute = options.sortAttribute || 'expectedOutTime';
+            this.sortAttribute = options.sortAttribute || 'stationName';
             this.sortDirection = options.sortDirection || 1;
             
             this.reset = jasmine.createSpy();
@@ -21,5 +21,5 @@ define(function(require) {
         }
     });
 
-    return MockStationEntryLogCollection;
+    return MockStationCollection;
 });

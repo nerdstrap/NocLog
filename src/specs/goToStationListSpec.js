@@ -8,9 +8,9 @@ define(function(require) {
             AppEventNamesEnum = require('enums/AppEventNamesEnum'),
             UserRolesEnum = require('enums/UserRolesEnum'),
             MockAppRouter = require('mocks/MockAppRouter'),
-            MockStationEntryLogCollection = require('mocks/MockStationEntryLogCollection'),
+            MockStationCollection = require('mocks/MockStationCollection'),
             MockListItemCollection = require('mocks/MockListItemCollection'),
-            MockStationEntryLogHistoryListView = require('mocks/MockStationEntryLogHistoryListView'),
+            MockStationListView = require('mocks/MockStationListView'),
             Squire = require('squire');
 
     var injector = new Squire();
@@ -18,12 +18,12 @@ define(function(require) {
     var builder = injector.mock({
         'console': console,
         'routers/AppRouter': MockAppRouter,
-        'collections/StationEntryLogCollection': MockStationEntryLogCollection,
+        'collections/StationCollection': MockStationCollection,
         'collections/ListItemCollection': MockListItemCollection,
-        'views/StationEntryLogHistoryListView': MockStationEntryLogHistoryListView
+        'views/StationListView': MockStationListView
     });
 
-    describe('go to station entry log history list', function() {
+    describe('go to station list', function() {
         var self = this;
 
         beforeEach(function(done) {
@@ -46,10 +46,10 @@ define(function(require) {
             //arrange
             var fakeDashboardServiceInstance = {};
             var fakeUserRole = UserRolesEnum.NocAdmin;
-            fakeDashboardServiceInstance.getStationEntryLogs = function() {
+            fakeDashboardServiceInstance.getStations = function() {
                 var deferred = $.Deferred();
                 var results = {
-                    stationEntryLogs: [],
+                    stations: [],
                     stationIdentifiers: [],
                     regions: [],
                     areas: [],
@@ -60,31 +60,31 @@ define(function(require) {
                 }, 200);
                 return deferred.promise();
             };
-            spyOn(fakeDashboardServiceInstance, 'getStationEntryLogs').and.callThrough();
+            spyOn(fakeDashboardServiceInstance, 'getStations').and.callThrough();
             self.dashboardControllerInstance.dashboardService = fakeDashboardServiceInstance;
 
             //act
-            var promise = self.dashboardControllerInstance.goToStationEntryLogHistoryList();
+            var promise = self.dashboardControllerInstance.goToStationList();
 
-            promise.then(function(stationEntryLogHistoryListViewInstance) {
+            promise.then(function(stationListViewInstance) {
                 //assert
-                expect(stationEntryLogHistoryListViewInstance.collection.setSortAttribute).toHaveBeenCalledWith('outTime');
-                expect(self.dashboardControllerInstance.router.swapContent).toHaveBeenCalledWith(stationEntryLogHistoryListViewInstance);
-                expect(self.dashboardControllerInstance.router.navigate).toHaveBeenCalledWith('stationEntryLogHistory');
-                expect(stationEntryLogHistoryListViewInstance.showLoading).toHaveBeenCalled();
-                expect(self.dashboardControllerInstance.dashboardService.getStationEntryLogs).toHaveBeenCalledWith({onlyCheckedOut: true});
+                expect(stationListViewInstance.collection.setSortAttribute).toHaveBeenCalledWith('stationName');
+                expect(self.dashboardControllerInstance.router.swapContent).toHaveBeenCalledWith(stationListViewInstance);
+                expect(self.dashboardControllerInstance.router.navigate).toHaveBeenCalledWith('station');
+                expect(stationListViewInstance.showLoading).toHaveBeenCalled();
+                expect(self.dashboardControllerInstance.dashboardService.getStations).toHaveBeenCalledWith();
                 expect(self.dashboardControllerInstance.dispatcher.trigger).toHaveBeenCalledWith(AppEventNamesEnum.userRoleUpdated, fakeUserRole);
-                expect(stationEntryLogHistoryListViewInstance.setUserRole).toHaveBeenCalledWith(fakeUserRole);
-                expect(stationEntryLogHistoryListViewInstance.collection.reset).toHaveBeenCalledWith([]);
-                expect(stationEntryLogHistoryListViewInstance.stationIdentifierCompleteCollection.reset).toHaveBeenCalledWith([]);
-                expect(stationEntryLogHistoryListViewInstance.stationIdentifierCollection.reset).toHaveBeenCalledWith([]);
-                expect(stationEntryLogHistoryListViewInstance.regionCompleteCollection.reset).toHaveBeenCalledWith([]);
-                expect(stationEntryLogHistoryListViewInstance.regionCollection.reset).toHaveBeenCalledWith([]);
-                expect(stationEntryLogHistoryListViewInstance.areaCompleteCollection.reset).toHaveBeenCalledWith([]);
-                expect(stationEntryLogHistoryListViewInstance.areaCollection.reset).toHaveBeenCalledWith([]);
+                expect(stationListViewInstance.setUserRole).toHaveBeenCalledWith(fakeUserRole);
+                expect(stationListViewInstance.collection.reset).toHaveBeenCalledWith([]);
+                expect(stationListViewInstance.stationIdentifierCompleteCollection.reset).toHaveBeenCalledWith([]);
+                expect(stationListViewInstance.stationIdentifierCollection.reset).toHaveBeenCalledWith([]);
+                expect(stationListViewInstance.regionCompleteCollection.reset).toHaveBeenCalledWith([]);
+                expect(stationListViewInstance.regionCollection.reset).toHaveBeenCalledWith([]);
+                expect(stationListViewInstance.areaCompleteCollection.reset).toHaveBeenCalledWith([]);
+                expect(stationListViewInstance.areaCollection.reset).toHaveBeenCalledWith([]);
                 done();
             }, function() {
-                this.fail(new Error('dashboardControllerInstance.goToStationEntryLogHistoryList call failed'));
+                this.fail(new Error('dashboardControllerInstance.goToStationList call failed'));
                 done();
             });
         });
@@ -95,24 +95,24 @@ define(function(require) {
             var jqXHR = {};
             var textStatus = 'fail';
             var errorThrown = {};
-            fakeDashboardServiceInstance.getStationEntryLogs = function() {
+            fakeDashboardServiceInstance.getStations = function() {
                 var deferred = $.Deferred();
                 setTimeout(function() {
                     deferred.reject(jqXHR, textStatus, errorThrown);
                 }, 200);
                 return deferred.promise();
             };
-            spyOn(fakeDashboardServiceInstance, 'getStationEntryLogs').and.callThrough();
+            spyOn(fakeDashboardServiceInstance, 'getStations').and.callThrough();
             self.dashboardControllerInstance.dashboardService = fakeDashboardServiceInstance;
 
             //act
-            var promise = self.dashboardControllerInstance.goToStationEntryLogHistoryList();
+            var promise = self.dashboardControllerInstance.goToStationList();
 
             promise.fail(function(results) {
                 //assert
-                expect(results.stationEntryLogHistoryListView).toBeDefined();
-                expect(results.stationEntryLogHistoryListView.showError).toHaveBeenCalledWith(textStatus);
-                expect(results.stationEntryLogHistoryListView.collection.reset).toHaveBeenCalled();
+                expect(results.stationListView).toBeDefined();
+                expect(results.stationListView.showError).toHaveBeenCalledWith(textStatus);
+                expect(results.stationListView.collection.reset).toHaveBeenCalled();
                 expect(results.error).toEqual(textStatus);
                 done();
             }, function() {
@@ -120,5 +120,6 @@ define(function(require) {
                 done();
             });
         });
+
     });
 });

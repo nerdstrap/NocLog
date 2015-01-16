@@ -7,7 +7,7 @@ define(function(require) {
             Backbone = require('backbone'),
             ListItemCollection = require('collections/ListItemCollection');
 
-    var MockStationEntryLogListView = Backbone.View.extend({
+    var MockStationEntryLogHistoryListView = Backbone.View.extend({
         initialize: function(options) {
             options || (options = {});
             this.dispatcher = options.dispatcher || this;
@@ -25,6 +25,6 @@ define(function(require) {
         }
     });
 
-    return MockStationEntryLogListView;
+    return MockStationEntryLogHistoryListView;
 
 });

@@ -7,6 +7,7 @@ define(function(require) {
             StationEntryLogListItemView = require('views/StationEntryLogListItemView'),
             NewStationEntryLogModel = require('models/NewStationEntryLogModel'),
             LookupDataItemCollection = require('collections/LookupDataItemCollection'),
+            ListItemCollection = require('collections/ListItemCollection'),
             NewStationEntryLogView = require('views/NewStationEntryLogView'),
             AppEventNamesEnum = require('enums/AppEventNamesEnum'),
             UserRolesEnum = require('enums/UserRolesEnum'),

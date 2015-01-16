@@ -6,6 +6,7 @@ define(function(require) {
             Backbone = require('backbone'),
             BaseListView = require('views/BaseListView'),
             StationEntryLogHistoryListItemView = require('views/StationEntryLogHistoryListItemView'),
+            ListItemCollection = require('collections/ListItemCollection'),
             AppEventNamesEnum = require('enums/AppEventNamesEnum'),
             appEvents = require('events'),
             utils = require('utils'),
@@ -21,9 +22,9 @@ define(function(require) {
             this.regionCompleteCollection = options.regionCompleteCollection;
             this.areaCompleteCollection = options.areaCompleteCollection;
 
-            this.stationIdentifierCollection = options.stationIdentifierCollection || new Backbone.Collection();
-            this.regionCollection = options.regionCollection || new Backbone.Collection();
-            this.areaCollection = options.areaCollection || new Backbone.Collection();
+            this.stationIdentifierCollection = options.stationIdentifierCollection || new ListItemCollection();
+            this.regionCollection = options.regionCollection || new ListItemCollection();
+            this.areaCollection = options.areaCollection || new ListItemCollection();
 
             this.listenTo(this.collection, 'reset', this.addAll);
             this.listenTo(this.collection, 'sort', this.addAll);

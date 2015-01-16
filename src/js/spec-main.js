@@ -18,38 +18,39 @@ require.config({
         'require': 'libs/require',
         'text': 'libs/text',
         'hbs': 'libs/hbs',
-
+        
         /* jQuery */
         'jquery': 'libs/jquery',
-
+        
         /* Underscore */
         'underscore': 'libs/lodash',
-
+        
         /* Backbone */
         'backbone': 'libs/backbone',
         'backbone.validation': 'libs/backbone.validation',
-
+        
         /* Handlebars */
         'Handlebars': 'libs/handlebars',
         'handlebars.helpers': 'app/handlebars.helpers',
-
+        
         /* Modernizr */
         'modernizr': 'libs/modernizr',
-
+        
         /* FileSaver */
         'filesaver': 'libs/filesaver',
-
+        
         /* Foundation */
         'foundation.core': 'libs/foundation',
         'foundation.alert': 'libs/foundation.alert',
-
+        
         /* Jasmine */
         /*'jasmine': 'libs/jasmine/jasmine',
-        'jasmine-html': 'libs/jasmine/jasmine-html',*/
+        'jasmine-html': 'libs/jasmine/jasmine-html',
+        'boot-loader': 'libs/jasmine/boot-loader',*/
         
         /* Squire */
         'squire': 'libs/squire',
-
+        
         /* App */
         'console': 'app/console',
         'dates': 'app/dates',
@@ -59,14 +60,14 @@ require.config({
         'resources': 'app/resources',
         'utils': 'app/utils',
         'utils.views': 'app/utils.views',
-
+        
         /* Convenience */
         'collections': '../collections',
         'controllers': '../controllers',
         'enums': '../enums',
         'models': '../models',
         'routers': '../routers',
-        'services': '../services/memory',
+        'services': '../services',
         'templates': '../templates',
         'views': '../views',
         'specs': '../specs',
@@ -96,14 +97,17 @@ require.config({
         'Handlebars': {
             exports: 'Handlebars'
         }/*,
-        'jasmine': {
+        'boot-loader': {
+            deps: [
+                'jasmine',
+                'jasmine-html'
+            ],
             exports: 'jasmine'
         },
         'jasmine-html': {
             deps: [
                 'jasmine'
-            ],
-            exports: 'jasmine'
+            ]
         }*/
     }
 });

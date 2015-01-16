@@ -20,11 +20,11 @@ define(function(require) {
                 Backbone.history.fragment = fragment;
                 this.trigger('after-navigate', fragment, options);
             };
+            spyOn(fakeRouterInstance, 'navigate').and.callThrough();
+            
             fakeRouterInstance.swapContent = function(newContentView) {
                 newContentView.render();
             };
-
-            spyOn(fakeRouterInstance, 'navigate').and.callThrough();
             spyOn(fakeRouterInstance, 'swapContent').and.callThrough();
 
             fakeDashboardServiceInstance.getStationEntryLogs = function() {
@@ -43,7 +43,9 @@ define(function(require) {
                     regions: [],
                     areas: []
                 };
-                deferred.resolve(results, "success", null);
+                setTimeout(function() {
+                    deferred.resolve(results, "success", null);
+                }, 200);
                 return deferred.promise();
             };            
             spyOn(fakeDashboardServiceInstance, 'getStationEntryLogs').and.callThrough();
@@ -68,10 +70,22 @@ define(function(require) {
                     durations: [],
                     purposes: []
                 };
-                deferred.resolve(results, "success", null);
+                setTimeout(function() {
+                    deferred.resolve(results, "success", null);
+                }, 200);
                 return deferred.promise();
             };
             spyOn(fakeDashboardServiceInstance, 'getOptions').and.callThrough();
+
+            fakeDashboardServiceInstance.getPersonnels = function() {
+                return  {
+                    userRole: '',
+                    personnels: [
+                        {"userId":"S251201","contactNumber":"6147163718","email":"mebaltic@aep.com","userName":"Baltic, Michael"}
+                    ]
+                };
+            };
+            spyOn(fakeDashboardServiceInstance, 'getPersonnels').and.callThrough();
 
             dashboardControllerInstance = new DashboardController({
                 router: fakeRouterInstance,
@@ -139,7 +153,7 @@ define(function(require) {
                     done();
                 });
             });
-        });
+        });  
         
         describe('goToStationEntryLogHistoryList', function() {
 
@@ -261,7 +275,7 @@ define(function(require) {
                     expect(fakeRouterInstance.navigate).toHaveBeenCalledWith('stationEntryLog/' + stationEntryLogId);
                     
                     expect(stationEntryLogViewInstance.userRole).toBeDefined();
-                    expect(stationEntryLogViewInstance.model.attributes.stationEntryLogId).toEqual(stationEntryLogId)
+                    expect(stationEntryLogViewInstance.model.attributes.stationEntryLogId).toEqual(stationEntryLogId);
                     expect(stationEntryLogViewInstance.durationCollection).toBeDefined();
                     done();
                 }, function() {
@@ -295,6 +309,123 @@ define(function(require) {
             });
         });
         
+        describe('goToPersonnel with userId', function() {
+
+            it('should render the view', function(done) {
+                //arrange
+                var userId = 'S251201';
+
+                //act
+                var promise = dashboardControllerInstance.goToPersonnel({userId: userId});
+
+                promise.then(function(personnelViewInstance) {
+                    //assert
+                    expect(fakeRouterInstance.swapContent).toHaveBeenCalledWith(personnelViewInstance);
+                    expect(fakeRouterInstance.navigate).toHaveBeenCalledWith('personnel/userId/' + userId);
+                    
+                    expect(personnelViewInstance.userRole).toBeDefined();
+                    expect(personnelViewInstance.model.id).toEqual(userId);
+                    expect(personnelViewInstance.model.attributes.contactNumber).toEqual('6147163718');
+                    done();
+                }, function() {
+                    test.fail(new Error("dashboardControllerInstance.goToPersonnel call failed"));
+                    done();
+                });
+            });
+        });
+        
+        describe('goToPersonnel with userName', function() {
+
+            it('should render the view', function(done) {
+                //arrange
+                var userName = 'Baltic, Michael';
+
+                //act
+                var promise = dashboardControllerInstance.goToPersonnel({userName: userName});
+
+                promise.then(function(personnelViewInstance) {
+                    //assert
+                    expect(fakeRouterInstance.swapContent).toHaveBeenCalledWith(personnelViewInstance);
+                    expect(fakeRouterInstance.navigate).toHaveBeenCalledWith('personnel/userName/' + userName);
+                    
+                    expect(personnelViewInstance.userRole).toBeDefined();
+                    expect(personnelViewInstance.model.attributes.contactNumber).toEqual('6147163718');
+                    done();
+                }, function() {
+                    test.fail(new Error("dashboardControllerInstance.goToPersonnel call failed"));
+                    done();
+                });
+            });
+        });   
+        
+        describe('refreshStationEntryLogList', function() {
+
+            it('should render the view', function(done) {
+                //arrange
+                var options = {onlyOpen: true};
+                var stationEntryLogCollection = new Backbone.Collection();
+                spyOn(stationEntryLogCollection, 'reset');
+                
+                //act
+                var promise = dashboardControllerInstance.refreshStationEntryLogList(stationEntryLogCollection, options);
+
+                promise.then(function(getStationEntryLogsResponse) {
+                    //assert
+                    expect(fakeDashboardServiceInstance.getStationEntryLogs).toHaveBeenCalledWith(options);
+                    expect(stationEntryLogCollection.reset).toHaveBeenCalledWith(getStationEntryLogsResponse.stationEntryLogs);
+                    done();
+                }, function() {
+                    test.fail(new Error("dashboardControllerInstance.refreshStationEntryLogList call failed"));
+                    done();
+                });
+            });
+        });     
+        
+        describe('refreshStationList', function() {
+
+            it('should render the view', function(done) {
+                //arrange
+                var options = ({regionName: '', areaName: '', stationId: ''});
+                var stationCollection = new Backbone.Collection();
+                spyOn(stationCollection, 'reset');
+                
+                //act
+                var promise = dashboardControllerInstance.refreshStationList(stationCollection, options);
+
+                promise.then(function(getStationsResponse) {
+                    //assert
+                    expect(fakeDashboardServiceInstance.getStations).toHaveBeenCalledWith(options);
+                    expect(stationCollection.reset).toHaveBeenCalledWith(getStationsResponse.stations);
+                    done();
+                }, function() {
+                    test.fail(new Error("dashboardControllerInstance.refreshStationList call failed"));
+                    done();
+                });
+            });
+        });        
+        
+        describe('refreshPersonnelList', function() {
+
+            it('should render the view', function(done) {
+                //arrange
+                var options = ({userName: 'mi'});
+                var personnelCollection = new Backbone.Collection();
+                spyOn(personnelCollection, 'reset');
+                
+                //act
+                var promise = dashboardControllerInstance.refreshPersonnelList(personnelCollection, options);
+
+                promise.then(function(getPersonnelsResponse) {
+                    //assert
+                    expect(fakeDashboardServiceInstance.getPersonnels).toHaveBeenCalledWith(options);
+                    expect(personnelCollection.reset).toHaveBeenCalledWith(getPersonnelsResponse.personnels);
+                    done();
+                }, function() {
+                    test.fail(new Error("dashboardControllerInstance.refreshPersonnelList call failed"));
+                    done();
+                });
+            });
+        });
         
     });
 });

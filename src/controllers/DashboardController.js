@@ -17,7 +17,7 @@ define(function(require) {
             StationCollection = require('collections/StationCollection'),
             PersonnelCollection = require('collections/PersonnelCollection'),
             LookupDataItemCollection = require('collections/LookupDataItemCollection'),
-        ListItemCollection = require('collections/ListItemCollection'),
+            ListItemCollection = require('collections/ListItemCollection'),
             PurposeCollection = require('collections/PurposeCollection'),
             StationEntryLogModel = require('models/StationEntryLogModel'),
             StationModel = require('models/StationModel'),
@@ -231,7 +231,10 @@ define(function(require) {
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 stationCollection.reset();
                 stationListViewInstance.showError(textStatus);
-                deferred.reject(textStatus);
+                deferred.reject({
+                    stationListView: stationListViewInstance,
+                    error: textStatus
+                });
             });
 
             return deferred.promise();
@@ -295,7 +298,10 @@ define(function(require) {
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 purposeCollection.reset();
                 purposeMaintenanceViewInstance.showError(textStatus);
-                deferred.reject(textStatus);
+                deferred.reject({
+                    purposeMaintenanceView: purposeMaintenanceViewInstance,
+                    error: textStatus
+                });
             });
 
             return deferred.promise();
@@ -537,15 +543,15 @@ define(function(require) {
                 appEvents.trigger(AppEventNamesEnum.checkInSuccess, checkInResponse.stationEntryLog);
                 deferred.resolve(checkInResponse);
             }).fail(function(jqXHR, textStatus, errorThrown) {
-                var msg = 'Error checking in.';
+                var errorMessage = 'Error checking in.';
                 if (jqXHR.status === 409 && jqXHR.responseText) {
-                    msg = jqXHR.responseText;
+                    errorMessage = jqXHR.responseText;
                 }
                 if (jqXHR.status === 409 || jqXHR.status === 403) {
-                    msg = jqXHR.responseText;
+                    errorMessage = jqXHR.responseText;
                 }
-                appEvents.trigger(AppEventNamesEnum.checkInError, msg);
-                deferred.reject(msg);
+                appEvents.trigger(AppEventNamesEnum.checkInError, errorMessage);
+                deferred.reject(errorMessage);
             });
 
             return deferred.promise();

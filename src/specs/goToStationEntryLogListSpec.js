@@ -9,6 +9,7 @@ define(function(require) {
             UserRolesEnum = require('enums/UserRolesEnum'),
             MockAppRouter = require('mocks/MockAppRouter'),
             MockStationEntryLogCollection = require('mocks/MockStationEntryLogCollection'),
+            MockListItemCollection = require('mocks/MockListItemCollection'),
             MockStationEntryLogListView = require('mocks/MockStationEntryLogListView'),
             Squire = require('squire');
 
@@ -18,6 +19,7 @@ define(function(require) {
         'console': console,
         'routers/AppRouter': MockAppRouter,
         'collections/StationEntryLogCollection': MockStationEntryLogCollection,
+        'collections/ListItemCollection': MockListItemCollection,
         'views/StationEntryLogListView': MockStationEntryLogListView
     });
 
@@ -74,6 +76,12 @@ define(function(require) {
                 expect(self.dashboardControllerInstance.dispatcher.trigger).toHaveBeenCalledWith(AppEventNamesEnum.userRoleUpdated, fakeUserRole);
                 expect(stationEntryLogListViewInstance.setUserRole).toHaveBeenCalledWith(fakeUserRole);
                 expect(stationEntryLogListViewInstance.collection.reset).toHaveBeenCalledWith([]);
+                expect(stationEntryLogListViewInstance.stationIdentifierCompleteCollection.reset).toHaveBeenCalledWith([]);
+                expect(stationEntryLogListViewInstance.stationIdentifierCollection.reset).toHaveBeenCalledWith([]);
+                expect(stationEntryLogListViewInstance.regionCompleteCollection.reset).toHaveBeenCalledWith([]);
+                expect(stationEntryLogListViewInstance.regionCollection.reset).toHaveBeenCalledWith([]);
+                expect(stationEntryLogListViewInstance.areaCompleteCollection.reset).toHaveBeenCalledWith([]);
+                expect(stationEntryLogListViewInstance.areaCollection.reset).toHaveBeenCalledWith([]);
                 done();
             }, function() {
                 this.fail(new Error('dashboardControllerInstance.goToStationEntryLogList call failed'));
@@ -125,6 +133,12 @@ define(function(require) {
                 expect(self.dashboardControllerInstance.dispatcher.trigger).toHaveBeenCalledWith(AppEventNamesEnum.userRoleUpdated, fakeUserRole);
                 expect(stationEntryLogListViewInstance.setUserRole).toHaveBeenCalledWith(fakeUserRole);
                 expect(stationEntryLogListViewInstance.collection.reset).toHaveBeenCalledWith([]);
+                expect(stationEntryLogListViewInstance.stationIdentifierCompleteCollection.reset).toHaveBeenCalledWith([]);
+                expect(stationEntryLogListViewInstance.stationIdentifierCollection.reset).toHaveBeenCalledWith([]);
+                expect(stationEntryLogListViewInstance.regionCompleteCollection.reset).toHaveBeenCalledWith([]);
+                expect(stationEntryLogListViewInstance.regionCollection.reset).toHaveBeenCalledWith([]);
+                expect(stationEntryLogListViewInstance.areaCompleteCollection.reset).toHaveBeenCalledWith([]);
+                expect(stationEntryLogListViewInstance.areaCollection.reset).toHaveBeenCalledWith([]);
                 expect(stationEntryLogListViewInstance.showSuccess).toHaveBeenCalledWith(expectedUpdateCheckInSucessMessage);
                 done();
             }, function() {
