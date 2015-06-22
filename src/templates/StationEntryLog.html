@@ -60,7 +60,42 @@
                     <label for="station-id-input">{{resource "stationIdHeaderText"}}</label>
                 </div>
                 <div class="small-4 columns">
-                    <span id="station-id-input">{{withDefault stationId "&nbsp;"}}</span>
+                    <div class="row collapse">
+                        <div class="small-12 columns">
+                            <span id="station-id-input">{{withDefault stationId "&nbsp;"}}</span>
+                        </div>
+                    </div>
+                    <div class="row collapse linked-station-info-row hidden">
+                        <div class="small-12 columns" id='linked-station-info-container'>
+                            <i class="fa fa-link" title="Linked with T&D Station"></i> <span id="linked-station-name"></span>
+                            <div class="row collapse hidden" id="linked-hazard-section">
+                                <div class="row collapse">
+                                    <div class="small-12 columns">
+                                        <span class="station-hazard-icon"><i class="fa fa-exclamation-triangle" title="Hazard at T&D Station"></i></span>&nbsp;
+                                        <span id="linked-hazard-comments"></span>
+                                    </div>
+                                </div>
+                                <div class="row collapse">
+                                    <div class="small-12 columns pad-left">
+                                        <span id="linked-tdc-label">{{resource "linkedStationTDCHeaderText"}}</span> <span id="linked-tdc-center"></span>: <span id="linked-tdc-phone"></span><br>
+                                        <span id="linked-ddc-label">{{resource "linkedStationDDCHeaderText"}}</span> <span id="linked-ddc-center"></span>: <span id="linked-ddc-phone"></span>
+                                    </div>
+                                </div>
+                                <div class="row collapse" id="linked-hazard-override">
+                                    <div class="small-2 columns">
+                                        <label for="override-id-input">{{resource "overrideIdHeaderText"}}</label>
+                                    </div>
+                                    <div class="small-6 columns">
+                                        <input id="override-id-input" name="overrideId" type="text" placeholder="Dispatcher's UserId" />
+                                        <a id="lookup-override-id-button" class="button radius tiny top-align" href="#">{{resource "lookupOverrideIdHeaderText"}}</a>
+                                    </div>
+                                    <div class="small-4 columns pad-left">
+                                        <span id="override-name"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="small-1 columns">
                     &nbsp;
@@ -75,12 +110,32 @@
                     &nbsp;
                 </div>
             </div>
+
+            <div class="adhoc-checkin-container hidden">   
+                <div class="row collapse">
+                    <div class="small-1 columns">
+                        <label for="additional-info-input">{{resource "adhocLatLonHeaderText"}}</label>
+                    </div>
+                    <div class="small-5 columns">
+                        <input id="adhoc-latitude-input" class="adhoc-latitude-input" name="latitude" type="text" placeholder="{{resource 'adhocLatitudeHeaderText'}}" />
+                        &nbsp;<input id="adhoc-longitude-input" class="adhoc-longitude-input" name="longitude" type="text" placeholder="{{resource 'adhocLongitudeHeaderText'}}" />
+                        &nbsp; <a class="directions-link" data-latitude="{{latitude}}" data-longitude="{{longitude}}" href="#">{{resource "adhocValidateCoordinatesText"}} <i class="fa fa-map-marker"></i></a>        
+                    </div>
+                    <div class="small-1 columns">
+                        &nbsp;
+                    </div>
+                    <div class="small-5 columns">
+                        &nbsp;
+                    </div>
+                </div>
+            </div>
+
             <div class="row collapse">
                 <div class="small-1 columns">
                     <label for="purpose-input">{{resource "purposeHeaderText"}}</label>
                 </div>
                 <div class="small-2 columns">
-                    <span id="purpose-input">{{withDefault purpose "&nbsp;"}}</span>
+                    <span id="purpose-input">{{{withDefault purpose "&nbsp;"}}}</span>
                 </div>
                 <div class="small-1 columns">
                     <label for="old-duration-input">{{resource "durationHeaderText"}}</label>
@@ -160,12 +215,23 @@
                     <span id="has-crew-input">{{formatYesNoWithDefault hasCrew "&nbsp;"}}</span>
                 </div>
             </div>
+            <div id="station-warnings-container" class="row collapse">
+                <div class="small-1 columns">
+                    <span>{{resource "stationWarningsHeaderText"}}</span>
+                </div>
+                <div id="station-warning-list-view" class="small-5 columns">
+                </div>
+                <div class="small-6 columns">
+                    &nbsp;
+                </div>
+            </div>
             <div class="row collapse">
                 <div class="small-6 columns">
                     &nbsp;
                 </div>
                 <div class="small-6 columns">
                     <a id="save-station-entry-log-button" class="button radius hidden" href="#">{{resource "saveButtonText"}}</a>
+                    <a id="check-out-station-entry-log-button" class=" button radius alert hidden" href="#">{{resource "checkOutButtonText"}}</a>
                     <a id="cancel-save-station-entry-log-button" class="button radius secondary" href="#">{{resource "cancelButtonText"}}</a>
                 </div>
             </div>

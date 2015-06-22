@@ -66,6 +66,32 @@ define(function (require) {
         _removeChild: function (view) {
             var index = this.children.indexOf(view);
             this.children.splice(index, 1);
+        },
+        listenToWindowResize: function() {
+            var resizeEvent = $._data($(window)[0], 'events').resize;
+            if (resizeEvent) {
+                this.calculateScrollClassHeight();
+            } else {
+                $(window).on("resize", this.calculateScrollClassHeight);
+                this.calculateScrollClassHeight();
+            }
+        },
+        calculateScrollClassHeight: function() {
+            if ($(".scroll")) {
+                var header_height = $("#header-view").outerHeight();
+                var filter_height = $("#filter-and-list-header-area").outerHeight();
+                var personnel_open_entry_height = $("#personnel-open-entry-area").outerHeight();
+                var footer_height = $("#footer-view").outerHeight();
+                var plus_padding = 20; //just needs to be large enough to prevent normal vertical scroll bar for window
+                var height = $(window).height() - (((header_height + footer_height) + filter_height) + plus_padding);
+                if (personnel_open_entry_height !== null) {
+                    height = $(window).height() - ((((header_height + footer_height) + filter_height) + personnel_open_entry_height ) + plus_padding);
+                }
+                if (height < 250) {
+                    height = 250; //this prevents the scroll list from being too small to show
+                }
+                $(".scroll").css("height", height + "px");
+            }
         }
     });
 

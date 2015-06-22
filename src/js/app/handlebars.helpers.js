@@ -90,6 +90,12 @@ define(function(require) {
         }
         return helpers.withDefault(option, defaultValue);
     };
+    helpers.ifCond = function(v1, v2, options) {
+        if (v1 === v2) {
+            return options.fn(this);
+        }
+        return options.inverse(this);
+    };
 
     for (var helper in helpers) {
         Handlebars.registerHelper(helper, helpers[helper]);

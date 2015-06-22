@@ -33,7 +33,8 @@ define(function(require) {
             var renderModel = _.extend({}, currentContext.model);
             currentContext.$el.html(template(renderModel));
 
-            currentContext.setDefaultDateFilters(-1);
+            currentContext.setDefaultDateFilters(0);
+            currentContext.onChangeIncludeTDStationFilterOnly();
 
             return this;
         },
@@ -45,14 +46,18 @@ define(function(require) {
             'click #reset-station-entry-log-list-button': 'resetStationEntryLogList',
             'click .sort-button': 'sortListView',
             'click .close-alert-box-button': 'closeAlertBox',
+            'change #station-filter': 'onChangeStationFilterOnly',
             'click #export-station-entry-log-list-button': 'exportStationEntryLogList',
-            'click .refresh-button': 'setDateFilter'
+            'click .refresh-button': 'setDateFilter',
+            'click #filter-station-entry-td': 'onChangeIncludeTDStationFilterOnly',
+            'click #filter-station-entry-tc': 'onChangeIncludeTCStationFilterOnly'
         },
         addAll: function() {
             this._leaveChildren();
             this.clearSortIndicators();
             _.each(this.collection.models, this.addOne, this);
             this.addSortIndicators();
+            this.listenToWindowResize();
             this.hideLoading();
         },
         addOne: function(stationEntryLog) {
@@ -77,26 +82,39 @@ define(function(require) {
             if (event) {
                 event.preventDefault();
             }
+            this.$('#filter-station-entry-tc').prop('checked', true);
+            this.$('#filter-station-entry-td').prop('checked', true);
 
             this.$('#station-filter').val('');
-            this.setDefaultDateFilters(-1);
+            this.setDefaultDateFilters(0);
             this.collection.setSortAttribute('outTime');
 
             this.refreshStationEntryLogList();
         },
         refreshStationEntryLogList: function() {
             this.showLoading();
-
+            var showNoc = this.$('#filter-station-entry-tc').is(':checked');
+            var showDol = this.$('#filter-station-entry-td').is(':checked');
+            if (showNoc === false & showDol === false) {
+                this.$('#filter-station-entry-tc').prop('checked', true);
+                this.$('#filter-station-entry-td').prop('checked', true);
+                showDol = true;
+                showNoc = true;
+                this.onChangeIncludeTDStationFilterOnly();
+            }
             var stationId = this.$('#station-filter').val();
             var startDate = this.$('#start-date-filter').val();
             var endDate = this.$('#end-date-filter').val();
 
             var options = {
+                showNoc: showNoc,
+                showDol: showDol,
                 stationId: stationId,
                 startDate: startDate,
                 endDate: endDate,
                 onlyCheckedOut: true
             };
+            
             if (this.parent.model.has('userId')) {
                 options.userId = this.parent.model.get('userId');
             }
@@ -134,10 +152,21 @@ define(function(require) {
                 event.preventDefault();
             }
             var currentContext = this;
+            var showNoc = this.$('#filter-station-entry-tc').is(':checked');
+            var showDol = this.$('#filter-station-entry-td').is(':checked');
+            if (showNoc === false & showDol === false) {
+                this.$('#filter-station-entry-tc').prop('checked', true);
+                this.$('#filter-station-entry-td').prop('checked', true);
+                showDol = true;
+                showNoc = true;
+                this.onChangeIncludeTDStationFilterOnly();
+            }
             var stationId = this.$('#station-filter').val();
             var startDate = this.$('#start-date-filter').val();
             var endDate = this.$('#end-date-filter').val();
             var options = {
+                showNoc: showNoc,
+                showDol: showDol,
                 stationId: stationId,
                 startDate: startDate,
                 endDate: endDate,
@@ -155,7 +184,32 @@ define(function(require) {
             };
             this.listenToOnce(this.collection, 'reset', triggerExport);
             this.refreshStationEntryLogList();
-        }
+        },
+        onChangeStationFilterOnly: function() {
+            var showNoc = this.$('#filter-station-entry-tc').is(':checked');
+            var showDol = this.$('#filter-station-entry-td').is(':checked');
+            var stationSelected = this.$('#station-filter').val();
+            if (stationSelected !== null && stationSelected.length > 0){  
+                if (showDol){
+                    this.$('#filter-station-entry-td').prop('checked', false);
+                }
+                if (!showNoc){
+                    this.$('#filter-station-entry-tc').prop('checked', true);                
+                }
+            }
+        },
+        onChangeIncludeTDStationFilterOnly: function() {
+            var showDol = this.$('#filter-station-entry-td').is(':checked');
+            if (showDol) {
+                this.$('#station-filter').val('');
+            }
+        },
+        onChangeIncludeTCStationFilterOnly: function() {
+            var showNoc = this.$('#filter-station-entry-tc').is(':checked');
+            if (!showNoc) {
+                this.$('#station-filter').val('');
+            } 
+        }  
     });
 
     return PersonnelStationEntryLogListView;

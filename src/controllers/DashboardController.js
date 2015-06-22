@@ -10,6 +10,7 @@ define(function(require) {
             StationListView = require('views/StationListView'),
             PersonnelListView = require('views/PersonnelListView'),
             EditPurposeListView = require('views/EditPurposeListView'),
+            EditExclusionListView = require('views/EditExclusionListView'),
             StationEntryLogView = require('views/StationEntryLogView'),
             StationView = require('views/StationView'),
             PersonnelView = require('views/PersonnelView'),
@@ -17,6 +18,7 @@ define(function(require) {
             StationCollection = require('collections/StationCollection'),
             PersonnelCollection = require('collections/PersonnelCollection'),
             LookupDataItemCollection = require('collections/LookupDataItemCollection'),
+            EntryLogExclusionCollection = require('collections/EntryLogExclusionCollection'),
             ListItemCollection = require('collections/ListItemCollection'),
             PurposeCollection = require('collections/PurposeCollection'),
             StationEntryLogModel = require('models/StationEntryLogModel'),
@@ -26,6 +28,7 @@ define(function(require) {
             AppEventNamesEnum = require('enums/AppEventNamesEnum'),
             appEvents = require('events'),
             globals = require('globals'),
+            env = require('env'),
             utils = require('utils');
 
     /**
@@ -56,6 +59,7 @@ define(function(require) {
             this.listenTo(appEvents, AppEventNamesEnum.goToStationList, this.goToStationList);
             this.listenTo(appEvents, AppEventNamesEnum.goToPersonnelList, this.goToPersonnelList);
             this.listenTo(appEvents, AppEventNamesEnum.goToMaintainPurposes, this.goToMaintainPurposes);
+            this.listenTo(appEvents, AppEventNamesEnum.goToMaintainExclusions, this.goToMaintainExclusions);
 
             this.listenTo(appEvents, AppEventNamesEnum.goToStationEntryLogWithId, this.goToStationEntryLogWithId);
             this.listenTo(appEvents, AppEventNamesEnum.goToStationWithId, this.goToStationWithId);
@@ -64,7 +68,10 @@ define(function(require) {
             this.listenTo(appEvents, AppEventNamesEnum.refreshStationEntryLogList, this.refreshStationEntryLogList);
             this.listenTo(appEvents, AppEventNamesEnum.refreshStationList, this.refreshStationList);
             this.listenTo(appEvents, AppEventNamesEnum.refreshPersonnelList, this.refreshPersonnelList);
+            this.listenTo(appEvents, AppEventNamesEnum.refreshOverridePersonnelList, this.refreshOverridePersonnelList);
             this.listenTo(appEvents, AppEventNamesEnum.refreshMaintainPurposes, this.refreshMaintainPurposes);
+            this.listenTo(appEvents, AppEventNamesEnum.refreshMaintainExclusions, this.refreshMaintainExclusions);
+            this.listenTo(appEvents, AppEventNamesEnum.refreshStationWarningList, this.refreshStationWarningList);
 
             this.listenTo(appEvents, AppEventNamesEnum.checkIn, this.checkIn);
             this.listenTo(appEvents, AppEventNamesEnum.checkOut, this.checkOut);
@@ -76,8 +83,21 @@ define(function(require) {
             this.listenTo(appEvents, AppEventNamesEnum.addItem, this.addItem);
             this.listenTo(appEvents, AppEventNamesEnum.updateItem, this.updateItem);
 
+            this.listenTo(appEvents, AppEventNamesEnum.addExclusion, this.addExclusion);
+            this.listenTo(appEvents, AppEventNamesEnum.deleteExclusion, this.deleteExclusion);
+
+            this.listenTo(appEvents, AppEventNamesEnum.addLinkedStation, this.addLinkedStation);
+            this.listenTo(appEvents, AppEventNamesEnum.clearLinkedStation, this.clearLinkedStation);
+            this.listenTo(appEvents, AppEventNamesEnum.refreshLinkedStationDetails, this.refreshLinkedStationDetails);
+            this.listenTo(appEvents, AppEventNamesEnum.getToaStation, this.getToaStation);
+
             this.listenTo(appEvents, AppEventNamesEnum.goToDirectionsWithLatLng, this.goToDirectionsWithLatLng);
             this.listenTo(appEvents, AppEventNamesEnum.goToExportStationEntryLogList, this.goToExportStationEntryLogList);
+            
+            this.listenTo(appEvents, AppEventNamesEnum.addWarning, this.addStationWarning);
+            this.listenTo(appEvents, AppEventNamesEnum.clearWarning, this.clearStationWarning);
+            this.listenTo(appEvents, AppEventNamesEnum.updateWarning, this.updateStationWarning);
+            
         },
         goToStationEntryLogList: function(options) {
             console.trace('DashboardController.goToStationEntryLogList');
@@ -92,6 +112,10 @@ define(function(require) {
             var regionCollection = new ListItemCollection();
             var areaCompleteCollection = new ListItemCollection();
             var areaCollection = new ListItemCollection();
+            var dolRegionCompleteCollection = new ListItemCollection();
+            var dolRegionCollection = new ListItemCollection();
+            var dolAreaCompleteCollection = new ListItemCollection();
+            var dolAreaCollection = new ListItemCollection();
             var stationEntryLogListViewInstance = new StationEntryLogListView({
                 controller: currentContext,
                 dispatcher: currentContext.dispatcher,
@@ -101,7 +125,11 @@ define(function(require) {
                 regionCompleteCollection: regionCompleteCollection,
                 regionCollection: regionCollection,
                 areaCompleteCollection: areaCompleteCollection,
-                areaCollection: areaCollection
+                areaCollection: areaCollection,
+                dolRregionCompleteCollection: dolRegionCompleteCollection,
+                dolRegionCollection: dolRegionCollection,
+                dolAreaCompleteCollection: dolAreaCompleteCollection,
+                dolAreaCollection: dolAreaCollection
             });
 
             currentContext.router.swapContent(stationEntryLogListViewInstance);
@@ -109,17 +137,18 @@ define(function(require) {
             currentContext.router.navigate('stationEntryLog', {replace: fragmentAlreadyMatches});
 
             stationEntryLogListViewInstance.showLoading();
-            $.when(currentContext.dashboardService.getStationEntryLogs({onlyOpen: true})).done(function(getStationEntryLogsResponse) {
-                currentContext.dispatcher.trigger(AppEventNamesEnum.userRoleUpdated, getStationEntryLogsResponse.userRole);
-                stationEntryLogListViewInstance.setUserRole(getStationEntryLogsResponse.userRole);
-                stationEntryLogCollection.reset(getStationEntryLogsResponse.stationEntryLogs);
-                stationIdentifierCompleteCollection.reset(getStationEntryLogsResponse.stationIdentifiers);
-                stationIdentifierCollection.reset(getStationEntryLogsResponse.stationIdentifiers);
-                regionCompleteCollection.reset(getStationEntryLogsResponse.regions);
-                regionCollection.reset(getStationEntryLogsResponse.regions);
-                areaCompleteCollection.reset(getStationEntryLogsResponse.areas);
-                areaCollection.reset(getStationEntryLogsResponse.areas);
-                if (options && options.stationEntryLog) {
+            $.when(currentContext.dashboardService.getStationEntryLogs({onlyOpen: true, showNoc: true, showDol: true})).done(function(getStationEntryLogsResponse) {
+                var getStationEntryLogsData = getStationEntryLogsResponse;
+                currentContext.dispatcher.trigger(AppEventNamesEnum.userRoleUpdated, getStationEntryLogsData.userRole);
+                stationEntryLogListViewInstance.setUserRole(getStationEntryLogsData.userRole);
+                stationEntryLogCollection.reset(getStationEntryLogsData.stationEntryLogs);
+
+                if (options && options.stationEntryLog.isCheckOutAction) {
+                    var userName = options.stationEntryLog.userName;
+                    var stationName = options.stationEntryLog.stationName;
+                    var checkOutSucessMessage = 'Successful check-out for ' + userName + ' at ' + stationName;
+                    stationEntryLogListViewInstance.showSuccess(checkOutSucessMessage);
+                } else if (options && options.stationEntryLog) {
                     var userName = options.stationEntryLog.userName;
                     var stationName = options.stationEntryLog.stationName;
                     var updateCheckInSucessMessage = 'Successful update of check-in for ' + userName + ' at ' + stationName;
@@ -128,11 +157,30 @@ define(function(require) {
                 deferred.resolve(stationEntryLogListViewInstance);
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 stationEntryLogCollection.reset();
-                stationEntryLogListViewInstance.showError(textStatus);
+                if (jqXHR.status === 500) {
+                    var guid = env.getNewGuid();
+                    stationEntryLogListViewInstance.addAlertBox(guid, 'alert', 'Critical Error: Please call the IT Service Desk.');
+                } else {
+                    stationEntryLogListViewInstance.showError(textStatus);
+                }
                 deferred.reject({
                     stationEntryLogListView: stationEntryLogListViewInstance,
                     error: textStatus
                 });
+            });
+
+            $.when(currentContext.dashboardService.getFilters({showDol: true})).done(function(getFiltersResponse) {
+                var getFiltersData = getFiltersResponse;
+                stationIdentifierCompleteCollection.reset(getFiltersData.stationIdentifiers);
+                stationIdentifierCollection.reset(getFiltersData.stationIdentifiers);
+                regionCompleteCollection.reset(getFiltersData.regions);
+                regionCollection.reset(getFiltersData.regions);
+                areaCompleteCollection.reset(getFiltersData.areas);
+                areaCollection.reset(getFiltersData.areas);
+                dolRegionCompleteCollection.reset(getFiltersData.dolRegions);
+                dolRegionCollection.reset(getFiltersData.dolRegions);
+                dolAreaCompleteCollection.reset(getFiltersData.dolAreas);
+                dolAreaCollection.reset(getFiltersData.dolAreas);
             });
 
             return deferred.promise();
@@ -150,6 +198,10 @@ define(function(require) {
             var regionCollection = new ListItemCollection();
             var areaCompleteCollection = new ListItemCollection();
             var areaCollection = new ListItemCollection();
+            var dolRegionCompleteCollection = new ListItemCollection();
+            var dolRegionCollection = new ListItemCollection();
+            var dolAreaCompleteCollection = new ListItemCollection();
+            var dolAreaCollection = new ListItemCollection();
             var stationEntryLogHistoryListViewInstance = new StationEntryLogHistoryListView({
                 controller: currentContext,
                 dispatcher: currentContext.dispatcher,
@@ -159,31 +211,49 @@ define(function(require) {
                 regionCompleteCollection: regionCompleteCollection,
                 regionCollection: regionCollection,
                 areaCompleteCollection: areaCompleteCollection,
-                areaCollection: areaCollection
+                areaCollection: areaCollection,
+                dolRregionCompleteCollection: dolRegionCompleteCollection,
+                dolRegionCollection: dolRegionCollection,
+                dolAreaCompleteCollection: dolAreaCompleteCollection,
+                dolAreaCollection: dolAreaCollection
             });
 
             currentContext.router.swapContent(stationEntryLogHistoryListViewInstance);
             currentContext.router.navigate('stationEntryLogHistory');
 
             stationEntryLogHistoryListViewInstance.showLoading();
-            $.when(currentContext.dashboardService.getStationEntryLogs({onlyCheckedOut: true})).done(function(getStationEntryLogsResponse) {
-                currentContext.dispatcher.trigger(AppEventNamesEnum.userRoleUpdated, getStationEntryLogsResponse.userRole);
-                stationEntryLogHistoryListViewInstance.setUserRole(getStationEntryLogsResponse.userRole);
-                stationEntryLogCollection.reset(getStationEntryLogsResponse.stationEntryLogs);
-                stationIdentifierCompleteCollection.reset(getStationEntryLogsResponse.stationIdentifiers);
-                stationIdentifierCollection.reset(getStationEntryLogsResponse.stationIdentifiers);
-                regionCompleteCollection.reset(getStationEntryLogsResponse.regions);
-                regionCollection.reset(getStationEntryLogsResponse.regions);
-                areaCompleteCollection.reset(getStationEntryLogsResponse.areas);
-                areaCollection.reset(getStationEntryLogsResponse.areas);
+            $.when(currentContext.dashboardService.getStationEntryLogs({onlyCheckedOut: true, showNoc: true, showDol: true})).done(function(getStationEntryLogsResponse) {
+                var getStationEntryLogsData = getStationEntryLogsResponse;
+                currentContext.dispatcher.trigger(AppEventNamesEnum.userRoleUpdated, getStationEntryLogsData.userRole);
+                stationEntryLogHistoryListViewInstance.setUserRole(getStationEntryLogsData.userRole);
+                stationEntryLogCollection.reset(getStationEntryLogsData.stationEntryLogs);
                 deferred.resolve(stationEntryLogHistoryListViewInstance);
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 stationEntryLogCollection.reset();
-                stationEntryLogHistoryListViewInstance.showError(textStatus);
+                if (jqXHR.status === 500) {
+                    var guid = env.getNewGuid();
+                    stationEntryLogHistoryListViewInstance.addAlertBox(guid, 'alert', 'Critical Error: Please call the IT Service Desk.');
+                } else {
+                    stationEntryLogHistoryListViewInstance.showError(textStatus);
+                }
                 deferred.reject({
                     stationEntryLogHistoryListView: stationEntryLogHistoryListViewInstance,
                     error: textStatus
                 });
+            });
+
+            $.when(currentContext.dashboardService.getFilters({showDol: true})).done(function(getFiltersResponse) {
+                var getFiltersData = getFiltersResponse;
+                stationIdentifierCompleteCollection.reset(getFiltersData.stationIdentifiers);
+                stationIdentifierCollection.reset(getFiltersData.stationIdentifiers);
+                regionCompleteCollection.reset(getFiltersData.regions);
+                regionCollection.reset(getFiltersData.regions);
+                areaCompleteCollection.reset(getFiltersData.areas);
+                areaCollection.reset(getFiltersData.areas);
+                dolRegionCompleteCollection.reset(getFiltersData.dolRegions);
+                dolRegionCollection.reset(getFiltersData.dolRegions);
+                dolAreaCompleteCollection.reset(getFiltersData.dolAreas);
+                dolAreaCollection.reset(getFiltersData.dolAreas);
             });
 
             return deferred.promise();
@@ -218,23 +288,33 @@ define(function(require) {
 
             stationListViewInstance.showLoading();
             $.when(currentContext.dashboardService.getStations()).done(function(getStationsResponse) {
-                currentContext.dispatcher.trigger(AppEventNamesEnum.userRoleUpdated, getStationsResponse.userRole);
-                stationListViewInstance.setUserRole(getStationsResponse.userRole);
-                stationCollection.reset(getStationsResponse.stations);
-                stationIdentifierCompleteCollection.reset(getStationsResponse.stationIdentifiers);
-                stationIdentifierCollection.reset(getStationsResponse.stationIdentifiers);
-                regionCompleteCollection.reset(getStationsResponse.regions);
-                regionCollection.reset(getStationsResponse.regions);
-                areaCompleteCollection.reset(getStationsResponse.areas);
-                areaCollection.reset(getStationsResponse.areas);
+                var getStationsData = getStationsResponse;
+                currentContext.dispatcher.trigger(AppEventNamesEnum.userRoleUpdated, getStationsData.userRole);
+                stationListViewInstance.setUserRole(getStationsData.userRole);
+                stationCollection.reset(getStationsData.stations);
                 deferred.resolve(stationListViewInstance);
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 stationCollection.reset();
-                stationListViewInstance.showError(textStatus);
+                if (jqXHR.status === 500) {
+                    var guid = env.getNewGuid();
+                    stationListViewInstance.addAlertBox(guid, 'alert', 'Critical Error: Please call the IT Service Desk.');
+                } else {
+                    stationListViewInstance.showError(textStatus);
+                }
                 deferred.reject({
                     stationListView: stationListViewInstance,
                     error: textStatus
                 });
+            });
+
+            $.when(currentContext.dashboardService.getFilters({showDol: true})).done(function(getFiltersResponse) {
+                var getFiltersData = getFiltersResponse;
+                stationIdentifierCompleteCollection.reset(getFiltersData.stationIdentifiers);
+                stationIdentifierCollection.reset(getFiltersData.stationIdentifiers);
+                regionCompleteCollection.reset(getFiltersData.regions);
+                regionCollection.reset(getFiltersData.regions);
+                areaCompleteCollection.reset(getFiltersData.areas);
+                areaCollection.reset(getFiltersData.areas);
             });
 
             return deferred.promise();
@@ -264,8 +344,16 @@ define(function(require) {
                 deferred.resolve(personnelListViewInstance);
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 personnelCollection.reset();
-                personnelListViewInstance.showError(textStatus);
-                deferred.reject(textStatus);
+                if (jqXHR.status === 500) {
+                    var guid = env.getNewGuid();
+                    personnelListViewInstance.addAlertBox(guid, 'alert', 'Critical Error: Please call the IT Service Desk.');
+                } else {
+                    personnelListViewInstance.showError(textStatus);
+                }
+                deferred.reject({
+                    personnelListView: personnelListViewInstance,
+                    error: textStatus
+                });
             });
 
             return deferred.promise();
@@ -274,7 +362,6 @@ define(function(require) {
             console.trace('DashboardController.goToMaintainPurposes');
             var currentContext = this,
                     deferred = $.Deferred();
-
 
             var purposeCollection = new PurposeCollection();
             var durationCollection = new LookupDataItemCollection();
@@ -297,7 +384,12 @@ define(function(require) {
                 deferred.resolve(purposeMaintenanceViewInstance);
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 purposeCollection.reset();
-                purposeMaintenanceViewInstance.showError(textStatus);
+                if (jqXHR.status === 500) {
+                    var guid = env.getNewGuid();
+                    purposeMaintenanceViewInstance.addAlertBox(guid, 'alert', 'Critical Error: Please call the IT Service Desk.');
+                } else {
+                    purposeMaintenanceViewInstance.showError(textStatus);
+                }
                 deferred.reject({
                     purposeMaintenanceView: purposeMaintenanceViewInstance,
                     error: textStatus
@@ -306,12 +398,50 @@ define(function(require) {
 
             return deferred.promise();
         },
-        goToStationEntryLogWithId: function(stationEntryLogId, referringAppEvent, personnelViewOptions) {
+        goToMaintainExclusions: function() {
+            console.trace('DashboardController.goToMaintainExclusions');
+            var currentContext = this,
+                    deferred = $.Deferred();
+
+            var entryLogExclusionCollection = new EntryLogExclusionCollection();
+            var exclusionMaintenanceViewInstance = new EditExclusionListView({
+                controller: currentContext,
+                dispatcher: currentContext.dispatcher,
+                collection: entryLogExclusionCollection
+            });
+
+            currentContext.router.swapContent(exclusionMaintenanceViewInstance);
+            currentContext.router.navigate('maintenance/exclusions');
+
+            exclusionMaintenanceViewInstance.showLoading();
+            $.when(currentContext.dashboardService.getEntryLogExclusions()).done(function(getEntryLogExclusionsResponse) {
+                currentContext.dispatcher.trigger(AppEventNamesEnum.userRoleUpdated, getEntryLogExclusionsResponse.userRole);
+                exclusionMaintenanceViewInstance.setUserRole(getEntryLogExclusionsResponse.userRole);
+                entryLogExclusionCollection.reset(getEntryLogExclusionsResponse.entryLogExclusions);
+                deferred.resolve(exclusionMaintenanceViewInstance);
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                entryLogExclusionCollection.reset();
+                if (jqXHR.status === 500) {
+                    var guid = env.getNewGuid();
+                    exclusionMaintenanceViewInstance.addAlertBox(guid, 'alert', 'Critical Error: Please call the IT Service Desk.');
+                } else {
+                    exclusionMaintenanceViewInstance.showError(textStatus);
+                }
+
+                deferred.reject({
+                    exclusionMaintenanceView: exclusionMaintenanceViewInstance,
+                    error: textStatus
+                });
+            });
+
+            return deferred.promise();
+        },
+        goToStationEntryLogWithId: function(stationEntryLogId, referringAppEvent, personnelViewOptions, selectedStationEntryLogOptions) {
             console.trace('DashboardController.goToStationEntryLogWithId');
             var currentContext = this,
                     deferred = $.Deferred();
 
-            var stationEntryLogModelInstance = new StationEntryLogModel({stationEntryLogId: stationEntryLogId});
+            var stationEntryLogModelInstance = new StationEntryLogModel({stationEntryLogId: stationEntryLogId, showNoc: true});
             var durationCollection = new LookupDataItemCollection();
             var stationEntryLogViewInstance = new StationEntryLogView({
                 controller: currentContext,
@@ -319,7 +449,8 @@ define(function(require) {
                 model: stationEntryLogModelInstance,
                 durationCollection: durationCollection,
                 referringAppEvent: referringAppEvent,
-                personnelViewOptions: personnelViewOptions
+                personnelViewOptions: personnelViewOptions,
+                selectedStationEntryLogOptions: selectedStationEntryLogOptions
             });
 
             currentContext.router.swapContent(stationEntryLogViewInstance);
@@ -331,18 +462,38 @@ define(function(require) {
                 if (getStationEntryLogResults[0].stationEntryLogs && getStationEntryLogResults[0].stationEntryLogs.length > 0) {
                     stationEntryLogViewInstance.setUserRole(getStationEntryLogResults[0].userRole);
                     stationEntryLogModelInstance.set(getStationEntryLogResults[0].stationEntryLogs[0]);
+                    if (typeof selectedStationEntryLogOptions !== 'undefined') {
+                        if (selectedStationEntryLogOptions.isCheckOutAction) {
+                            stationEntryLogViewInstance.setCheckOutAction(selectedStationEntryLogOptions.isCheckOutAction);
+                        }
+                        if (selectedStationEntryLogOptions.isViewOnlyAction) {
+                            stationEntryLogViewInstance.setViewOnlyAction(selectedStationEntryLogOptions.isViewOnlyAction);
+                        }
+                    }
                     stationEntryLogViewInstance.setInitialFieldFocus();
                     durationCollection.reset(getOptionsResults[0].durations);
+                    stationEntryLogViewInstance.trigger('loaded');
                     deferred.resolve(stationEntryLogViewInstance);
                 } else {
                     stationEntryLogModelInstance.clear();
                     stationEntryLogViewInstance.showError('not found!');
-                    deferred.reject('not found!');
+                    deferred.reject({
+                        stationEntryLogView: stationEntryLogViewInstance,
+                        error: 'not found!'
+                    });
                 }
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 stationEntryLogModelInstance.clear();
-                stationEntryLogViewInstance.showError(textStatus);
-                deferred.reject(textStatus);
+                if (jqXHR.status === 500) {
+                    var guid = env.getNewGuid();
+                    stationEntryLogViewInstance.addAlertBox(guid, 'alert', 'Critical Error: Please call the IT Service Desk.');
+                } else {
+                    stationEntryLogViewInstance.showError(textStatus);
+                }
+                deferred.reject({
+                    stationEntryLogView: stationEntryLogViewInstance,
+                    error: textStatus
+                });
             });
 
             return deferred.promise();
@@ -372,12 +523,23 @@ define(function(require) {
                 } else {
                     stationModelInstance.clear();
                     stationViewInstance.showError('not found!');
-                    deferred.reject('not found!');
+                    deferred.reject({
+                        stationView: stationViewInstance,
+                        error: 'not found!'
+                    });
                 }
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 stationModelInstance.clear();
-                stationViewInstance.showError(textStatus);
-                deferred.reject(textStatus);
+                if (jqXHR.status === 500) {
+                    var guid = env.getNewGuid();
+                    stationViewInstance.addAlertBox(guid, 'alert', 'Critical Error: Please call the IT Service Desk.');
+                } else {
+                    stationViewInstance.showError(textStatus);
+                }
+                deferred.reject({
+                    stationView: stationViewInstance,
+                    error: textStatus
+                });
             });
 
             return deferred.promise();
@@ -416,8 +578,17 @@ define(function(require) {
                 }
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 personnelModelInstance.clear();
+                if (jqXHR.status === 500) {
+                    var guid = env.getNewGuid();
+                    personnelViewInstance.addAlertBox(guid, 'alert', 'Critical Error: Please call the IT Service Desk.');
+                } else {
+                    personnelViewInstance.showError(textStatus);
+                }
                 personnelViewInstance.showError(textStatus);
-                deferred.reject(textStatus);
+                deferred.reject({
+                    personnelView: personnelViewInstance,
+                    error: textStatus
+                });
             });
 
             return deferred.promise();
@@ -467,6 +638,21 @@ define(function(require) {
 
             return deferred.promise();
         },
+        refreshOverridePersonnelList: function(personnelCollection, options) {
+            console.trace('DashboardController.refreshOverridePersonnelList');
+            var currentContext = this,
+                    deferred = $.Deferred();
+
+            $.when(currentContext.dashboardService.getOverridePersonnels(options)).done(function(getPersonnelsResponse) {
+                personnelCollection.reset(getPersonnelsResponse.personnels);
+                deferred.resolve(getPersonnelsResponse);
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                personnelCollection.reset();
+                deferred.reject(textStatus);
+            });
+
+            return deferred.promise();
+        },
         refreshMaintainPurposes: function(purposeCollection, options) {
             console.trace('DashboardController.refreshMaintainPurposes');
             var currentContext = this,
@@ -482,6 +668,21 @@ define(function(require) {
 
             return deferred.promise();
         },
+        refreshMaintainExclusions: function(entryLogExclusionCollection, options) {
+            console.trace('DashboardController.refreshMaintainExclusions');
+            var currentContext = this,
+                    deferred = $.Deferred();
+
+            $.when(currentContext.dashboardService.getEntryLogExclusions()).done(function(getEntryLogExclusionsResponse) {
+                entryLogExclusionCollection.reset(getEntryLogExclusionsResponse.entryLogExclusions);
+                deferred.resolve(getEntryLogExclusionsResponse);
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                entryLogExclusionCollection.reset();
+                deferred.reject(textStatus);
+            });
+
+            return deferred.promise();
+        },
         refreshOptions: function(options) {
             options || (options = {});
             console.trace('DashboardController.refreshOptions');
@@ -491,9 +692,6 @@ define(function(require) {
             $.when(currentContext.dashboardService.getOptions()).done(function(getOptionsResponse) {
                 if (options.userRole) {
                     options.userRole = getOptionsResponse.userRole;
-                }
-                if (options.stationIdentifierCollection) {
-                    options.stationIdentifierCollection.reset(getOptionsResponse.stationIdentifiers);
                 }
                 if (options.purposeCollection) {
                     options.purposeCollection.reset(getOptionsResponse.purposes);
@@ -517,9 +715,6 @@ define(function(require) {
             $.when(currentContext.dashboardService.getOptions()).done(function(getOptionsResponse) {
                 if (options.userRole) {
                     options.userRole = getOptionsResponse.userRole;
-                }
-                if (options.stationIdentifierCollection) {
-                    options.stationIdentifierCollection.reset(getOptionsResponse.stationIdentifiers);
                 }
                 if (options.purposeCollection) {
                     options.purposeCollection.reset(_.where(getOptionsResponse.purposes, {itemEnabled: true}));
@@ -547,10 +742,11 @@ define(function(require) {
                 if (jqXHR.status === 409 && jqXHR.responseText) {
                     errorMessage = jqXHR.responseText;
                 }
-                if (jqXHR.status === 409 || jqXHR.status === 403) {
-                    errorMessage = jqXHR.responseText;
+                if (jqXHR.status === 403 && jqXHR.responseJSON && jqXHR.responseJSON.hazardFlag) {
+                    appEvents.trigger(AppEventNamesEnum.checkInFailedWithHazard, jqXHR.responseJSON);
+                } else {
+                    appEvents.trigger(AppEventNamesEnum.checkInError, errorMessage);
                 }
-                appEvents.trigger(AppEventNamesEnum.checkInError, errorMessage);
                 deferred.reject(errorMessage);
             });
 
@@ -571,7 +767,11 @@ define(function(require) {
                     msg = 'The user is already checked-out.';
                 }
                 if (jqXHR.status === 403) {
-                    msg = 'You do not have permission to check-out this user.';
+                    if (jqXHR.responseJSON && jqXHR.responseJSON.hazardFlag) {
+                        appEvents.trigger(AppEventNamesEnum.checkOutFailedWithHazard, jqXHR.responseJSON);
+                    } else {
+                        msg = 'You do not have permission to check-out this user.';
+                    }
                 }
                 appEvents.trigger(AppEventNamesEnum.checkOutError, msg);
                 deferred.reject(msg);
@@ -594,7 +794,11 @@ define(function(require) {
                     msg = 'The user is already checked-out.';
                 }
                 if (jqXHR.status === 403) {
-                    msg = 'You do not have permission to check-out this user.';
+                    if (jqXHR.responseJSON && jqXHR.responseJSON.hazardFlag) {
+                        appEvents.trigger(AppEventNamesEnum.updateCheckInFailedWithHazard, jqXHR.responseJSON);
+                    } else {
+                        msg = 'You do not have permission to check-out this user.';
+                    }
                 }
 
                 appEvents.trigger(AppEventNamesEnum.updateCheckInError, msg);
@@ -634,9 +838,108 @@ define(function(require) {
 
             return deferred.promise();
         },
-        goToDirectionsWithLatLng: function(latitude, longitude) {
+        addExclusion: function(entryLogExclusionModel) {
+            console.trace('DashboardController.addExclusion');
+            var currentContext = this,
+                    deferred = $.Deferred();
+
+            $.when(currentContext.dashboardService.postAddEntryLogExclusion(entryLogExclusionModel.attributes)).done(function(postAddEntryLogExclusionResponse) {
+                //set the id
+                entryLogExclusionModel.trigger(AppEventNamesEnum.addExclusionSuccess, postAddEntryLogExclusionResponse.entryLogExclusion);
+                deferred.resolve(postAddEntryLogExclusionResponse);
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                entryLogExclusionModel.trigger(AppEventNamesEnum.addExclusionError, 'error');
+                deferred.reject('error');
+            });
+
+            return deferred.promise();
+        },
+        deleteExclusion: function(entryLogExclusionModel) {
+            console.trace('DashboardController.deleteExclusion');
+            var currentContext = this,
+                    deferred = $.Deferred();
+
+            $.when(currentContext.dashboardService.postDeleteEntryLogExclusion(entryLogExclusionModel.attributes)).done(function(postDeleteEntryLogExclusionResults) {
+                entryLogExclusionModel.trigger(AppEventNamesEnum.deleteExclusionSuccess, postDeleteEntryLogExclusionResults.entryLogExclusion);
+                deferred.resolve(postDeleteEntryLogExclusionResults);
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                entryLogExclusionModel.trigger(AppEventNamesEnum.deleteExclusionError, 'error');
+                deferred.reject('error');
+            });
+
+            return deferred.promise();
+        },
+        addLinkedStation: function(stationModel) {
+            console.trace('DashboardController.addLinkedStation');
+            var currentContext = this,
+                    deferred = $.Deferred();
+
+            $.when(currentContext.dashboardService.postAddLinkedStation(stationModel.attributes)).done(function(postAddLinkedStationResults) {
+                stationModel.set(postAddLinkedStationResults.station);
+                stationModel.trigger(AppEventNamesEnum.addLinkedStationSuccess, postAddLinkedStationResults.station);
+                deferred.resolve(postAddLinkedStationResults);
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                stationModel.trigger(AppEventNamesEnum.addLinkedStationError, jqXHR.responseText);
+                deferred.reject('error');
+            });
+
+            return deferred.promise();
+        },
+        clearLinkedStation: function(stationModel) {
+            console.trace('DashboardController.clearLinkedStation');
+            var currentContext = this,
+                    deferred = $.Deferred();
+
+            $.when(currentContext.dashboardService.postClearLinkedStation(stationModel.attributes)).done(function(postClearLinkedStationResults) {
+                stationModel.set(postClearLinkedStationResults.station);
+                stationModel.trigger(AppEventNamesEnum.clearLinkedStationSuccess, postClearLinkedStationResults.station);
+                deferred.resolve(postClearLinkedStationResults);
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                stationModel.trigger(AppEventNamesEnum.clearLinkedStationError, jqXHR.responseText);
+                deferred.reject('error');
+            });
+
+            return deferred.promise();
+        },
+        refreshLinkedStationDetails: function(newDolStationViewInstance, options) {
+            console.trace('DashboardController.refreshLinkedStationDetails');
+            var currentContext = this,
+                    deferred = $.Deferred();
+
+            $.when(currentContext.dashboardService.getLinkedStation(options)).done(function(getStationResponse) {
+                newDolStationViewInstance.set(getStationResponse[0]);
+                deferred.resolve(getStationResponse);
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                newDolStationViewInstance.clear();
+                deferred.reject(textStatus);
+            });
+
+            return deferred.promise();
+        },
+        getToaStation: function(options) {
+            console.trace('DashboardController.getToaStation');
+            var currentContext = this,
+                    deferred = $.Deferred();
+
+            $.when(currentContext.dashboardService.getLinkedStation(options)).done(function(getStationResponse) {
+                var linkedStationData = getStationResponse.stations[0];
+                appEvents.trigger(AppEventNamesEnum.getToaStationSuccess, linkedStationData);
+                deferred.resolve(getStationResponse);
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                appEvents.trigger(AppEventNamesEnum.getToaStationError, errorThrown);
+                deferred.reject(textStatus);
+            });
+
+            return deferred.promise();
+        },
+        goToDirectionsWithLatLng: function(latitude, longitude, linkedLatitude, linkedLongitude) {
             console.trace('DashboardController.goToDirectionsWithLatLng');
-            var directionsUri = 'http://maps.google.com?daddr=' + latitude + ',' + longitude;
+            var directionsUri = '';
+            if (linkedLatitude && linkedLongitude) {
+                directionsUri = 'https://maps.google.com?t=k&saddr=' + latitude + ',' + longitude + '&daddr=' + linkedLatitude + ',' + linkedLongitude;
+            } else {
+                directionsUri = 'https://maps.google.com?t=k&q=loc:' + latitude + '+' + longitude;
+            }
             globals.window.open(directionsUri);
         },
         goToExportStationEntryLogList: function(stationEntryLogCollection, options) {
@@ -644,6 +947,69 @@ define(function(require) {
             var blob = new Blob([csv], {type: "text/csv;charset=utf-8"});
             var fileName = utils.getCSVFileName(options);
             saveAs(blob, fileName);
+        },
+        addStationWarning: function(stationWarningModel) {
+            console.trace('DashboardController.addStationWarning');
+            var currentContext = this,
+                    deferred = $.Deferred();
+
+            $.when(currentContext.dashboardService.postAddStationWarning(stationWarningModel.attributes)).done(function(postAddWarningResults) {
+                stationWarningModel.set(postAddWarningResults.stationWarning);
+                stationWarningModel.trigger(AppEventNamesEnum.addWarningSuccess, postAddWarningResults.stationWarning);
+                deferred.resolve(postAddWarningResults);
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                stationWarningModel.trigger(AppEventNamesEnum.addWarningError, jqXHR.responseText);
+                deferred.reject('error');
+            });
+
+            return deferred.promise();
+        },
+        updateStationWarning: function(stationWarningModel) {
+            console.trace('DashboardController.updateStationWarning');
+            var currentContext = this,
+                    deferred = $.Deferred();
+
+            $.when(currentContext.dashboardService.postUpdateStationWarning(stationWarningModel.attributes)).done(function(postUpdateWarningResults) {
+                stationWarningModel.set(postUpdateWarningResults.stationWarning);
+                stationWarningModel.trigger(AppEventNamesEnum.updateWarningSuccess, postUpdateWarningResults.stationWarning);
+                deferred.resolve(postUpdateWarningResults);
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                stationWarningModel.trigger(AppEventNamesEnum.updateWarningError, jqXHR.responseText);
+                deferred.reject('error');
+            });
+
+            return deferred.promise();
+        },
+        clearStationWarning: function(stationWarningModel) {
+            console.trace('DashboardController.clearStationWarning');
+            var currentContext = this,
+                    deferred = $.Deferred();
+
+            $.when(currentContext.dashboardService.postClearStationWarning(stationWarningModel.attributes)).done(function(postClearWarningResults) {
+                stationWarningModel.set(postClearWarningResults.stationWarning);
+                stationWarningModel.trigger(AppEventNamesEnum.clearWarningSuccess, postClearWarningResults.stationWarning);
+                deferred.resolve(postClearWarningResults);
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                stationWarningModel.trigger(AppEventNamesEnum.clearWarningError, jqXHR.responseText);
+                deferred.reject('error');
+            });
+
+            return deferred.promise();
+        },
+        refreshStationWarningList: function(stationWarningCollection, options) {
+            console.trace('DashboardController.refreshStationWarningList');
+            var currentContext = this,
+                    deferred = $.Deferred();
+
+            $.when(currentContext.dashboardService.getStationWarnings(options)).done(function(getStationWarningsResponse) {
+                stationWarningCollection.reset(getStationWarningsResponse.stationWarnings);
+                deferred.resolve(getStationWarningsResponse);
+            }).fail(function(jqXHR, textStatus, errorThrown) {
+                stationWarningCollection.trigger('error');
+                deferred.reject(textStatus);
+            });
+
+            return deferred.promise();
         }
     });
 

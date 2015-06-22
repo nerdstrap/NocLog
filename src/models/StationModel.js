@@ -40,6 +40,15 @@ define(function (require) {
             }
             return Backbone.Model.prototype.set.call(this, attributes, options);
         }
+//        validation: {
+//            linkedStationId: {
+//                required: function() {
+//                    return (this.get('linkedStationId') !== '');
+//                },
+//                pattern: 'digits',
+//                maxLength: 5
+//            }
+//        }
     });
 
     return StationModel;

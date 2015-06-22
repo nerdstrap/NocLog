@@ -11,6 +11,7 @@ define(function(require) {
             NewStationEntryLogView = require('views/NewStationEntryLogView'),
             AppEventNamesEnum = require('enums/AppEventNamesEnum'),
             UserRolesEnum = require('enums/UserRolesEnum'),
+            CheckInTypeEnum = require('enums/CheckInTypeEnum'),
             globals = require('globals'),
             env = require('env'),
             utils = require('utils'),
@@ -28,16 +29,24 @@ define(function(require) {
             this.stationIdentifierCompleteCollection = options.stationIdentifierCompleteCollection;
             this.regionCompleteCollection = options.regionCompleteCollection;
             this.areaCompleteCollection = options.areaCompleteCollection;
-			
+            
+            this.dolRegionCompleteCollection = options.dolRegionCompleteCollection;
+            this.dolAreaCompleteCollection = options.dolAreaCompleteCollection;
+
             this.stationIdentifierCollection = options.stationIdentifierCollection;
             this.regionCollection = options.regionCollection;
             this.areaCollection = options.areaCollection;
             this.purposeCollection = options.purposeCollection;
             this.durationCollection = options.durationCollection;
+            
+            this.dolRegionCollection = options.dolRegionCollection;
+            this.dolAreaCollection = options.dolAreaCollection;
 
             this.listenTo(this.stationIdentifierCollection, 'reset', this.addStationNameFilter);
             this.listenTo(this.regionCollection, 'reset', this.addRegionNameFilter);
             this.listenTo(this.areaCollection, 'reset', this.addAreaNameFilter);
+            this.listenTo(this.dolRegionCollection, 'reset', this.addDolRegionNameFilter);
+            this.listenTo(this.dolAreaCollection, 'reset', this.addDolAreaNameFilter);
             this.listenTo(this.collection, 'add', this.updateViewFromCollection);
             this.listenTo(this.collection, 'remove', this.updateViewFromCollection);
             this.listenTo(this.collection, 'reset', this.addAll);
@@ -58,6 +67,7 @@ define(function(require) {
             currentContext.$el.html(template(renderModel));
 
             currentContext.setAutRefreshInterval();
+            currentContext.onChangeIncludeTD();
 
             return this;
         },
@@ -72,9 +82,13 @@ define(function(require) {
             'click #new-station-entry-log-button': 'goToNewStationEntryLog',
             'click .close-alert-box-button': 'closeAlertBox',
             'click #export-station-entry-log-list-button': 'exportStationEntryLogList',
-			'change #station-filter': 'onChangeStationFilter',
-			'change #area-filter': 'onChangeAreaFilter',
-			'change #region-filter': 'onChangeRegionFilter'
+            'change #station-filter': 'onChangeStationFilter',
+            'change #area-filter': 'onChangeAreaFilter',
+            'change #region-filter': 'onChangeRegionFilter',
+            'click #filter-station-entry-td': 'onChangeIncludeTD',
+            'click #filter-station-entry-tc': 'onChangeIncludeTC',
+            'change #dol-area-filter': 'onChangeDolAreaFilter',
+            'change #dol-region-filter': 'onChangeDolRegionFilter'
         },
         addAll: function() {
             this.removeAll();
@@ -82,6 +96,7 @@ define(function(require) {
             _.each(this.collection.models, this.addOne, this);
             this.updateViewFromCollection();
             this.addSortIndicators();
+            this.listenToWindowResize();
             this.hideLoading();
         },
         removeAll: function() {
@@ -139,31 +154,52 @@ define(function(require) {
                 event.preventDefault();
             }
 
-            this.$('#status-filter').val('open');
+            //this.$('#status-filter').val('open');
+            this.$('#filter-station-entry-status-expired').prop('checked', false);
+            this.$('#filter-station-entry-tc').prop('checked', true);
+            this.$('#filter-station-entry-td').prop('checked', true);
             this.stationIdentifierCollection.reset(this.stationIdentifierCompleteCollection.models);
             this.$('#station-filter').val('');
-			this.$('#region-filter').val('');
-			this.areaCollection.reset(this.areaCompleteCollection.models);
+            this.$('#region-filter').val('');
+            this.areaCollection.reset(this.areaCompleteCollection.models);
             this.$('#area-filter').val('');
+            this.$('#dol-region-filter').val('');
+            this.dolAreaCollection.reset(this.dolAreaCompleteCollection.models);
+            this.$('#dol-area-filter').val('');
             this.collection.setSortAttribute('expectedOutTime');
 
             this.refreshStationEntryLogList();
         },
         refreshStationEntryLogList: function() {
             this.showLoading();
-            var status = this.$('#status-filter').val();
+            var showNoc = this.$('#filter-station-entry-tc').is(':checked');
+            var showDol = this.$('#filter-station-entry-td').is(':checked');
+            if (showNoc === false & showDol === false) {
+                this.$('#filter-station-entry-tc').prop('checked', true);
+                this.$('#filter-station-entry-td').prop('checked', true);
+                showDol = true;
+                showNoc = true;
+                this.onChangeIncludeTD();
+            }
             var stationId = this.$('#station-filter').val();
             var regionName = this.$('#region-filter').val();
             var areaName = this.$('#area-filter').val();
+            var dolRegionName = this.$('#dol-region-filter').val();
+            var dolAreaName = this.$('#dol-area-filter').val();
             var options = {
+                showNoc: showNoc,
+                showDol: showDol,
                 stationId: stationId,
                 regionName: regionName,
-                areaName: areaName
+                areaName: areaName,
+                dolRegionName: dolRegionName,
+                dolAreaName: dolAreaName
             };
-            if (status === 'open') {
-                options.onlyOpen = true;
-            } else {
+            var status_expired = this.$('#filter-station-entry-status-expired').is(':checked');
+            if (status_expired) {
                 options.onlyExpired = true;
+            } else {
+                options.onlyOpen = true;
             }
             this.dispatcher.trigger(AppEventNamesEnum.refreshStationEntryLogList, this.collection, options);
         },
@@ -172,10 +208,21 @@ define(function(require) {
                 event.preventDefault();
             }
             var currentContext = this;
+            var showNoc = this.$('#filter-station-entry-tc').is(':checked');
+            var showDol = this.$('#filter-station-entry-td').is(':checked');
+            if (showNoc === false & showDol === false) {
+                this.$('#filter-station-entry-tc').prop('checked', true);
+                this.$('#filter-station-entry-td').prop('checked', true);
+                showDol = true;
+                showNoc = true;
+                this.onChangeIncludeTD();
+            }
             var status = this.$('#status-filter').val();
             var stationId = this.$('#station-filter').val();
             var regionName = this.$('#region-filter').val();
             var areaName = this.$('#area-filter').val();
+            var dolRegionName = this.$('#dol-region-filter').val();
+            var dolAreaName = this.$('#dol-area-filter').val();
             var onlyCheckedOut = false;
             if (status === 'open') {
                 onlyCheckedOut = false;
@@ -183,10 +230,14 @@ define(function(require) {
                 onlyCheckedOut = true;
             }
             var options = {
+                showNoc: showNoc,
+                showDol: showDol,
                 status: status,
                 stationId: stationId,
                 areaName: areaName,
                 regionName: regionName,
+                dolAreaName: dolAreaName,
+                dolRegionName: dolRegionName,
                 onlyCheckedOut: onlyCheckedOut,
                 reportType: 'OpenStationEntryLogs'
             };
@@ -217,27 +268,26 @@ define(function(require) {
             var currentContext = this;
             this.hideNewStationEntryLogButton();
 
-            var newStationEntryLogModelInstance = new NewStationEntryLogModel();
-            var stationIdentifierCollection = new Backbone.Collection();
+            var newStationEntryLogModelInstance = new NewStationEntryLogModel({checkInType: CheckInTypeEnum.station});
             var purposeCollection = new LookupDataItemCollection();
             var durationCollection = new LookupDataItemCollection();
             currentContext.newStationEntryLogViewInstance = new NewStationEntryLogView({
                 model: newStationEntryLogModelInstance,
                 controller: currentContext,
                 dispatcher: currentContext.dispatcher,
-                stationIdentifierCollection: stationIdentifierCollection,
+                stationIdentifierCollection: currentContext.stationIdentifierCompleteCollection,
                 purposeCollection: purposeCollection,
-                durationCollection: durationCollection
+                durationCollection: durationCollection,
+                areaCollection: currentContext.areaCompleteCollection
             });
             currentContext.renderChildInto(currentContext.newStationEntryLogViewInstance, currentContext.$('#new-station-entry-log-view'));
 
             currentContext.newStationEntryLogViewInstance.showLoading();
             var options = {
-                stationIdentifierCollection: stationIdentifierCollection,
                 purposeCollection: purposeCollection,
                 durationCollection: durationCollection
             };
-            this.dispatcher.trigger(AppEventNamesEnum.refreshOptions, options);
+            this.dispatcher.trigger(AppEventNamesEnum.refreshFilters, options);
         },
         onCheckInSuccess: function(stationEntryLog) {
             if (this.newStationEntryLogViewInstance) {

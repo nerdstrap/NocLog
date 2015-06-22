@@ -1,0 +1,24 @@
+<div class="station-warning-list-item-view">
+    <div class="row collapse">
+        <div class="small-8 columns">
+            <span class="warning-input" data-station-warning-id="{{stationWarningId}}" data-last-confirmed-by="{{lastConfirmedBy}}" data-last-confirmed-date="{{lastConfirmedDate}}" data-first-reported-by="{{firstReportedBy}}" data-first-reported-date="{{firstReportedDate}}">{{warning}}</span>
+        </div>
+        <div class="small-4 columns">
+            <a class="confirm-warning-button button radius tiny" href="#">{{resource "confirmButtonText"}}&nbsp;<i class="fa fa-question"></i></a>
+            <a class="clear-warning-button button radius tiny warning" href="#">{{resource "clearButtonText"}}</a>
+        </div>
+    </div>
+    <div class="row collapse">
+        <div class="small-4 columns"><span class="detail">{{resource "firstReportedByHeaderText"}}&nbsp;{{firstReportedBy}}</span></div>
+        <div class="small-4 columns"><span class="detail">{{formatDate firstReportedDate "%D %I:%M %p"}}</span></div>
+        <div class="small-4 columns">&nbsp;</div>
+    </div>
+    <div id="last-confirmed-by-container" class="row collapse hidden">
+        <div class="small-4 columns"><span class="detail">{{resource "lastConfirmedByHeaderText"}}&nbsp;{{lastConfirmedBy}}</span></div>
+        <div class="small-4 columns"><span class="detail">{{formatDate lastConfirmedDate "%D %I:%M %p"}}</span></div>
+        <div class="small-4 columns">&nbsp;</div>
+    </div>
+    <div class="row collapse view-alerts">
+        <div class="small-12 columns"></div>
+    </div>
+</div>

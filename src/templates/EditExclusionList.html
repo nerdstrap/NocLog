@@ -1,0 +1,37 @@
+<div class="exclusion-list-view">
+    <div id="filter-and-list-header-area">
+        <div class="row collapse">
+            <div class="small-12 columns">
+                <h3>{{resource "exclusionList.viewTitleText"}}</h3>
+            </div>
+        </div>
+        <div class="row collapse">
+            <div class="small-2 columns">
+                <a id="refresh-exclusion-list-button" class="button radius" href="#">{{resource "refreshButtonText"}}</a>
+            </div>
+            <div class="small-10 columns">
+                <span>&nbsp;</span>
+            </div>
+        </div>
+        <div class="row collapse list-header-item-view">
+            <div class="small-12 columns">
+                <span>{{resource "userIdHeaderText"}}</span>
+            </div>
+        </div>
+        <div class="row collapse view-status hidden">
+            <div class="small-12 columns">
+                <span class="view-message">{{resource "exclusionList.loadingMessage"}}</span>
+                <img src="{{resource 'loadingIconSrc'}}" class="view-loading" />
+            </div>
+        </div>
+        <div class="row collapse view-alerts">
+            <div class="small-12 columns"></div>
+        </div>
+    </div>
+    <div class="row collapse scroll">
+        <div id="exclusion-list-item-container" class="small-12 columns">
+        </div>
+        <div id="add-exclusion-list-item-container" class="small-12 columns">
+        </div>
+    </div>
+</div>

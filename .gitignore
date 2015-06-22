@@ -230,3 +230,12 @@ $RECYCLE.BIN/
 .idea/vcs.xml
 
 .idea/workspace.xml
+
+.grunt/grunt-contrib-jasmine/boot.js
+.grunt/grunt-contrib-jasmine/es5-shim.js
+.grunt/grunt-contrib-jasmine/jasmine.css
+.grunt/grunt-contrib-jasmine/jasmine-html.js
+.grunt/grunt-contrib-jasmine/jasmine.js
+.grunt/grunt-contrib-jasmine/jasmine_favicon.png
+.grunt/grunt-contrib-jasmine/json2.js
+.grunt/grunt-contrib-jasmine/reporter.js

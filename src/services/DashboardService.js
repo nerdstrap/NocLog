@@ -28,6 +28,18 @@ define(function(require) {
                 url: env.getApiUrl() + '/station/find'
             });
         },
+        getLinkedStation: function(options) {
+            options || (options = {});
+            var data = $.param(options);
+
+            return $.ajax({
+                contentType: 'application/json',
+                data: data,
+                dataType: 'json',
+                type: 'GET',
+                url: env.getApiUrl() + '/station/linked'
+            });
+        },
         getStationEntryLogs: function(options) {
             options || (options = {});
             var data = $.param(options);
@@ -41,6 +53,18 @@ define(function(require) {
             });
         },
         getPersonnels: function(options) {
+            options || (options = {});
+            var data = $.param(options);
+
+            return $.ajax({
+                contentType: 'application/json',
+                data: data,
+                dataType: 'json',
+                type: 'GET',
+                url: env.getApiUrl() + '/personnel/find'
+            });
+        },
+        getOverridePersonnels: function(options) {
             options || (options = {});
             var data = $.param(options);
 
@@ -146,6 +170,114 @@ define(function(require) {
                 dataType: 'json',
                 type: 'PUT',
                 url: env.getApiUrl() + '/lookupDataItem/updateItem'
+            });
+        },
+        postAddLinkedStation: function(options) {
+            options || (options = {});
+            var data = JSON.stringify(options);
+
+            return $.ajax({
+                contentType: 'application/json',
+                data: data,
+                dataType: 'json',
+                type: 'PUT',
+                url: env.getApiUrl() + '/station/linked/add'
+            });
+        },
+        postClearLinkedStation: function(options) {
+            options || (options = {});
+            var data = JSON.stringify(options);
+
+            return $.ajax({
+                contentType: 'application/json',
+                data: data,
+                dataType: 'json',
+                type: 'PUT',
+                url: env.getApiUrl() + '/station/linked/clear'
+            });
+        },
+        getEntryLogExclusions: function(options) {
+            options || (options = {});
+            var data = $.param(options);
+
+            return $.ajax({
+                contentType: 'application/json',
+                data: data,
+                dataType: 'json',
+                type: 'GET',
+                url: env.getApiUrl() + '/admin/find/exclusions'
+            });
+        },
+        postAddEntryLogExclusion: function(options) {
+            options || (options = {});
+            var data = JSON.stringify(options);
+
+            return $.ajax({
+                contentType: 'application/json',
+                data: data,
+                dataType: 'json',
+                type: 'PUT',
+                url: env.getApiUrl() + '/admin/entryLogExclusion/add'
+            });
+        },
+        postDeleteEntryLogExclusion: function(options) {
+            options || (options = {});
+            var data = JSON.stringify(options);
+
+            return $.ajax({
+                contentType: 'application/json',
+                data: data,
+                dataType: 'json',
+                type: 'PUT',
+                url: env.getApiUrl() + '/admin/entryLogExclusion/delete'
+            });
+        },
+        postAddStationWarning: function(options) {
+            options || (options = {});
+            var data = JSON.stringify(options);
+
+            return $.ajax({
+                contentType: 'application/json',
+                data: data,
+                dataType: 'json',
+                type: 'PUT',
+                url: env.getApiUrl() + '/station/warning/add'
+            });
+        },
+        postUpdateStationWarning: function(options) {
+            options || (options = {});
+            var data = JSON.stringify(options);
+
+            return $.ajax({
+                contentType: 'application/json',
+                data: data,
+                dataType: 'json',
+                type: 'PUT',
+                url: env.getApiUrl() + '/station/warning/confirm'
+            });
+        },
+        postClearStationWarning: function(options) {
+            options || (options = {});
+            var data = JSON.stringify(options);
+
+            return $.ajax({
+                contentType: 'application/json',
+                data: data,
+                dataType: 'json',
+                type: 'PUT',
+                url: env.getApiUrl() + '/station/warning/clear'
+            });
+        },
+        getStationWarnings: function(options) {
+            options || (options = {});
+            var data = $.param(options);
+
+            return $.ajax({
+                contentType: 'application/json',
+                data: data,
+                dataType: 'json',
+                type: 'GET',
+                url: env.getApiUrl() + '/station/warning'
             });
         }
     });

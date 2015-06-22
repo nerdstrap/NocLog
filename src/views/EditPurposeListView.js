@@ -60,6 +60,7 @@ define(function(require) {
             this._leaveChildren();
             this.collection.add(new PurposeModel({itemType: 'STATION_ENTRY_PURPOSE'}));
             _.each(this.collection.models, this.addOne, this);
+            this.listenToWindowResize();
             this.hideLoading();
         },
         addOne: function(purpose) {

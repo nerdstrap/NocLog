@@ -4,15 +4,8 @@ define(function(require) {
     var $ = require('jquery'),
             _ = require('underscore'),
             Backbone = require('backbone'),
-            StationModel = require('models/StationModel');
-
-    var simpleComparator = function(a, b, sortDirection) {
-        if (sortDirection !== 1) {
-            return (a === b) ? 0 : (a < b) ? 1 : -1;
-        } else {
-            return (a === b) ? 0 : (a > b) ? 1 : -1;
-        }
-    };
+            StationModel = require('models/StationModel'),
+            utils = require('utils');
 
     var StationCollection = Backbone.Collection.extend({
         model: StationModel,
@@ -27,7 +20,7 @@ define(function(require) {
         },
         comparator: function(a, b) {
             var currentContext = this;
-            return simpleComparator(a.get(currentContext.sortAttribute), b.get(currentContext.sortAttribute), currentContext.sortDirection);
+            return utils.simpleComparator(a.get(currentContext.sortAttribute), b.get(currentContext.sortAttribute), currentContext.sortDirection);
 
         }
     });

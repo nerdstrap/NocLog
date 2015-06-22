@@ -10,12 +10,33 @@
     </div>
     <div class="row collapse">
         <div class="small-12 columns">
-            <h3 data-station-id="{{stationId}}">{{stationName}}</h3>
+            <h3 data-station-id="{{stationId}}">{{stationName}}&nbsp;
+                <span id="linked-station-icon" class="hidden"><i class="fa fa-link" title="{{resource 'linkedStationIconAlt'}}{{linkedStationName}}"></i></span>
+                <span id="station-warning-icon" class="hidden"><i class="fa fa-bullhorn" title="{{resource 'tcomStationWarningsIconAlt'}}"></i></span>
+            </h3>
         </div>
     </div>
     <div class="row collapse">
         <div class="small-12 columns">
-            <a class="directions-link" data-latitude="{{latitude}}" data-longitude="{{longitude}}" href="#">{{resource "goToMapButtonText"}}</a>
+            <a class="directions-link" data-latitude="{{latitude}}" data-longitude="{{longitude}}" href="#">{{resource "goToMapButtonText"}} <i class="fa fa-map-marker"></i></a>
+        </div>
+    </div>
+    <div id="warning-list-view-section" class="row">
+        <div class="small-6 columns">
+            <div class="panel callout">
+                <div class="row collapse section-header">
+                    <div class="small-12 columns">
+                        <span>{{resource "stationWarningsHeaderText"}}</span>
+                        <i class="fa fa-minus"></i>
+                    </div>
+                </div>
+                <div class="row collapse section-details">
+                    <div class="small-12 columns">
+                        <div id="warning-list-view-container">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <div id="station-view-section-container" class="row">
@@ -177,6 +198,77 @@
                             <div class="small-8 columns">
                                 <span class="detail">{{withDefault contactPostalCode "&nbsp;"}}</span>
                             </div>
+                        </div>
+                        <div class="row collapse">
+                            &nbsp;
+                        </div>
+                    </div>
+                </div>
+                <div class="row collapse section-header">
+                    <div class="small-12 columns">
+                        <span>Linked Station</span>
+                        <i class="fa fa-minus"></i>
+                    </div>
+                </div>
+                <div class="row collapse section-details" id="linked-station-section-details">
+                    <div class="small-12 columns">
+                        <div id="linked-station-add-container">
+                            <div class="row collapse">
+                                <div class="small-4 columns">
+                                    <span>Station is not linked.</span>
+                                </div>
+                                <div class="small-8 columns">
+                                    <a id="linked-station-add-button" class="button radius tiny hidden" href="#" style="float: right;">Add</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="linked-station-input-container" class="hidden">
+                            <div class="row collapse">
+                                <div class="small-4 columns">
+                                    <span id="inputStationLinkId">
+                                        <input id="linked-station-id-input" name="linkedStationId" type="text" placeholder="Enter T&D Station Id..." value="{{linkedStationId}}" />
+                                    </span>
+                                </div>
+                                <div class="small-8 columns">
+                                    &nbsp;<a id="linked-station-save-button" class="button radius tiny" href="#">{{resource "saveButtonText"}}</a>
+                                    <a id="linked-station-cancel-edit-button" class="button secondary radius tiny" href="#">{{resource "cancelButtonText"}}</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="linked-station-name-and-id" class="hidden">
+                            <div class="row collapse">
+                                <div class="small-4 columns">
+                                    <span>T&D Station Name</span>
+                                </div>
+                                <div class="small-8 columns">
+                                    <span class="detail" id="linkedStationName">{{linkedStationName}}</span>
+                                </div>
+                            </div>
+                            <div class="row collapse">
+                                <div class="small-4 columns">
+                                    <span>Station ID</span>
+                                </div>
+                                <div class="small-8 columns">
+                                    <span class="detail" id="linkedStationId">{{linkedStationId}}</span>
+                                    <a id="linked-station-edit-button" class="button radius tiny hidden" href="#" style="float: right;">Edit</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hidden" id="linked-station-details-panel">
+                    <div class="row collapse">
+                        &nbsp;
+                    </div>
+                    <div class="row collapse section-header" id="linked-station-details-header">
+                        <div class="small-12 columns">
+                            <span>Linked Station Details</span>
+                            <i class="fa fa-plus"></i>
+                        </div>
+                    </div>
+                    <div class="row collapse section-details hidden">
+                        <div class="small-12 columns">
+                            <div id="dol-station-view"></div>
                         </div>
                     </div>
                 </div>

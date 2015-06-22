@@ -45,6 +45,7 @@ define(function(require) {
             this.clearSortIndicators();
             _.each(this.collection.models, this.addOne, this);
             this.addSortIndicators();
+            this.listenToWindowResize();
             this.hideLoading();
         },
         addOne: function(personnel) {

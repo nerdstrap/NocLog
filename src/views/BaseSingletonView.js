@@ -17,10 +17,10 @@ define(function(require) {
     };
 
     _.extend(BaseSingletonView.prototype, CompositeView.prototype, {
-        addFilter: function(filterSelector, options, valuePropertyName, textPropertyName) {
+        addFilter: function(filterSelector, options, valuePropertyName, textPropertyName, nameOptionalProperty1, valueOptionalProperty1, nameOptionalProperty2, valueOptionalProperty2) {
             var filterRenderModel = {
                 defaultOption: utils.getResource('filterDefaultOption'),
-                options: utils.getFilterOptions(options, valuePropertyName, textPropertyName)
+                options: utils.getFilterOptions(options, valuePropertyName, textPropertyName, nameOptionalProperty1, valueOptionalProperty1, nameOptionalProperty2, valueOptionalProperty2)
             };
             this.$(filterSelector).html(filterTemplate(filterRenderModel));
         },

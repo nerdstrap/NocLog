@@ -60,13 +60,15 @@ define(function(require) {
         return {hours: hours, minutes: minutes};
     };
 
-    utils.getFilterOptions = function(collection, valuePropertyName, textPropertyName, optionalProperty1, optionalProperty2) {
+    utils.getFilterOptions = function(collection, valuePropertyName, textPropertyName, nameOptionalProperty1, valueOptionalProperty1, nameOptionalProperty2, valueOptionalProperty2) {
         return _.map(collection, function(value, key, list) {
             return {
                 'value': value.get(valuePropertyName),
                 'text': value.get(textPropertyName),
-				'data-option1': value.get(optionalProperty1),
-				'data-option2': value.get(optionalProperty2)
+				'data-name-option1': nameOptionalProperty1,
+                                'data-value-option1': value.get(valueOptionalProperty1),
+				'data-name-option2': nameOptionalProperty2,
+                                'data-value-option2': value.get(valueOptionalProperty2)
             };
         });
     };
@@ -94,6 +96,11 @@ define(function(require) {
         if (options.userId) {
             csvFileFilter = csvFileFilter + "_usr_" + options.userId;
         }
+        if (options.showNoc && options.showDol) {
+            csvFileFilter = csvFileFilter + "_noc_dol";
+        } else if (options.showDol) {
+            csvFileFilter = csvFileFilter + "_dol";
+        }
 
         if (options.stationId) {
             csvFileFilter = csvFileFilter + "_stn_" + options.stationId;
@@ -101,8 +108,11 @@ define(function(require) {
             csvFileFilter = csvFileFilter + "_are_" + options.areaName;
         } else if (options.regionName) {
             csvFileFilter = csvFileFilter + "_rgn_" + options.regionName;
+        } else if (options.dolAreaName) {
+            csvFileFilter = csvFileFilter + "_dare_" + options.dolAreaName;
+        } else if (options.dolRegionName) {
+            csvFileFilter = csvFileFilter + "_drgn_" + options.dolRegionName;
         }
-
 
         if (options.startDate) {
             csvFileFilter = csvFileFilter + "_sd_" + options.startDate;

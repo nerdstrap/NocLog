@@ -13,6 +13,11 @@ define(function(require) {
         'logoImageAlt': 'AEP',
         'logoImageSrc': 'images/aep_logo_180x180.png',
         'logoImageSvgSrc': 'images/aep_logo_180x180.svg',
+        'thirdPartyIconAlt': 'Third Party',
+        'linkedStationIconAlt': 'Linked with T&amp;D Station: ',
+        'linkedStationHazardIconAlt': 'T&D Station has Hazard',
+        'tcomStationWarningsIconAlt': 'Telecom Station has Warnings',
+        'checkedInWithCrew': 'Checked-in with Crew',
 
         'checkInErrorMessage': 'check-in error',
         'checkInSuccessMessage': 'check-in success',
@@ -28,7 +33,9 @@ define(function(require) {
         'newCheckInButtonText': 'Create Manual Check-in',
         'refreshButtonText': 'Refresh',
         'resetButtonText': 'Reset',
+        'addButtonText': 'Add',
         'saveButtonText': 'Save',
+        'deleteButtonText': 'Delete',
         'viewCheckInButtonText': 'View Check-in',
         'sevenButtonText': '7',
         'fourteenButtonText': '14',
@@ -42,6 +49,7 @@ define(function(require) {
         'goToStationEntryLogListButtonText': 'Entry Log',
         'goToStationListButtonText': 'Stations',
         'goToMaintainPurposesButtonText': 'Maintain Purposes',
+        'goToMaintainExclusionsButtonText': 'Maintain Exclusions',
 
         /* list item headers */
         'actualDurationHeaderText': 'Actual Duration',
@@ -49,6 +57,8 @@ define(function(require) {
         'additionalDurationHeaderText': 'Additional Duration',
         'additionalInfoHeaderText': 'Additional Info',
         'areaNameHeaderText': 'Area',
+        'nocAreaNameHeaderText': 'TCOM Area',
+        'dolAreaNameHeaderText': 'T&D Area',
         'hasCrewHeaderText': 'Checked-in With Crew?',
         'companyNameHeaderText': 'Company Name',
         'contactNumberHeaderText': 'Mobile #',
@@ -60,14 +70,18 @@ define(function(require) {
         'firstNameHeaderText': 'First',        
         'inTimeHeaderText': 'Checked-In',
         'lastNameHeaderText': 'Last',
+        'linkedStationNameHeaderText': 'Linked T&D Station',
         'middleInitialHeaderText': 'MI',
         'newExpectedOutTimeHeaderText': 'New Est. Check-out',
         'outTimeHeaderText': 'Checked-out',
         'purposeHeaderText': 'Purpose',
         'purposeOtherHeaderText': 'Other',
         'regionNameHeaderText': 'Region',
+        'nocRegionNameHeaderText': 'TCOM Region',
+        'dolRegionNameHeaderText': 'T&D Region',
         'showPreviousHeaderText': 'Show Previous',
         'startDateHeaderText': 'Start Date',
+        'nocStationNameHeaderText': 'TCOM Station',
         'stationNameHeaderText': 'Station',
         'stationIdHeaderText': 'Station',
         'thirdPartyHeaderText': 'Third Party',
@@ -76,12 +90,32 @@ define(function(require) {
         'checkInTypeHeaderText': 'Type',
         'checkInEmployeeHeaderText': 'Employee',
         'lookupUserIdHeaderText': 'lookup',
+        'overrideIdHeaderText': 'Override Id',
+        'lookupOverrideIdHeaderText': 'lookup',
         'itemTextHeaderText': 'Purpose',
         'itemValueHeaderText': 'Default Duration',
         'itemEnabledHeaderText': 'Status',
         'itemOrderHeaderText': 'Sort Order',
         'statusHeaderText': 'Check-In Status',
         'withCrewHeaderText': 'Check-in With Crew?',
+        
+        'checkInLocationTypeHeaderText': 'Location Type',
+        'checkInStationSelectHeaderText': 'Station',
+        'checkInAdHocHeaderText': 'Ad Hoc',
+        'adhocDescriptionHeaderText': 'Description',
+        'adhocLatitudeHeaderText': 'Latitude',
+        'adhocLongitudeHeaderText': 'Longitude',
+        'adhocAreaHeaderText': 'Area',
+        'adhocValidateCoordinatesText': 'Validate Coordinates',
+        'adhocLatLonHeaderText': 'Lat/Lon',
+        
+        'linkedStationTDCHeaderText': 'TDC',
+        'linkedStationDDCHeaderText': 'DDC',
+        
+        'filterStationEntryTypeHeaderText': 'Include',
+        'filterStationEntryTypeTcomOption': 'TCOM Only',
+        'filterStationEntryTypeTDOption': 'T&D Only',
+        'filterStationEntryTypeBothOption': 'TCOM and T&D',
 
         'itemTextPlaceholderText': 'add purpose text',
         'itemOrderPlaceholderText': 'enter a number',
@@ -107,13 +141,18 @@ define(function(require) {
         'newStationEntryLog.viewTitleText': 'Manual Check-in',
         'stationEntryLog.viewTitleText': 'Check-in Details',
         'editStationEntryLog.viewTitleText': 'Edit Check-in Details',
+        'checkOutStationEntryLog.viewTitleText': 'Check-out Details',
         'purposeList.viewTitleText': 'Maintain Purposes',
+        'exclusionList.viewTitleText': 'Maintain Exclusions',
+        'warningList.viewTitleText': 'Warnings',
 
         'personnelList.loadingMessage': 'loading users',
         'purposeList.loadingMessage': 'loading purposes',
         'newStationEntryLog.loadingMessage': 'loading',
         'stationEntryLogList.loadingMessage': 'loading check-ins',
         'stationList.loadingMessage': 'loading stations',
+        'exclusionList.loadingMessage': 'loading exclusions',
+        'warningList.loadingMessage': 'loading warnings',
 
         'personnel.loadingMessage': 'loading user',
         'stationEntryLog.loadingMessage': 'loading check-in',
@@ -123,6 +162,7 @@ define(function(require) {
         'newPurposeItemOrderHeaderText': '0-999',
         
         'validationErrorMessage': 'One or more of the fields are invalid. Please update them and try again.',
+        'confirmWarningErrorMessage': 'One or more of the warnings are not confirmed. Please confirm them and try again.',
 
         /* filter headers */
 
@@ -185,7 +225,16 @@ define(function(require) {
         'siteTypeHeaderText': 'Site Type',
         'telecomNpaHeaderText': 'Telecom NPA',
         'telecomNxxHeaderText': 'Telecom NXX',
-        'transformerPoleHeaderText': 'Transformer Pole'
+        'transformerPoleHeaderText': 'Transformer Pole',
+        'hazardWarning': 'Check-in failed due to station hazard!',
+        'stationWarningsHeaderText': 'Warnings',
+        'warningHeader': 'Warning',
+        'warningPlaceholder': 'enter a warning description',
+        'stationWarningsCheckInMessageText': 'All warnings must be confirmed, or cleared, on check-out.',
+        'confirmButtonText': 'confirm',
+        'clearButtonText': 'clear',
+        'firstReportedByHeaderText': 'Reported By',
+        'lastConfirmedByHeaderText': 'Confirmed By'
     };
 
     var defaultResource = '';
@@ -195,7 +244,7 @@ define(function(require) {
             if (resources.hasOwnProperty(key)) {
                 return resources[key];
             } else {
-                console.warn('resource for key "' + key + '" not found!')
+                console.warn('resource for key "' + key + '" not found!');
             }
             return defaultResource;
         }

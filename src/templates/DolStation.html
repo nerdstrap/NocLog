@@ -1,0 +1,91 @@
+<div class="dol-station-view">
+    <div class="row collapse view-status">
+        <div class="small-12 columns">
+            <span class="view-message">{{resource "station.loadingMessage"}}</span>
+            <img src="{{resource 'loadingIconSrc'}}" class="view-loading" />
+        </div>
+    </div>
+    <div class="row collapse view-alerts">
+        <div class="small-12 columns"></div>
+    </div>
+    <div class="small-12 columns">
+        <div id="linked-station-details-section">
+            <div class="row collapse">
+                <div class="small-4 columns">
+                    <span>Station Phone</span>
+                </div>
+                <div class="small-8 columns">
+                    <span class="detail">{{telephone}}</span>
+                </div>
+            </div>
+            <div class="row collapse">
+                <div class="small-4 columns">
+                    <span>Radio Channel</span>
+                </div>
+                <div class="small-8 columns">
+                    <span class="detail">{{radio}}</span>
+                </div>
+            </div>
+            <div class="row collapse">
+                <div class="small-4 columns">
+                    <span>Emergency Contact Numbers</span>
+                </div>
+                <div class="small-8 columns">
+                    <span class="detail">{{contacts}}</span>
+                </div>
+            </div>
+            <div class="row collapse">
+                <div class="small-4 columns">
+                    <span>City</span>
+                </div>
+                <div class="small-8 columns">
+                    <span class="detail">{{city}}</span>
+                </div>
+            </div>
+            <div class="row collapse">
+                <div class="small-4 columns">
+                    <span>County</span>
+                </div>
+                <div class="small-8 columns">
+                    <span class="detail">{{county}}</span>
+                </div>
+            </div>
+            <div class="row collapse">
+                <div class="small-4 columns">
+                    <span>State</span>
+                </div>
+                <div class="small-8 columns">
+                    <span class="detail">{{state}}</span>
+                </div>
+            </div>
+            <div class="row collapse">
+                <div class="small-4 columns">
+                    <span>GPS (lat/long)</span>
+                </div>
+                <div class="small-8 columns">
+                    <span class="detail">
+                        {{#if latitude}}
+                        {{latitude}} &#47; {{longitude}} <a class="linked-station-directions" href="#"><i class="fa fa-map-marker"></i></a>
+                        {{/if}}
+                    </span>
+                </div>
+            </div>
+            <div class="row collapse">
+                <div class="small-4 columns">
+                    <span>Address/Directions</span>
+                </div>
+                <div class="small-8 columns">
+                    <span class="detail">{{directions}}</span>
+                </div>
+            </div>
+            <div class="row collapse">
+                <div class="small-4 columns">
+                    <span>Additional Station Data</span>
+                </div>
+                <div class="small-8 columns">
+                    <span class="detail">{{stationData}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

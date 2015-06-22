@@ -3,7 +3,8 @@ define(function(require) {
 
     var $ = require('jquery'),
             _ = require('underscore'),
-            Backbone = require('backbone');
+            Backbone = require('backbone'),
+            CheckInTypeEnum = require('enums/CheckInTypeEnum');
 
     var NewStationEntryLogModel = Backbone.Model.extend({
         idAttribute: 'stationEntryLogId',
@@ -37,8 +38,9 @@ define(function(require) {
                 pattern: 'email'
             },
             stationId: {
-                required: true,
-                minLength: 1
+                required: function() {
+                    return (this.get('checkInType') === CheckInTypeEnum.station);
+                }
             },
             purpose: {
                 required: true,
@@ -55,6 +57,19 @@ define(function(require) {
                 required: function() {
                     return (this.get('purpose') === 'Other');
                 }
+            },
+            description: {
+                 required: function() {
+                    return (this.get('checkInType') === CheckInTypeEnum.adHoc);
+                }               
+            },
+            latitude: {
+                pattern: 'number',
+                required: false
+            },
+            longitude: {
+                pattern: 'number',
+                required: false
             }
         }
     });

@@ -1,28 +1,82 @@
 <div class="station-entry-log-history-list-item-view">
     <div class="row collapse elevated-functions-toggle">
         <div class="small-12 columns">
-            <div class="small-1 columns">
-                <span class="collapse">
-                    <i class="fa fa-plus hide-container-icon"></i>
-                    <i class="fa fa-minus show-container-icon hidden"></i>
-                </span>
-                &nbsp;
-                <a class="station-link" data-station-id="{{stationId}}" href="#">{{withDefault stationName "&nbsp;"}}</a>
+            <div class="small-2 columns">
+                <div class="row collapse">
+                    <div class="small-12 columns">
+                        <span class="collapse">
+                            <i class="fa fa-plus hide-container-icon"></i>
+                            <i class="fa fa-minus show-container-icon hidden"></i>
+                        </span>
+                        &nbsp;
+                        {{#ifCond stationType "TD"}}
+                        <span class="station-link" data-station-id="{{stationId}}">{{withDefault stationName "&nbsp;"}}</span>
+                        {{else}}
+                        {{#if stationId}}
+                        <a class="station-link" data-station-id="{{stationId}}" href="#">{{withDefault stationName "&nbsp;"}}</a>
+                        {{else}}
+                        <span class="station-link" data-station-id="{{stationId}}">{{withDefault stationName "&nbsp;"}}</span>
+                        {{/if}}                       
+                        {{/ifCond}}                          
+                    </div>
+                </div>
+                <div class="row collapse item-icons hidden">
+                    <div class="small-1 columns">
+                        <!-- spacer offset for expand/collapse -->
+                        &nbsp;
+                    </div>
+                    <div class="small-1 columns">
+                        {{#if linkedStationName}}
+                        <span class="linked-station-icon"><i class="fa fa-link" title="{{resource 'linkedStationIconAlt'}}{{linkedStationName}}"></i></span>
+                        {{else}}
+                        <!-- spacer for Linked Station icon -->&nbsp;
+                        {{/if}}
+                    </div>
+                    <div class="small-1 columns">
+                        {{#ifCond stationType "TD"}}
+                        <span class="td-station-icon"><img id="td-station-icon" class="text-icon" title="T&D Station Entry" alt="T&D Station Entry" src="images/tower_180x180.png"/></span>
+                        {{else}}
+                        <!-- spacer for TD Station icon -->&nbsp;
+                        {{/ifCond}}
+                    </div>
+                    <div class="small-9 columns">
+                        &nbsp;
+                    </div>
+                </div>
             </div>
-            <div class="small-1 columns">
-                {{#if thirdParty}}
-                <img id="third-party-icon" class="text-icon" title="third party" alt="third party" src="images/third_party_180x180.png"/>
-                <!--<i id="third-party-icon" class="fa fa-globe"></i>-->
-                {{/if}}
-                <a class="personnel-link" data-user-id="{{userId}}" data-user-name="{{userName}}" href="#">{{withDefault userName "&nbsp;"}}</a>
+            <div class="small-2 columns">
+                <div class="row collapse">
+                    <div class="small-12 columns">
+                        <a class="personnel-link" data-user-id="{{userId}}" data-user-name="{{userName}}" href="#">{{withDefault userName "&nbsp;"}}</a>
+                    </div>
+                </div>
+                <div class="row collapse item-icons hidden">
+                    <div class="small-1 columns">
+                        {{#if thirdParty}}
+                        <img id="third-party-icon" class="text-icon" title="{{resource 'thirdPartyIconAlt'}}" alt="{{resource 'thirdPartyIconAlt'}}" src="images/third_party_180x180.png"/>
+                        {{else}}
+                        <!-- spacer for Third Party icon -->&nbsp;
+                        {{/if}}
+                    </div>
+                    <div class="small-1 columns">
+                        {{#if hasCrew}}
+                        <i class="fa fa-users" title="{{resource 'checkedInWithCrew'}}"></i>
+                        {{else}}
+                        <!-- spacer for Check-in with Crew icon -->&nbsp;
+                        {{/if}}
+                    </div>
+                    <div class="small-10 columns">
+                        &nbsp;
+                    </div>
+                </div>
             </div>
             <div class="small-1 columns">
                 <span>{{formatPhoneWithDefault contactNumber "%D %I:%M %p" "&nbsp;"}}</span>
             </div>
-            <div class="small-2 columns">
+            <div class="small-1 columns">
                 <span>{{formatDateWithDefault inTime "%D %I:%M %p" "&nbsp;"}}</span>
             </div>
-            <div class="small-2 columns">
+            <div class="small-1 columns">
                 <span>{{formatDateWithDefault outTime "%D %I:%M %p" "&nbsp;"}}</span>
             </div>
             <div class="small-1 columns">
@@ -41,7 +95,20 @@
         <div class="small-12 columns">
             <div class="row collapse elevated-functions-container hidden">
                 <div class="small-2 columns">
+                    <div class="row collapse trans-dispatch-info-container hidden">
+                        <div class="small-12">
+                            <b>TDC:</b> {{transDispatchCenter}} {{formatPhoneWithDefault transDispatchPhone "%D %I:%M %p" "&nbsp;"}}
+                        </div>
+                    </div>
+                    <div class="row collapse dist-dispatch-info-container hidden">
+                        <div class="small-12">
+                            <b>DDC:</b> {{distDispatchCenter}} {{formatPhoneWithDefault distDispatchPhone "%D %I:%M %p" "&nbsp;"}}
+                        </div>
+                    </div>
                     <a class="view-station-entry-log-button button radius tiny" href="#">{{resource "viewCheckInButtonText"}}</a>
+                </div>
+                <div class="small-10 columns">
+                    &nbsp;
                 </div>
             </div>
         </div>

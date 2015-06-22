@@ -1,13 +1,46 @@
 <div class="station-list-item-view">
     <div class="row collapse">
-        <div class="small-4 columns">
-            <a class="station-link" data-station-id="{{stationId}}" href="#">{{withDefault stationName  "&nbsp;"}}</a>
+        <div class="small-3 columns">
+            <div class="row collapse">
+                <div class="small-12 columns">
+                    <a class="station-link" data-station-id="{{stationId}}" href="#">{{withDefault stationName  "&nbsp;"}}</a>
+                </div>
+            </div>
+            <div class="row collapse item-icons hidden">
+                <div class="small-1 columns">
+                    {{#if linkedStationName}}
+                    <span class="linked-station-icon"><i class="fa fa-link" title="{{resource 'linkedStationIconAlt'}}{{linkedStationName}}"></i></span>
+                    {{else}}
+                    <!-- spacer for Linked Station icon -->&nbsp;
+                    {{/if}}
+                </div>
+                <div class="small-1 columns">
+                    {{#if linkedStationHasHazard}}
+                    <span class="station-hazard-icon"><i class="fa fa-exclamation-triangle" title="{{resource 'linkedStationHazardIconAlt'}}"></i></span>
+                    {{else}}
+                    <!-- spacer for T&D Station Hazard icon -->&nbsp;
+                    {{/if}}
+                </div>
+                <div class="small-1 columns">
+                    {{#if hasWarnings}}
+                    <span class="station-warning-icon"><i class="fa fa-bullhorn" title="{{resource 'tcomStationWarningsIconAlt'}}"></i></span>
+                    {{else}}
+                    <!-- spacer for Telecom Station Warnings icon -->&nbsp;
+                    {{/if}}
+                </div>
+                <div class="small-9 columns">
+                    &nbsp;
+                </div>
+            </div>
         </div>
-        <div class="small-4 columns">
+        <div class="small-3 columns">
             <span>{{withDefault regionName "&nbsp;"}}</span>
         </div>
-        <div class="small-4 columns">
+        <div class="small-3 columns">
             <span>{{withDefault areaName "&nbsp;"}}</span>
+        </div>
+        <div class="small-3 columns">
+            <span>{{withDefault linkedStationName "&nbsp;"}}</span>
         </div>
     </div>
 </div>

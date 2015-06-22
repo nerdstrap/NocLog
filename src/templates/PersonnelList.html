@@ -1,56 +1,58 @@
 <div class="personnel-list-view">
-    <div class="row collapse">
-        <div class="small-12 columns">
-            <h2>{{resource "personnelList.viewTitleText"}}</h2>
-        </div>
-    </div>
-    <div class="row collapse">
-        <div class="small-2 columns">
-            <label>{{resource "userNameHeaderText"}}</label>
-            <input id="user-name-input" type="search" placeholder="{{resource 'userNameSearchQueryPlaceholderText'}}" spellcheck="false" autocomplete="off" />
-        </div>
-    </div>
-    <div class="row collapse">
-        <a id="refresh-personnel-list-button" class="button radius" href="#">{{resource "refreshButtonText"}}</a>
-        <a id="reset-personnel-list-button" class="button radius secondary" href="#">{{resource "resetButtonText"}}</a>
-    </div>
-    <div class="row collapse list-header-item-view">
+    <div id="filter-and-list-header-area">
         <div class="row collapse">
-            <div class="small-3 columns">
-                <span>
-                    <a class="sort-button" data-sort-attribute="userName" href="#">{{resource "userNameHeaderText"}}</a>
-                </span>
-            </div>
-            <div class="small-2 columns">
-                <span>
-                    <a class="sort-button" data-sort-attribute="userId" href="#">{{resource "userIdHeaderText"}}</a>
-                </span>
-            </div>
-            <div class="small-2 columns">
-                <span>
-                    <a class="sort-button" data-sort-attribute="companyName" href="#">{{resource "companyNameHeaderText"}}</a>
-                </span>
-            </div>
-            <div class="small-3 columns">
-                <span>
-                    <a class="sort-button" data-sort-attribute="contactNumber" href="#">{{resource "contactNumberHeaderText"}}</a>
-                </span>
-            </div>
-            <div class="small-2 columns">
-                <span>
-                    <a class="sort-button" data-sort-attribute="email" href="#">{{resource "emailHeaderText"}}</a>
-                </span>
+            <div class="small-12 columns">
+                <h2>{{resource "personnelList.viewTitleText"}}</h2>
             </div>
         </div>
-    </div>
-    <div class="row collapse view-status hidden">
-        <div class="small-12 columns">
-            <span class="view-message">{{resource "personnelList.loadingMessage"}}</span>
-            <img src="{{resource 'loadingIconSrc'}}" class="view-loading" alt="{{resource 'loadingIconAlt'}}" />
+        <div class="row collapse">
+            <div class="small-2 columns">
+                <label>{{resource "userNameHeaderText"}}</label>
+                <input id="user-name-input" type="search" placeholder="{{resource 'userNameSearchQueryPlaceholderText'}}" spellcheck="false" autocomplete="off" />
+            </div>
         </div>
-    </div>
-    <div class="row collapse view-alerts">
-        <div class="small-12 small-12 columns"></div>
+        <div class="row collapse">
+            <a id="refresh-personnel-list-button" class="button radius" href="#">{{resource "refreshButtonText"}}</a>
+            <a id="reset-personnel-list-button" class="button radius secondary" href="#">{{resource "resetButtonText"}}</a>
+        </div>
+        <div class="row collapse list-header-item-view">
+            <div class="row collapse">
+                <div class="small-3 columns">
+                    <span>
+                        <a class="sort-button" data-sort-attribute="userName" href="#">{{resource "userNameHeaderText"}}</a>
+                    </span>
+                </div>
+                <div class="small-2 columns">
+                    <span>
+                        <a class="sort-button" data-sort-attribute="userId" href="#">{{resource "userIdHeaderText"}}</a>
+                    </span>
+                </div>
+                <div class="small-2 columns">
+                    <span>
+                        <a class="sort-button" data-sort-attribute="companyName" href="#">{{resource "companyNameHeaderText"}}</a>
+                    </span>
+                </div>
+                <div class="small-3 columns">
+                    <span>
+                        <a class="sort-button" data-sort-attribute="contactNumber" href="#">{{resource "contactNumberHeaderText"}}</a>
+                    </span>
+                </div>
+                <div class="small-2 columns">
+                    <span>
+                        <a class="sort-button" data-sort-attribute="email" href="#">{{resource "emailHeaderText"}}</a>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="row collapse view-status hidden">
+            <div class="small-12 columns">
+                <span class="view-message">{{resource "personnelList.loadingMessage"}}</span>
+                <img src="{{resource 'loadingIconSrc'}}" class="view-loading" alt="{{resource 'loadingIconAlt'}}" />
+            </div>
+        </div>
+        <div class="row collapse view-alerts">
+            <div class="small-12 small-12 columns"></div>
+        </div>
     </div>
     <div class="row collapse scroll">
         <div id="personnel-list-item-container" class="small-12 columns">

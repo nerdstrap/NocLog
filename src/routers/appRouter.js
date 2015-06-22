@@ -37,7 +37,8 @@ define(function(require) {
             'station/:id': 'goToStationWithId',
             'personnel/userId/:id': 'goToPersonnelWithUserId',
             'personnel/userName/:userName': 'goToPersonnelWithUserName',
-            'maintenance': 'goToMaintainPurposes'
+            'maintenance': 'goToMaintainPurposes',
+            'maintenance/exclusions': 'goToMaintainExclusions'
         },
         goToStationEntryLogList: function() {
             console.trace('appRouter.goToStationEntryLogList');
@@ -78,6 +79,10 @@ define(function(require) {
         goToMaintainPurposes: function() {
             console.trace('appRouter.goToMaintainPurposes');
             this.dashboardControllerInstance.goToMaintainPurposes();
+        },
+        goToMaintainExclusions: function() {
+            console.trace('appRouter.goToMaintainExclusions');
+            this.dashboardControllerInstance.goToMaintainExclusions();
         }
     });
 

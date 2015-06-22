@@ -7,7 +7,8 @@ define(function(require) {
             Backbone = require('backbone'),
             env = require('env'),
             utils = require('utils'),
-            helpers = require('handlebars.helpers');
+            helpers = require('handlebars.helpers'),
+            CheckInTypeEnum = require('enums/CheckInTypeEnum');
 
     var StationEntryModel = Backbone.Model.extend({
         idAttribute: 'stationEntryLogId',
@@ -51,6 +52,14 @@ define(function(require) {
                 var companyName = attributes.companyName;
                 if (companyName.length > 0) {
                     attributes.thirdParty = true;
+                }
+            }
+            if (attributes.hasOwnProperty('stationId')) {
+                var stationId = attributes.stationId;
+                if (stationId.length > 0) {
+                    attributes.checkInType = CheckInTypeEnum.station;
+                }else{
+                    attributes.checkInType = CheckInTypeEnum.adHoc;                    
                 }
             }
 
@@ -102,6 +111,8 @@ define(function(require) {
                 if (latitude && !isNaN(latitude)) {
                     attributes.latitude = Number(latitude);
                 }
+            }else{
+                attributes.latitude = null;
             }
 
             if (attributes.hasOwnProperty('longitude')) {
@@ -109,6 +120,8 @@ define(function(require) {
                 if (longitude && !isNaN(longitude)) {
                     attributes.longitude = Number(longitude);
                 }
+            }else{
+                attributes.longitude = null;
             }
 
             if (attributes.hasOwnProperty('distanceInMiles')) {
@@ -157,8 +170,9 @@ define(function(require) {
                 pattern: 'email'
             },
             stationId: {
-                required: true,
-                minLength: 1
+                required: function() {
+                    return (this.get('checkInType') === CheckInTypeEnum.station);
+                }
             },
             purpose: {
                 required: true,
@@ -169,6 +183,19 @@ define(function(require) {
             },
             dispatchCenterId: {
                 required: true
+            },
+            description: {
+                 required: function() {
+                    return (this.get('checkInType') === CheckInTypeEnum.adHoc);
+                }               
+            },
+            latitude: {
+                pattern: 'number',
+                required: false
+            },
+            longitude: {
+                pattern: 'number',
+                required: false
             }
         }
     });

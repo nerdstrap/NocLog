@@ -4,14 +4,14 @@ module.exports = function (grunt) {
 	// Project configuration.
 	grunt.initConfig({
 		jasmine : {
-			src : 'controllers/DashboardController.js',
+			src : 'src/controllers/DashboardController.js',
 			options : {
-				specs : 'specs/**/*.js',
+				specs : 'src/specs/goToStationEntryLogListSpec.js',
 				template : require('grunt-template-jasmine-requirejs'),
 				templateOptions : {
-					requireConfigFile : 'js/spec-main.js',
+					requireConfigFile : 'src/js/spec-main.js',
 					requireConfig : {
-						baseUrl : 'js/'
+						baseUrl : 'src/js/'
 					}
 				}
 			}
@@ -19,15 +19,15 @@ module.exports = function (grunt) {
 		jshint : {
 			all : [
 				'Gruntfile.js',
-				'collections/*.js',
-				'controllers/*.js',
-				'enums/*.js',
-				'fakes/*.js',
-				'models/*.js',
-				'js/app/*.js',
-				'routers/*.js',
-				'views/*.js',
-				'specs/*.js'
+				'src/collections/*.js',
+				'src/controllers/*.js',
+				'src/enums/*.js',
+				'src/fakes/*.js',
+				'src/models/*.js',
+				'src/js/app/*.js',
+				'src/routers/*.js',
+				'src/views/*.js',
+				'src/specs/*.js'
 			],
 			options : {
 				"-W030": false
@@ -40,9 +40,9 @@ module.exports = function (grunt) {
 				},
 				files : [{
 						expand : true,
-						cwd : 'scss',
+						cwd : 'src/scss',
 						src : ['*.scss'],
-						dest : 'css/',
+						dest : 'src/css/',
 						ext : '.css'
 					}
 				]
@@ -55,6 +55,7 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-contrib-sass');
 
 	grunt.registerTask('validate', ['jshint']);
-	grunt.registerTask('test', ['sass', 'jasmine']);
+	//grunt.registerTask('test', ['sass', 'jasmine']);
+	grunt.registerTask('test', ['jasmine']);
 	grunt.registerTask('default', ['test']);
 };

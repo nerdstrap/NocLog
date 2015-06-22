@@ -30,7 +30,7 @@ define(function(require) {
             this.listenTo(this.stationIdentifierCollection, 'reset', this.addStationNameFilter);
             this.listenTo(this.regionCollection, 'reset', this.addRegionNameFilter);
             this.listenTo(this.areaCollection, 'reset', this.addAreaNameFilter);
-
+            
             this.listenTo(this, 'leave', this.onLeave);
         },
         render: function() {
@@ -50,15 +50,16 @@ define(function(require) {
             'click #reset-station-list-button': 'resetStationList',
             'click .sort-button': 'sortListView',
             'click .close-alert-box-button': 'closeAlertBox',
-			'change #station-filter': 'onChangeStationFilter',
-			'change #area-filter': 'onChangeAreaFilter',
-			'change #region-filter': 'onChangeRegionFilter'
+            'change #station-filter': 'onChangeStationFilter',
+            'change #area-filter': 'onChangeAreaFilter',
+            'change #region-filter': 'onChangeRegionFilter'
         },
         addAll: function() {
             this._leaveChildren();
             this.clearSortIndicators();
             _.each(this.collection.models, this.addOne, this);
             this.addSortIndicators();
+            this.listenToWindowResize();
             this.hideLoading();
         },
         addOne: function(station) {
@@ -82,7 +83,7 @@ define(function(require) {
             }
 
             this.stationIdentifierCollection.reset(this.stationIdentifierCompleteCollection.models);
-			this.$('#station-filter').val('');
+            this.$('#station-filter').val('');
             this.$('#region-filter').val('');
             this.areaCollection.reset(this.areaCompleteCollection.models);
             this.$('#area-filter').val('');

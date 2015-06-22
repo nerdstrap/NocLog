@@ -28,6 +28,7 @@ define(function(require) {
 
             this.updateUserPrivileges();
             this.updateCheckOutStatus();
+            this.showItemIcons();
 
             return this;
         },
@@ -35,7 +36,7 @@ define(function(require) {
             'click .station-link': 'goToStationWithId',
             'click .personnel-link': 'goToPersonnel',
             'click .elevated-functions-toggle': 'toggleElevatedFunctions',
-            'click .view-station-entry-log-button': 'goToStationEntryLogWithId',
+            'click .view-station-entry-log-button': 'goToStationEntryLogWithIdViewOnly',
             'click .edit-station-entry-log-button': 'goToStationEntryLogWithId',
             'click .check-out-button': 'checkOut'
         },
@@ -61,16 +62,35 @@ define(function(require) {
             if (event) {
                 event.preventDefault();
             }
-            this.$('.hide-container-icon').toggle('hidden');
-            this.$('.show-container-icon').toggle('hidden');
-            this.$('.elevated-functions-container').toggle('hidden');
+            var currentContext = this;
+            var stationIs = currentContext.model.get('stationType');
+            if (stationIs === "TD") {
+                this.$('.view-station-entry-log-button').addClass('hidden');
+                this.$('.check-out-button').addClass('hidden');
+                this.$('.edit-station-entry-log-button').addClass('hidden');
+                var dispatchCenterId = currentContext.model.get('dispatchCenterId');
+                var transDispatchCenterId = currentContext.model.get('transDispatchCenterId');
+                var distDispatchCenterId = currentContext.model.get('distDispatchCenterId');
+                if (dispatchCenterId === transDispatchCenterId) {
+                    this.$('.trans-dispatch-info-container ').removeClass('hidden');
+                }
+                if (dispatchCenterId === distDispatchCenterId) {
+                    this.$('.dist-dispatch-info-container ').removeClass('hidden');
+                }
+            }
+            currentContext.$('.hide-container-icon').toggle('hidden');
+            currentContext.$('.show-container-icon').toggle('hidden');
+            currentContext.$('.elevated-functions-container').toggle('hidden');
         },
         goToStationWithId: function(event) {
             if (event) {
                 event.preventDefault();
             }
-            var stationId = this.model.get('stationId');
-            this.dispatcher.trigger(AppEventNamesEnum.goToStationWithId, stationId);
+            var stationType = this.model.get('stationType');
+            if(stationType === 'TC' && this.model.get('stationId')){
+               var stationId = this.model.get('stationId');
+               this.dispatcher.trigger(AppEventNamesEnum.goToStationWithId, stationId);
+            }
         },
         goToPersonnel: function(event) {
             if (event) {
@@ -96,16 +116,40 @@ define(function(require) {
                 event.preventDefault();
             }
             var stationEntryLogId = this.model.get('stationEntryLogId');
-            this.dispatcher.trigger(AppEventNamesEnum.goToStationEntryLogWithId, stationEntryLogId, AppEventNamesEnum.goToStationEntryLogList);
+            this.dispatcher.trigger(AppEventNamesEnum.goToStationEntryLogWithId, stationEntryLogId, AppEventNamesEnum.goToStationEntryLogList, null, this.model.attributes);
+        },
+        goToStationEntryLogWithIdViewOnly: function(event) {
+            if (event) {
+                event.preventDefault();
+            }
+            this.model.set({isViewOnlyAction: true}, {silent: true});
+            this.goToStationEntryLogWithId();
         },
         checkOut: function(event) {
             if (event) {
                 event.preventDefault();
             }
-            this.dispatcher.trigger(AppEventNamesEnum.checkOut, this.model);
+            this.model.set({isCheckOutAction: true}, {silent: true});
+            this.goToStationEntryLogWithId();
         },
         onCheckOutSuccess: function() {
             this.$el.remove();
+        },
+        showItemIcons: function() {
+            var currentContext = this;
+            var stationIs = currentContext.model.get('stationType');
+            var stationIsTD = false;
+            if (stationIs === "TD") {
+                stationIsTD = true;
+            }
+            if (currentContext.model.has('linkedStationName')
+                ||currentContext.model.has('hasWarnings')
+                ||currentContext.model.get('thirdParty')
+                ||currentContext.model.get('hasCrew')
+                || stationIsTD
+                ) {
+                currentContext.$('.item-icons').removeClass('hidden');
+            }
         }
     });
     return StationEntryLogListItemView;

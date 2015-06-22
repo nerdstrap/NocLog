@@ -54,7 +54,7 @@
                         &nbsp;<input id="middle-initial-input" class="third-party-input" name="middleInitial" type="text" placeholder="{{resource 'middleInitialHeaderText'}}" />
                         &nbsp;<input id="last-name-input" class="third-party-input" name="lastName" type="text" placeholder="{{resource 'lastNameHeaderText'}}" />
                     </div>
-                </div>
+                </div>                 
                 <div class="row collapse">
                     <div class="small-1 columns">
                         <label for="contact-number-input">{{resource "contactNumberHeaderText"}}</label>
@@ -72,16 +72,109 @@
                         &nbsp;
                     </div>
                 </div>
+
+
+
                 <div class="row collapse">
                     <div class="small-1 columns">
-                        <label for="station-filter">{{resource "stationNameHeaderText"}}</label>
+                        <label>{{resource "checkInLocationTypeHeaderText"}}</label>
                     </div>
-                    <div class="small-11 columns">
-                        <select id="station-filter" name="stationId">
-                            <option disabled="disabled" selected="selected" value="">{{resource "filterDefaultOption"}}</option>
-                        </select>
+                    <div class="small-3 columns">
+                        <span class="bolder inline-block top-align">{{resource "checkInStationSelectHeaderText"}}</span>
+                        <div id="ad-hoc-indicator-container" class="switch radius tiny inline-block top-align" tabindex="0">
+                            <input id="ad-hoc-indicator" type="checkbox" name="adHoc"/>
+                            <label for="ad-hoc-indicator"></label>
+                        </div>
+                        <span class="inline-block top-align">{{resource "checkInAdHocHeaderText"}}</span>
+                    </div>
+                    <div class="small-8 columns">
+                        &nbsp;
                     </div>
                 </div>
+
+                <div class="adhoc-checkin-container hidden">   
+                    <div class="row collapse">
+                        <div class="small-1 columns">
+                            <label for="adhoc-description-input">{{resource "adhocDescriptionHeaderText"}}</label>
+                        </div>
+                        <div class="small-4 columns">
+                            <input id="adhoc-description-input" class="adhoc-description-input" name="description" type="text" placeholder="{{resource 'adhocDescriptionHeaderText'}}" />                            
+                        </div>
+                        <div class="small-1 columns">
+                            &nbsp;
+                        </div>
+                        <div class="small-6 columns">
+                            <input id="adhoc-latitude-input" class="adhoc-latitude-input" name="latitude" type="text" placeholder="{{resource 'adhocLatitudeHeaderText'}}" />
+                            &nbsp;<input id="adhoc-longitude-input" class="adhoc-longitude-input" name="longitude" type="text" placeholder="{{resource 'adhocLongitudeHeaderText'}}" />
+                            &nbsp; <a class="directions-link" data-latitude="{{latitude}}" data-longitude="{{longitude}}" href="#">{{resource "adhocValidateCoordinatesText"}} <i class="fa fa-map-marker"></i></a>                           
+                        </div>
+                    </div>
+                    <div class="row collapse">
+                        <div class="small-1 columns">
+                            <label for="adhoc-area-input">{{resource "adhocAreaHeaderText"}}</label>
+                        </div>
+                        <div class="small-4 columns">
+                            <select id="adhoc-area-filter" class="text-body" >
+                                <option disabled="disabled" selected="selected">{{resource "filterDefaultOption"}}</option>                           
+                            </select>
+                        </div>
+                        <div class="small-1 columns">
+                            &nbsp;
+                        </div>
+                    </div>
+                </div>                
+
+                <div class="station-checkin-container">             
+                    <div class="row collapse">
+                        <div class="small-1 columns">
+                            <label for="check-in-station-filter">{{resource "stationNameHeaderText"}}</label>
+                        </div>
+                        <div class="small-4 columns">
+                            <div class="row collapse">
+                                <div class="small-12 columns">
+                                    <select id="check-in-station-filter" name="stationId">
+                                        <option disabled="disabled" selected="selected" value="">{{resource "filterDefaultOption"}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row collapse linked-station-info-row hidden">
+                                <div class="small-12 columns" id='linked-station-info-container'>
+                                    <i class="fa fa-link" title="Linked with T&D Station"></i> <span id="linked-station-name"></span>
+                                    <div class="row collapse hidden" id="linked-hazard-section">
+                                        <div class="row collapse">
+                                            <div class="small-12 columns">
+                                                <span class="station-hazard-icon"><i class="fa fa-exclamation-triangle" title="Hazard at T&D Station"></i></span>&nbsp;
+                                                <span id="linked-hazard-comments"></span>
+                                            </div>
+                                        </div>
+                                        <div class="row collapse">
+                                            <div class="small-12 columns pad-left">
+                                                <span id="linked-tdc-label">{{resource "linkedStationTDCHeaderText"}}</span> <span id="linked-tdc-center"></span>: <span id="linked-tdc-phone"></span><br>
+                                                <span id="linked-ddc-label">{{resource "linkedStationDDCHeaderText"}}</span> <span id="linked-ddc-center"></span>: <span id="linked-ddc-phone"></span>
+                                            </div>
+                                        </div>
+                                        <div class="row collapse" id="linked-hazard-override">
+                                            <div class="small-2 columns">
+                                                <label for="override-id-input">{{resource "overrideIdHeaderText"}}</label>
+                                            </div>
+                                            <div class="small-6 columns">
+                                                <input id="override-id-input" name="overrideId" type="text" placeholder="Dispatcher's UserId" />
+                                                <a id="lookup-override-id-button" class="button radius tiny top-align" href="#">{{resource "lookupOverrideIdHeaderText"}}</a>
+                                            </div>
+                                            <div class="small-4 columns pad-left">
+                                                <span id="override-name"></span>&nbsp;
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="small-7 columns">
+                            &nbsp;
+                        </div>
+                    </div>
+                </div>
+
                 <div class="row collapse">
                     <div class="small-1 columns">
                         <label for="purpose-filter">{{resource "purposeHeaderText"}}</label>
@@ -145,6 +238,17 @@
                         <span class="inline-block top-align">{{resource "yesOptionText"}}</span>
                     </div>
 
+                </div>
+                <div id="station-warnings-container" class="row collapse hidden">
+                    <div class="small-1 columns">
+                        <span>{{resource "stationWarningsHeaderText"}}</span>
+                    </div>
+                    <div class="small-5 columns">
+                        <div id="station-warning-list-view"></div>
+                    </div>
+                    <div class="small-6 columns">
+                        <span>{{resource "stationWarningsCheckInMessageText"}}</span>
+                    </div>
                 </div>
                 <div class="row collapse">
                     <div class="small-6 columns">

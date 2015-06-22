@@ -1,4 +1,6 @@
 "stationEntryLogId","stationId","stationName","userId","userName","purpose","duration","inTime","expectedOutTime","outTime","actualDuration","contactNumber","email","regionName","areaName","hasCrew"
-{{~#each logArray}}
-{{#with attributes}}"{{stationEntryLogId}}","{{stationId}}","{{stationName}}","{{userId}}","{{userName}}","{{{purpose}}}","{{formatMinutesWithDefault duration ""}}","{{formatDateWithDefault inTime "%D %I:%M %p" ""}}","{{formatDateWithDefault expectedOutTime "%D %I:%M %p" ""}}","{{formatDateWithDefault outTime "%D %I:%M %p" ""}}","{{formatTimespanWithDefault actualDuration ""}}","{{formatPhoneWithDefault contactNumber "" ""}}","{{email}}","{{regionName}}","{{areaName}}","{{formatYesNoWithDefault hasCrew ""}}"{{/with}}
-{{~/each}}
+{{#each logArray}}
+{{#with attributes}}
+"{{stationEntryLogId}}","{{stationId}}","{{stationName}}","{{userId}}","{{userName}}","{{{purpose}}}","{{formatMinutesWithDefault duration ""}}","{{formatDateWithDefault inTime "%D %I:%M %p" ""}}","{{formatDateWithDefault expectedOutTime "%D %I:%M %p" ""}}","{{formatDateWithDefault outTime "%D %I:%M %p" ""}}","{{formatTimespanWithDefault actualDuration ""}}","{{formatPhoneWithDefault contactNumber "" ""}}","{{email}}","{{regionName}}","{{areaName}}","{{formatYesNoWithDefault hasCrew ""}}"
+{{/with}}
+{{/each}}

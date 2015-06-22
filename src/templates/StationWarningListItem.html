@@ -1,0 +1,15 @@
+<div class="station-warning-list-item-view">
+    <div class="row collapse">
+        <div class="small-12 columns">
+            <span class="warning-input" data-station-warning-id="{{stationWarningId}}">{{warning}}</span>
+        </div>
+    </div>
+    <div class="row collapse">
+        <div class="small-4 columns">{{resource "firstReportedByHeaderText"}}&nbsp;{{firstReportedBy}}</div>
+        <div class="small-4 columns">{{formatDate firstReportedDate "%D %I:%M %p"}}</div>
+    </div>
+    <div id="last-confirmed-by-container" class="row collapse hidden">
+        <div class="small-4 columns">{{resource "lastConfirmedByHeaderText"}}&nbsp;{{lastConfirmedBy}}</div>
+        <div class="small-4 columns">{{formatDate lastConfirmedDate "%D %I:%M %p"}}</div>
+    </div>
+</div>

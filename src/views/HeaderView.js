@@ -24,7 +24,8 @@ define(function (require) {
             'click #go-to-station-entry-log-history-list-button': 'goToStationEntryLogHistoryList',
             'click #go-to-station-list-button': 'goToStationList',
             'click #go-to-personnel-list-button': 'goToPersonnelList',
-            'click #go-to-maintain-purposes-button': 'goToMaintainPurposes'
+            'click #go-to-maintain-purposes-button': 'goToMaintainPurposes',
+            'click #go-to-maintain-exclusions-button': 'goToMaintainExclusions'
         },
         render: function () {
             console.trace('HeaderView.render');
@@ -37,9 +38,9 @@ define(function (require) {
         },
         userRoleUpdated: function (userRole) {
             if (userRole === UserRolesEnum.NocAdmin) {
-                this.$('#go-to-maintain-purposes-link-container').removeClass('hidden');
+                this.$('.admin-link-container').removeClass('hidden');
             } else {
-                this.$('#go-to-maintain-purposes-link-container').addClass('hidden');
+                this.$('.admin-link-container').addClass('hidden');
             }
         },
         titleButtonClick: function (event) {
@@ -76,6 +77,12 @@ define(function (require) {
                 event.preventDefault();
             }
             this.dispatcher.trigger(AppEventNamesEnum.goToMaintainPurposes);
+        },
+        goToMaintainExclusions: function (event) {
+            if (event) {
+                event.preventDefault();
+            }
+            this.dispatcher.trigger(AppEventNamesEnum.goToMaintainExclusions);
         }
     });
 

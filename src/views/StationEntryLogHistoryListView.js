@@ -22,15 +22,23 @@ define(function(require) {
             this.regionCompleteCollection = options.regionCompleteCollection;
             this.areaCompleteCollection = options.areaCompleteCollection;
 
+            this.dolRegionCompleteCollection = options.dolRegionCompleteCollection;
+            this.dolAreaCompleteCollection = options.dolAreaCompleteCollection;
+
             this.stationIdentifierCollection = options.stationIdentifierCollection || new ListItemCollection();
             this.regionCollection = options.regionCollection || new ListItemCollection();
             this.areaCollection = options.areaCollection || new ListItemCollection();
+
+            this.dolRegionCollection = options.dolRegionCollection;
+            this.dolAreaCollection = options.dolAreaCollection;
 
             this.listenTo(this.collection, 'reset', this.addAll);
             this.listenTo(this.collection, 'sort', this.addAll);
             this.listenTo(this.stationIdentifierCollection, 'reset', this.addStationNameFilter);
             this.listenTo(this.regionCollection, 'reset', this.addRegionNameFilter);
             this.listenTo(this.areaCollection, 'reset', this.addAreaNameFilter);
+            this.listenTo(this.dolRegionCollection, 'reset', this.addDolRegionNameFilter);
+            this.listenTo(this.dolAreaCollection, 'reset', this.addDolAreaNameFilter);
 
             this.listenTo(this, 'leave', this.onLeave);
         },
@@ -41,7 +49,8 @@ define(function(require) {
             var renderModel = _.extend({}, currentContext.model);
             currentContext.$el.html(template(renderModel));
 
-            currentContext.setDefaultDateFilters(-1);
+            currentContext.setDefaultDateFilters(0);
+            currentContext.onChangeIncludeTD();
 
             return this;
         },
@@ -55,15 +64,20 @@ define(function(require) {
             'click .close-alert-box-button': 'closeAlertBox',
             'click #export-station-entry-log-list-button': 'exportStationEntryLogList',
             'click .refresh-button': 'setDateFilter',
-			'change #station-filter': 'onChangeStationFilter',
-			'change #area-filter': 'onChangeAreaFilter',
-			'change #region-filter': 'onChangeRegionFilter'
+            'change #station-filter': 'onChangeStationFilter',
+            'change #area-filter': 'onChangeAreaFilter',
+            'change #region-filter': 'onChangeRegionFilter',
+            'click #filter-station-entry-td': 'onChangeIncludeTD',
+            'click #filter-station-entry-tc': 'onChangeIncludeTC',
+            'change #dol-area-filter': 'onChangeDolAreaFilter',
+            'change #dol-region-filter': 'onChangeDolRegionFilter'
         },
         addAll: function() {
             this._leaveChildren();
             this.clearSortIndicators();
             _.each(this.collection.models, this.addOne, this);
             this.addSortIndicators();
+            this.listenToWindowResize();
             this.hideLoading();
         },
         addOne: function(stationEntryLog) {
@@ -85,13 +99,18 @@ define(function(require) {
             if (event) {
                 event.preventDefault();
             }
+            this.$('#filter-station-entry-tc').prop('checked', true);
+            this.$('#filter-station-entry-td').prop('checked', true);
 
             this.stationIdentifierCollection.reset(this.stationIdentifierCompleteCollection.models);
-			this.$('#station-filter').val('');
+            this.$('#station-filter').val('');
             this.$('#region-filter').val('');
-			this.areaCollection.reset(this.areaCompleteCollection.models);
+            this.areaCollection.reset(this.areaCompleteCollection.models);
             this.$('#area-filter').val('');
-            this.setDefaultDateFilters(-1);
+            this.$('#dol-region-filter').val('');
+            this.dolAreaCollection.reset(this.dolAreaCompleteCollection.models);
+            this.$('#dol-area-filter').val('');
+            this.setDefaultDateFilters(0);
             this.collection.setSortAttribute('outTime');
 
             this.refreshStationEntryLogList();
@@ -99,18 +118,33 @@ define(function(require) {
         refreshStationEntryLogList: function() {
             this.showLoading();
 
+            var showNoc = this.$('#filter-station-entry-tc').is(':checked');
+            var showDol = this.$('#filter-station-entry-td').is(':checked');
+            if (showNoc === false & showDol === false) {
+                this.$('#filter-station-entry-tc').prop('checked', true);
+                this.$('#filter-station-entry-td').prop('checked', true);
+                showDol = true;
+                showNoc = true;
+                this.onChangeIncludeTD();
+            }
             var stationId = this.$('#station-filter').val();
             var regionName = this.$('#region-filter').val();
             var areaName = this.$('#area-filter').val();
+            var dolRegionName = this.$('#dol-region-filter').val();
+            var dolAreaName = this.$('#dol-area-filter').val();
             var startDate = this.$('#start-date-filter').val();
             //var startTime = this.$('#start-time-filter').val();
             var endDate = this.$('#end-date-filter').val();
             //var endTime = this.$('#end-time-filter').val();
 
             var options = {
+                showNoc: showNoc,
+                showDol: showDol,
                 stationId: stationId,
                 regionName: regionName,
                 areaName: areaName,
+                dolRegionName: dolRegionName,
+                dolAreaName: dolAreaName,
                 startDate: startDate,
                 //startTime: startTime,
                 endDate: endDate,
@@ -149,24 +183,39 @@ define(function(require) {
                 event.preventDefault();
             }
             var currentContext = this;
+            var showNoc = this.$('#filter-station-entry-tc').is(':checked');
+            var showDol = this.$('#filter-station-entry-td').is(':checked');
+            if (showNoc === false & showDol === false) {
+                this.$('#filter-station-entry-tc').prop('checked', true);
+                this.$('#filter-station-entry-td').prop('checked', true);
+                showDol = true;
+                showNoc = true;
+                this.onChangeIncludeTD();
+            }
             var stationId = this.$('#station-filter').val();
             var regionName = this.$('#region-filter').val();
             var areaName = this.$('#area-filter').val();
+            var dolRegionName = this.$('#dol-region-filter').val();
+            var dolAreaName = this.$('#dol-area-filter').val();
             var startDate = this.$('#start-date-filter').val();
             //var startTime = this.$('#start-time-filter').val();
             var endDate = this.$('#end-date-filter').val();
             //var endTime = this.$('#end-time-filter').val();
             var options = {
+                showNoc: showNoc,
+                showDol: showDol,
                 stationId: stationId,
                 areaName: areaName,
                 regionName: regionName,
+                dolRegionName: dolRegionName,
+                dolAreaName: dolAreaName,
                 startDate: startDate,
                 //startTime: startTime,
                 endDate: endDate,
                 //endTime: endTime,
                 reportType: 'HistoryStationEntryLogs'
             };
-            
+
             var triggerExport = function() {
                 this.dispatcher.trigger(AppEventNamesEnum.goToExportStationEntryLogList, currentContext.collection, options);
 

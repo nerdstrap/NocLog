@@ -23,6 +23,8 @@ define(function(require) {
 
             var renderModel = _.extend({}, currentContext.model.attributes);
             currentContext.$el.html(template(renderModel));
+            
+            this.showItemIcons();
 
             return this;
         },
@@ -35,6 +37,14 @@ define(function(require) {
             }
             var stationId = this.model.get('stationId');
             this.dispatcher.trigger(AppEventNamesEnum.goToStationWithId, stationId);
+        },
+        showItemIcons: function() {
+            var currentContext = this;
+            if (currentContext.model.has('linkedStationName')
+                ||currentContext.model.has('hasWarnings')
+                ) {
+                currentContext.$('.item-icons').removeClass('hidden');
+            }
         }
     });
 

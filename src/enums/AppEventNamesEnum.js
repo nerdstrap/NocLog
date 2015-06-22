@@ -1,58 +1,77 @@
 define(function(require) {
-    'use strict';
-
-    var AppEventNamesEnum = {
+'use strict';
+        var AppEventNamesEnum = {
         login: 'login',
-        logout: 'logout',
-        
-        userRoleUpdated: 'userRoleUpdated',
-        
-        goToStationEntryLogList: 'goToStationEntryLogList',
-        goToStationEntryLogHistoryList: 'goToStationEntryLogHistoryList',
-        goToStationList: 'goToStationList',
-        goToPersonnelList: 'goToPersonnelList',
-        goToMaintainPurposes: 'goToMaintainPurposes',
-        
-        goToStationEntryLogWithId: 'goToStationEntryLogWithId',
-        goToStationWithId: 'goToStationWithId',
-        goToPersonnel: 'goToPersonnel',
-        
-        refreshStationEntryLogList: 'refreshStationEntryLogList',
-        refreshStationList: 'refreshStationList',
-        refreshPersonnelList: 'refreshPersonnelList',
-        refreshMaintainPurposes: 'refreshMaintainPurposes',
-        
-        checkIn: 'checkIn',
-        cancelCheckIn: 'cancelCheckIn',
-        checkInSuccess: 'checkInSuccess',
-        checkInError: 'checkInError',
-        
-        checkOut: 'checkOut',
-        checkOutSuccess: 'checkOutSuccess',
-        checkOutError: 'checkOutError',
-        
-        updateCheckIn: 'updateCheckIn',
-        cancelUpdateCheckIn: 'cancelUpdateCheckIn',
-        updateCheckInSuccess: 'updateCheckInSuccess',
-        updateCheckInError: 'updateCheckInError',
-        
-        refreshOptions: 'refreshOptions',
-        refreshFilters: 'refreshFilters',
-        
-        addItem: 'addItem',
-        updateItem: 'updateItem',
-        addItemSuccess: 'addItemSuccess',
-        addItemError: 'addItemError',
-        updateItemSuccess: 'updateItemSuccess',
-        updateItemError: 'updateItemError',
-        
-        goToDirectionsWithLatLng: 'goToDirectionsWithLatLng',
-        goToExportStationEntryLogList: 'goToExportStationEntryLogList'
-    };
+                logout: 'logout',
+                userRoleUpdated: 'userRoleUpdated',
+                goToStationEntryLogList: 'goToStationEntryLogList',
+                goToStationEntryLogHistoryList: 'goToStationEntryLogHistoryList',
+                goToStationList: 'goToStationList',
+                goToPersonnelList: 'goToPersonnelList',
+                goToMaintainPurposes: 'goToMaintainPurposes',
+                goToStationEntryLogWithId: 'goToStationEntryLogWithId',
+                goToStationWithId: 'goToStationWithId',
+                goToPersonnel: 'goToPersonnel',
+                refreshStationEntryLogList: 'refreshStationEntryLogList',
+                refreshStationList: 'refreshStationList',
+                refreshPersonnelList: 'refreshPersonnelList',
+                refreshOverridePersonnelList: 'refreshOverridePersonnelList',
+                refreshMaintainPurposes: 'refreshMaintainPurposes',
+                refreshMaintainExclusions: 'refreshMaintainExclusions',
+                checkIn: 'checkIn',
+                cancelCheckIn: 'cancelCheckIn',
+                checkInSuccess: 'checkInSuccess',
+                checkInError: 'checkInError',
+                checkInFailedWithHazard: 'checkInFailedWithHazard',
+                checkOutFailedWithHazard: 'checkOutFailedWithHazard',
+                updateCheckInFailedWithHazard: 'updateCheckInFailedWithHazard',
+                checkOut: 'checkOut',
+                checkOutSuccess: 'checkOutSuccess',
+                checkOutError: 'checkOutError',
+                updateCheckIn: 'updateCheckIn',
+                cancelUpdateCheckIn: 'cancelUpdateCheckIn',
+                updateCheckInSuccess: 'updateCheckInSuccess',
+                updateCheckInError: 'updateCheckInError',
+                refreshOptions: 'refreshOptions',
+                refreshFilters: 'refreshFilters',
+                addItem: 'addItem',
+                updateItem: 'updateItem',
+                addItemSuccess: 'addItemSuccess',
+                addItemError: 'addItemError',
+                updateItemSuccess: 'updateItemSuccess',
+                updateItemError: 'updateItemError',
+                addExclusion: 'addExclusion',
+                deleteExclusion: 'deleteExclusion',
+                addExclusionSuccess: 'addExclusionSuccess',
+                addExclusionError: 'addExclusionError',
+                deleteExclusionSuccess: 'deleteExclusionSuccess',
+                deleteExclusionError: 'deleteExclusionError',
+                updateLinkedStation: 'updateLinkedStation',
+                updateLinkedStationSuccess: 'updateLinkedStationSuccess',
+                updateLinkedStationError: 'updateLinkedStationError',
+                addWarning: 'addWarning',
+                addWarningSuccess: 'addWarningSuccess',
+                addWarningError: 'addWarningError',
+                confirmWarning: 'confirmWarning',
+                confirmWarningSuccess: 'confirmWarningSuccess',
+                confirmWarningError: 'confirmWarningError',
+                clearWarning: 'clearWarning',
+                clearWarningSuccess: 'clearWarningSuccess',
+                clearWarningError: 'clearWarningError',
+                allWarningsCleared: 'allWarningsCleared',
+                refreshLinkedStationDetails: 'refreshLinkedStationDetails',
+                refreshLinkedStationDetailsSuccess: 'refreshLinkedStationDetailsSuccess',
+                refreshLinkedStationDetailsError: 'refreshLinkedStationDetailsError',
+                getToaStation: 'getToaStation',
+                getToaStationSuccess: 'getToaStationSuccess',
+                getToaStationError: 'getToaStationError',
+                refreshStationWarningList: 'refreshStationWarningList',
+                goToDirectionsWithLatLng: 'goToDirectionsWithLatLng',
+                goToExportStationEntryLogList: 'goToExportStationEntryLogList'
+        };
+        if (Object.freeze) {
+Object.freeze(AppEventNamesEnum);
+}
 
-    if (Object.freeze) {
-        Object.freeze(AppEventNamesEnum);
-    }
-
-    return AppEventNamesEnum;
-});
+return AppEventNamesEnum;
+        });

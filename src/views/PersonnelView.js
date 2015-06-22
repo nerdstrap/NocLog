@@ -75,6 +75,16 @@ define(function(require) {
                 if (currentContext.model.has('userName')) {
                     options.userName = currentContext.model.get('userName');
                 }
+            
+                var showNoc = currentContext.$('#filter-station-entry-tc').is(':checked');
+                if (showNoc) {
+                    options.showNoc = true;
+                }
+                var showDol = currentContext.$('#filter-station-entry-td').is(':checked');
+                if (showDol) {
+                    options.showDol = true;
+                }
+
                 currentContext.personnelStationEntryLogListViewInstance.showLoading();
                 currentContext.dispatcher.trigger(AppEventNamesEnum.refreshStationEntryLogList, currentContext.stationEntryLogCollection, options);
                 currentContext.dispatcher.trigger(AppEventNamesEnum.refreshOptions, {stationIdentifierCollection: currentContext.stationIdentifierCollection});
@@ -91,7 +101,9 @@ define(function(require) {
             currentContext.appendChildTo(currentContext.personnelOpenStationEntryLogViewInstance, '#personnel-open-station-entry-log-view');
 
             var options = {
-                onlyOpen: true
+                onlyOpen: true,
+                showNoc: true,
+                showDol: true
             };
             if (currentContext.model.has('userId')) {
                 options.userId = currentContext.model.get('userId');
@@ -99,6 +111,7 @@ define(function(require) {
             if (currentContext.model.has('userName')) {
                 options.userName = currentContext.model.get('userName');
             }
+
             currentContext.personnelOpenStationEntryLogViewInstance.showLoading();
             this.listenToOnce(currentContext.openStationEntryLogCollection, 'reset', currentContext.addOpenStationEntryLog);
             currentContext.dispatcher.trigger(AppEventNamesEnum.refreshStationEntryLogList, currentContext.openStationEntryLogCollection, options);

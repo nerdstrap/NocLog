@@ -6099,6 +6099,7 @@ body:before {
 
 .personnel-list-view,
 .purpose-list-view,
+.exclusion-list-view,
 .station-entry-log-list-view,
 .station-entry-log-history-list-view,
 .station-list-view,
@@ -6146,7 +6147,7 @@ body:before {
   font-size: 1.5em; }
 
 .scroll {
-  height: 550px;
+  /*height:550px;*/
   overflow: scroll;
   overflow-x: hidden; }
 
@@ -6235,6 +6236,7 @@ span.detail {
   font-size: 1rem; }
 
 .purpose-list-item-view .invalid,
+.exclusion-list-item-view .invalid,
 .new-station-entry-log-view .invalid,
 .edit-station-entry-log-view .invalid {
   color: #c22222;
@@ -6289,8 +6291,10 @@ label {
   cursor: default; }
 
 #purpose-other-input,
-#additional-info-input {
-  width: 99%;
+#purpose-other-input,
+#additional-info-input,
+.exclusion-user-id-input {
+  width: 99% !important;
   resize: none; }
 
 .view-station-entry-log-button,
@@ -6317,3 +6321,33 @@ label {
 .text-icon {
   width: 20px;
   margin-bottom: 5px; }
+
+.station-hazard-icon {
+  color: red;
+  font-size: 3rem;
+  float: left;
+  padding-right: 10px;
+  padding-bottom: 10px; }
+
+.station-hazard-icon-small {
+  color: red;
+  font-size: 16px; }
+
+#linked-hazard-comments {
+  font-style: italic; }
+
+#linked-tdc-label,
+#linked-ddc-label {
+  font-weight: bold;
+  font-size: 1.5em;
+  margin-left: 5px; }
+
+#linked-tdc-center,
+#linked-ddc-center {
+  font-size: 1.2em; }
+
+#override-name {
+  font-style: italic; }
+
+.pad-left {
+  padding-left: 10px; }
