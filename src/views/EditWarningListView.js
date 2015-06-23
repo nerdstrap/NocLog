@@ -27,7 +27,7 @@ define(function(require) {
             
             this.stationModel = options.stationModel;
 
-            this.listenTo(this.warningCollection, 'reset', this.addAll);
+            this.listenToOnce(this.warningCollection, 'reset', this.addAll);
             
             this.listenTo(appEvents, AppEventNamesEnum.clearWarningSuccess, this.onClearWarningSuccess);
             this.listenTo(appEvents, AppEventNamesEnum.addWarningSuccess, this.onAddWarningSuccess);
@@ -38,10 +38,7 @@ define(function(require) {
 
             var renderModel = _.extend({}, currentContext.model);
             currentContext.$el.html(template(renderModel));
-            
-            var stationId = currentContext.stationModel.get('stationId');            
-            currentContext.dispatcher.trigger(AppEventNamesEnum.refreshStationWarningList, currentContext.warningCollection, {stationId: stationId});
-            
+    
             this.renderNewAddWarningView();
 
             return this;
@@ -54,12 +51,18 @@ define(function(require) {
                 model: newStationWarningModel,
                 dispatcher: currentContext.dispatcher
             });
+            if (currentContext.userName) {
+                addWarningListItemView.setUserName(currentContext.userName);
+            }
             this.appendChildTo(addWarningListItemView, '#add-warning-list-item-container'); 
         },
         setUserRole: function(userRole) {
             var currentContext = this;
             currentContext.userRole = userRole;
             currentContext.checkUserRole();
+        },
+        setUserName: function(userName) {
+            this.userName = userName;
         },
         events: {
             'click #refresh-warning-list-button': 'refreshWarningList',

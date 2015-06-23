@@ -14,7 +14,7 @@ define(function(require) {
             options || (options = {});
             this.dispatcher = options.dispatcher || this;
 
-            this.listenTo(this.collection, 'reset', this.addAll);
+            this.listenToOnce(this.collection, 'reset', this.addAll);
         },
         render: function() {
             console.trace('StationWarningListView.render()');

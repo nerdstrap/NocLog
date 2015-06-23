@@ -1,17 +1,18 @@
 define(function(require) {
-
     'use strict';
 
     var $ = require('jquery'),
             _ = require('underscore'),
             Backbone = require('backbone'),
             BaseSingletonView = require('views/BaseSingletonView'),
-            DolStationModel = require('models/DolStationModel'),
-            DolStationView = require('views/DolStationView'),
             EditWarningListView = require('views/EditWarningListView'),
+            StationWarningListView = require('views/StationWarningListView'),
+            LinkedStationView = require('views/LinkedStationView'),
+            StationWarningCollection = require('collections/StationWarningCollection'),
             AppEventNamesEnum = require('enums/AppEventNamesEnum'),
             UserRolesEnum = require('enums/UserRolesEnum'),
             appEvents = require('events'),
+            helpers = require('handlebars.helpers'),
             template = require('hbs!templates/Station');
 
     var StationView = BaseSingletonView.extend({
@@ -19,14 +20,17 @@ define(function(require) {
             console.trace('StationView.initialize');
             options || (options = {});
             this.dispatcher = options.dispatcher || this;
+            this.stationWarningCollection = new StationWarningCollection();
 
-            this.listenTo(this.model, 'change', this.render);
-            this.listenTo(this.model, AppEventNamesEnum.addLinkedStationSuccess, this.addLinkedStationSuccess);
-            this.listenTo(this.model, AppEventNamesEnum.addLinkedStationError, this.addLinkedStationError);
-            this.listenTo(this.model, AppEventNamesEnum.clearLinkedStationSuccess, this.clearLinkedStationSuccess);
-            this.listenTo(this.model, AppEventNamesEnum.clearLinkedStationError, this.clearLinkedStationError);
+            this.listenTo(appEvents, AppEventNamesEnum.addLinkedStationSuccess, this.onAddLinkedStationSuccess);
+            this.listenTo(appEvents, AppEventNamesEnum.addLinkedStationError, this.onAddLinkedStationError);
+            this.listenTo(appEvents, AppEventNamesEnum.clearLinkedStationSuccess, this.onClearLinkedStationSuccess);
+            this.listenTo(appEvents, AppEventNamesEnum.clearLinkedStationError, this.onClearLinkedStationError);
             this.listenTo(appEvents, AppEventNamesEnum.addWarningSuccess, this.onAddWarningSuccess);
-            this.listenTo(appEvents, AppEventNamesEnum.allWarningsCleared, this.onAllWarningsCleard);
+            this.listenTo(appEvents, AppEventNamesEnum.addWarningSuccess, this.onAddWarningSuccess);
+
+            this.listenTo(this, 'loaded', this.onLoaded);
+            this.listenTo(this, 'leave', this.onLeave);
         },
         render: function() {
             console.trace('StationView.render()');
@@ -35,89 +39,131 @@ define(function(require) {
             var renderModel = _.extend({}, currentContext.model.attributes);
             currentContext.$el.html(template(renderModel));
 
-            currentContext.updateViewFromModel();
-
-            if (currentContext.newDolStationViewInstance) {
-                this.$('#dol-station-view').html(currentContext.newDolStationViewInstance.el);
-            }
-            this.renderWarningListView();
-
-            this.hideLoading();
-
             return this;
         },
         renderWarningListView: function() {
             var currentContext = this;
-            var warningCollection = new Backbone.Collection();
-            var editWarningListView = new EditWarningListView({
-                stationModel: currentContext.model,
-                collection: warningCollection,
-                dispatcher: currentContext.dispatcher
-            });
-            editWarningListView.render();
-            currentContext.$('#warning-list-view-container').html(editWarningListView.el);
+
+            var stationId = currentContext.model.get('stationId');
+            var options = {
+                controller: currentContext,
+                dispatcher: currentContext.dispatcher,
+                collection: currentContext.stationWarningCollection,
+                parentModel: currentContext.model
+            };
+            if (currentContext.userRole === UserRolesEnum.NocAdmin) {
+                currentContext.stationWarningsView = new EditWarningListView(options);
+                if (currentContext.userName) {
+                    currentContext.stationWarningsView.setUserName(currentContext.userName);
+                }
+            } else {
+                currentContext.stationWarningsView = new StationWarningListView(options);
+            }
+            currentContext.renderChildInto(currentContext.stationWarningsView, currentContext.$('#warning-list-view-container'));
+            currentContext.dispatcher.trigger(AppEventNamesEnum.refreshStationWarningList, currentContext.stationWarningCollection, {stationId: stationId});
         },
-        setUserRole: function(userRole) {
-            this.userRole = userRole;
-//            this.userRole = 'NocUser';
+        renderLinkedStationView: function() {
+            var currentContext = this;
+            if (currentContext.userRole === UserRolesEnum.NocAdmin) {
+                if (currentContext.model.has('linkedStationId') && currentContext.model.has('linkedStationId')) {
+                    currentContext.$('#linked-station-id-label').text(currentContext.model.get('linkedStationId'));
+                    currentContext.$('#linked-station-name-label').text(currentContext.model.get('linkedStationName'));
+                    currentContext.$('#no-linked-station-read-only-view').addClass('hidden');
+                    currentContext.$('#clear-linked-station-view').removeClass('hidden');
+                    currentContext.$('#clear-linked-station-button').removeClass('hidden');
+                    currentContext.$('#add-linked-station-view').addClass('hidden');
+                } else {
+                    currentContext.$('#no-linked-station-read-only-view').removeClass('hidden');
+                    currentContext.$('#clear-linked-station-view').addClass('hidden');
+                    currentContext.$('#add-linked-station-view').removeClass('hidden');
+                }
+            } else {
+                if (currentContext.model.has('linkedStationId') && currentContext.model.has('linkedStationId')) {
+                    currentContext.$('#linked-station-id-label').text(currentContext.model.get('linkedStationId'));
+                    currentContext.$('#linked-station-name-label').text(currentContext.model.get('linkedStationName'));
+                    currentContext.$('#no-linked-station-read-only-view').addClass('hidden');
+                    currentContext.$('#clear-linked-station-view').removeClass('hidden');
+                    currentContext.$('#clear-linked-station-button').addClass('hidden');
+                    currentContext.$('#add-linked-station-view').addClass('hidden');
+                } else {
+                    currentContext.$('#no-linked-station-read-only-view').removeClass('hidden');
+                    currentContext.$('#clear-linked-station-view').addClass('hidden');
+                    currentContext.$('#add-linked-station-view').addClass('hidden');
+                }
+            }
         },
         events: {
             'click .directions-link': 'goToDirectionsWithLatLng',
             'click .section-header': 'toggleSectionDetails',
-            'click #linked-station-add-button': 'goToAddLinkedStation',
             'keypress #linked-station-id-input': 'invokeInputLinkedStationId',
-            'click #linked-station-save-button': 'validateAndSubmitLinkedStation',
-            'click #linked-station-cancel-edit-button': 'goToCancelEditLinkedStation',
-            'click #linked-station-edit-button': 'goToEditLinkedStation',
+            'click #add-linked-station-button': 'validateAndSubmitLinkedStation',
+            'click #cancel-add-linked-station-button': 'resetLinkedStationInput',
+            'click #clear-linked-station-button': 'clearLinkedStation',
             'click .close-alert-box-button': 'closeAlertBox'
-        },
-        updateUserPrivileges: function() {
-            if (this.userRole === UserRolesEnum.NocAdmin) {
-                this.$('#linked-station-add-button').removeClass('hidden');
-                this.$('#linked-station-edit-button').removeClass('hidden');
-            } else {
-                this.$('#linked-station-add-button').addClass('hidden');
-                this.$('#linked-station-edit-button').addClass('hidden');
-            }
         },
         updateViewFromModel: function() {
             var currentContext = this;
-            currentContext.$('#linkedStationId').html(currentContext.model.get('linkedStationId'));
-            currentContext.$('#linkedStationName').html(currentContext.model.get('linkedStationName'));
-            if (currentContext.model.has('linkedStationId') && (currentContext.model.get('linkedStationId').length > 0)) {
-                currentContext.displayLinkedStation(true);
-            } else {
-                currentContext.displayLinkedStation(false);
-            }
-            var hasWarnings = currentContext.model.get('hasWarnings');
-            currentContext.displayHasWarnings(hasWarnings);
-            currentContext.updateUserPrivileges();
+            currentContext.$('#station-name-label').text(currentContext.model.get('stationName'));
+            currentContext.$('#go-to-directions-button').attr('data-latitude', currentContext.model.get('latitude')).attr('data-longitude', currentContext.model.get('longitude'));
+            currentContext.$('#contact-audinet-label').text(currentContext.model.get('contactAudinet'));
+            currentContext.$('#telephone-label').text(helpers.formatPhone(currentContext.model.get('telephone')));
+            currentContext.$('#address1-label').text(currentContext.model.get('address1'));
+            currentContext.$('#city-label').text(currentContext.model.get('city'));
+            currentContext.$('#state-label').text(currentContext.model.get('state'));
+            currentContext.$('#postal-code-label').text(currentContext.model.get('postalCode'));
+            currentContext.$('#county-label').text(currentContext.model.get('county'));
+            currentContext.$('#latitude-label').text(currentContext.model.get('latitude'));
+            currentContext.$('#longitude-label').text(currentContext.model.get('longitude'));
+            currentContext.$('#directions-label').text(currentContext.model.get('directions'));
+
+            currentContext.$('#contact-id-label').text(currentContext.model.get('contactId'));
+            currentContext.$('#contact-phone-label').text(currentContext.model.get('contactPhone'));
+            currentContext.$('#contact-security-phone-label').text(currentContext.model.get('contactSecurityPhone'));
+            currentContext.$('#contact-address1-label').text(currentContext.model.get('contactAddress1'));
+            currentContext.$('#contact-city-label').text(currentContext.model.get('contactCity'));
+            currentContext.$('#contact-state-label').text(currentContext.model.get('contactState'));
+            currentContext.$('#contact-postal-code-label').text(currentContext.model.get('contactPostalCode'));
+
+            currentContext.$('#medical-emergency-department-label').text(currentContext.model.get('medicalEmergencyDepartment'));
+            currentContext.$('#medical-emergency-department-phone-label').text(currentContext.model.get('medicalEmergencyDepartmentPhone'));
+            currentContext.$('#fire-department-label').text(currentContext.model.get('fireDepartment'));
+            currentContext.$('#fire-department-phone-label').text(currentContext.model.get('fireDepartmentPhone'));
+            currentContext.$('#police-department-label').text(currentContext.model.get('policeDepartment'));
+            currentContext.$('#police-department-phone-label').text(currentContext.model.get('policeDepartmentPhone'));
+
+            currentContext.$('#complex-name-label').text(currentContext.model.get('complexName'));
+            currentContext.$('#owning-organization-label').text(currentContext.model.get('owningOrganization'));
+            currentContext.$('#leased-circuits-label').text(currentContext.model.get('leasedCircuits'));
+
+            currentContext.$('#faa-reportable-label').text(currentContext.model.get('faaReportable'));
+            currentContext.$('#faa-region-label').text(currentContext.model.get('faaRegion'));
+            currentContext.$('#tower-number-label').text(currentContext.model.get('towerNumber'));
+            currentContext.$('#nearest-airport-label').text(currentContext.model.get('nearestAirport'));
+
+            currentContext.$('#area-label').text(currentContext.model.get('area'));
+            currentContext.$('#region-label').text(currentContext.model.get('region'));
+            currentContext.$('#benefiting-organization-label').text(currentContext.model.get('benefitingOrganization'));
+            currentContext.$('#serving-electric-utility-label').text(currentContext.model.get('servingElectricUtility'));
+            currentContext.$('#serving-utility-telephone-label').text(currentContext.model.get('servingUtilityTelephone'));
+            currentContext.$('#ac-circuit-feeder-label').text(currentContext.model.get('acCircuitFeeder'));
+            currentContext.$('#transformer-pole-label').text(currentContext.model.get('transformerPole'));
+            currentContext.$('#serving-telephone-company-label').text(currentContext.model.get('servingTelephoneCompany'));
+            currentContext.$('#demarcation-location-label').text(currentContext.model.get('demarcationLocation'));
+            currentContext.$('#telecom-npa-label').text(currentContext.model.get('telecomNpa'));
+            currentContext.$('#telecom-nxx-label').text(currentContext.model.get('telecomNxx'));
+            currentContext.$('#fuel-provider-label').text(currentContext.model.get('fuelProvider'));
+            currentContext.$('#site-type-label').text(currentContext.model.get('siteType'));
+            currentContext.$('#site-access-method-label').text(currentContext.model.get('siteAccessMethod'));
+            currentContext.$('#equipment-label').text(currentContext.model.get('equipment'));
+            currentContext.$('#land-owner-label').text(currentContext.model.get('landOwner'));
+            currentContext.$('#notes-label').text(currentContext.model.get('notes'));
+            return this;
         },
-        toggleSectionDetails: function(event) {
-            if (event) {
-                event.preventDefault();
-            }
-            if (event.target) {
-                var sectionHeaderButton = $(event.target).closest('.section-header');
-                if (sectionHeaderButton) {
-                    sectionHeaderButton.next().toggle('hidden');
-                    var sectionHeaderIcon = sectionHeaderButton.find('i');
-                    if (sectionHeaderIcon.hasClass('fa-minus')) {
-                        sectionHeaderIcon.removeClass('fa-minus').addClass('fa-plus');
-                    } else {
-                        sectionHeaderIcon.removeClass('fa-plus').addClass('fa-minus');
-                    }
-                }
-                if (sectionHeaderButton[0].id === 'linked-station-details-header') {
-                    //Lookup Linked Station details
-                    if (!this.newDolStationViewInstance) {
-                        this.goToDolStation();
-                    } else {
-                        if (this.model.get('linkedStationId') !== this.newDolStationViewInstance.model.get('stationId')) {
-                            this.goToDolStation();
-                        }
-                    }
-                }
+        toggleStationWarningIcon: function(hasWarnings) {
+            if (hasWarnings) {
+                $("#station-warning-icon").removeClass('hidden');
+            } else {
+                $("#station-warning-icon").addClass('hidden');
             }
         },
         goToDirectionsWithLatLng: function(event) {
@@ -127,14 +173,6 @@ define(function(require) {
             var latitude = this.model.get('latitude');
             var longitude = this.model.get('longitude');
             this.dispatcher.trigger(AppEventNamesEnum.goToDirectionsWithLatLng, latitude, longitude);
-        },
-        goToAddLinkedStation: function(event) {
-            if (event) {
-                event.preventDefault();
-            }
-            $("#linked-station-input-container").removeClass('hidden');
-            $("#linked-station-add-container").addClass('hidden');
-            this.$('#linked-station-id-input').focus();
         },
         invokeInputLinkedStationId: function(event) {
             var validPattern = /^[0-9\s]*$/;
@@ -155,133 +193,56 @@ define(function(require) {
             if (event) {
                 event.preventDefault();
             }
-            this.showLoading();
-            var currentContext = this;
-            if ((currentContext.$('#linked-station-id-input').val() === '') ||
-                    (($.isNumeric(currentContext.$('#linked-station-id-input').val())) &&
-                            (currentContext.$('#linked-station-id-input').val() !== currentContext.model.get('linkedStationId')))) {
-                currentContext.model.set({
-                    linkedStationId: currentContext.$('#linked-station-id-input').val(),
-                    linkedStationName: ''
-                });
-                currentContext.updateStation();
-            } else {
-                currentContext.showError('Linked station id must be a number.');
-                this.$('#linked-station-id-input').focus();
-                currentContext.hideLoading();
-                return false;
-            }
-        },
-        displayLinkedStation: function(linkedStationExists) {
-            if (linkedStationExists) {
-                $("#linked-station-icon").removeClass('hidden');
-                $("#linked-station-name-and-id").removeClass('hidden');
-                $("#linked-station-add-container").addClass('hidden');
-                $("#linked-station-details-not-linked").addClass('hidden');
-                $("#linked-station-details-linked").removeClass('hidden');
-                $("#linked-station-details-panel").removeClass('hidden');
-
-            } else {
-                $("#linked-station-icon").addClass('hidden');
-                $("#linked-station-name-and-id").addClass('hidden');
-                $("#linked-station-add-container").removeClass('hidden');
-                $("#linked-station-details-not-linked").removeClass('hidden');
-                $("#linked-station-details-linked").addClass('hidden');
-                $("#linked-station-details-panel").addClass('hidden');
-            }
-        },
-        displayHasWarnings: function(hasWarnings) {
-            if (hasWarnings) {
-                $("#station-warning-icon").removeClass('hidden');
-            } else {
-                $("#station-warning-icon").addClass('hidden');
-            }
-        },
-        updateStation: function() {
-            this.dispatcher.trigger(AppEventNamesEnum.updateLinkedStation, this.model);
-        },
-        updateLinkedStationSuccess: function() {
-            var currentContext = this;
-            $("#linked-station-input-container").addClass('hidden');
-            if (currentContext.newDolStationViewInstance) {
-                currentContext.newDolStationViewInstance.model.trigger('destroy');
-            }
-            currentContext.showSuccess('linked station successfully saved');
-            currentContext.hideLoading();
-        },
-        updateLinkedStationError: function(message) {
-            var currentContext = this;
-            if (currentContext.model.previous('linkedStationId')) {
-                currentContext.model.set({
-                    linkedStationId: currentContext.model.previous('linkedStationId'),
-                    linkedStationName: currentContext.model.previous('linkedStationName')
-                });
-            } else {
-                currentContext.model.unset('linkedStationId');
-            }
-            currentContext.showError(message);
-            $("#linked-station-input-container").removeClass('hidden');
-            $("#linked-station-add-container").addClass('hidden');
-            $("#linked-station-name-and-id").addClass('hidden');
-            $("#linked-station-details-panel").addClass('hidden');
-            this.$('#linked-station-id-input').focus();
-            currentContext.hideLoading();
-        },
-        goToCancelEditLinkedStation: function(event) {
-            if (event) {
-                event.preventDefault();
-            }
-            $("#linked-station-input-container").addClass('hidden');
-            if (this.model.has('linkedStationId') && (this.model.get('linkedStationId').length > 0)) {
-                this.displayLinkedStation(true);
-            } else {
-                this.displayLinkedStation(false);
-            }
-        },
-        goToEditLinkedStation: function(event) {
-            if (event) {
-                event.preventDefault();
-            }
-            var currentContext = this;
-            currentContext.$('#linked-station-id-input').val(currentContext.model.get('linkedStationId'));
-            $("#linked-station-input-container").removeClass('hidden');
-            $("#linked-station-name-and-id").addClass('hidden');
-            this.$('#linked-station-id-input').focus();
-        },
-        goToDolStation: function(event) {
-            if (event) {
-                event.preventDefault();
-            }
-            var currentContext = this;
-
-            var newDolStationModelInstance = new DolStationModel();
-            currentContext.newDolStationViewInstance = new DolStationView({
-                model: newDolStationModelInstance,
-                controller: currentContext,
-                dispatcher: currentContext.dispatcher
-            });
-            currentContext.renderChildInto(currentContext.newDolStationViewInstance, currentContext.$('#dol-station-view'));
-
-            var newLinkedStationId = currentContext.$('#linked-station-id-input').val();
-            var currentLinkedStationId = this.model.get('linkedStationId');
-            var linkedStationId = '';
-            if (newLinkedStationId) {
-                linkedStationId = newLinkedStationId;
-            } else {
-                linkedStationId = currentLinkedStationId;
-            }
-            var options = {
-                stationId: linkedStationId,
-                stationType: 'TD'
+            var stationId = this.model.get('stationId');
+            var linkedStationId = this.$('#linked-station-id-input').val();
+            var linkedStation = {
+                'stationId': stationId,
+                'linkedStationId': linkedStationId
             };
-            currentContext.newDolStationViewInstance.showLoading();
-            currentContext.dispatcher.trigger(AppEventNamesEnum.refreshLinkedStationDetails, currentContext.newDolStationViewInstance.model, options);
+            this.dispatcher.trigger(AppEventNamesEnum.addLinkedStation, linkedStation);
         },
-        onAddWarningSuccess: function() {
-            this.displayHasWarnings(true);
+        resetLinkedStationInput: function(event) {
+            if (event) {
+                event.preventDefault();
+            }
+            this.$('#linked-station-id-input').val('');
         },
-        onAllWarningsCleard: function() {
-            this.displayHasWarnings(false);
+        clearLinkedStation: function(event) {
+            if (event) {
+                event.preventDefault();
+            }
+            var stationId = this.model.get('stationId');
+            this.dispatcher.trigger(AppEventNamesEnum.clearLinkedStation, {'stationId': stationId});
+        },
+        onAddWarningSuccess: function(stationWarning) {
+        },
+        onAddWarningError: function(error) {
+        },
+        onAddLinkedStationSuccess: function(linkedStation) {
+            var currentContext = this;
+            var attributes = {
+                linkedStationId: linkedStation.linkedStationId,
+                linkedStationName: linkedStation.linkedStationName
+            };
+            currentContext.model.set(attributes);
+            currentContext.renderLinkedStationView();
+        },
+        onAddLinkedStationError: function(error) {
+        },
+        onClearLinkedStationSuccess: function(linkedStation) {
+            var currentContext = this;
+            currentContext.model.unset('linkedStationId');
+            currentContext.model.unset('linkedStationName');
+            currentContext.renderLinkedStationView();
+        },
+        onClearLinkedStationError: function(error) {
+        },
+        onLoaded: function() {
+            this.renderWarningListView();
+            this.renderLinkedStationView();
+            this.hideLoading();
+        },
+        onLeave: function() {
         }
     });
 

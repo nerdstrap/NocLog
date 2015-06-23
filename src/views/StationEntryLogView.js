@@ -10,6 +10,7 @@ define(function(require) {
             BaseSingletonView = require('views/BaseSingletonView'),
             ConfirmWarningListView = require('views/ConfirmWarningListView'),
             ClearWarningListView = require('views/ClearWarningListView'),
+            StationWarningListView = require('views/StationWarningListView'),
             PersonnelCollection = require('collections/PersonnelCollection'),
             StationWarningCollection = require('collections/StationWarningCollection'),
             AppEventNamesEnum = require('enums/AppEventNamesEnum'),
@@ -176,14 +177,18 @@ define(function(require) {
                 collection: currentContext.stationWarningCollection,
                 parentModel: currentContext.model
             };
-            if (this.model.get('isCheckOutAction') === true) {
-                if (currentContext.stationWarningCollection && currentContext.stationWarningCollection.length > 0) {
-                    currentContext.stationWarningsView = new ConfirmWarningListView(options);
+            if (!this.readOnly) {
+                if (this.model.get('isCheckOutAction') === true) {
+                    if (currentContext.stationWarningCollection && currentContext.stationWarningCollection.length > 0) {
+                        currentContext.stationWarningsView = new ConfirmWarningListView(options);
+                    } else {
+                        this.$('#station-warnings-container').addClass('hidden');
+                    }
                 } else {
-                    this.$('#station-warnings-container').addClass('hidden');
+                    currentContext.stationWarningsView = new ClearWarningListView(options);
                 }
             } else {
-                currentContext.stationWarningsView = new ClearWarningListView(options);
+                currentContext.stationWarningsView = new StationWarningListView(options);
             }
             if (currentContext.stationWarningsView) {
                 currentContext.renderChildInto(currentContext.stationWarningsView, currentContext.$('#station-warning-list-view'));

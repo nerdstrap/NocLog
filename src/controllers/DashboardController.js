@@ -88,16 +88,17 @@ define(function(require) {
 
             this.listenTo(appEvents, AppEventNamesEnum.addLinkedStation, this.addLinkedStation);
             this.listenTo(appEvents, AppEventNamesEnum.clearLinkedStation, this.clearLinkedStation);
+            this.listenTo(appEvents, AppEventNamesEnum.refreshLinkedStation, this.refreshLinkedStation);
             this.listenTo(appEvents, AppEventNamesEnum.refreshLinkedStationDetails, this.refreshLinkedStationDetails);
             this.listenTo(appEvents, AppEventNamesEnum.getToaStation, this.getToaStation);
 
             this.listenTo(appEvents, AppEventNamesEnum.goToDirectionsWithLatLng, this.goToDirectionsWithLatLng);
             this.listenTo(appEvents, AppEventNamesEnum.goToExportStationEntryLogList, this.goToExportStationEntryLogList);
-            
+
             this.listenTo(appEvents, AppEventNamesEnum.addWarning, this.addStationWarning);
             this.listenTo(appEvents, AppEventNamesEnum.clearWarning, this.clearStationWarning);
             this.listenTo(appEvents, AppEventNamesEnum.updateWarning, this.updateStationWarning);
-            
+
         },
         goToStationEntryLogList: function(options) {
             console.trace('DashboardController.goToStationEntryLogList');
@@ -498,46 +499,66 @@ define(function(require) {
 
             return deferred.promise();
         },
+        /**
+         * 
+         * @param {type} stationId
+         * @returns {promise}
+         * 
+         * Logic for go to Foo with Id should do the following:
+         * 1. new Deferred
+         * 2. new Model with id
+         * 3. new View with controller, dispatcher, model
+         * 4. render the view
+         * 5. update the router
+         * 6. show the loading indicator
+         * 7. get the model from the server
+         * 8. update the user data from the service response
+         * 9. update the model from the service response
+         * 10. trigger the view.loaded event
+         * 11. resolve the promise
+         */
         goToStationWithId: function(stationId) {
             console.trace('DashboardController.goToStationWithId');
-            var currentContext = this,
-                    deferred = $.Deferred();
+            var currentContext = this;
+            var deferred = $.Deferred();
 
-            var stationModelInstance = new StationModel({stationId: stationId});
-            var stationViewInstance = new StationView({
+            var stationModel = new StationModel({stationId: stationId});
+            var stationView = new StationView({
                 controller: currentContext,
                 dispatcher: currentContext.dispatcher,
-                model: stationModelInstance
+                model: stationModel
             });
 
-            currentContext.router.swapContent(stationViewInstance);
+            currentContext.router.swapContent(stationView);
             currentContext.router.navigate('station/' + stationId);
 
-            stationViewInstance.showLoading();
+            stationView.showLoading();
             $.when(currentContext.dashboardService.getStations({stationId: stationId})).done(function(getStationByIdResponse) {
                 currentContext.dispatcher.trigger(AppEventNamesEnum.userRoleUpdated, getStationByIdResponse.userRole);
                 if (getStationByIdResponse.stations && getStationByIdResponse.stations.length > 0) {
-                    stationViewInstance.setUserRole(getStationByIdResponse.userRole);
-                    stationModelInstance.set(getStationByIdResponse.stations[0]);
-                    deferred.resolve(stationViewInstance);
+                    stationView.setUserRole(getStationByIdResponse.userRole);
+                    stationView.setUserName(getStationByIdResponse.userName);
+                    stationModel.set(getStationByIdResponse.stations[0]);
+                    stationView.updateViewFromModel();
+                    stationView.trigger('loaded');
+                    deferred.resolve(stationView);
                 } else {
-                    stationModelInstance.clear();
-                    stationViewInstance.showError('not found!');
+                    stationView.showError('not found!');
                     deferred.reject({
-                        stationView: stationViewInstance,
+                        stationView: stationView,
                         error: 'not found!'
                     });
                 }
             }).fail(function(jqXHR, textStatus, errorThrown) {
-                stationModelInstance.clear();
+                stationModel.clear();
                 if (jqXHR.status === 500) {
                     var guid = env.getNewGuid();
-                    stationViewInstance.addAlertBox(guid, 'alert', 'Critical Error: Please call the IT Service Desk.');
+                    stationView.addAlertBox(guid, 'alert', 'Critical Error: Please call the IT Service Desk.');
                 } else {
-                    stationViewInstance.showError(textStatus);
+                    stationView.showError(textStatus);
                 }
                 deferred.reject({
-                    stationView: stationViewInstance,
+                    stationView: stationView,
                     error: textStatus
                 });
             });
@@ -869,33 +890,31 @@ define(function(require) {
 
             return deferred.promise();
         },
-        addLinkedStation: function(stationModel) {
+        addLinkedStation: function(linkedStation) {
             console.trace('DashboardController.addLinkedStation');
             var currentContext = this,
                     deferred = $.Deferred();
 
-            $.when(currentContext.dashboardService.postAddLinkedStation(stationModel.attributes)).done(function(postAddLinkedStationResults) {
-                stationModel.set(postAddLinkedStationResults.station);
-                stationModel.trigger(AppEventNamesEnum.addLinkedStationSuccess, postAddLinkedStationResults.station);
+            $.when(currentContext.dashboardService.postAddLinkedStation(linkedStation)).done(function(postAddLinkedStationResults) {
+                currentContext.dispatcher.trigger(AppEventNamesEnum.addLinkedStationSuccess, postAddLinkedStationResults.linkedStation);
                 deferred.resolve(postAddLinkedStationResults);
             }).fail(function(jqXHR, textStatus, errorThrown) {
-                stationModel.trigger(AppEventNamesEnum.addLinkedStationError, jqXHR.responseText);
+                currentContext.dispatcher.trigger(AppEventNamesEnum.addLinkedStationError, jqXHR.responseText);
                 deferred.reject('error');
             });
 
             return deferred.promise();
         },
-        clearLinkedStation: function(stationModel) {
+        clearLinkedStation: function(linkedStation) {
             console.trace('DashboardController.clearLinkedStation');
             var currentContext = this,
                     deferred = $.Deferred();
 
-            $.when(currentContext.dashboardService.postClearLinkedStation(stationModel.attributes)).done(function(postClearLinkedStationResults) {
-                stationModel.set(postClearLinkedStationResults.station);
-                stationModel.trigger(AppEventNamesEnum.clearLinkedStationSuccess, postClearLinkedStationResults.station);
+            $.when(currentContext.dashboardService.postClearLinkedStation(linkedStation)).done(function(postClearLinkedStationResults) {
+                currentContext.dispatcher.trigger(AppEventNamesEnum.clearLinkedStationSuccess, postClearLinkedStationResults.linkedStation);
                 deferred.resolve(postClearLinkedStationResults);
             }).fail(function(jqXHR, textStatus, errorThrown) {
-                stationModel.trigger(AppEventNamesEnum.clearLinkedStationError, jqXHR.responseText);
+                currentContext.dispatcher.trigger(AppEventNamesEnum.clearLinkedStationError, jqXHR.responseText);
                 deferred.reject('error');
             });
 

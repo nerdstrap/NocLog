@@ -17,6 +17,12 @@ define(function(require) {
     };
 
     _.extend(BaseSingletonView.prototype, CompositeView.prototype, {
+        setUserRole: function(userRole) {
+            this.userRole = userRole;
+        },
+        setUserName: function(userName) {
+            this.userName = userName;
+        },
         addFilter: function(filterSelector, options, valuePropertyName, textPropertyName, nameOptionalProperty1, valueOptionalProperty1, nameOptionalProperty2, valueOptionalProperty2) {
             var filterRenderModel = {
                 defaultOption: utils.getResource('filterDefaultOption'),
@@ -24,7 +30,7 @@ define(function(require) {
             };
             this.$(filterSelector).html(filterTemplate(filterRenderModel));
         },
-        updateIndicatorLabel: function (indicator) {
+        updateIndicatorLabel: function(indicator) {
             if (indicator.is(':checked')) {
                 indicator.parent().next().addClass('bolder');
                 indicator.parent().prev().removeClass('bolder');
@@ -90,6 +96,23 @@ define(function(require) {
                     var alert = closeAlertButton.closest('[data-alert]');
                     if (alert) {
                         alert.trigger('close').trigger('close.fndtn.alert').remove();
+                    }
+                }
+            }
+        },
+        toggleSectionDetails: function(event) {
+            if (event) {
+                event.preventDefault();
+            }
+            if (event.target) {
+                var sectionHeaderButton = $(event.target).closest('.section-header');
+                if (sectionHeaderButton) {
+                    sectionHeaderButton.next().toggle('hidden');
+                    var sectionHeaderIcon = sectionHeaderButton.find('i');
+                    if (sectionHeaderIcon.hasClass('fa-minus')) {
+                        sectionHeaderIcon.removeClass('fa-minus').addClass('fa-plus');
+                    } else {
+                        sectionHeaderIcon.removeClass('fa-plus').addClass('fa-minus');
                     }
                 }
             }

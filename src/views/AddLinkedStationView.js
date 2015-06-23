@@ -10,24 +10,23 @@ define(function(require) {
             utils = require('utils'),
             AppEventNamesEnum = require('enums/AppEventNamesEnum'),
             appEvents = require('events'),
-            template = require('hbs!templates/AddWarningListItem');
+            template = require('hbs!templates/AddLinkedStation');
 
-    var AddWarningListView = BaseSingletonView.extend({
+    var AddLinkedStationView = BaseSingletonView.extend({
         initialize: function(options) {
-            console.trace('AddWarningListView.initialize');
+            console.trace('AddLinkedStationView.initialize');
             options || (options = {});
             this.dispatcher = options.dispatcher || this;
             this.userRole = options.userRole;
-            this.parentModel = options.parentModel;
 
             this.listenTo(this.model, 'validated', this.onValidated);
             this.listenTo(this, 'leave', this.onLeave);
 
-            this.listenTo(this.model, AppEventNamesEnum.addWarningSuccess, this.onAddWarningSuccess);
-            this.listenTo(this.model, AppEventNamesEnum.addWarningError, this.onAddWarningError);
+            this.listenTo(this.model, AppEventNamesEnum.addLinkedStationSuccess, this.onAddLinkedStationSuccess);
+            this.listenTo(this.model, AppEventNamesEnum.addLinkedStationError, this.onAddLinkedStationError);
         },
         render: function() {
-            console.trace('AddWarningListView.render()');
+            console.trace('AddLinkedStationView.render()');
             var currentContext = this;
 
             validation.unbind(currentContext);
@@ -44,11 +43,11 @@ define(function(require) {
             return this;
         },
         events: {
-            'click .add-station-warning-button': 'validateAndSubmitWarning',
-            'click .reset-add-station-warning-button': 'revertChanges',
+            'click .add-linked-station-button': 'validateAndSubmitLinkedStation',
+            'click .reset-add-linked-station-button': 'revertChanges',
             'click .close-alert-box-button': 'closeAlertBox'
         },
-        validateAndSubmitWarning: function(event) {
+        validateAndSubmitLinkedStation: function(event) {
             if (event) {
                 event.preventDefault();
             }
@@ -57,7 +56,7 @@ define(function(require) {
         },
         updateViewFromModel: function() {
             var currentContext = this;
-            if (currentContext.model.has('warning')) {
+            if (currentContext.model.has('linkedStationId')) {
                 currentContext.$('.warning-input').val(currentContext.model.get('warning').toString());
             } else {
                 currentContext.$('.warning-input').val('');
@@ -70,9 +69,9 @@ define(function(require) {
                 var stationId = currentContext.parentModel.get('stationId');
                 var warning = currentContext.$('.warning-input').val();
                 var firstReportedBy;
-                if(currentContext.parentModel && currentContext.parentModel.get('userName')){
+                if (currentContext.parentModel && currentContext.parentModel.get('userName')) {
                     firstReportedBy = currentContext.parentModel.get('userName');
-                }else if(currentContext.userName){
+                } else if (currentContext.userName) {
                     firstReportedBy = currentContext.userName;
                 }
                 currentContext.model.set({
@@ -85,7 +84,7 @@ define(function(require) {
         onValidated: function(isValid, model, errors) {
             if (isValid) {
                 if (this.model.has('warning') && this.model.get('warning')) {
-                    this.addWarning();
+                    this.addLinkedStation();
                 }
             } else {
                 var message = utils.getResource('validationErrorMessage');
@@ -100,24 +99,21 @@ define(function(require) {
             currentContext.$('.warning-input').val('').removeClass('invalid');
             currentContext.model.unset('warning');
         },
-        addWarning: function() {
+        addLinkedStation: function() {
             this.showLoading();
-            this.dispatcher.trigger(AppEventNamesEnum.addWarning, this.model);
+            this.dispatcher.trigger(AppEventNamesEnum.addLinkedStation, this.model);
         },
-        onAddWarningSuccess: function(stationWarningModel) {
+        onAddLinkedStationSuccess: function(stationLinkedStationModel) {
             this.hideLoading();
-            appEvents.trigger(AppEventNamesEnum.addWarningSuccess, stationWarningModel);
+            appEvents.trigger(AppEventNamesEnum.addLinkedStationSuccess, stationLinkedStationModel);
             this.leave();
         },
-        onAddWarningError: function(message) {
+        onAddLinkedStationError: function(message) {
             this.hideLoading();
             this.showError(message);
-        },
-        setUserName: function(userName) {
-            this.userName = userName;
         }
     });
 
-    return AddWarningListView;
+    return AddLinkedStationView;
 
 });

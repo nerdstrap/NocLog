@@ -18,6 +18,8 @@ define(function(require) {
             this.userRole = options.userRole;
 
             this.listenTo(this, 'leave', this.onLeave);
+            this.listenTo(this.model, AppEventNamesEnum.clearWarningSuccess, this.onClearWarningSuccess);
+            this.listenTo(this.model, AppEventNamesEnum.clearWarningError, this.onClearWarningError);
         },
         render: function() {
             console.trace('ConfirmWarningListItemView.render()');

@@ -70,7 +70,8 @@ define(function(require) {
         'firstNameHeaderText': 'First',        
         'inTimeHeaderText': 'Checked-In',
         'lastNameHeaderText': 'Last',
-        'linkedStationNameHeaderText': 'Linked T&D Station',
+        'linkedStationNameHeaderText': 'T&D Station Name',
+        'linkedStationIdHeaderText': 'T&D Station Id',
         'middleInitialHeaderText': 'MI',
         'newExpectedOutTimeHeaderText': 'New Est. Check-out',
         'outTimeHeaderText': 'Checked-out',
@@ -234,7 +235,11 @@ define(function(require) {
         'confirmButtonText': 'confirm',
         'clearButtonText': 'clear',
         'firstReportedByHeaderText': 'Reported By',
-        'lastConfirmedByHeaderText': 'Confirmed By'
+        'lastConfirmedByHeaderText': 'Confirmed By',
+        'linkedStationHeaderText': 'Linked Station',
+        'linkedStationDetailsHeaderText': 'Linked Station Details',
+        'stationNotLinkedMessageText': 'Station is not currently linked.',
+        'linkedStationIdPlaceholder': 'Enter T&D Station Id'
     };
 
     var defaultResource = '';

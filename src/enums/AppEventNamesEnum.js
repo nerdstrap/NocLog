@@ -46,9 +46,6 @@ define(function(require) {
                 addExclusionError: 'addExclusionError',
                 deleteExclusionSuccess: 'deleteExclusionSuccess',
                 deleteExclusionError: 'deleteExclusionError',
-                updateLinkedStation: 'updateLinkedStation',
-                updateLinkedStationSuccess: 'updateLinkedStationSuccess',
-                updateLinkedStationError: 'updateLinkedStationError',
                 addWarning: 'addWarning',
                 addWarningSuccess: 'addWarningSuccess',
                 addWarningError: 'addWarningError',
@@ -67,7 +64,13 @@ define(function(require) {
                 getToaStationError: 'getToaStationError',
                 refreshStationWarningList: 'refreshStationWarningList',
                 goToDirectionsWithLatLng: 'goToDirectionsWithLatLng',
-                goToExportStationEntryLogList: 'goToExportStationEntryLogList'
+                goToExportStationEntryLogList: 'goToExportStationEntryLogList',
+                addLinkedStation: 'addLinkedStation',
+                addLinkedStationSuccess: 'addLinkedStationSuccess',
+                addLinkedStationError: 'addLinkedStationError',
+                clearLinkedStation: 'clearLinkedStation',
+                clearLinkedStationSuccess: 'clearLinkedStationSuccess',
+                clearLinkedStationError: 'clearLinkedStationError'
         };
         if (Object.freeze) {
 Object.freeze(AppEventNamesEnum);

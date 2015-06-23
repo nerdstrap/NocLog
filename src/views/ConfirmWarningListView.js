@@ -6,6 +6,8 @@ define(function(require) {
             Backbone = require('backbone'),
             BaseListView = require('views/BaseListView'),
             ConfirmWarningListItemView = require('views/ConfirmWarningListItemView'),
+            AppEventNamesEnum = require('enums/AppEventNamesEnum'),
+            appEvents = require('events'),
             template = require('hbs!templates/ConfirmWarningList');
 
     var ConfirmWarningListView = BaseListView.extend({
@@ -15,6 +17,7 @@ define(function(require) {
             this.dispatcher = options.dispatcher || this;
 
             this.listenTo(this.collection, 'reset', this.addAll);
+            this.listenTo(appEvents, AppEventNamesEnum.clearWarningSuccess, this.onClearWarningSuccess);
         },
         render: function() {
             console.trace('ConfirmWarningListView.render()');
@@ -36,6 +39,13 @@ define(function(require) {
                 dispatcher: currentContext.dispatcher
             });
             this.appendChildTo(confirmWarningListItemView, '#station-warning-list-item-container');
+        },
+        onClearWarningSuccess: function(stationWarningModel) {
+            this.collection.remove(this.collection.where({stationWarningId: stationWarningModel.stationWarningId}));
+            if (this.collection.length === 0) {
+                appEvents.trigger(AppEventNamesEnum.allWarningsCleared);
+            }
+            this.showSuccess('clear success');
         },
         onLeave: function() {
         }
