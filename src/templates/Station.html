@@ -1,8 +1,8 @@
 <div class="station-view">
     <div class="row collapse view-status">
         <div class="small-12 columns">
-            <span class="view-message">{{resource "station.loadingMessage"}}</span>
-            <img src="{{resource 'loadingIconSrc'}}" class="view-loading" />
+            <span>{{resource "station.loadingMessage"}}</span>
+            <img src="{{resource 'loadingIconSrc'}}" alt="loading icon"/>
         </div>
     </div>
     <div class="row collapse view-alerts">
@@ -12,11 +12,11 @@
         <div class="small-12 columns">
             <h3 id="station-name-label" data-station-id="{{stationId}}">{{stationName}}&nbsp;
                 <span id="linked-station-icon" class="hidden"><i class="fa fa-link" title="{{resource 'linkedStationIconAlt'}}{{linkedStationName}}"></i></span>
-                <span id="station-warning-icon" class="hidden"><i class="fa fa-bullhorn" title="{{resource 'tcomStationWarningsIconAlt'}}"></i></span>
+                <span id="station-warning-icon" class="hidden"><i class="fa fa-bullhorn" title="{{resource 'stationWarningsIconAlt'}}"></i></span>
             </h3>
         </div>
     </div>
-    <div class="row collapse">
+    <div id="go-to-directions-button-container" class="row collapse hidden">
         <div class="small-12 columns">
             <a id="go-to-directions-button" class="directions-link" data-latitude="{{latitude}}" data-longitude="{{longitude}}" href="#">{{resource "goToMapButtonText"}} <i class="fa fa-map-marker"></i></a>
         </div>
@@ -217,14 +217,17 @@
                                 <span>{{resource "stationNotLinkedMessageText"}}</span>
                             </div>
                         </div>
-                        <div id="clear-linked-station-view" class="row collapse">
+                        <div id="clear-linked-station-view" class="row collapse hidden">
+                            <div class="small-12 columns clear-linked-station-view-status hidden">
+                                <img src="{{resource 'loadingIconSrc'}}" alt="loading icon"/>
+                            </div>
                             <div class="small-12 columns">
                                 <div class="row collapse">
                                     <div class="small-4 columns">
                                         <span>{{resource "linkedStationIdHeaderText"}}</span>
                                     </div>
                                     <div class="small-8 columns">
-                                        <span id="linked-station-id-label" class="detail">{{linkedStationId}}</span>                                        
+                                        <span id="linked-station-id-label" class="detail">{{linkedStationId}}</span>
                                     </div>
                                 </div>
                                 <div class="row collapse">
@@ -232,7 +235,7 @@
                                         <span>{{resource "linkedStationNameHeaderText"}}</span>
                                     </div>
                                     <div class="small-6 columns">
-                                        <span id="linked-station-name-label" class="detail">{{linkedStationName}}</span>                                        
+                                        <span id="linked-station-name-label" class="detail">{{linkedStationName}}</span>
                                     </div>
                                     <div class="small-2 columns">
                                         <a id="clear-linked-station-button" class="button radius tiny hidden" href="#">{{resource "clearButtonText"}}</a>
@@ -241,8 +244,11 @@
                             </div>
                         </div>
                         <div id="add-linked-station-view" class="row collapse hidden">
+                            <div class="small-12 columns add-linked-station-view-status hidden">
+                                <img src="{{resource 'loadingIconSrc'}}" alt="loading icon"/>
+                            </div>
                             <div class="small-8 columns">
-                                <input id="linked-station-id-input" name="linkedStationId" type="text" placeholder='{{resource "linkedStationIdPlaceholder"}}' value="{{linkedStationId}}" />
+                                <input id="linked-station-id-input" name="linkedStationId" type="text" placeholder='{{resource "linkedStationIdPlaceholder"}}' value="{{linkedStationId}}"/>
                             </div>
                             <div class="small-4 columns">
                                 <a id="add-linked-station-button" class="button radius tiny" href="#">{{resource "addButtonText"}}</a>
@@ -251,18 +257,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="row collapse section-header hidden">
-                    <div class="small-12 columns">
-                        <span>{{resource "linkedStationDetailsHeaderText"}}</span>
-                        <i class="fa fa-plus"></i>
-                    </div>
-                </div>
-                <div class="row collapse section-details hidden">
-                    <div class="small-12 columns">
-                        <div id="linked-station-details-view"></div>
-                    </div>
-                </div>
             </div>
+            <div id="linked-station-view-container"></div>
             <div class="panel">
                 <div class="row collapse section-header">
                     <div class="small-12 columns">

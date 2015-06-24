@@ -185,6 +185,8 @@ define(function(require) {
         'postalCodeHeaderText': 'Postal Code',
         'stateHeaderText': 'State',
         'telephoneHeaderText': 'Telephone',
+        'radioHeaderText': 'Radio Channel',
+        'contactsHeaderText': 'emergency Contact Numbers',
         /* contact */
         'contactAddress1HeaderText': 'Mailing Address',
         'contactCityHeaderText': 'City',
@@ -239,7 +241,8 @@ define(function(require) {
         'linkedStationHeaderText': 'Linked Station',
         'linkedStationDetailsHeaderText': 'Linked Station Details',
         'stationNotLinkedMessageText': 'Station is not currently linked.',
-        'linkedStationIdPlaceholder': 'Enter T&D Station Id'
+        'linkedStationIdPlaceholder': 'Enter T&D Station Id',
+        'stationDataHeaderText': 'Additional Station Data'
     };
 
     var defaultResource = '';

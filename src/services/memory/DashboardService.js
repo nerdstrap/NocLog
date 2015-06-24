@@ -691,7 +691,17 @@ define(function(require) {
 	{"areaId": "Texarkana", "areaName": "Texarkana", "regionName": "SWEPCO"},
 	{"areaId": "Tulsa", "areaName": "Tulsa", "regionName": "PSO"}
 	];
+
+	var inMemoryLinkedStation = {
+		stationId: 'THALI',
+		linkedStationId: '1234',
+		linkedStationName: 'TD_DEFAULT'
+	};
+
+    var inMemoryStationWarnings = [];
+    var inMemoryEntryLogExclusions = [];
     var inMemoryUserRole = "NOC_Admin";
+    var inMemoryUserName = "NOC_Admin";
 
     var findOpen = function(options) {
         var stationEntryLogs;
@@ -855,6 +865,39 @@ define(function(require) {
             }, 3000);
             return deferred.promise();
         },
+		getLinkedStation: function(options) {
+			options || (options = {});
+			var data = $.param(options);
+
+            var stations;
+            if (options.stationId) {
+                stations = _.where(inMemoryStations, function(station) {
+                    return station.stationId === options.stationId;
+                });
+            } else if (options.areaName) {
+                stations = _.where(inMemoryStations, function(station) {
+                    return station.areaName === options.areaName;
+                });
+            } else if (options.regionName) {
+                stations = _.where(inMemoryStations, function(station) {
+                    return station.regionName === options.regionName;
+                });
+            } else {
+                stations = inMemoryStations;
+            }
+
+			var deferred = $.Deferred();
+			var results = {
+				stations: stations,
+				regions: inMemoryRegions,
+				areas: inMemoryAreas,
+				userRole: inMemoryUserRole
+			};
+			setTimeout(function() {
+				deferred.resolve(results, "success", null);
+			}, 3000);
+			return deferred.promise();
+		},
         getStationEntryLogs: function(options) {
             options || (options = {});
 
@@ -1026,7 +1069,135 @@ define(function(require) {
                 deferred.resolve(results, "success", null);
             }, 3000);
             return deferred.promise();
-        }
+        },
+		postAddLinkedStation: function(options) {
+            options || (options = {});
+            var data = JSON.stringify(options);
+
+            var deferred = $.Deferred();
+            var results = {
+				linkedStation: inMemoryLinkedStation,
+                userRole: inMemoryUserRole,
+                userName: inMemoryUserName
+            };
+            setTimeout(function() {
+                deferred.resolve(results, "success", null);
+            }, 3000);
+            return deferred.promise();
+		},
+		postClearLinkedStation: function(options) {
+            options || (options = {});
+            var data = JSON.stringify(options);
+
+            var deferred = $.Deferred();
+            var results = {
+                userRole: inMemoryUserRole,
+                userName: inMemoryUserName
+            };
+            setTimeout(function() {
+                deferred.resolve(results, "success", null);
+            }, 3000);
+            return deferred.promise();
+		},
+		getEntryLogExclusions: function(options) {
+            options || (options = {});
+            var data = JSON.stringify(options);
+
+            var deferred = $.Deferred();
+            var results = {
+                userRole: inMemoryUserRole,
+                userName: inMemoryUserName
+            };
+            setTimeout(function() {
+                deferred.resolve(results, "success", null);
+            }, 3000);
+            return deferred.promise();
+		},
+		postAddEntryLogExclusion: function(options) {
+            options || (options = {});
+            var data = JSON.stringify(options);
+
+            var deferred = $.Deferred();
+            var results = {
+                userRole: inMemoryUserRole,
+                userName: inMemoryUserName
+            };
+            setTimeout(function() {
+                deferred.resolve(results, "success", null);
+            }, 3000);
+            return deferred.promise();
+		},
+		postDeleteEntryLogExclusion: function(options) {
+            options || (options = {});
+            var data = JSON.stringify(options);
+
+            var deferred = $.Deferred();
+            var results = {
+                userRole: inMemoryUserRole,
+                userName: inMemoryUserName
+            };
+            setTimeout(function() {
+                deferred.resolve(results, "success", null);
+            }, 3000);
+            return deferred.promise();
+		},
+		postAddStationWarning: function(options) {
+            options || (options = {});
+            var data = JSON.stringify(options);
+
+            var deferred = $.Deferred();
+            var results = {
+                userRole: inMemoryUserRole,
+                userName: inMemoryUserName
+            };
+            setTimeout(function() {
+                deferred.resolve(results, "success", null);
+            }, 3000);
+            return deferred.promise();
+		},
+		postUpdateStationWarning: function(options) {
+            options || (options = {});
+            var data = JSON.stringify(options);
+
+            var deferred = $.Deferred();
+            var results = {
+                userRole: inMemoryUserRole,
+                userName: inMemoryUserName
+            };
+            setTimeout(function() {
+                deferred.resolve(results, "success", null);
+            }, 3000);
+            return deferred.promise();
+		},
+		postClearStationWarning: function(options) {
+            options || (options = {});
+            var data = JSON.stringify(options);
+
+            var deferred = $.Deferred();
+            var results = {
+                userRole: inMemoryUserRole,
+                userName: inMemoryUserName
+            };
+            setTimeout(function() {
+                deferred.resolve(results, "success", null);
+            }, 3000);
+            return deferred.promise();
+		},
+		getStationWarnings: function(options) {
+            options || (options = {});
+            var data = JSON.stringify(options);
+
+            var deferred = $.Deferred();
+            var results = {
+                stationWarnings: inMemoryStationWarnings,
+                userRole: inMemoryUserRole,
+                userName: inMemoryUserName
+            };
+            setTimeout(function() {
+                deferred.resolve(results, "success", null);
+            }, 3000);
+            return deferred.promise();
+		}
     });
 
     return DashboardService;

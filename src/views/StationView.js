@@ -1,22 +1,23 @@
-define(function(require) {
+define(function (require) {
     'use strict';
 
     var $ = require('jquery'),
-            _ = require('underscore'),
-            Backbone = require('backbone'),
-            BaseSingletonView = require('views/BaseSingletonView'),
-            EditWarningListView = require('views/EditWarningListView'),
-            StationWarningListView = require('views/StationWarningListView'),
-            LinkedStationView = require('views/LinkedStationView'),
-            StationWarningCollection = require('collections/StationWarningCollection'),
-            AppEventNamesEnum = require('enums/AppEventNamesEnum'),
-            UserRolesEnum = require('enums/UserRolesEnum'),
-            appEvents = require('events'),
-            helpers = require('handlebars.helpers'),
-            template = require('hbs!templates/Station');
+        _ = require('underscore'),
+        Backbone = require('backbone'),
+        BaseSingletonView = require('views/BaseSingletonView'),
+        EditWarningListView = require('views/EditWarningListView'),
+        StationWarningListView = require('views/StationWarningListView'),
+        LinkedStationView = require('views/LinkedStationView'),
+        StationWarningCollection = require('collections/StationWarningCollection'),
+        StationModel = require('models/StationModel'),
+        AppEventNamesEnum = require('enums/AppEventNamesEnum'),
+        UserRolesEnum = require('enums/UserRolesEnum'),
+        appEvents = require('events'),
+        helpers = require('handlebars.helpers'),
+        template = require('hbs!templates/Station');
 
     var StationView = BaseSingletonView.extend({
-        initialize: function(options) {
+        initialize: function (options) {
             console.trace('StationView.initialize');
             options || (options = {});
             this.dispatcher = options.dispatcher || this;
@@ -32,7 +33,7 @@ define(function(require) {
             this.listenTo(this, 'loaded', this.onLoaded);
             this.listenTo(this, 'leave', this.onLeave);
         },
-        render: function() {
+        render: function () {
             console.trace('StationView.render()');
             var currentContext = this;
 
@@ -41,7 +42,7 @@ define(function(require) {
 
             return this;
         },
-        renderWarningListView: function() {
+        renderWarningListView: function () {
             var currentContext = this;
 
             var stationId = currentContext.model.get('stationId');
@@ -62,35 +63,43 @@ define(function(require) {
             currentContext.renderChildInto(currentContext.stationWarningsView, currentContext.$('#warning-list-view-container'));
             currentContext.dispatcher.trigger(AppEventNamesEnum.refreshStationWarningList, currentContext.stationWarningCollection, {stationId: stationId});
         },
-        renderLinkedStationView: function() {
+        renderLinkedStationView: function () {
             var currentContext = this;
-            if (currentContext.userRole === UserRolesEnum.NocAdmin) {
-                if (currentContext.model.has('linkedStationId') && currentContext.model.has('linkedStationId')) {
-                    currentContext.$('#linked-station-id-label').text(currentContext.model.get('linkedStationId'));
-                    currentContext.$('#linked-station-name-label').text(currentContext.model.get('linkedStationName'));
-                    currentContext.$('#no-linked-station-read-only-view').addClass('hidden');
-                    currentContext.$('#clear-linked-station-view').removeClass('hidden');
+            if (currentContext.model.has('linkedStationId') && currentContext.model.has('linkedStationId')) {
+                currentContext.$('#linked-station-icon').removeClass('hidden');
+                currentContext.$('#no-linked-station-read-only-view').addClass('hidden');
+                currentContext.$('#add-linked-station-view').addClass('hidden');
+                currentContext.$('#clear-linked-station-view').removeClass('hidden');
+                currentContext.$('#linked-station-id-label').text(currentContext.model.get('linkedStationId'));
+                currentContext.$('#linked-station-name-label').text(currentContext.model.get('linkedStationName'));
+                if (currentContext.userRole === UserRolesEnum.NocAdmin) {
                     currentContext.$('#clear-linked-station-button').removeClass('hidden');
-                    currentContext.$('#add-linked-station-view').addClass('hidden');
                 } else {
-                    currentContext.$('#no-linked-station-read-only-view').removeClass('hidden');
-                    currentContext.$('#clear-linked-station-view').addClass('hidden');
-                    currentContext.$('#add-linked-station-view').removeClass('hidden');
+                    currentContext.$('#clear-linked-station-button').addClass('hidden');
                 }
             } else {
-                if (currentContext.model.has('linkedStationId') && currentContext.model.has('linkedStationId')) {
-                    currentContext.$('#linked-station-id-label').text(currentContext.model.get('linkedStationId'));
-                    currentContext.$('#linked-station-name-label').text(currentContext.model.get('linkedStationName'));
-                    currentContext.$('#no-linked-station-read-only-view').addClass('hidden');
-                    currentContext.$('#clear-linked-station-view').removeClass('hidden');
-                    currentContext.$('#clear-linked-station-button').addClass('hidden');
-                    currentContext.$('#add-linked-station-view').addClass('hidden');
-                } else {
-                    currentContext.$('#no-linked-station-read-only-view').removeClass('hidden');
-                    currentContext.$('#clear-linked-station-view').addClass('hidden');
-                    currentContext.$('#add-linked-station-view').addClass('hidden');
+                currentContext.$('#linked-station-icon').addClass('hidden');
+                currentContext.$('#no-linked-station-read-only-view').removeClass('hidden');
+                if (currentContext.userRole === UserRolesEnum.NocAdmin) {
+                    currentContext.$('#add-linked-station-view').removeClass('hidden');
                 }
+                currentContext.$('#clear-linked-station-view').addClass('hidden');
             }
+        },
+        renderLinkedStationDetailsView: function (linkedStationId) {
+            var currentContext = this;
+            currentContext.linkedStationModel = new StationModel({
+                stationId: linkedStationId
+            });
+            var options = {
+                controller: currentContext,
+                dispatcher: currentContext.dispatcher,
+                model: currentContext.linkedStationModel
+            };
+            currentContext.linkedStationView = new LinkedStationView(options);
+            currentContext.renderChildInto(currentContext.linkedStationView, currentContext.$('#linked-station-view-container'));
+
+            currentContext.dispatcher.trigger(AppEventNamesEnum.goToLinkedStationWithId, {'linkedStationId': linkedStationId}, currentContext.linkedStationView);
         },
         events: {
             'click .directions-link': 'goToDirectionsWithLatLng',
@@ -101,10 +110,17 @@ define(function(require) {
             'click #clear-linked-station-button': 'clearLinkedStation',
             'click .close-alert-box-button': 'closeAlertBox'
         },
-        updateViewFromModel: function() {
+        updateViewFromModel: function () {
             var currentContext = this;
             currentContext.$('#station-name-label').text(currentContext.model.get('stationName'));
-            currentContext.$('#go-to-directions-button').attr('data-latitude', currentContext.model.get('latitude')).attr('data-longitude', currentContext.model.get('longitude'));
+
+            if (currentContext.model.has('latitude') && currentContext.model.has('longitude')) {
+                currentContext.$('#go-to-directions-button-container').attr('data-latitude', currentContext.model.get('latitude')).attr('data-longitude', currentContext.model.get('longitude'));
+                currentContext.$('#go-to-directions-button-container').removeClass('hidden');
+            } else {
+                currentContext.$('#go-to-directions-button').addClass('hidden');
+            }
+
             currentContext.$('#contact-audinet-label').text(currentContext.model.get('contactAudinet'));
             currentContext.$('#telephone-label').text(helpers.formatPhone(currentContext.model.get('telephone')));
             currentContext.$('#address1-label').text(currentContext.model.get('address1'));
@@ -159,14 +175,14 @@ define(function(require) {
             currentContext.$('#notes-label').text(currentContext.model.get('notes'));
             return this;
         },
-        toggleStationWarningIcon: function(hasWarnings) {
+        toggleStationWarningIcon: function (hasWarnings) {
             if (hasWarnings) {
                 $("#station-warning-icon").removeClass('hidden');
             } else {
                 $("#station-warning-icon").addClass('hidden');
             }
         },
-        goToDirectionsWithLatLng: function(event) {
+        goToDirectionsWithLatLng: function (event) {
             if (event) {
                 event.preventDefault();
             }
@@ -174,7 +190,7 @@ define(function(require) {
             var longitude = this.model.get('longitude');
             this.dispatcher.trigger(AppEventNamesEnum.goToDirectionsWithLatLng, latitude, longitude);
         },
-        invokeInputLinkedStationId: function(event) {
+        invokeInputLinkedStationId: function (event) {
             var validPattern = /^[0-9\s]*$/;
             if (event) {
                 if (event.keyCode === 13) {
@@ -189,10 +205,11 @@ define(function(require) {
                 }
             }
         },
-        validateAndSubmitLinkedStation: function(event) {
+        validateAndSubmitLinkedStation: function (event) {
             if (event) {
                 event.preventDefault();
             }
+            this.$('.add-linked-station-view-status').removeClass('hidden');
             var stationId = this.model.get('stationId');
             var linkedStationId = this.$('#linked-station-id-input').val();
             var linkedStation = {
@@ -201,48 +218,55 @@ define(function(require) {
             };
             this.dispatcher.trigger(AppEventNamesEnum.addLinkedStation, linkedStation);
         },
-        resetLinkedStationInput: function(event) {
+        resetLinkedStationInput: function (event) {
             if (event) {
                 event.preventDefault();
             }
             this.$('#linked-station-id-input').val('');
         },
-        clearLinkedStation: function(event) {
+        clearLinkedStation: function (event) {
             if (event) {
                 event.preventDefault();
             }
+            this.$('.clear-linked-station-view-status').removeClass('hidden');
             var stationId = this.model.get('stationId');
             this.dispatcher.trigger(AppEventNamesEnum.clearLinkedStation, {'stationId': stationId});
         },
-        onAddWarningSuccess: function(stationWarning) {
+        onAddWarningSuccess: function (stationWarning) {
         },
-        onAddWarningError: function(error) {
+        onAddWarningError: function (error) {
         },
-        onAddLinkedStationSuccess: function(linkedStation) {
+        onAddLinkedStationSuccess: function (linkedStation) {
             var currentContext = this;
+            currentContext.$('#linked-station-id-input').val('');
             var attributes = {
                 linkedStationId: linkedStation.linkedStationId,
                 linkedStationName: linkedStation.linkedStationName
             };
             currentContext.model.set(attributes);
+            this.$('.add-linked-station-view-status').addClass('hidden');
             currentContext.renderLinkedStationView();
         },
-        onAddLinkedStationError: function(error) {
+        onAddLinkedStationError: function (error) {
+            this.showError('clear linked station error!');
         },
-        onClearLinkedStationSuccess: function(linkedStation) {
+        onClearLinkedStationSuccess: function (linkedStation) {
             var currentContext = this;
             currentContext.model.unset('linkedStationId');
             currentContext.model.unset('linkedStationName');
+            currentContext.$('.clear-linked-station-view-status').addClass('hidden');
+            currentContext.linkedStationView.leave();
             currentContext.renderLinkedStationView();
         },
-        onClearLinkedStationError: function(error) {
+        onClearLinkedStationError: function (error) {
+            this.showError('clear linked station error!');
         },
-        onLoaded: function() {
+        onLoaded: function () {
             this.renderWarningListView();
             this.renderLinkedStationView();
             this.hideLoading();
         },
-        onLeave: function() {
+        onLeave: function () {
         }
     });
 

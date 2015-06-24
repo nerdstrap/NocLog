@@ -88,9 +88,7 @@ define(function(require) {
 
             this.listenTo(appEvents, AppEventNamesEnum.addLinkedStation, this.addLinkedStation);
             this.listenTo(appEvents, AppEventNamesEnum.clearLinkedStation, this.clearLinkedStation);
-            this.listenTo(appEvents, AppEventNamesEnum.refreshLinkedStation, this.refreshLinkedStation);
-            this.listenTo(appEvents, AppEventNamesEnum.refreshLinkedStationDetails, this.refreshLinkedStationDetails);
-            this.listenTo(appEvents, AppEventNamesEnum.getToaStation, this.getToaStation);
+            this.listenTo(appEvents, AppEventNamesEnum.goToLinkedStationWithId, this.goToLinkedStationWithId);
 
             this.listenTo(appEvents, AppEventNamesEnum.goToDirectionsWithLatLng, this.goToDirectionsWithLatLng);
             this.listenTo(appEvents, AppEventNamesEnum.goToExportStationEntryLogList, this.goToExportStationEntryLogList);
@@ -544,6 +542,7 @@ define(function(require) {
                     deferred.resolve(stationView);
                 } else {
                     stationView.showError('not found!');
+                    stationView.trigger('loaded');
                     deferred.reject({
                         stationView: stationView,
                         error: 'not found!'
@@ -951,14 +950,9 @@ define(function(require) {
 
             return deferred.promise();
         },
-        goToDirectionsWithLatLng: function(latitude, longitude, linkedLatitude, linkedLongitude) {
+        goToDirectionsWithLatLng: function(latitude, longitude) {
             console.trace('DashboardController.goToDirectionsWithLatLng');
-            var directionsUri = '';
-            if (linkedLatitude && linkedLongitude) {
-                directionsUri = 'https://maps.google.com?t=k&saddr=' + latitude + ',' + longitude + '&daddr=' + linkedLatitude + ',' + linkedLongitude;
-            } else {
-                directionsUri = 'https://maps.google.com?t=k&q=loc:' + latitude + '+' + longitude;
-            }
+            var directionsUri = 'https://maps.google.com?t=k&q=loc:' + latitude + '+' + longitude;
             globals.window.open(directionsUri);
         },
         goToExportStationEntryLogList: function(stationEntryLogCollection, options) {

@@ -64,18 +64,6 @@ define(function(require) {
                 url: env.getApiUrl() + '/personnel/find'
             });
         },
-        getOverridePersonnels: function(options) {
-            options || (options = {});
-            var data = $.param(options);
-
-            return $.ajax({
-                contentType: 'application/json',
-                data: data,
-                dataType: 'json',
-                type: 'GET',
-                url: env.getApiUrl() + '/personnel/find'
-            });
-        },
         postCheckIn: function(options) {
             options || (options = {});
             var data = JSON.stringify(options);

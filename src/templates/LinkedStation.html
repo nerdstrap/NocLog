@@ -1,49 +1,96 @@
-<div class="linked-station-view">
-    <div class="panel callout">
-        <div class="row collapse section-header">
-            <div class="small-12 columns">
-                <span>{{resource "linkedStationHeaderText"}}</span>
-                <i class="fa fa-minus"></i>
-            </div>
+<div class="linked-station-view panel callout">
+    <div class="row collapse section-header hidden">
+        <div class="small-12 columns">
+            <span>{{resource "linkedStationDetailsHeaderText"}}</span>
+            <i class="fa fa-plus"></i>
         </div>
-        <div class="row collapse section-details">
-            <div class="small-12 columns">
-                <div id="read-only-linked-station-view" class="row collapse">
-                    <div class="small-10 columns">
-                        <span class="detail hidden">{{resource "stationNotLinkedMessageText"}}</span>
-                        <span class="detail" id="linkedStationName">{{linkedStationName}}</span>
-                    </div>
+    </div>
+    <div class="row collapse section-details hidden">
+        <div class="small-12 columns">
+            <div class="row collapse">
+                <div class="small-4 columns">
+                    <span>{{resource "telephoneHeaderText}}</span>
                 </div>
-                <div id="add-linked-station-view" class="row collapse">
-                    <div class="small-10 columns">
-                        <span id="linked-station-id-label">{{linkedStationId}}</span>
-                        <div id="linked-station-id-input-container" class="hidden">
-                        <input id="linked-station-id-input" name="linkedStationId" type="text" placeholder='{{resource "linkedStationIdPlaceholder"}}' value="{{linkedStationId}}" />
-                        </div>
-                    </div>
-                    <div class="small-2 columns">
-                        <a id="linked-station-add-button" class="button radius tiny hidden" href="#">{{resource "addButtonText"}}</a>
-                        <a id="linked-station-cancel-button" class="button secondary radius tiny hidden" href="#">{{resource "cancelButtonText"}}</a>
-                        <a id="linked-station-clear-button" class="button radius tiny hidden" href="#">{{resource "clearButtonText"}}</a>
-                    </div>
-                </div>
-                <div id="clear-linked-station-view" class="row collapse">
-                    <div class="small-10 columns">
-                        <span class="detail hidden">{{resource "stationNotLinkedMessageText"}}</span>
-                        <span class="detail" id="linkedStationName">{{linkedStationName}}</span>
-                    </div>
+                <div class="small-8 columns">
+                    <span id="linked-station-telephone-label" class="detail">{{telephone}}</span>
                 </div>
             </div>
-        </div>
-        <div class="row collapse section-header hidden">
-            <div class="small-12 columns">
-                <span>{{resource "linkedStationDetailsHeaderText"}}</span>
-                <i class="fa fa-plus"></i>
+            <div class="row collapse">
+                <div class="small-4 columns">
+                    <span>{{resource "radioHeaderText}}</span>
+                </div>
+                <div class="small-8 columns">
+                    <span id="linked-station-radio-label" class="detail">{{radio}}</span>
+                </div>
             </div>
-        </div>
-        <div class="row collapse section-details hidden">
-            <div class="small-12 columns">
-                <div id="linked-station-details-view"></div>
+            <div class="row collapse">
+                <div class="small-4 columns">
+                    <span>{{resource "contactsHeaderText}}</span>
+                </div>
+                <div class="small-8 columns">
+                    <span id="linked-station-contacts-label" class="detail">{{contacts}}</span>
+                </div>
+            </div>
+            <div class="row collapse">
+                <div class="small-4 columns">
+                    <span>{{resource "cityHeaderText}}</span>
+                </div>
+                <div class="small-8 columns">
+                    <span id="linked-station-city-label" class="detail">{{city}}</span>
+                </div>
+            </div>
+            <div class="row collapse">
+                <div class="small-4 columns">
+                    <span>{{resource "stateHeaderText}}</span>
+                </div>
+                <div class="small-8 columns">
+                    <span id="linked-station-state-label" class="detail">{{state}}</span>
+                </div>
+            </div>
+            <div class="row collapse">
+                <div class="small-4 columns">
+                    <span>{{resource "countyHeaderText}}</span>
+                </div>
+                <div class="small-8 columns">
+                    <span id="linked-station-county-label" class="detail">{{county}}</span>
+                </div>
+            </div>
+            <div class="row collapse">
+                <div class="small-4 columns">
+                    <span>{{resource "latitudeHeaderText}}</span>
+                </div>
+                <div class="small-8 columns">
+                    <span id="linked-station-latitude-label" class="detail">{{latitude}}</span>
+                </div>
+            </div>
+            <div class="row collapse">
+                <div class="small-4 columns">
+                    <span>{{resource "longitudeHeaderText}}</span>
+                </div>
+                <div class="small-8 columns">
+                    <span id="linked-station-longitude-label" class="detail">{{longitude}}</span>
+                </div>
+            </div>
+            <div id="go-to-linked-station-directions-button-container" class="row collapse hidden">
+                <div class="small-12 columns">
+                    <a id="go-to-linked-station-directions-button" class="directions-link" data-latitude="{{latitude}}" data-longitude="{{longitude}}" href="#">{{resource "goToMapButtonText"}} <i class="fa fa-map-marker"></i></a>
+                </div>
+            </div>
+            <div class="row collapse">
+                <div class="small-4 columns">
+                    <span>{{resource "directionsHeaderText}}</span>
+                </div>
+                <div class="small-8 columns">
+                    <span id="linked-station-directions-label" class="detail">{{directions}}</span>
+                </div>
+            </div>
+            <div class="row collapse">
+                <div class="small-4 columns">
+                    <span>{{resource "stationDataHeaderText}}</span>
+                </div>
+                <div class="small-8 columns">
+                    <span id="linked-station-station-data-label" class="detail">{{stationData}}</span>
+                </div>
             </div>
         </div>
     </div>
