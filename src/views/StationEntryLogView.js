@@ -177,6 +177,7 @@ define(function(require) {
                 collection: currentContext.stationWarningCollection,
                 parentModel: currentContext.model
             };
+
             if (!this.readOnly) {
                 if (this.model.get('isCheckOutAction') === true) {
                     if (currentContext.stationWarningCollection && currentContext.stationWarningCollection.length > 0) {
@@ -193,10 +194,11 @@ define(function(require) {
             if (currentContext.stationWarningsView) {
                 currentContext.renderChildInto(currentContext.stationWarningsView, currentContext.$('#station-warning-list-view'));
                 currentContext.stationWarningsView.addAll();
-                if (this.model.get('isCheckOutAction') !== true) {
+                if (!this.readOnly && this.model.get('isCheckOutAction') !== true) {
                     currentContext.stationWarningsView.renderNewAddWarningView();
                 }
             }
+            this.hideLoadingWarnings();
             this.showSaveOrCheckoutButton();
         },
         onStationWarningsError: function() {
@@ -549,9 +551,19 @@ define(function(require) {
             }
             return true;
         },
+        showLoadingWarnings: function() {
+            this.$('.view-status-warning').removeClass('hidden');
+        },
+        hideLoadingWarnings: function() {
+            this.$('.view-status-warning').addClass('hidden');
+        },
         onLoaded: function() {
             this.hideLoading();
-            this.getStationWarnings();
+            if (this.model.get('outTime')) {
+                this.$('#station-warnings-container').addClass('hidden');
+            } else {
+                this.getStationWarnings();
+            }
         },
         onLeave: function() {
         }

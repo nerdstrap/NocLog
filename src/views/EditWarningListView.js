@@ -25,7 +25,7 @@ define(function(require) {
 
             this.warningCollection = options.collection || new Backbone.Collection();
             
-            this.stationModel = options.stationModel;
+            this.parentModel = options.parentModel;
 
             this.listenToOnce(this.warningCollection, 'reset', this.addAll);
             
@@ -47,7 +47,7 @@ define(function(require) {
             var currentContext = this;
             var newStationWarningModel = new StationWarningModel();
             var addWarningListItemView = new AddWarningListItemView({
-                parentModel: currentContext.stationModel,
+                parentModel: currentContext.parentModel,
                 model: newStationWarningModel,
                 dispatcher: currentContext.dispatcher
             });
@@ -81,6 +81,7 @@ define(function(require) {
             _.each(this.collection.models, this.addOne, this);
             this.listenToWindowResize();
             this.hideLoading();
+            appEvents.trigger(AppEventNamesEnum.allWarningsLoaded);
         },
         addOne: function(warning) {
             var currentContext = this;

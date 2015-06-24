@@ -6097,6 +6097,25 @@ body:before {
 .hidden {
   display: none; }
 
+.warnings-panel {
+  border-style: solid;
+  border-width: 1px;
+  border-color: #ff9a9a;
+  margin-bottom: 1.25rem;
+  padding: 1.25rem;
+  background: #ffcccc; }
+  .warnings-panel > :first-child {
+    margin-top: 0; }
+  .warnings-panel > :last-child {
+    margin-bottom: 0; }
+  .warnings-panel h1, .warnings-panel h2, .warnings-panel h3, .warnings-panel h4, .warnings-panel h5, .warnings-panel h6, .warnings-panel p, .warnings-panel li, .warnings-panel dl {
+    color: #333333; }
+  .warnings-panel h1, .warnings-panel h2, .warnings-panel h3, .warnings-panel h4, .warnings-panel h5, .warnings-panel h6 {
+    line-height: 1;
+    margin-bottom: 0.625rem; }
+    .warnings-panel h1.subheader, .warnings-panel h2.subheader, .warnings-panel h3.subheader, .warnings-panel h4.subheader, .warnings-panel h5.subheader, .warnings-panel h6.subheader {
+      line-height: 1.4; }
+
 .personnel-list-view,
 .purpose-list-view,
 .exclusion-list-view,
@@ -6146,8 +6165,7 @@ body:before {
 .h3 {
   font-size: 1.5em; }
 
-.scroll {
-  /*height:550px;*/
+.scroll, .warning-scroll {
   overflow: scroll;
   overflow-x: hidden; }
 
@@ -6238,7 +6256,8 @@ span.detail {
 .purpose-list-item-view .invalid,
 .exclusion-list-item-view .invalid,
 .new-station-entry-log-view .invalid,
-.edit-station-entry-log-view .invalid {
+.edit-station-entry-log-view .invalid,
+.station-entry-log-view .invalid {
   color: #c22222;
   border: 1px solid #c22222; }
 

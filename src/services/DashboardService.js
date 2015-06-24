@@ -232,18 +232,6 @@ define(function(require) {
                 url: env.getApiUrl() + '/station/warning/add'
             });
         },
-        postUpdateStationWarning: function(options) {
-            options || (options = {});
-            var data = JSON.stringify(options);
-
-            return $.ajax({
-                contentType: 'application/json',
-                data: data,
-                dataType: 'json',
-                type: 'PUT',
-                url: env.getApiUrl() + '/station/warning/confirm'
-            });
-        },
         postClearStationWarning: function(options) {
             options || (options = {});
             var data = JSON.stringify(options);

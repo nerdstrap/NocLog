@@ -88,7 +88,7 @@ define(function(require) {
 
             this.listenTo(appEvents, AppEventNamesEnum.addLinkedStation, this.addLinkedStation);
             this.listenTo(appEvents, AppEventNamesEnum.clearLinkedStation, this.clearLinkedStation);
-            this.listenTo(appEvents, AppEventNamesEnum.goToLinkedStationWithId, this.goToLinkedStationWithId);
+            this.listenTo(appEvents, AppEventNamesEnum.refreshLinkedStation, this.refreshLinkedStation);
 
             this.listenTo(appEvents, AppEventNamesEnum.goToDirectionsWithLatLng, this.goToDirectionsWithLatLng);
             this.listenTo(appEvents, AppEventNamesEnum.goToExportStationEntryLogList, this.goToExportStationEntryLogList);
@@ -919,16 +919,18 @@ define(function(require) {
 
             return deferred.promise();
         },
-        refreshLinkedStationDetails: function(newDolStationViewInstance, options) {
-            console.trace('DashboardController.refreshLinkedStationDetails');
+        refreshLinkedStation: function(linkedStationView, options) {
+            console.trace('DashboardController.refreshLinkedStation');
             var currentContext = this,
                     deferred = $.Deferred();
 
-            $.when(currentContext.dashboardService.getLinkedStation(options)).done(function(getStationResponse) {
-                newDolStationViewInstance.set(getStationResponse[0]);
-                deferred.resolve(getStationResponse);
+            $.when(currentContext.dashboardService.getLinkedStation(options)).done(function(getLinkedStationResponse) {
+                linkedStationView.model.set(getLinkedStationResponse.stations[0]);
+                linkedStationView.trigger('loaded');
+                deferred.resolve(getLinkedStationResponse);
             }).fail(function(jqXHR, textStatus, errorThrown) {
-                newDolStationViewInstance.clear();
+                linkedStationView.model.clear();
+                linkedStationView.trigger('loaded');
                 deferred.reject(textStatus);
             });
 
@@ -972,22 +974,6 @@ define(function(require) {
                 deferred.resolve(postAddWarningResults);
             }).fail(function(jqXHR, textStatus, errorThrown) {
                 stationWarningModel.trigger(AppEventNamesEnum.addWarningError, jqXHR.responseText);
-                deferred.reject('error');
-            });
-
-            return deferred.promise();
-        },
-        updateStationWarning: function(stationWarningModel) {
-            console.trace('DashboardController.updateStationWarning');
-            var currentContext = this,
-                    deferred = $.Deferred();
-
-            $.when(currentContext.dashboardService.postUpdateStationWarning(stationWarningModel.attributes)).done(function(postUpdateWarningResults) {
-                stationWarningModel.set(postUpdateWarningResults.stationWarning);
-                stationWarningModel.trigger(AppEventNamesEnum.updateWarningSuccess, postUpdateWarningResults.stationWarning);
-                deferred.resolve(postUpdateWarningResults);
-            }).fail(function(jqXHR, textStatus, errorThrown) {
-                stationWarningModel.trigger(AppEventNamesEnum.updateWarningError, jqXHR.responseText);
                 deferred.reject('error');
             });
 

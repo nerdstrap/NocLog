@@ -61,6 +61,7 @@ define(function (require) {
                 currentContext.stationWarningsView = new StationWarningListView(options);
             }
             currentContext.renderChildInto(currentContext.stationWarningsView, currentContext.$('#warning-list-view-container'));
+            currentContext.stationWarningsView.showLoading();
             currentContext.dispatcher.trigger(AppEventNamesEnum.refreshStationWarningList, currentContext.stationWarningCollection, {stationId: stationId});
         },
         renderLinkedStationView: function () {
@@ -77,6 +78,7 @@ define(function (require) {
                 } else {
                     currentContext.$('#clear-linked-station-button').addClass('hidden');
                 }
+                currentContext.renderLinkedStationDetailsView(currentContext.model.get('linkedStationId'));
             } else {
                 currentContext.$('#linked-station-icon').addClass('hidden');
                 currentContext.$('#no-linked-station-read-only-view').removeClass('hidden');
@@ -99,7 +101,7 @@ define(function (require) {
             currentContext.linkedStationView = new LinkedStationView(options);
             currentContext.renderChildInto(currentContext.linkedStationView, currentContext.$('#linked-station-view-container'));
 
-            currentContext.dispatcher.trigger(AppEventNamesEnum.goToLinkedStationWithId, {'linkedStationId': linkedStationId}, currentContext.linkedStationView);
+            currentContext.dispatcher.trigger(AppEventNamesEnum.refreshLinkedStation, currentContext.linkedStationView, {'stationId': linkedStationId});
         },
         events: {
             'click .directions-link': 'goToDirectionsWithLatLng',

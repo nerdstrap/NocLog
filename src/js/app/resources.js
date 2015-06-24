@@ -186,7 +186,7 @@ define(function(require) {
         'stateHeaderText': 'State',
         'telephoneHeaderText': 'Telephone',
         'radioHeaderText': 'Radio Channel',
-        'contactsHeaderText': 'emergency Contact Numbers',
+        'contactsHeaderText': 'Emergency Contact Numbers',
         /* contact */
         'contactAddress1HeaderText': 'Mailing Address',
         'contactCityHeaderText': 'City',

@@ -82,6 +82,10 @@ body:before {
     display: none;
 }
 
+.warnings-panel {
+  @include panel($bg:#ffcccc);
+}
+
 .personnel-list-view, 
 .purpose-list-view,
 .exclusion-list-view,
@@ -137,8 +141,7 @@ body:before {
     font-size: 1.5em;
 }
 
-.scroll{
-    /*height:550px;*/
+.scroll, .warning-scroll {
     overflow:scroll;
     overflow-x:hidden;
 }

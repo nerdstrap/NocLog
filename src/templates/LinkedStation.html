@@ -1,15 +1,15 @@
 <div class="linked-station-view panel callout">
-    <div class="row collapse section-header hidden">
+    <div class="row collapse section-header">
         <div class="small-12 columns">
             <span>{{resource "linkedStationDetailsHeaderText"}}</span>
             <i class="fa fa-plus"></i>
         </div>
     </div>
-    <div class="row collapse section-details hidden">
+    <div class="row collapse section-details" style="display: none;">
         <div class="small-12 columns">
             <div class="row collapse">
                 <div class="small-4 columns">
-                    <span>{{resource "telephoneHeaderText}}</span>
+                    <span>{{resource "telephoneHeaderText"}}</span>
                 </div>
                 <div class="small-8 columns">
                     <span id="linked-station-telephone-label" class="detail">{{telephone}}</span>
@@ -17,7 +17,7 @@
             </div>
             <div class="row collapse">
                 <div class="small-4 columns">
-                    <span>{{resource "radioHeaderText}}</span>
+                    <span>{{resource "radioHeaderText"}}</span>
                 </div>
                 <div class="small-8 columns">
                     <span id="linked-station-radio-label" class="detail">{{radio}}</span>
@@ -25,7 +25,7 @@
             </div>
             <div class="row collapse">
                 <div class="small-4 columns">
-                    <span>{{resource "contactsHeaderText}}</span>
+                    <span>{{resource "contactsHeaderText"}}</span>
                 </div>
                 <div class="small-8 columns">
                     <span id="linked-station-contacts-label" class="detail">{{contacts}}</span>
@@ -33,7 +33,7 @@
             </div>
             <div class="row collapse">
                 <div class="small-4 columns">
-                    <span>{{resource "cityHeaderText}}</span>
+                    <span>{{resource "cityHeaderText"}}</span>
                 </div>
                 <div class="small-8 columns">
                     <span id="linked-station-city-label" class="detail">{{city}}</span>
@@ -41,7 +41,7 @@
             </div>
             <div class="row collapse">
                 <div class="small-4 columns">
-                    <span>{{resource "stateHeaderText}}</span>
+                    <span>{{resource "stateHeaderText"}}</span>
                 </div>
                 <div class="small-8 columns">
                     <span id="linked-station-state-label" class="detail">{{state}}</span>
@@ -49,7 +49,7 @@
             </div>
             <div class="row collapse">
                 <div class="small-4 columns">
-                    <span>{{resource "countyHeaderText}}</span>
+                    <span>{{resource "countyHeaderText"}}</span>
                 </div>
                 <div class="small-8 columns">
                     <span id="linked-station-county-label" class="detail">{{county}}</span>
@@ -57,7 +57,7 @@
             </div>
             <div class="row collapse">
                 <div class="small-4 columns">
-                    <span>{{resource "latitudeHeaderText}}</span>
+                    <span>{{resource "latitudeHeaderText"}}</span>
                 </div>
                 <div class="small-8 columns">
                     <span id="linked-station-latitude-label" class="detail">{{latitude}}</span>
@@ -65,20 +65,23 @@
             </div>
             <div class="row collapse">
                 <div class="small-4 columns">
-                    <span>{{resource "longitudeHeaderText}}</span>
+                    <span>{{resource "longitudeHeaderText"}}</span>
                 </div>
                 <div class="small-8 columns">
                     <span id="linked-station-longitude-label" class="detail">{{longitude}}</span>
                 </div>
             </div>
             <div id="go-to-linked-station-directions-button-container" class="row collapse hidden">
-                <div class="small-12 columns">
+                <div class="small-4 columns">
+                    &nbsp;
+                </div>
+                <div class="small-8 columns">
                     <a id="go-to-linked-station-directions-button" class="directions-link" data-latitude="{{latitude}}" data-longitude="{{longitude}}" href="#">{{resource "goToMapButtonText"}} <i class="fa fa-map-marker"></i></a>
                 </div>
             </div>
             <div class="row collapse">
                 <div class="small-4 columns">
-                    <span>{{resource "directionsHeaderText}}</span>
+                    <span>{{resource "directionsHeaderText"}}</span>
                 </div>
                 <div class="small-8 columns">
                     <span id="linked-station-directions-label" class="detail">{{directions}}</span>
@@ -86,7 +89,7 @@
             </div>
             <div class="row collapse">
                 <div class="small-4 columns">
-                    <span>{{resource "stationDataHeaderText}}</span>
+                    <span>{{resource "stationDataHeaderText"}}</span>
                 </div>
                 <div class="small-8 columns">
                     <span id="linked-station-station-data-label" class="detail">{{stationData}}</span>

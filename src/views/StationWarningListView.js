@@ -6,6 +6,8 @@ define(function(require) {
             Backbone = require('backbone'),
             BaseListView = require('views/BaseListView'),
             StationWarningListItemView = require('views/StationWarningListItemView'),
+            AppEventNamesEnum = require('enums/AppEventNamesEnum'),
+            appEvents = require('events'),
             template = require('hbs!templates/StationWarningList');
 
     var StationWarningListView = BaseListView.extend({
@@ -28,6 +30,7 @@ define(function(require) {
         addAll: function() {
             _.each(this.collection.models, this.addOne, this);
             this.hideLoading();
+            appEvents.trigger(AppEventNamesEnum.allWarningsLoaded);
         },
         addOne: function(stationWarning) {
             var currentContext = this;

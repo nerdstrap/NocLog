@@ -5,11 +5,11 @@
         </div>
     </div>
     <div class="row collapse">
-        <div class="small-4 columns">{{resource "firstReportedByHeaderText"}}&nbsp;{{firstReportedBy}}</div>
-        <div class="small-4 columns">{{formatDate firstReportedDate "%D %I:%M %p"}}</div>
+        <div class="small-4 columns"><span class="detail">{{resource "firstReportedByHeaderText"}}&nbsp;{{firstReportedBy}}</span></div>
+        <div class="small-4 columns"><span class="detail">{{formatDate firstReportedDate "%D %I:%M %p"}}</span></div>
     </div>
     <div id="last-confirmed-by-container" class="row collapse hidden">
-        <div class="small-4 columns">{{resource "lastConfirmedByHeaderText"}}&nbsp;{{lastConfirmedBy}}</div>
-        <div class="small-4 columns">{{formatDate lastConfirmedDate "%D %I:%M %p"}}</div>
+        <div class="small-4 columns"><span class="detail">{{resource "lastConfirmedByHeaderText"}}&nbsp;{{lastConfirmedBy}}</span></div>
+        <div class="small-4 columns"><span class="detail">{{formatDate lastConfirmedDate "%D %I:%M %p"}}</span></div>
     </div>
 </div>

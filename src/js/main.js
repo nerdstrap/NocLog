@@ -59,7 +59,7 @@ require.config({
         'enums': '../enums',
         'models': '../models',
         'routers': '../routers',
-        'services': '../services/memory',
+        'services': '../services',
         'templates': '../templates',
         'views': '../views'
     },

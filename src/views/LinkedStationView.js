@@ -8,6 +8,7 @@ define(function (require) {
         BaseSingletonView = require('views/BaseSingletonView'),
         AppEventNamesEnum = require('enums/AppEventNamesEnum'),
         appEvents = require('events'),
+        helpers = require('handlebars.helpers'),
         template = require('hbs!templates/LinkedStation');
 
     var LinkedStationView = BaseSingletonView.extend({
@@ -15,9 +16,6 @@ define(function (require) {
             console.trace('StationView.initialize');
             options || (options = {});
             this.dispatcher = options.dispatcher || this;
-
-            this.listenTo(appEvents, AppEventNamesEnum.getLinkedStationSuccess, this.onGetLinkedStationSuccess);
-            this.listenTo(appEvents, AppEventNamesEnum.getLinkedStationError, this.onGetLinkedStationError);
 
             this.listenTo(this, 'loaded', this.onLoaded);
             this.listenTo(this, 'leave', this.onLeave);
@@ -66,6 +64,7 @@ define(function (require) {
             this.dispatcher.trigger(AppEventNamesEnum.goToDirectionsWithLatLng, latitude, longitude);
         },
         onLoaded: function () {
+            this.updateViewFromModel();
             this.hideLoading();
         },
         onLeave: function () {
