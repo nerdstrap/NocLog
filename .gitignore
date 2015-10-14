@@ -239,3 +239,12 @@ $RECYCLE.BIN/
 .grunt/grunt-contrib-jasmine/jasmine_favicon.png
 .grunt/grunt-contrib-jasmine/json2.js
 .grunt/grunt-contrib-jasmine/reporter.js
+src/.idea/workspace.xml
+
+src/.idea/src.iml
+
+src/.idea/modules.xml
+
+src/.idea/misc.xml
+
+src/.idea/vcs.xml
